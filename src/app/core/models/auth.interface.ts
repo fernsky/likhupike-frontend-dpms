@@ -1,6 +1,4 @@
 import { RoleType } from './role.enum';
-import { UserType } from './user-type.enum';
-import { OfficeSection, ElectedPosition } from './office.enum';
 
 export interface LoginRequest {
   email: string;
@@ -10,18 +8,9 @@ export interface LoginRequest {
 export interface RegisterRequest {
   email: string;
   password: string;
-  fullName: string;
-  fullNameNepali: string;
-  dateOfBirth?: string;
-  address: string;
-  userType: UserType;
-  provinceCode?: string;
-  districtCode?: string;
-  municipalityCode?: string;
+  confirmPassword: string;
+  isWardLevelUser: boolean;
   wardNumber?: number;
-  officeSection?: OfficeSection;
-  electedPosition?: ElectedPosition;
-  officePost?: string;
 }
 
 export interface AuthResponse {

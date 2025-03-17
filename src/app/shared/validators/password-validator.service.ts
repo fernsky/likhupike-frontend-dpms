@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
+import {
+  AbstractControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+} from '@angular/forms';
 import { PASSWORD_RULES } from '../../core/constants/validation.constants';
 
 @Injectable({
@@ -23,6 +28,65 @@ export class PasswordValidatorService {
     'कखगघ',
     '१२३४५',
   ];
+
+  createValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+
+      if (!value) {
+        return null;
+      }
+
+      const errors: ValidationErrors = {};
+
+      // Check minimum length
+      if (value.length < 8) {
+        errors['minlength'] = { requiredLength: 8, actualLength: value.length };
+      }
+
+      // Check password pattern
+      const passwordPattern =
+        /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/;
+      if (!passwordPattern.test(value)) {
+        errors['pattern'] = {
+          message:
+            'Password must contain at least one digit, one lowercase, one uppercase letter and one special character',
+        };
+      }
+
+      return Object.keys(errors).length === 0 ? null : errors;
+    };
+  }
+
+  createMatchValidator(
+    passwordKey: string,
+    confirmPasswordKey: string
+  ): ValidatorFn {
+    return (group: AbstractControl): ValidationErrors | null => {
+      const password = group.get(passwordKey)?.value;
+      const confirmPassword = group.get(confirmPasswordKey)?.value;
+
+      return password === confirmPassword ? null : { passwordMismatch: true };
+    };
+  }
+
+  createWardNumberValidator(): ValidatorFn {
+    return (group: AbstractControl): ValidationErrors | null => {
+      const isWardLevelUser = group.get('isWardLevelUser')?.value;
+      const wardNumber = group.get('wardNumber')?.value;
+
+      if (isWardLevelUser) {
+        if (!wardNumber) {
+          return { wardNumberRequired: true };
+        }
+        if (wardNumber < 1 || wardNumber > 5) {
+          return { wardNumberRange: true };
+        }
+      }
+
+      return null;
+    };
+  }
 
   validatePassword(control: AbstractControl): ValidationErrors | null {
     const value = control.value;

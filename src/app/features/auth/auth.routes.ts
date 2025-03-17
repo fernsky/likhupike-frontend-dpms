@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { provideState } from '@ngrx/store';
-import { registerFormReducer } from './store/register-form.reducer';
+
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { authReducer } from '@app/core/store/auth/auth.reducer';
 import {
@@ -36,11 +36,10 @@ export const AUTH_ROUTES: Routes = [
         provide: API_CONFIG,
         useValue: DEFAULT_API_CONFIG,
       },
-      provideState({ name: 'registerForm', reducer: registerFormReducer }),
       provideNativeDateAdapter(),
       provideTranslocoScope({
         scope: 'registration',
-        alias: 'registration',
+        alias: 'register',
       }),
     ],
   },
