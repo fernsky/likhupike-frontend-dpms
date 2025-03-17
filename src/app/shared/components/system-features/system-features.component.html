@@ -1,0 +1,24 @@
+<div class="features-container">
+  <h2>{{ "systemFeatures.title" | transloco }}</h2>
+  <p class="subtitle">
+    {{ "systemFeatures.subtitle" | transloco }}
+  </p>
+
+  <div class="features-grid">
+    <div class="feature-card" *ngFor="let feature of features">
+      <mat-icon [fontIcon]="feature.icon"></mat-icon>
+      <h3>
+        {{
+          "systemFeatures.features." + feature.translationKey + ".title"
+            | transloco
+        }}
+      </h3>
+      <p>
+        {{
+          "systemFeatures.features." + feature.translationKey + ".description"
+            | transloco
+        }}
+      </p>
+    </div>
+  </div>
+</div>

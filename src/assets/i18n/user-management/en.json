@@ -1,0 +1,84 @@
+{
+  "list": {
+    "title": "User Management",
+    "createButton": "Create User",
+    "search": "Search users...",
+    "wardFilter": "Filter by Ward",
+    "roleFilter": "Filter by Role",
+    "statusFilter": "Filter by Status",
+    "allWards": "All Wards",
+    "allRoles": "All Roles",
+    "allStatuses": "All Statuses",
+    "active": "Active",
+    "inactive": "Inactive",
+    "activate": "Activate User",
+    "deactivate": "Deactivate User",
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "post": "Position",
+      "ward": "Ward",
+      "roles": "Roles",
+      "status": "Status"
+    }
+  },
+  "create": {
+    "title": "Create New User",
+    "description": "Add a new user with their roles and permissions.",
+    "permissionRequired": "Admin privileges required",
+    "helpText": "Need help? View documentation",
+    "success": "User created successfully"
+  },
+  "edit": {
+    "title": "Edit User",
+    "success": "User updated successfully"
+  },
+  "form": {
+    "email": "Email Address",
+    "password": "Password",
+    "passwordRequirements": "Password must be at least 8 characters and contain uppercase, lowercase, number and special characters",
+    "fullName": "Full Name (English)",
+    "fullNameNepali": "Full Name (Nepali)",
+    "dateOfBirth": "Date of Birth",
+    "address": "Address",
+    "officePost": "Office Position",
+    "wardNumber": "Ward Number",
+    "selectWard": "Select Ward",
+    "roles": "User Roles",
+    "isMunicipalityLevel": "This is a municipality-level position",
+    "profilePicture": "Profile Picture",
+    "uploadPhoto": "Click to upload photo",
+    "errors": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "passwordRequired": "Password is required",
+      "passwordInvalid": "Password does not meet requirements",
+      "fullNameRequired": "Full name is required",
+      "fullNameNepaliRequired": "Nepali name is required",
+      "dateOfBirthRequired": "Date of birth is required",
+      "addressRequired": "Address is required",
+      "officePostRequired": "Office position is required",
+      "rolesRequired": "At least one role must be selected"
+    }
+  },
+  "delete": {
+    "confirmTitle": "Delete User",
+    "confirmMessage": "Are you sure you want to delete {name}? This action cannot be undone.",
+    "success": "User deleted successfully"
+  },
+  "messages": {
+    "createSuccess": "User created successfully",
+    "createError": "Failed to create user",
+    "updateSuccess": "User updated successfully",
+    "updateError": "Failed to update user",
+    "deleteSuccess": "User deleted successfully",
+    "deleteError": "Failed to delete user",
+    "loadError": "Failed to load users",
+    "activateSuccess": "User activated successfully",
+    "activateError": "Failed to activate user",
+    "deactivateSuccess": "User deactivated successfully",
+    "deactivateError": "Failed to deactivate user"
+  },
+  "municipality": "Municipality Level",
+  "ward": "Ward"
+}

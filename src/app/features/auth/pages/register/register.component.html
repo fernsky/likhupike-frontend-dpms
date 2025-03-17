@@ -1,0 +1,90 @@
+<div class="auth-container">
+  <div class="background-decorations">
+    <div class="curved-line"></div>
+  </div>
+  <app-background-particles></app-background-particles>
+  <div class="auth-header">
+    <app-gov-branding></app-gov-branding>
+  </div>
+
+  <div class="auth-content">
+    <app-system-features></app-system-features>
+    <mat-card>
+      <mat-card-header>
+        <app-step-indicator
+          [steps]="(steps$ | async) ?? []"
+          [currentStepIndex]="(currentStep$ | async)! - 1"
+          (stepChange)="onNextStep($event + 1)"
+        ></app-step-indicator>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="form-scroll-container">
+          <ng-container [ngSwitch]="currentStep$ | async">
+            <app-register-step-one *ngSwitchCase="1"></app-register-step-one>
+            <app-register-step-two *ngSwitchCase="2"></app-register-step-two>
+            <app-register-step-three
+              *ngSwitchCase="3"
+            ></app-register-step-three>
+            <app-register-step-four *ngSwitchCase="4"></app-register-step-four>
+            <app-register-step-one *ngSwitchDefault></app-register-step-one>
+          </ng-container>
+        </div>
+
+        <div class="form-navigation">
+          <div class="nav-buttons">
+            <button
+              mat-stroked-button
+              class="prev-btn teal-outlined-btn"
+              *ngIf="(currentStep$ | async)! > 1"
+              (click)="handlePreviousStep()"
+              [disabled]="loading"
+            >
+              <mat-icon>arrow_back</mat-icon>
+              {{ "registration.navigation.previous" | transloco }}
+            </button>
+
+            <ng-container [ngSwitch]="currentStep$ | async">
+              <!-- Show Create Account only on step 4 -->
+              <button
+                *ngSwitchCase="4"
+                mat-flat-button
+                class="submit-btn teal-gradient-btn"
+                (click)="onSubmit()"
+                [disabled]="!(canProceedToNextStep$ | async) || loading"
+              >
+                <span class="submit-content">
+                  <mat-icon>login</mat-icon>
+                  {{
+                    loading
+                      ? ("registration.navigation.creatingAccount" | transloco)
+                      : ("registration.navigation.createAccount" | transloco)
+                  }}
+                </span>
+              </button>
+
+              <!-- Show Next button for all other steps -->
+              <button
+                *ngSwitchDefault
+                mat-flat-button
+                class="next-btn teal-gradient-btn"
+                (click)="handleNextStep()"
+                [disabled]="!(canProceedToNextStep$ | async) || loading"
+              >
+                {{ "registration.navigation.next" | transloco }}
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="form-footer">
+          <span>{{ "registration.navigation.haveAccount" | transloco }}</span>
+          <a mat-button class="teal-text-btn" routerLink="/auth/login">
+            {{ "registration.navigation.login" | transloco }}
+          </a>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

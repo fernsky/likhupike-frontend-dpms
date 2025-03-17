@@ -1,0 +1,138 @@
+.gov-branding {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+  width: 100%;
+
+  .branding-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex: 1;
+  }
+
+  .gov-logo {
+    width: 80px;
+    height: auto;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  .titles {
+    flex: 1;
+
+    .system-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &.horizontal {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+
+    .branding-content {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .titles {
+      text-align: center;
+    }
+
+    .controls {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}
+
+// Responsive styles
+@media (max-width: 1024px) {
+  .gov-branding {
+    padding: 1rem;
+
+    .titles .system-title {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .gov-branding {
+    flex-direction: row;
+    padding: 0.75rem 1rem;
+    gap: 0.75rem;
+
+    .branding-content {
+      flex-direction: row;
+      gap: 0.75rem;
+    }
+
+    .gov-logo {
+      width: 40px;
+    }
+
+    .titles {
+      text-align: left;
+
+      .system-title {
+        font-size: 1rem;
+        line-height: 1.2;
+      }
+    }
+
+    .controls {
+      width: auto;
+      margin-left: auto;
+    }
+
+    &.horizontal {
+      flex-direction: column;
+
+      .branding-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .titles {
+        text-align: center;
+      }
+
+      .controls {
+        width: 100%;
+        margin-left: 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .gov-branding {
+    padding: 0.5rem 0.75rem;
+    gap: 0.5rem;
+
+    .gov-logo {
+      width: 32px;
+    }
+
+    .titles .system-title {
+      font-size: 0.875rem;
+    }
+  }
+}

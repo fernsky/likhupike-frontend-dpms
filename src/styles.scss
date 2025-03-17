@@ -1,0 +1,193 @@
+@use '@angular/material' as mat;
+@use '@angular/cdk/overlay-prebuilt.css' as overlay;
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+:root {
+  --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  @include mat.tooltip-overrides((
+    supporting-text-tracking: -0.01rem,
+  ));
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  @include mat.theme((
+    typography: var(--font-family-base),
+    density: 0
+  ));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01rem;
+}
+
+body {
+  height: 100%;
+  font-family: var(--font-family-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Material Components Font Overrides
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button,
+.mat-mdc-unelevated-button,
+.mat-mdc-menu-item,
+.mat-mdc-tab,
+.mat-mdc-form-field,
+.mat-mdc-optgroup,
+.mat-mdc-option,
+.mat-mdc-select,
+.mat-mdc-card,
+.mat-mdc-card-title,
+.mat-mdc-card-subtitle,
+.mat-calendar-table,
+.mat-calendar-body,
+.mat-mdc-list-item,
+.mat-mdc-snack-bar-container,
+.mat-mdc-dialog-container,
+.mat-calendar-body-cell-content,
+.mat-calendar-body-cell,
+.mdc-floating-label,
+.mdc-label,
+.ng-star-inserted,
+.mat-mdc-form-field-error,
+.mat-mdc-plain-tooltip,
+.mat-mdc-plain-tooltip-text,
+.mat-mdc-plain-tooltip-supporting-text,
+.mdc-text-field__input,
+.mat-mdc-menu-item-text,
+.mat-mdc-menu-item
+{
+  font-family: var(--font-family-base) !important;
+  letter-spacing: -0.01rem;
+}
+
+
+// Override MDC typography
+.mdc-typography {
+  font-family: var(--font-family-base) !important;
+}
+
+// Ensure all form elements use the same font
+input, select, textarea, button {
+  font-family: var(--font-family-base);
+}
+
+// Material Icons
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+// Material Icons styles
+.mat-icon {
+  display: inline-flex !important;
+  vertical-align: middle;
+  align-items: center;
+  justify-content: center;
+
+  &.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+// Shared Menu/Select Panel Styles
+.mat-mdc-select-panel,
+.mat-mdc-menu-panel {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 6px !important;
+  margin-top: 4px !important;
+  min-width: 220px !important;
+
+  .mat-mdc-option,
+  .mat-mdc-menu-item {
+    min-height: 40px;
+    border-radius: 4px;
+    margin: 2px 0;
+    font-size: 0.9rem;
+    letter-spacing: -0.01em;
+
+    &:hover:not(.mat-mdc-option-disabled) {
+      background: rgba(18, 55, 114, 0.04) !important;
+    }
+
+    &.mat-mdc-option-active,
+    &:focus {
+      background: rgba(18, 55, 114, 0.08) !important;
+    }
+
+    &.mat-selected:not(.mat-mdc-option-disabled),
+    &.active {
+      background: rgba(18, 55, 114, 0.12) !important;
+      color: #123772;
+
+      .mdc-list-item__primary-text {
+        color: #123772;
+      }
+    }
+  }
+}
+
+// Custom styles for menu panels
+.mat-mdc-menu-panel {
+  .mat-mdc-menu-content {
+    padding: 0 !important;
+  }
+
+  // Style for menu headers if needed
+  .menu-header {
+    padding: 16px 20px;  // Increased padding
+    background: linear-gradient(
+      135deg,
+      rgba(18, 55, 114, 0.03),
+      rgba(26, 72, 148, 0.06)
+    );
+    border-bottom: 1px solid rgba(18, 55, 114, 0.06);
+    font-size: 0.875rem;
+    color: #123772;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  // Add more breathing room for menu items
+  .mat-mdc-menu-item {
+    height: 56px !important;  // Taller menu items
+    line-height: 56px !important;
+    padding: 0 20px !important;  // More horizontal padding
+  }
+}

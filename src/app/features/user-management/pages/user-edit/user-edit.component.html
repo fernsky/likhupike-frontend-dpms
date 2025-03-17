@@ -1,0 +1,27 @@
+<div class="edit-user-container">
+  <app-breadcrumb></app-breadcrumb>
+  <div class="page-header">
+    <h1>{{ "user.edit.title" | transloco }}</h1>
+  </div>
+
+  <mat-progress-bar
+    *ngIf="loading$ | async"
+    mode="indeterminate"
+    class="page-loading-bar"
+  ></mat-progress-bar>
+
+  <ng-container *ngIf="user$ | async as user; else loading">
+    <app-user-form
+      [user]="user"
+      [isEdit]="true"
+      (submitForm)="onSubmit($event)"
+      (cancel)="onCancel()"
+    ></app-user-form>
+  </ng-container>
+
+  <ng-template #loading>
+    <div *ngIf="loading$ | async" class="loading-state">
+      {{ "common.loading" | transloco }}
+    </div>
+  </ng-template>
+</div>

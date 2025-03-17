@@ -1,0 +1,40 @@
+<div class="dashboard-container" [class.is-mobile]="isHandset$ | async">
+  <mat-sidenav-container class="sidenav-container">
+    <!-- Sidebar Navigation -->
+    <mat-sidenav
+      #sidenav
+      [mode]="(sidenavMode$ | async) ?? 'side'"
+      [opened]="sidenavOpened$ | async"
+      class="sidenav"
+      [class.mobile-open]="isMobileOpen"
+      fixedInViewport
+      role="navigation"
+      [attr.aria-label]="'Primary Navigation'"
+    >
+      <!-- Navigation Menu - Our enhanced sidenav component-->
+      <app-sidenav
+        [collapsed]="(isHandset$ | async) === true"
+        [mobileOpen]="isMobileOpen"
+        (mobileClose)="onMobileClose()"
+      ></app-sidenav>
+    </mat-sidenav>
+
+    <!-- Main Content -->
+    <mat-sidenav-content class="content-container">
+      <!-- Add menu toggle button -->
+      <app-menu-toggle
+        *ngIf="showMenuToggle$ | async"
+        [isOpen]="isMobileOpen"
+        (toggleMenu)="onToggleMenu()"
+      ></app-menu-toggle>
+      <!-- Main Content Area -->
+      <main class="main-content" role="main">
+        <div class="page-wrapper">
+          <div class="router-outlet-container">
+            <router-outlet></router-outlet>
+          </div>
+        </div>
+      </main>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

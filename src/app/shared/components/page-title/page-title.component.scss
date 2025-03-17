@@ -1,0 +1,131 @@
+.page-title-container {
+  margin: 0;
+  position: relative;
+
+  .title-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 1rem 0;
+    position: relative;
+  }
+
+  .icon-wrapper {
+    .icon-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #123772, #1A4894);
+      box-shadow:
+        0 4px 12px rgba(18, 55, 114, 0.15),
+        0 2px 4px rgba(18, 55, 114, 0.08),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1);
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 1px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+        border-radius: 13px;
+      }
+    }
+
+    .title-icon {
+      color: #ffffff;
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+    }
+  }
+
+  .text-content {
+    flex: 1;
+  }
+
+  .title {
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.375rem;
+    line-height: 1.2;
+  }
+
+  .description {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    margin: 0;
+    max-width: 650px;
+  }
+
+  .actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-title-container {
+    .title-content {
+      padding: 1rem;
+      gap: 1rem;
+    }
+
+    .icon-wrapper {
+      .icon-container {
+        width: 44px;
+        height: 44px;
+      }
+
+      .title-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    .title {
+      font-size: 1.25rem;
+    }
+
+    .description {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .page-title-container {
+    .title {
+      color: #F1F5F9;
+    }
+
+    .description {
+      color: #94A3B8;
+    }
+  }
+}
+
+@media print {
+  .page-title-container {
+    background: none;
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+    box-shadow: none;
+
+    &::before {
+      display: none;
+    }
+
+    .title {
+      -webkit-text-fill-color: initial;
+      color: black;
+    }
+  }
+}

@@ -1,0 +1,164 @@
+<form [formGroup]="stepForm">
+  <div class="step-header">
+    <div class="step-icon">
+      <mat-icon>location_on</mat-icon>
+    </div>
+    <div class="step-intro">
+      <h2>{{ "registration.stepThree.title" | transloco }}</h2>
+      <p>{{ "registration.stepThree.subtitle" | transloco }}</p>
+    </div>
+  </div>
+
+  <div class="form-fields">
+    <!-- Province Selection -->
+    <mat-form-field appearance="outline">
+      <mat-label>{{
+        "registration.stepThree.fields.province.label" | transloco
+      }}</mat-label>
+      <mat-select formControlName="provinceCode">
+        <mat-option *ngIf="locationForm.isLoading('provinces') | async">
+          <mat-spinner diameter="20"></mat-spinner>
+          {{ "common.loading" | transloco }}
+        </mat-option>
+        <mat-option
+          *ngFor="let province of locationForm.provinces$ | async"
+          [value]="province.code"
+        >
+          {{ province.nameNepali || province.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="locationForm.getError('provinces') | async as error">
+        {{ error }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{
+        "registration.stepThree.fields.district.label" | transloco
+      }}</mat-label>
+      <mat-select
+        formControlName="districtCode"
+        [disabled]="
+          (!stepForm.get('provinceCode')?.value ||
+          (locationForm.isLoading('districts') | async)) ?? false
+        "
+      >
+        <mat-option *ngIf="locationForm.isLoading('districts') | async">
+          <mat-spinner diameter="20"></mat-spinner>
+          {{ "common.loading" | transloco }}
+        </mat-option>
+        <mat-option
+          *ngFor="let district of locationForm.districts$ | async"
+          [value]="district.code"
+        >
+          {{ district.nameNepali || district.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="locationForm.getError('districts') | async as error">
+        {{ error }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{
+        "registration.stepThree.fields.municipality.label" | transloco
+      }}</mat-label>
+      <mat-select
+        formControlName="municipalityCode"
+        [disabled]="
+          (!stepForm.get('districtCode')?.value ||
+          (locationForm.isLoading('municipalities') | async)) ?? false
+        "
+      >
+        <mat-option *ngIf="locationForm.isLoading('municipalities') | async">
+          <mat-spinner diameter="20"></mat-spinner>
+          {{ "common.loading" | transloco }}
+        </mat-option>
+        <mat-option
+          *ngFor="let municipality of locationForm.municipalities$ | async"
+          [value]="municipality.code"
+        >
+          {{ municipality.nameNepali || municipality.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error
+        *ngIf="locationForm.getError('municipalities') | async as error"
+      >
+        {{ error }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Office Section (Conditional) -->
+    <ng-container *ngIf="showOfficeSection$ | async">
+      <mat-form-field appearance="outline">
+        <mat-label>
+          {{ "registration.stepThree.fields.officeSection.label" | transloco }}
+        </mat-label>
+        <mat-select formControlName="officeSection">
+          <mat-option *ngFor="let section of officeSections" [value]="section">
+            {{ getTranslationKey(section) | transloco }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-checkbox formControlName="isWardOffice" class="ward-office-checkbox">
+        {{ "registration.stepThree.fields.isWardOffice.label" | transloco }}
+      </mat-checkbox>
+    </ng-container>
+
+    <!-- Position Selection (Conditional) -->
+    <ng-container *ngIf="showPosition$ | async">
+      <mat-form-field appearance="outline">
+        <mat-label>
+          {{ "registration.stepThree.fields.position.label" | transloco }}
+        </mat-label>
+        <mat-select formControlName="position">
+          <mat-option
+            *ngFor="let position of electedPositions"
+            [value]="position"
+          >
+            {{ getTranslationKey(position) | transloco }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+
+    <!-- Ward Selection (Single Implementation) -->
+    <ng-container *ngIf="showWardSelection$ | async">
+      <mat-form-field appearance="outline">
+        <mat-label>
+          {{ "registration.stepThree.fields.ward.label" | transloco }}
+        </mat-label>
+        <mat-select
+          formControlName="wardNumber"
+          [disabled]="
+            (!stepForm.get('municipalityCode')?.value ||
+            (locationForm.isLoading('wards') | async)) ?? false
+          "
+        >
+          <mat-option *ngIf="locationForm.isLoading('wards') | async">
+            <mat-spinner diameter="20"></mat-spinner>
+            {{ "common.loading" | transloco }}
+          </mat-option>
+          <mat-option
+            *ngFor="let ward of locationForm.wards$ | async"
+            [value]="ward.wardNumber"
+          >
+            {{ "registration.stepThree.fields.ward.numberPrefix" | transloco }}
+            {{ ward.wardNumber | nepaliNumber }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="locationForm.getError('wards') | async as error">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+    </ng-container>
+  </div>
+</form>
+
+<!-- Global Loading Overlay -->
+<app-loading-overlay
+  [isLoading]="(locationForm.isAnyLoading() | async) ?? false"
+  [message]="'registration.stepThree.loading' | transloco"
+>
+</app-loading-overlay>

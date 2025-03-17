@@ -1,0 +1,28 @@
+{
+  "title": "Welcome Back",
+  "subtitle": "Sign in to your account",
+  "fields": {
+    "email": {
+      "label": "Email",
+      "placeholder": "Enter your email",
+      "errors": {
+        "required": "Email is required",
+        "invalid": "Please enter a valid email address",
+        "governmentEmail": "Please use a valid government email address"
+      }
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter your password",
+      "errors": {
+        "required": "Password is required"
+      }
+    }
+  },
+  "actions": {
+    "submit": "Sign In",
+    "submitting": "Signing in...",
+    "register": "Create Account",
+    "noAccount": "Don't have an account?"
+  }
+}

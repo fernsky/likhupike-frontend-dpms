@@ -1,0 +1,244 @@
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 0.5rem 0;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.section-label {
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 0.87);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.hint-text {
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 1.5rem;
+}
+
+.user-type-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+
+  &.invalid {
+    .user-type-group {
+      border-color: #f44336;
+    }
+  }
+
+  mat-error {
+    font-size: 0.75rem;
+    margin-top: -0.5rem;
+  }
+}
+
+.user-type-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 0.5rem;
+
+  transition: all 0.2s ease;
+
+  &:focus-within {
+    border-color: #123772;
+  }
+}
+
+.user-type-option {
+  position: relative;
+  margin: 0;
+  padding: 0.875rem 1rem;
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+
+
+  &:hover {
+    border-color: #123772;
+
+  }
+
+  &.mat-radio-checked {
+
+    border-color: #123772;
+    box-shadow: 0 2px 4px rgba(18, 55, 114, 0.05);
+
+    ::ng-deep .mat-radio-label-content {
+      color: #123772;
+      font-weight: 500;
+    }
+  }
+
+  ::ng-deep .mat-radio-label {
+    padding: 1.25rem;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    width: 100%;
+    margin: 0;
+    transition: all 0.2s ease;
+    background: #fafafa;
+
+    &:hover {
+      background: #f5f5f5;
+      border-color: #123772;
+    }
+
+    .mat-radio-container {
+      position: absolute;
+      top: 1.25rem;
+      left: 1.25rem;
+    }
+
+    .mat-radio-outer-circle {
+      border-color: rgba(0, 0, 0, 0.48);
+      border-width: 2px;
+    }
+
+    .mat-radio-inner-circle {
+      background: #123772;
+    }
+
+    .mat-radio-label-content {
+      padding-left: 2.5rem;
+      font-size: 1rem;
+      color: rgba(0, 0, 0, 0.87);
+      font-weight: 400;
+    }
+  }
+
+  &.mat-radio-checked {
+    ::ng-deep .mat-radio-label {
+      background: #f0f7ff;
+      border-color: #123772;
+      box-shadow: 0 2px 4px rgba(18, 55, 114, 0.08);
+
+      .mat-radio-label-content {
+        color: #123772;
+        font-weight: 500;
+      }
+
+      .mat-radio-outer-circle {
+        border-color: #123772;
+      }
+    }
+  }
+
+  &:focus-within {
+    border-color: #123772;
+    outline: none;
+  }
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1rem;
+  background: linear-gradient(to right, rgba(18, 55, 114, 0.03), transparent);
+  border-radius: 12px;
+
+  .step-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #123772, #1A4894);
+    box-shadow: 0 4px 12px rgba(18, 55, 114, 0.12);
+
+    mat-icon {
+      color: white;
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .step-intro {
+    flex: 1;
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #0B1F42;
+      margin: 0 0 0.25rem;
+      line-height: 1.2;
+    }
+
+    p {
+      font-size: 0.875rem;
+      color: rgba(0, 0, 0, 0.6);
+      margin: 0;
+      line-height: 1.4;
+    }
+  }
+}
+
+.error-message {
+  color: #f44336;
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  .user-type-group {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .user-type-option {
+    padding: 0.75rem 0.875rem;
+
+    ::ng-deep .mat-radio-label {
+      padding: 1rem;
+
+      .mat-radio-container {
+        top: 1rem;
+        left: 1rem;
+      }
+    }
+  }
+
+  .step-header {
+    padding: 0.875rem;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+
+    .step-icon {
+      width: 40px;
+      height: 40px;
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .step-intro {
+      h2 {
+        font-size: 1.125rem;
+      }
+
+      p {
+        font-size: 0.8125rem;
+      }
+    }
+  }
+}
+

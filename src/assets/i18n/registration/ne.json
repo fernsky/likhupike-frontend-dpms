@@ -1,0 +1,188 @@
+{
+  "stepOne": {
+    "title": "व्यक्तिगत जानकारी",
+    "subtitle": "तपाईंको आधारभूत विवरणबाट सुरु गरौं",
+    "fields": {
+      "fullName": {
+        "label": "पूरा नाम (अंग्रेजीमा)",
+        "errors": {
+          "required": "पूरा नाम आवश्यक छ",
+          "minlength": "नाम कम्तिमा २ अक्षरको हुनुपर्छ"
+        }
+      },
+      "fullNameNepali": {
+        "label": "पूरा नाम",
+        "errors": {
+          "required": "पूरा नाम आवश्यक छ",
+          "nepaliName": "कृपया नेपाली अक्षरहरू मात्र प्रयोग गर्नुहोस्"
+        }
+      },
+      "phoneNumber": {
+        "label": "फोन नम्बर",
+        "placeholder": "98XXXXXXXX",
+        "errors": {
+          "required": "फोन नम्बर आवश्यक छ",
+          "nepaliPhone": "कृपया मान्य नेपाली फोन नम्बर हाल्नुहोस् (98XXXXXXXX)"
+        }
+      }
+    }
+  },
+  "stepTwo": {
+    "title": "आफ्नो भूमिका छान्नुहोस्",
+    "subtitle": "सिस्टम कसरी प्रयोग गर्नुहुन्छ छान्नुहोस्",
+    "errors": {
+      "required": "कृपया प्रयोगकर्ता प्रकार छान्नुहोस्"
+    }
+  },
+  "stepThree": {
+    "title": "स्थान विवरण",
+    "subtitle": "आफ्नो स्थान र भूमिका सम्बन्धी विवरणहरू बताउनुहोस्",
+    "loading": "लोड हुँदैछ...",
+    "fields": {
+      "province": {
+        "label": "प्रदेश",
+        "errors": {
+          "required": "प्रदेश आवश्यक छ"
+        }
+      },
+      "district": {
+        "label": "जिल्ला",
+        "errors": {
+          "required": "जिल्ला आवश्यक छ"
+        }
+      },
+      "municipality": {
+        "label": "नगरपालिका",
+        "errors": {
+          "required": "नगरपालिका आवश्यक छ"
+        }
+      },
+      "ward": {
+        "label": "वडा नं.",
+        "numberPrefix": "वडा नं.",
+        "errors": {
+          "required": "वडा नं. आवश्यक छ"
+        }
+      },
+      "officeSection": {
+        "label": "कार्यालय शाखा",
+        "errors": {
+          "required": "कार्यालय शाखा आवश्यक छ"
+        }
+      },
+      "isWardOffice": {
+        "label": "म वडा कार्यालयमा कार्यरत छु।"
+      },
+      "position": {
+        "label": "पद",
+        "errors": {
+          "required": "पद आवश्यक छ"
+        }
+      }
+    }
+  },
+  "stepFour": {
+    "title": "खाता सुरक्षा",
+    "subtitle": "आफ्नो लगइन विवरणहरू सेट गर्नुहोस्",
+    "fields": {
+      "email": {
+        "label": "इमेल ठेगाना",
+        "placeholder": "उदाहरण, your.name@nepal.gov.np",
+        "errors": {
+          "required": "इमेल ठेगाना आवश्यक छ",
+          "invalid": "कृपया मान्य इमेल ठेगाना हाल्नुहोस्",
+          "governmentEmail": "कृपया मान्य सरकारी इमेल ठेगाना प्रयोग गर्नुहोस्"
+        }
+      },
+      "password": {
+        "label": "पासवर्ड",
+        "errors": {
+          "required": "पासवर्ड आवश्यक छ",
+          "weak": "पासवर्ड धेरै कमजोर छ",
+          "mismatch": "पासवर्डहरू मिलेनन्"
+        },
+        "strength": {
+          "weak": "कमजोर",
+          "medium": "मध्यम",
+          "strong": "बलियो",
+          "label": "पासवर्ड बल"
+        },
+        "validations": {
+          "minLength": "कम्तिमा {{length}} वर्ण हुनुपर्छ",
+          "maxLength": "{{length}} वर्ण भन्दा कम हुनुपर्छ",
+          "uppercase": "कम्तिमा एउटा ठूलो अक्षर समावेश गर्नुहोस्",
+          "lowercase": "कम्तिमा एउटा सानो अक्षर समावेश गर्नुहोस्",
+          "number": "कम्तिमा एउटा नम्बर समावेश गर्नुहोस्",
+          "specialChar": "कम्तिमा एउटा विशेष वर्ण समावेश गर्नुहोस्",
+          "commonWord": "सामान्य शब्द वा प्याटर्नहरू प्रयोग नगर्नुहोस्",
+          "sequential": "क्रमिक प्याटर्नहरू प्रयोग नगर्नुहोस्",
+          "repeating": "दोहोरिने वर्णहरू प्रयोग नगर्नुहोस्"
+        }
+      },
+      "confirmPassword": {
+        "label": "पासवर्ड पुष्टि गर्नुहोस्",
+        "errors": {
+          "required": "कृपया पासवर्ड पुष्टि गर्नुहोस्",
+          "mismatch": "पासवर्डहरू मिलेनन्"
+        }
+      }
+    }
+  },
+  "navigation": {
+    "previous": "पछाडि",
+    "next": "अगाडि",
+    "createAccount": "खाता सिर्जना गर्नुहोस्",
+    "creatingAccount": "खाता सिर्जना गर्दै...",
+    "login": "साइन इन",
+    "haveAccount": "पहिले नै खाता छ?"
+  },
+  "steps": {
+    "personal": {
+      "label": "व्यक्तिगत",
+      "description": "आधारभूत विवरण"
+    },
+    "role": {
+      "label": "भूमिका",
+      "description": "प्रयोगकर्ता प्रकार"
+    },
+    "location": {
+      "label": "स्थान",
+      "description": "ठेगाना विवरण"
+    },
+    "account": {
+      "label": "खाता",
+      "description": "लगइन विवरण"
+    }
+  },
+  "userTypes": {
+    "citizen": "नागरिक",
+    "localLevelEmployee": "स्थानीय तह कर्मचारी",
+    "electedRepresentative": "निर्वाचित प्रतिनिधि",
+    "other": "अन्य"
+  },
+  "officeSection": {
+    "generalAdmin": "सामान्य प्रशासन",
+    "revenueFinancial": "राजस्व तथा आर्थिक प्रशासन",
+    "infrastructure": "पूर्वाधार विकास",
+    "socialDev": "सामाजिक विकास",
+    "economicDev": "आर्थिक विकास",
+    "planningDev": "योजना तथा विकास",
+    "envDisaster": "वातावरण तथा विपद् व्यवस्थापन",
+    "legalInfo": "कानूनी तथा सूचना",
+    "other": "अन्य"
+  },
+  "electedPosition": {
+    "chairperson": "अध्यक्ष",
+    "viceChairperson": "उपाध्यक्ष",
+    "wardChairperson": "वडा अध्यक्ष",
+    "wardMember": "वडा सदस्य"
+  },
+  "stepIndicator": {
+    "status": {
+      "completed": "पूरा भएको",
+      "current": "हालको",
+      "pending": "बाँकी"
+    },
+    "ariaLabel": "चरण {{number}}: {{label}} - {{description}}. स्थिति: {{status}}"
+  }
+}

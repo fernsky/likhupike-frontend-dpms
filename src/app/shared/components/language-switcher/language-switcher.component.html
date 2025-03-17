@@ -1,0 +1,41 @@
+<div class="language-switcher">
+  <button
+    mat-button
+    class="language-button"
+    [matMenuTriggerFor]="menu"
+    [attr.aria-label]="'languages.selectLanguageAria' | transloco"
+  >
+    <span class="flag">{{ currentLanguage.flag }}</span>
+    <span class="language-name">{{
+      getLocalizedLocalName(currentLanguage)
+    }}</span>
+    <mat-icon>expand_more</mat-icon>
+  </button>
+
+  <mat-menu #menu="matMenu" class="language-menu" [overlapTrigger]="false">
+    <div class="menu-header">
+      <span class="menu-title">{{
+        "languages.chooseLanguage" | transloco
+      }}</span>
+    </div>
+
+    <button
+      mat-menu-item
+      *ngFor="let lang of languages"
+      (click)="switchLanguage(lang)"
+      [class.active]="currentLanguage.code === lang.code"
+      class="language-option"
+    >
+      <div class="language-option-content">
+        <span class="flag">{{ lang.flag }}</span>
+        <div class="language-info">
+          <span class="primary-name">{{ getLocalizedLocalName(lang) }}</span>
+          <span class="secondary-name">{{ getLocalizedName(lang) }}</span>
+        </div>
+        <p *ngIf="currentLanguage.code === lang.code">
+          <mat-icon class="check-icon" [fontIcon]="'check'"></mat-icon>
+        </p>
+      </div>
+    </button>
+  </mat-menu>
+</div>

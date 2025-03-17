@@ -1,0 +1,234 @@
+.user-list-container {
+  padding: 24px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  // Header Section
+  .user-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    h1 {
+      font-size: 24px;
+      font-weight: 500;
+      margin: 0;
+      color: var(--text-primary);
+    }
+
+    button {
+      min-width: 140px;
+      padding: 0 24px;
+      height: 42px;
+
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  // Filters Section
+  .filters-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 16px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
+  // Table Container
+  .table-container {
+    position: relative;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    flex: 1;
+    min-height: 400px;
+
+    // Loading Overlay
+    .loading-shade {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.8);
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(2px);
+    }
+
+    // Table Styles
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+
+      th {
+        background: var(--background-light);
+        color: var(--text-secondary);
+        font-weight: 500;
+        padding: 16px;
+        white-space: nowrap;
+      }
+
+      td {
+        padding: 12px 16px;
+        border-top: 1px solid var(--border-color);
+        vertical-align: middle;
+      }
+
+      // User Avatar
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--border-color);
+      }
+
+      // User Name Container
+      .user-name {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        .full-name {
+          font-weight: 500;
+          color: var(--text-primary);
+        }
+
+        .nepali-name {
+          font-family: var(--font-nepali);
+          color: var(--text-secondary);
+          font-size: 0.9em;
+        }
+      }
+
+      // Roles and Status Chips
+      mat-chip-list {
+        .mat-chip {
+          font-size: 12px;
+          min-height: 24px;
+          padding: 0 8px;
+        }
+      }
+
+      // Actions Column
+      .mat-column-actions {
+        width: 48px;
+        padding: 0 8px;
+      }
+    }
+
+    // Paginator Styles
+    mat-paginator {
+      border-top: 1px solid var(--border-color);
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .user-list-container {
+    padding: 16px;
+
+    .filters-section {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .user-list-container {
+    padding: 12px;
+
+    .user-list-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+
+      button {
+        width: 100%;
+      }
+    }
+
+    // Adjust table for mobile
+    .table-container {
+      overflow-x: auto;
+
+      table {
+        // Hide less important columns on mobile
+        .mat-column-email,
+        .mat-column-officePost {
+          display: none;
+        }
+
+        // Stack name and Nepali name
+        .user-name {
+          .nepali-name {
+            font-size: 0.85em;
+          }
+        }
+
+        // Adjust chips display
+        mat-chip-list {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4px;
+        }
+      }
+    }
+  }
+}
+
+// Print Styles
+@media print {
+  .user-list-container {
+    padding: 0;
+
+    .user-list-header button,
+    .filters-section,
+    .mat-column-actions,
+    mat-paginator {
+      display: none;
+    }
+
+    .table-container {
+      box-shadow: none;
+
+      table {
+        th, td {
+          border: 1px solid #ddd;
+        }
+      }
+    }
+  }
+}
+
+// High Contrast Mode
+@media (prefers-contrast: more) {
+  .user-list-container {
+    .table-container {
+      border: 2px solid currentColor;
+
+      table {
+        th, td {
+          border: 1px solid currentColor;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,334 @@
+.user-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin: 1rem auto;
+
+  .profile-picture-section {
+    text-align: center;
+    padding: 2rem;
+    background: #fafafa;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+    .preview-container {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: white;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #e0e0e0;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      cursor: pointer;
+
+      &:hover {
+        border-color: #0B1F42;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+        .overlay {
+          opacity: 1;
+        }
+
+        mat-icon {
+          color: #0B1F42;
+          opacity: 0.8;
+        }
+      }
+
+      &.has-image {
+        border-color: #0B1F42;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        color: #90A4AE;
+        opacity: 0.5;
+        transition: all 0.2s ease;
+      }
+
+      .preview-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .placeholder-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+
+        mat-icon {
+          font-size: 40px;
+          width: 40px;
+          height: 40px;
+          color: #90A4AE;
+        }
+
+        .upload-text {
+          font-size: 11px;
+          color: #90A4AE;
+          font-weight: 400;
+          transition: color 0.2s ease;
+        }
+      }
+
+      .overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(11, 31, 66, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+
+        button {
+          width: 32px;
+          height: 32px;
+          padding: 0;
+          line-height: 0;
+
+          &.upload-btn {
+            background: white;
+            color: #0B1F42;
+          }
+
+          &.remove-btn {
+            background: #DC3545;
+            color: white;
+          }
+
+          mat-icon {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+            margin: 0;
+          }
+        }
+      }
+    }
+
+    .file-input {
+      display: none;
+    }
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+    padding: 2rem;
+
+    mat-form-field {
+      width: 100%;
+    }
+
+    .municipality-toggle {
+      padding: 0.5rem 0;
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    background: #fafafa;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+
+    button {
+      min-width: 140px;
+      height: 48px;
+      border-radius: 24px;
+
+      .button-content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      mat-spinner {
+        margin: 0 auto;
+      }
+
+      mat-icon {
+        margin: 0; // Remove default margin
+      }
+
+      &[color="primary"] {
+        background: #0B1F42;
+        color: white;
+
+        &:hover:not([disabled]) {
+          background: #123772;
+        }
+      }
+
+      &[type="submit"] {
+        display: flex;
+
+        .mdc-button__label {
+          display: flex;
+        }
+      }
+
+      &:not([color="primary"]) {
+        border: 2px solid #123772;
+        color: #123772;
+      }
+
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  // Error States
+  .mat-error {
+    font-size: 13px;
+    margin-top: 4px;
+  }
+
+  // Form Field Customization
+  ::ng-deep {
+    .mat-form-field-wrapper {
+      margin: 0;
+    }
+
+    .mat-form-field-appearance-outline .mat-form-field-outline {
+      color: rgba(0, 0, 0, 0.12);
+    }
+
+    .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+      color: #0B1F42;
+    }
+
+    .mat-form-field-label {
+      font-size: 15px;
+    }
+
+    .mat-form-field-infix {
+      padding: 1em 0;
+    }
+  }
+
+  // Checkbox Styling
+  .mat-checkbox {
+    font-size: 14px;
+  }
+}
+
+// Responsive Design
+@media (max-width: 960px) {
+  .user-form {
+    margin: 1rem auto;
+    padding: 16px;
+
+    .form-grid {
+      padding: 1.5rem;
+      gap: 1.5rem;
+      grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+      padding: 1.5rem 2rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .user-form {
+    padding: 1rem;
+
+    .form-grid {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .user-form {
+    margin: 0;
+    border-radius: 0;
+    padding: 12px;
+    gap: 24px;
+
+    .profile-picture-section {
+      padding: 3rem 1rem;
+
+      .preview-container {
+        width: 120px;
+        height: 120px;
+
+        mat-icon {
+          font-size: 60px;
+          width: 60px;
+          height: 60px;
+        }
+      }
+    }
+
+    .form-grid {
+      padding: 1.5rem;
+      gap: 1rem;
+    }
+
+    .form-actions {
+      padding: 1.5rem;
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// High Contrast Mode
+@media (prefers-contrast: more) {
+  .user-form {
+    .preview-container {
+      border-width: 4px;
+    }
+
+    .form-actions {
+      border-top-width: 2px;
+    }
+  }
+}
+
+// Reduce Motion
+@media (prefers-reduced-motion: reduce) {
+  .user-form {
+    .preview-container,
+    .overlay,
+    button {
+      transition: none !important;
+    }
+  }
+}
+
+// Print Styles
+@media print {
+  .user-form {
+    .profile-picture-section .overlay,
+    .form-actions {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,51 @@
+.edit-user-container {
+  min-height: 100%;
+  background: var(--background-default);
+  position: relative;
+
+  .page-header {
+    padding: 32px 32px 0;
+    background: linear-gradient(to right, var(--primary-color), var(--primary-color-light));
+    border-bottom-left-radius: 32px;
+    border-bottom-right-radius: 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(var(--primary-color-rgb), 0.15);
+
+    h1 {
+      font-size: 28px;
+      font-weight: 600;
+      margin: 0;
+      padding-bottom: 32px;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .page-loading-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+  }
+
+  .loading-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+  }
+}
+
+@media (max-width: 768px) {
+  .edit-user-container {
+    .page-header {
+      padding: 16px 16px 0;
+
+      h1 {
+        font-size: 20px;
+      }
+    }
+  }
+}

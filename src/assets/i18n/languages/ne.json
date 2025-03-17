@@ -1,0 +1,14 @@
+{
+  "change": "भाषा परिवर्तन गर्नुहोस्",
+  "selectLanguage": "भाषा चयन गर्नुहोस्",
+  "en": {
+    "name": "अंग्रेजी",
+    "localName": "English"
+  },
+  "ne": {
+    "name": "नेपाली",
+    "localName": "नेपाली"
+  },
+  "chooseLanguage": "भाषा छान्नुहोस्",
+  "selectLanguageAria": "भाषा चयन गर्नुहोस्"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Integrated Municipal Information System",
+  "subtitle": "Streamline your municipal services with integrated digital solutions",
+  "features": {
+    "municipalServices": {
+      "title": "Municipal Services",
+      "description": "Access all municipal services from one platform"
+    },
+    "quickProcessing": {
+      "title": "Quick Processing",
+      "description": "Fast and efficient municipal service delivery"
+    },
+    "dataIntegration": {
+      "title": "Data Integration",
+      "description": "Integrated municipal data management system"
+    },
+    "citizenPortal": {
+      "title": "Citizen Portal",
+      "description": "Easy access to municipal services for citizens"
+    }
+  }
+}

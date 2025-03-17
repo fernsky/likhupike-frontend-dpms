@@ -1,0 +1,207 @@
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="user-form">
+  <!-- Profile Picture Section -->
+  <div class="profile-picture-section">
+    <div
+      class="preview-container"
+      [class.has-image]="previewUrl"
+      (click)="fileInput.click()"
+    >
+      <img
+        *ngIf="previewUrl"
+        [src]="previewUrl"
+        alt="Profile Preview"
+        class="preview-image"
+      />
+      <p *ngIf="!previewUrl">
+        <mat-icon>account_circle</mat-icon>
+      </p>
+
+      <div class="overlay">
+        <input
+          type="file"
+          #fileInput
+          (change)="onFileSelected($event)"
+          accept="image/*"
+          class="file-input"
+          hidden
+        />
+        <button
+          type="button"
+          mat-mini-fab
+          class="upload-btn"
+          (click)="$event.stopPropagation(); fileInput.click()"
+        >
+          <mat-icon>{{ previewUrl ? "edit" : "add_a_photo" }}</mat-icon>
+        </button>
+        <button
+          type="button"
+          *ngIf="previewUrl"
+          mat-mini-fab
+          class="remove-btn"
+          (click)="$event.stopPropagation(); removeImage()"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-grid">
+    <!-- Form Fields -->
+    <div class="form-field-container">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.form.email" | transloco }}</mat-label>
+        <input matInput formControlName="email" type="email" />
+        <mat-error *ngIf="userForm.get('email')?.errors?.['required']">
+          {{ "user.form.errors.emailRequired" | transloco }}
+        </mat-error>
+        <mat-error *ngIf="userForm.get('email')?.errors?.['email']">
+          {{ "user.form.errors.emailInvalid" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field-container">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.form.password" | transloco }}</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          type="password"
+          (input)="onPasswordChange()"
+        />
+        <mat-icon
+          matSuffix
+          [matTooltip]="'user.form.passwordRequirements' | transloco"
+          >info</mat-icon
+        >
+        <mat-error *ngFor="let error of passwordErrors">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field-container">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.form.fullName" | transloco }}</mat-label>
+        <input matInput formControlName="fullName" />
+        <mat-error *ngIf="userForm.get('fullName')?.errors?.['required']">
+          {{ "user.form.errors.fullNameRequired" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field-container">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.form.fullNameNepali" | transloco }}</mat-label>
+        <input matInput formControlName="fullNameNepali" class="nepali-font" />
+        <mat-error *ngIf="userForm.get('fullNameNepali')?.errors?.['required']">
+          {{ "user.form.errors.fullNameNepaliRequired" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field-container">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.form.dateOfBirth" | transloco }}</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="dateOfBirth"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="userForm.get('dateOfBirth')?.errors?.['required']">
+          {{ "user.form.errors.dateOfBirthRequired" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field-container">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.form.address" | transloco }}</mat-label>
+        <input matInput formControlName="address" />
+        <mat-error *ngIf="userForm.get('address')?.errors?.['required']">
+          {{ "user.form.errors.addressRequired" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field-container">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.form.officePost" | transloco }}</mat-label>
+        <input matInput formControlName="officePost" />
+        <mat-error *ngIf="userForm.get('officePost')?.errors?.['required']">
+          {{ "user.form.errors.officePostRequired" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field-container">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.form.roles" | transloco }}</mat-label>
+        <mat-select formControlName="roles" multiple>
+          <mat-option *ngFor="let role of roleTypes" [value]="role">
+            {{ "roles." + role | transloco }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="userForm.get('roles')?.errors?.['required']">
+          {{ "user.form.errors.rolesRequired" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Municipality Toggle -->
+    <div class="municipality-toggle">
+      <mat-checkbox formControlName="isMunicipalityLevel">
+        {{ "user.form.isMunicipalityLevel" | transloco }}
+      </mat-checkbox>
+    </div>
+
+    <div class="form-field-container">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.form.wardNumber" | transloco }}</mat-label>
+        <mat-select formControlName="wardNumber">
+          <mat-option [value]="null">{{
+            "user.form.selectWard" | transloco
+          }}</mat-option>
+          <mat-option
+            *ngFor="let ward of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
+            [value]="ward"
+          >
+            {{ "user.ward" | transloco }} {{ ward }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Form Actions -->
+  <div class="form-actions">
+    <button
+      type="button"
+      mat-stroked-button
+      (click)="cancelForm.emit()"
+      [disabled]="loading"
+    >
+      <mat-icon>arrow_back</mat-icon>
+      {{ "common.actions.cancel" | transloco }}
+    </button>
+    <button
+      class="submit-button"
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="loading"
+    >
+      <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+      <span class="button-content" *ngIf="!loading">
+        <mat-icon>{{ isEdit ? "save" : "add_circle" }}</mat-icon>
+        <span>{{
+          (isEdit ? "common.actions.update" : "common.actions.create")
+            | transloco
+        }}</span>
+      </span>
+    </button>
+  </div>
+</form>

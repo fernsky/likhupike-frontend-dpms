@@ -1,0 +1,31 @@
+<nav class="breadcrumb" aria-label="Breadcrumb navigation">
+  <ol>
+    <li *ngIf="showHome">
+      <a [routerLink]="['/']" class="breadcrumb-link home-link">
+        <mat-icon [class.icon-only]="true">{{ homeIcon }}</mat-icon>
+        <span class="sr-only">Home</span>
+      </a>
+    </li>
+
+    <ng-container *ngFor="let item of breadcrumbs; let last = last">
+      <li>
+        <mat-icon class="separator" aria-hidden="true">{{
+          separator
+        }}</mat-icon>
+        <a
+          [routerLink]="[item.url]"
+          class="breadcrumb-link"
+          [class.active]="last"
+          [attr.aria-current]="last ? 'page' : null"
+        >
+          <mat-icon *ngIf="item.icon" class="item-icon">{{
+            item.icon
+          }}</mat-icon>
+          <span>{{
+            item.translationKey ? (item.translationKey | transloco) : item.label
+          }}</span>
+        </a>
+      </li>
+    </ng-container>
+  </ol>
+</nav>

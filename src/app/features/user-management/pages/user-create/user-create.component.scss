@@ -1,0 +1,67 @@
+.create-user-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  min-height: 100%;
+
+  .page-header {
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+    padding: 0 0 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+    .title-section {
+      h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #0B1F42;
+        margin: 0 0 0.75rem;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+      }
+
+      .subtitle {
+        color: #546E7A;
+        font-size: 1rem;
+        max-width: 600px;
+        line-height: 1.6;
+        font-weight: 400;
+      }
+    }
+  }
+
+  .page-loading-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+
+  // Remove the content-area styles that were adding the white background
+  .content-area {
+    width: 100%;
+    // Remove max-width to allow full width expansion
+  }
+}
+
+@media (max-width: 768px) {
+  .create-user-container {
+    padding: 1rem;
+
+    .page-header {
+      margin-bottom: 1.5rem;
+
+      .title-section {
+        h1 {
+          font-size: 1.5rem;
+        }
+        .subtitle {
+          font-size: 0.875rem;
+        }
+      }
+    }
+  }
+}

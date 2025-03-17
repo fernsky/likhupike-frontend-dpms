@@ -1,0 +1,179 @@
+{
+  "stepOne": {
+    "title": "Personal Information",
+    "subtitle": "Let's start with your basic details",
+    "fields": {
+      "fullName": {
+        "label": "Full Name",
+        "errors": {
+          "required": "Full name is required",
+          "minlength": "Name must be at least 2 characters"
+        }
+      },
+      "fullNameNepali": {
+        "label": "Full Name in Nepali",
+        "errors": {
+          "required": "Full name in Nepali is required",
+          "nepaliName": "Please use Nepali characters only"
+        }
+      },
+      "phoneNumber": {
+        "label": "Phone Number",
+        "errors": {
+          "required": "Phone number is required",
+          "nepaliPhone": "Please enter a valid Nepali phone number (98XXXXXXXX)"
+        }
+      }
+    }
+  },
+  "stepTwo": {
+    "title": "Choose Your Role",
+    "subtitle": "Select how you'll be using the system to get started",
+    "errors": {
+      "required": "Please select a user type"
+    }
+  },
+  "stepThree": {
+    "title": "Location Details",
+    "subtitle": "Tell us about your location and role-specific details",
+    "loading": "Loading ...",
+    "fields": {
+      "province": {
+        "label": "Province",
+        "errors": {
+          "required": "Province is required"
+        }
+      },
+      "district": {
+        "label": "District",
+        "errors": {
+          "required": "District is required"
+        }
+      },
+      "municipality": {
+        "label": "Municipality",
+        "errors": {
+          "required": "Municipality is required"
+        }
+      },
+      "ward": {
+        "label": "Ward Number",
+        "numberPrefix": "Ward No.",
+        "errors": {
+          "required": "Ward number is required"
+        }
+      },
+      "officeSection": {
+        "label": "Office Section",
+        "errors": {
+          "required": "Office section is required"
+        }
+      },
+      "isWardOffice": {
+        "label": "I am working on a Ward Office."
+      },
+      "position": {
+        "label": "Position",
+        "errors": {
+          "required": "Position is required"
+        }
+      }
+    }
+  },
+  "stepFour": {
+    "title": "Account Security",
+    "subtitle": "Set up your login credentials",
+    "fields": {
+      "email": {
+        "label": "Email Address",
+        "placeholder": "e.g., your.name@nepal.gov.np",
+        "errors": {
+          "required": "Email is required",
+          "invalid": "Please enter a valid email address",
+          "governmentEmail": "Please use a valid government email address"
+        }
+      },
+      "password": {
+        "label": "Password",
+        "errors": {
+          "required": "Password is required",
+          "weak": "Password is too weak",
+          "mismatch": "Passwords do not match"
+        },
+        "strength": {
+          "weak": "Weak",
+          "medium": "Medium",
+          "strong": "Strong",
+          "label": "Password Strength"
+        },
+        "validations": {
+          "minLength": "Must be at least {{length}} characters",
+          "maxLength": "Must be less than {{length}} characters",
+          "uppercase": "Include at least one uppercase letter",
+          "lowercase": "Include at least one lowercase letter",
+          "number": "Include at least one number",
+          "specialChar": "Include at least one special character",
+          "commonWord": "Avoid common words or patterns",
+          "sequential": "Avoid sequential patterns",
+          "repeating": "Avoid repeating characters"
+        }
+      },
+      "confirmPassword": {
+        "label": "Confirm Password",
+        "errors": {
+          "required": "Please confirm your password",
+          "mismatch": "Passwords do not match"
+        }
+      }
+    }
+  },
+  "navigation": {
+    "previous": "Previous",
+    "next": "Next",
+    "createAccount": "Create Account",
+    "creatingAccount": "Creating Account...",
+    "login": "Sign in",
+    "haveAccount": "Already have an account?"
+  },
+  "steps": {
+    "personal": {
+      "label": "Personal",
+      "description": "Basic Information"
+    },
+    "role": {
+      "label": "Role",
+      "description": "User Type"
+    },
+    "location": {
+      "label": "Location",
+      "description": "Address Details"
+    },
+    "account": {
+      "label": "Account",
+      "description": "Login Credentials"
+    }
+  },
+  "userTypes": {
+    "citizen": "Citizen",
+    "localLevelEmployee": "Local Level Employee",
+    "electedRepresentative": "Elected Representative",
+    "other": "Other"
+  },
+  "officeSection": {
+    "generalAdmin": "General Administration",
+    "revenueFinancial": "Revenue & Financial Administration",
+    "infrastructure": "Infrastructure Development",
+    "socialDev": "Social Development",
+    "economicDev": "Economic Development",
+    "planningDev": "Planning & Development",
+    "envDisaster": "Environment & Disaster Management",
+    "legalInfo": "Legal & Information",
+    "other": "Other"
+  },
+  "electedPosition": {
+    "chairperson": "Chairperson",
+    "viceChairperson": "Vice Chairperson",
+    "wardChairperson": "Ward Chairperson",
+    "wardMember": "Ward Member"
+  }
+}

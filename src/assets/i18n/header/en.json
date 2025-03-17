@@ -1,0 +1,23 @@
+{
+  "closeMenu": "Close menu",
+  "openMenu": "Open menu",
+  "search": {
+    "placeholder": "Search...",
+    "ariaLabel": "Search the system",
+    "clear": "Clear search",
+    "noResults": "No results found",
+    "results": "Search results"
+  },
+  "notifications": {
+    "label": "Notifications",
+    "title": "Notifications",
+    "empty": "No notifications",
+    "markAllRead": "Mark all as read",
+    "viewAll": "View all notifications"
+  },
+  "profile": {
+    "viewProfile": "My Profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  }
+}

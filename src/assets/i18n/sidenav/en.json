@@ -1,0 +1,43 @@
+{
+  "menu": {
+    "main": "Main Menu",
+    "system": "System"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "profiles": {
+      "title": "Digital Profiles",
+      "list": "Profile List",
+      "pending": "Pending Approvals"
+    },
+    "reports": {
+      "title": "Reports",
+      "statistics": "Statistics",
+      "analytics": "Analytics"
+    },
+    "settings": "Settings",
+    "help": "Help Center"
+  },
+  "user": {
+    "profile": "Profile",
+    "settings": "User Settings",
+    "logout": "Logout"
+  },
+  "actions": {
+    "collapse": "Collapse menu",
+    "expand": "Expand menu"
+  },
+  "sidenav": {
+    "menu": {
+      "main": "Main Menu",
+      "system": "System Menu"
+    },
+    "navigation": {
+      "settings": "Settings",
+      "help": "Help Center"
+    },
+    "user": {
+      "logout": "Logout"
+    }
+  }
+}

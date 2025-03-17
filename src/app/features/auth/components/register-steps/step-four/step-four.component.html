@@ -1,0 +1,117 @@
+<form [formGroup]="stepForm">
+  <div class="step-header">
+    <div class="step-icon">
+      <mat-icon>security</mat-icon>
+    </div>
+    <div class="step-intro">
+      <h2>{{ "registration.stepFour.title" | transloco }}</h2>
+      <p>{{ "registration.stepFour.subtitle" | transloco }}</p>
+    </div>
+  </div>
+
+  <div class="form-fields">
+    <mat-form-field appearance="outline">
+      <mat-label>{{
+        "registration.stepFour.fields.email.label" | transloco
+      }}</mat-label>
+      <input
+        matInput
+        type="email"
+        formControlName="email"
+        [placeholder]="
+          'registration.stepFour.fields.email.placeholder' | transloco
+        "
+      />
+      <mat-error *ngIf="stepForm.get('email')?.hasError('required')">
+        {{ "registration.stepFour.fields.email.errors.required" | transloco }}
+      </mat-error>
+      <mat-error *ngIf="stepForm.get('email')?.hasError('email')">
+        {{ "registration.stepFour.fields.email.errors.invalid" | transloco }}
+      </mat-error>
+      <mat-error *ngIf="stepForm.get('email')?.hasError('governmentEmail')">
+        {{
+          "registration.stepFour.fields.email.errors.governmentEmail"
+            | transloco
+        }}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="password-section">
+      <mat-form-field appearance="outline">
+        <mat-label>{{
+          "registration.stepFour.fields.password.label" | transloco
+        }}</mat-label>
+        <input
+          matInput
+          [type]="hidePassword ? 'password' : 'text'"
+          formControlName="password"
+          autocomplete="new-password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="hidePassword = !hidePassword"
+          type="button"
+        >
+          <mat-icon>{{
+            hidePassword ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <div class="password-validation" *ngIf="showPasswordValidation">
+        <div
+          class="validation-item"
+          *ngFor="let validation of passwordValidations"
+          [class.valid]="validation.isValid"
+        >
+          <mat-icon
+            [class.valid]="validation.isValid"
+            [class.invalid]="!validation.isValid"
+          >
+            {{ validation.isValid ? "check_circle" : "radio_button_unchecked" }}
+          </mat-icon>
+          <span>{{ validation.message | transloco: validation.params }}</span>
+        </div>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{
+          "registration.stepFour.fields.confirmPassword.label" | transloco
+        }}</mat-label>
+        <input
+          matInput
+          [type]="hideConfirmPassword ? 'password' : 'text'"
+          formControlName="confirmPassword"
+          autocomplete="new-password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="hideConfirmPassword = !hideConfirmPassword"
+          type="button"
+        >
+          <mat-icon>{{
+            hideConfirmPassword ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+        <mat-error
+          *ngIf="stepForm.get('confirmPassword')?.hasError('required')"
+        >
+          {{
+            "registration.stepFour.fields.confirmPassword.errors.required"
+              | transloco
+          }}
+        </mat-error>
+        <mat-error
+          *ngIf="stepForm.get('confirmPassword')?.hasError('passwordMismatch')"
+        >
+          {{
+            "registration.stepFour.fields.confirmPassword.errors.mismatch"
+              | transloco
+          }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+</form>

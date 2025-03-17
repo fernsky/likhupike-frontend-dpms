@@ -1,0 +1,33 @@
+<nav class="step-indicator" aria-label="Registration progress">
+  <div
+    class="steps-container"
+    [style.--progress]="currentStepIndex / (steps.length - 1)"
+  >
+    <div
+      *ngFor="let step of steps; let i = index"
+      class="step"
+      [class.completed]="step.completed"
+      [class.current]="step.current"
+      [class.clickable]="isStepClickable(i)"
+      [attr.aria-current]="step.current ? 'step' : null"
+      (click)="navigateToStep(i)"
+      [matTooltip]="step.description | transloco"
+      matTooltipPosition="above"
+    >
+      <div class="step-indicator-content">
+        <div class="step-circle">
+          <span *ngIf="step.current">
+            <mat-icon fontIcon="edit"></mat-icon>
+          </span>
+          <span *ngIf="step.completed">
+            <mat-icon fontIcon="check_circle"></mat-icon>
+          </span>
+          <span class="step-number" *ngIf="!step.completed && !step.current">{{
+            i + 1
+          }}</span>
+        </div>
+        <span class="step-label">{{ step.label | transloco }}</span>
+      </div>
+    </div>
+  </div>
+</nav>

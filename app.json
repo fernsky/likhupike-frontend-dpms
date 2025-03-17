@@ -1,0 +1,6 @@
+{
+  "name": "Likhupike Digital Profile Web",
+  "description": "Digital Profile Web Interface for Likhupike",
+  "repository": "https://github.com/likhupike/likhupike-web-dpms",
+  "keywords": ["angular", "jest", "compodoc", "transloco"]
+}

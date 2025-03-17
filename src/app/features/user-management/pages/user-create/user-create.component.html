@@ -1,0 +1,24 @@
+<div class="create-user-container">
+  <app-breadcrumb></app-breadcrumb>
+  <mat-progress-bar
+    *ngIf="loading$ | async"
+    mode="indeterminate"
+    class="page-loading-bar"
+  ></mat-progress-bar>
+
+  <app-page-title
+    titleTranslationKey="user.create.title"
+    descriptionTranslationKey="user.create.description"
+    icon="person_add"
+  >
+    <!-- Optional action buttons can go here -->
+  </app-page-title>
+
+  <div class="content-area">
+    <app-user-form
+      [isEdit]="false"
+      (submitForm)="onSubmit($event)"
+      (cancel)="onCancel()"
+    ></app-user-form>
+  </div>
+</div>
