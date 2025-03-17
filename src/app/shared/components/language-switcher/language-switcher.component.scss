@@ -2,6 +2,9 @@
   --primary-color: #123772;
   --hover-bg: rgba(255, 255, 255, 0.15);
   --active-bg: rgba(255, 255, 255, 0.2);
+  --primary-dark: #0b1f42;
+  --primary-main: #123772;
+  --primary-light: #1a4894;
 }
 
 .language-switcher {
@@ -10,52 +13,54 @@
 
 .language-button {
   min-width: 0 !important;
-  height: 36px !important;
-  padding: 0 6px 0 12px !important;
-  border-radius: 18px !important;
-  background: rgba(255, 255, 255, 0.1);
+  height: 40px !important;
+  padding: 0 12px 0 16px !important;
+  border-radius: 20px !important;
+  background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
   font-weight: 500;
   display: flex;
   align-items: center;
   gap: 6px;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   .button-content {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
 
     .lang-icon {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-      opacity: 0.9;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      opacity: 0.95;
     }
 
     .language-code {
       font-size: 12px;
       font-weight: 400;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      opacity: 0.95;
       margin: 0 2px;
     }
 
     .chevron {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
       opacity: 0.8;
-      transition: transform 0.2s;
-      margin-left: 2px;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-right: -4px;
     }
   }
 
   &:hover {
     background: var(--hover-bg);
-    border-color: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     .button-content {
       transform: translateY(-1px);
     }
@@ -124,21 +129,21 @@
 
 @media (max-width: 768px) {
   .language-button {
-    height: 32px !important;
-    padding: 0 8px !important;
+    height: 36px !important;
+    padding: 0 10px 0 14px !important;
     border-radius: 16px !important;
 
     .button-content {
-      gap: 4px;
+      gap: 6px;
 
       .lang-icon {
-        font-size: 16px;
-        width: 16px;
-        height: 16px;
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
       }
 
       .language-code {
-        font-size: 11px;
+        font-size: 12px;
         letter-spacing: 0.5px;
       }
 
@@ -174,10 +179,10 @@
 
 @media (max-width: 480px) {
   .language-button {
-    height: 32px !important;
+    height: 34px !important;
     width: 64px !important;
-    min-width: 32px !important;
-    padding: 0 !important;
+    min-width: unset !important;
+    padding: 0 8px !important;
     border-radius: 16px !important;
 
     .button-content {
@@ -203,7 +208,7 @@
   }
 
   :host ::ng-deep .language-menu {
-    min-width: 140px !important;
+    min-width: 180px !important;
     margin-top: 8px !important;
 
     .mat-mdc-menu-content {
@@ -211,7 +216,7 @@
     }
 
     .language-option {
-      height: 32px !important;
+      height: 44px !important;
       padding: 0 10px !important;
       gap: 8px;
       border-radius: 4px;
@@ -238,19 +243,19 @@
 }
 
 :host ::ng-deep .language-menu {
-  margin-top: 12px !important;
-  min-width: 180px !important;
+  margin-top: 8px !important;
+  min-width: 200px !important;
   max-width: 280px !important;
 
   .mat-mdc-menu-content {
-    padding: 6px !important;
+    padding: 8px !important;
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(10px);
-    border-radius: 12px;
+    border-radius: 16px;
     border: 1px solid rgba(0, 0, 0, 0.08);
     box-shadow:
-      0 4px 20px rgba(0, 0, 0, 0.08),
-      0 1px 3px rgba(0, 0, 0, 0.05);
+      0 8px 24px rgba(0, 0, 0, 0.12),
+      0 2px 8px rgba(0, 0, 0, 0.08);
   }
 
   .menu-header {
@@ -271,10 +276,10 @@
   }
 
   .language-option {
-    height: 40px !important;
+    height: 48px !important;
     padding: 0 12px !important;
-    border-radius: 6px;
-    margin: 2px 0;
+    border-radius: 12px;
+    margin: 4px 0;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
@@ -293,6 +298,11 @@
 
       .lang-icon {
         opacity: 1;
+      }
+
+      .check-icon {
+        opacity: 1;
+        transform: scale(1);
       }
     }
 

@@ -4,7 +4,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRippleModule } from '@angular/material/core';
-import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { LanguageService } from '../../../core/services/language.service';
 import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 
@@ -19,7 +19,7 @@ import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
     MatButtonModule,
     MatIconModule,
     MatRippleModule,
-    TranslocoPipe,
+
     TranslocoModule,
   ],
   providers: [
@@ -57,6 +57,10 @@ export class LanguageSwitcherComponent implements OnInit {
 
   getLocalizedLocalName(lang: Language): string {
     return this.translocoService.translate(`languages.${lang.code}.localName`);
+  }
+
+  getDisplayLanguageCode(lang: Language): string {
+    return lang.code === 'en' ? 'नेपाली' : 'English';
   }
 }
 

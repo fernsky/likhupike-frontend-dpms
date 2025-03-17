@@ -1,3 +1,9 @@
+:host {
+  --primary-dark: #0b1f42;
+  --primary-main: #123772;
+  --primary-light: #1a4894;
+}
+
 .register-form {
   padding: 2.5rem;
   display: flex;
@@ -14,13 +20,20 @@
 }
 
 .ward-level-section {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
+  margin: 0.75rem 0;
+  padding: 0.75rem;
+  background: rgba(18, 55, 114, 0.02);
+  border-radius: 8px;
 
   mat-checkbox {
-    margin: 0.5rem 0;
-    color: #546e7a;
+    margin: 0;
+    color: var(--primary-dark);
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+
+  mat-form-field {
+    margin-top: 0.75rem;
   }
 }
 
@@ -163,28 +176,6 @@ mat-card-header {
   }
 }
 
-.ward-level-section {
-  margin: 0.5rem 0;
-  padding: 0.75rem;
-  background: rgba(0, 0, 0, 0.02);
-  border-radius: 8px;
-
-  mat-checkbox {
-    margin: 0;
-    color: var(--primary-dark);
-    font-weight: 500;
-    font-size: 0.95rem;
-  }
-
-  mat-form-field {
-    margin-top: 1rem;
-  }
-}
-
-.register-form {
-  padding: 2rem 2.5rem 2.5rem;
-}
-
 @media (max-width: 480px) {
   .register-form {
     padding: 1.5rem;
@@ -212,7 +203,6 @@ mat-card-header {
 
     mat-card-subtitle {
       font-size: 1rem;
-      max-width: 100%;
     }
   }
 }
