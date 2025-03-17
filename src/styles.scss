@@ -1,12 +1,72 @@
-@use '@angular/material' as mat;
-@use '@angular/cdk/overlay-prebuilt.css' as overlay;
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@use "@angular/material" as mat;
+@use "@angular/cdk/overlay-prebuilt.css" as overlay;
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
 :root {
-  --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-  @include mat.tooltip-overrides((
-    supporting-text-tracking: -0.01rem,
-  ));
+  --font-family-base:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans,
+    Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  @include mat.tooltip-overrides(
+    (
+      supporting-text-tracking: -0.01rem,
+    )
+  );
+}
+
+// Font utility classes
+.inter-thin {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+}
+.inter-extralight {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
+.inter-light {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+.inter-regular {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+.inter-medium {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+.inter-semibold {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+.inter-bold {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+.inter-extrabold {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+}
+.inter-black {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
 }
 
 * {
@@ -17,10 +77,12 @@
 
 html {
   height: 100%;
-  @include mat.theme((
-    typography: var(--font-family-base),
-    density: 0
-  ));
+  @include mat.theme(
+    (
+      typography: var(--font-family-base),
+      density: 0,
+    )
+  );
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: -0.01rem;
@@ -63,12 +125,10 @@ body {
 .mat-mdc-plain-tooltip-supporting-text,
 .mdc-text-field__input,
 .mat-mdc-menu-item-text,
-.mat-mdc-menu-item
-{
+.mat-mdc-menu-item {
   font-family: var(--font-family-base) !important;
   letter-spacing: -0.01rem;
 }
-
 
 // Override MDC typography
 .mdc-typography {
@@ -76,13 +136,16 @@ body {
 }
 
 // Ensure all form elements use the same font
-input, select, textarea, button {
+input,
+select,
+textarea,
+button {
   font-family: var(--font-family-base);
 }
 
 // Material Icons
 .material-icons {
-  font-family: 'Material Icons';
+  font-family: "Material Icons";
   font-weight: normal;
   font-style: normal;
   font-size: 24px;
@@ -93,7 +156,7 @@ input, select, textarea, button {
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
-  -webkit-font-feature-settings: 'liga';
+  -webkit-font-feature-settings: "liga";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -107,7 +170,7 @@ input, select, textarea, button {
   justify-content: center;
 
   &.material-icons {
-    font-family: 'Material Icons';
+    font-family: "Material Icons";
     font-weight: normal;
     font-style: normal;
     font-size: 24px;
@@ -171,7 +234,7 @@ input, select, textarea, button {
 
   // Style for menu headers if needed
   .menu-header {
-    padding: 16px 20px;  // Increased padding
+    padding: 16px 20px; // Increased padding
     background: linear-gradient(
       135deg,
       rgba(18, 55, 114, 0.03),
@@ -186,8 +249,8 @@ input, select, textarea, button {
 
   // Add more breathing room for menu items
   .mat-mdc-menu-item {
-    height: 56px !important;  // Taller menu items
+    height: 56px !important; // Taller menu items
     line-height: 56px !important;
-    padding: 0 20px !important;  // More horizontal padding
+    padding: 0 20px !important; // More horizontal padding
   }
 }
