@@ -23,9 +23,9 @@
           <span class="primary-name">{{ getLocalizedName(lang) }}</span>
           <span class="secondary-name">{{ getLocalizedLocalName(lang) }}</span>
         </div>
-        <mat-icon class="check-icon" *ngIf="currentLanguage.code === lang.code"
-          >check</mat-icon
-        >
+        <p *ngIf="currentLanguage.code === lang.code">
+          <mat-icon class="check-icon">check</mat-icon>
+        </p>
       </div>
     </button>
   </mat-menu>

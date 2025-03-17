@@ -1,9 +1,9 @@
 import { createAction, props } from '@ngrx/store';
 import { AuthUser } from './auth.types';
 import {
-  LoginRequest,
+  LoginSuccessData,
   RegisterRequest,
-  AuthResponse,
+  RegistrationSuccessData,
   RequestPasswordResetRequest,
   ResetPasswordRequest,
 } from '../../models/auth.interface';
@@ -38,7 +38,7 @@ export const register = createAction(
 
 export const registerSuccess = createAction(
   '[Auth] Register Success',
-  props<{ response: AuthResponse }>()
+  props<{ response: RegistrationSuccessData }>()
 );
 
 export const registerFailure = createAction(
@@ -55,7 +55,7 @@ export const refreshToken = createAction(
 
 export const refreshTokenSuccess = createAction(
   '[Auth] Refresh Token Success',
-  props<{ response: AuthResponse }>()
+  props<{ response: LoginSuccessData }>()
 );
 
 export const refreshTokenFailure = createAction(

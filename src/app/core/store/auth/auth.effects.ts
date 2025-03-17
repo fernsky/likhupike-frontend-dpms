@@ -16,6 +16,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import * as AuthActions from './auth.actions';
 import { AuthUser } from './auth.types';
 import { TranslocoService } from '@jsverse/transloco';
+import {
+  ApiResponse,
+  LoginSuccessData,
+  RegistrationSuccessData,
+} from '../../models/auth.interface';
 
 @Injectable()
 export class AuthEffects {
@@ -41,70 +46,66 @@ export class AuthEffects {
       ofType(AuthActions.login),
       switchMap(({ credentials }) =>
         this.authService.login(credentials).pipe(
-          map((response) => {
-            // Ensure response has required properties
-            if (!response.token || !response.userId) {
-              throw new Error(
-                this.translocoService.translate('auth.errors.invalidResponse')
-              );
+          map((response: ApiResponse<LoginSuccessData>) => {
+            if (!response.success || !response.data) {
+              throw new Error(response.error?.message || 'Login failed');
             }
 
-            const { token, userId, email, roles } = response;
-            // Ensure user has required properties for AuthUser
+            const { data } = response;
             const authUser: AuthUser = {
-              id: userId,
-              email: email,
-              name: '',
-              roles: roles || [],
+              id: data.userId,
+              email: data.email,
+              permissions: data.permissions,
+              isWardLevelUser: data.isWardLevelUser,
+              wardNumber: data.wardNumber,
             };
 
-            this.storageService.setToken(token);
+            this.storageService.setToken(data.token);
+            this.storageService.setRefreshToken(data.refreshToken);
             this.storageService.setUser(authUser);
 
-            // Use translate$ for reactive translations
-            from(
-              this.translocoService
-                .selectTranslate('auth.notifications.loginSuccess')
-                .pipe(
-                  withLatestFrom(
-                    this.translocoService.selectTranslate(
-                      'common.actions.close'
-                    )
-                  )
-                )
-            ).subscribe(([message, closeText]) => {
-              this.snackBar.open(message, closeText, {
-                duration: 3000,
-              });
-            });
+            const successMessage = this.translocoService.translate(
+              'auth.notifications.loginSuccess',
+              {},
+              this.translocoService.getActiveLang()
+            );
 
-            return AuthActions.loginSuccess({ token, user: authUser });
+            this.snackBar.open(
+              successMessage,
+              this.translocoService.translate('common.actions.close'),
+              {
+                duration: 4000,
+                panelClass: ['success-snackbar', 'bottom-right'],
+              }
+            );
+
+            return AuthActions.loginSuccess({
+              token: data.token,
+              user: authUser,
+            });
           }),
           catchError((error) => {
-            // Use translate$ for error messages too
-            from(
-              this.translocoService
-                .selectTranslate('auth.errors.loginFailed')
-                .pipe(
-                  withLatestFrom(
-                    this.translocoService.selectTranslate(
-                      'common.actions.close'
-                    )
-                  )
-                )
-            ).subscribe(([message, closeText]) => {
-              this.snackBar.open(message, closeText, {
-                duration: 5000,
-              });
-            });
+            const isNotApproved = error.error?.code === 'AUTH_011';
+            const messageKey = isNotApproved
+              ? 'auth.notifications.userNotApproved'
+              : 'auth.errors.loginFailed';
 
-            return of(
-              AuthActions.loginFailure({
-                error: this.translocoService.translate(
-                  'auth.errors.loginFailed'
-                ),
-              })
+            const errorMessage = this.translocoService.translate(
+              messageKey,
+              {},
+              this.translocoService.getActiveLang()
             );
+
+            this.snackBar.open(
+              errorMessage,
+              this.translocoService.translate('common.actions.close'),
+              {
+                duration: 5000,
+                panelClass: ['error-snackbar', 'bottom-right'],
+              }
+            );
+
+            return of(AuthActions.loginFailure({ error: errorMessage }));
           })
         )
       )
@@ -116,17 +117,43 @@ export class AuthEffects {
       ofType(AuthActions.register),
       switchMap(({ userData }) =>
         this.authService.register(userData).pipe(
-          map((response) => {
-            if (!response.token || !response.userId) {
-              throw new Error('Invalid registration response');
+          map((response: ApiResponse<RegistrationSuccessData>) => {
+            if (!response.success || !response.data) {
+              throw new Error(response.error?.message || 'Registration failed');
             }
-            return AuthActions.registerSuccess({ response });
+
+            const translatedMessage = this.translocoService.translate(
+              'auth.notifications.registerPending',
+              {},
+              this.translocoService.getActiveLang()
+            );
+
+            this.snackBar.open(
+              translatedMessage,
+              this.translocoService.translate('common.actions.close'),
+              {
+                duration: 8000,
+                panelClass: ['success-snackbar', 'bottom-right'],
+              }
+            );
+
+            return AuthActions.registerSuccess({ response: response.data });
           }),
           catchError((error) => {
-            const errorMessage = error.error?.message || 'Registration failed.';
-            this.snackBar.open(errorMessage, 'Close', {
-              duration: 5000,
-            });
+            const errorMessage = this.translocoService.translate(
+              'auth.errors.registrationFailed',
+              {},
+              this.translocoService.getActiveLang()
+            );
+
+            this.snackBar.open(
+              errorMessage,
+              this.translocoService.translate('common.actions.close'),
+              {
+                duration: 5000,
+                panelClass: ['error-snackbar', 'bottom-right'],
+              }
+            );
             return of(AuthActions.registerFailure({ error: errorMessage }));
           })
         )
@@ -139,9 +166,7 @@ export class AuthEffects {
       this.actions$.pipe(
         ofType(AuthActions.registerSuccess),
         tap(() => {
-          this.snackBar.open('Registration successful.', 'Close', {
-            duration: 5000,
-          });
+          // After registration, always redirect to login since we need admin approval
           this.router.navigate(['/auth/login']);
         })
       ),

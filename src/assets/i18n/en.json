@@ -10,11 +10,14 @@
   },
   "auth": {
     "notifications": {
-      "loginSuccess": "Welcome back! Successfully logged in.",
+      "loginSuccess": "Welcome back! You've successfully logged in.",
       "logoutSuccess": "You have been successfully logged out.",
-      "registerSuccess": "Account created successfully! Please log in.",
+      "registerSuccess": "Registration successful! Please check your email for further instructions.",
       "passwordResetEmailSent": "Password reset instructions have been sent to your email.",
-      "passwordResetSuccess": "Your password has been successfully reset."
+      "passwordResetSuccess": "Your password has been successfully reset.",
+      "registerPending": "Registration successful! Your account is pending admin approval. You'll be notified via email once approved.",
+      "pendingApproval": "Your account is pending approval. You will be notified via email once approved.",
+      "userNotApproved": "Account not yet approved. Please wait for admin approval."
     },
     "errors": {
       "invalidResponse": "Invalid server response.",

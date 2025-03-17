@@ -1,4 +1,4 @@
-import { RoleType } from '@app/core/models/role.enum';
+import { PermissionType } from '@app/core/models/permission.enum';
 
 export interface NavItem {
   id: string;
@@ -6,7 +6,7 @@ export interface NavItem {
   labelNp: string;
   icon: string;
   route?: string;
-  roles?: RoleType[];
+  permissions?: PermissionType[];
   children?: NavItem[];
   badge?: NavBadge;
   metadata?: NavItemMetadata;

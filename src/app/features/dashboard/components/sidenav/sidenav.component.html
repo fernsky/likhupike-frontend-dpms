@@ -36,7 +36,7 @@
           [class.has-children]="item.children?.length"
           [class.expanded]="isExpanded(item.id)"
           role="none"
-          *ngIf="hasRole(item.roles) | async"
+          *ngIf="hasPermission(item.permissions) | async"
         >
           <!-- Single Menu Item -->
           <a
@@ -102,40 +102,42 @@
             role="menu"
             [attr.aria-hidden]="!isExpanded(item.id)"
           >
-            <a
-              *ngFor="let child of item.children"
-              [routerLink]="child.route"
-              routerLinkActive="active"
-              class="nav-item child-item"
-              role="menuitem"
-              [attr.aria-current]="
-                isActive(child.route || '') ? 'page' : undefined
-              "
-              [matTooltip]="
-                collapsed
-                  ? currentLang === 'ne'
-                    ? child.labelNp
-                    : child.label
-                  : ''
-              "
-              matTooltipPosition="right"
-            >
-              <mat-icon class="nav-icon" aria-hidden="true">{{
-                child.icon
-              }}</mat-icon>
-              <span class="nav-label" [class.hidden]="collapsed">
-                {{ currentLang === "ne" ? child.labelNp : child.label }}
-              </span>
-              <span
-                *ngIf="child.badge"
-                class="badge"
-                [ngClass]="child.badge.color"
-                role="status"
-                [attr.aria-label]="child.badge.value + ' notifications'"
+            <ng-container *ngFor="let child of item.children">
+              <a
+                *ngIf="hasPermission(child.permissions) | async"
+                [routerLink]="child.route"
+                routerLinkActive="active"
+                class="nav-item child-item"
+                role="menuitem"
+                [attr.aria-current]="
+                  isActive(child.route || '') ? 'page' : undefined
+                "
+                [matTooltip]="
+                  collapsed
+                    ? currentLang === 'ne'
+                      ? child.labelNp
+                      : child.label
+                    : ''
+                "
+                matTooltipPosition="right"
               >
-                {{ child.badge.value }}
-              </span>
-            </a>
+                <mat-icon class="nav-icon" aria-hidden="true">{{
+                  child.icon
+                }}</mat-icon>
+                <span class="nav-label" [class.hidden]="collapsed">
+                  {{ currentLang === "ne" ? child.labelNp : child.label }}
+                </span>
+                <span
+                  *ngIf="child.badge"
+                  class="badge"
+                  [ngClass]="child.badge.color"
+                  role="status"
+                  [attr.aria-label]="child.badge.value + ' notifications'"
+                >
+                  {{ child.badge.value }}
+                </span>
+              </a>
+            </ng-container>
           </div>
         </div>
       </ng-container>

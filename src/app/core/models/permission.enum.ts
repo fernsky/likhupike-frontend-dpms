@@ -1,0 +1,9 @@
+export enum PermissionType {
+  // User Management
+  CREATE_USER = 'CREATE_USER',
+  APPROVE_USER = 'APPROVE_USER',
+  EDIT_USER = 'EDIT_USER',
+  DELETE_USER = 'DELETE_USER',
+  VIEW_USER = 'VIEW_USER',
+  RESET_USER_PASSWORD = 'RESET_USER_PASSWORD',
+}

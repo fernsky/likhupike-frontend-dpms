@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { AuthState, initialAuthState } from './auth.types';
+import { initialAuthState } from './auth.types';
 import * as AuthActions from './auth.actions';
 
 export const authReducer = createReducer(
@@ -37,6 +37,7 @@ export const authReducer = createReducer(
     ...state,
     error,
     isLoading: false,
+    isAuthenticated: false,
   })),
 
   on(AuthActions.logout, () => ({
@@ -49,23 +50,37 @@ export const authReducer = createReducer(
     error: null,
   })),
 
-  on(AuthActions.registerSuccess, (state, { response }) => ({
+  on(AuthActions.registerSuccess, (state) => ({
     ...state,
-    token: response.token,
-    user: {
-      id: response.userId,
-      email: response.email,
-      name: '',
-      roles: response.roles || [],
-    },
-    isAuthenticated: true,
     isLoading: false,
     error: null,
+    // Don't set auth state on registration as we need admin approval
   })),
 
   on(AuthActions.registerFailure, (state, { error }) => ({
     ...state,
     error,
     isLoading: false,
+  })),
+
+  on(AuthActions.refreshTokenSuccess, (state, { response }) => ({
+    ...state,
+    token: response.token,
+    refreshToken: response.refreshToken,
+    expiresIn: response.expiresIn,
+    error: null,
+  })),
+
+  on(AuthActions.refreshTokenFailure, (state, { error }) => ({
+    ...state,
+    error,
+    isAuthenticated: false,
+    token: null,
+    refreshToken: null,
+    user: null,
+  })),
+
+  on(AuthActions.terminateSession, () => ({
+    ...initialAuthState,
   }))
 );

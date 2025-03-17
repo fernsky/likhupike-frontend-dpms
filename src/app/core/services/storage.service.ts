@@ -6,6 +6,7 @@ import { AuthUser } from '../store/auth/auth.types';
 })
 export class StorageService {
   private readonly TOKEN_KEY = 'auth_token';
+  private readonly REFRESH_TOKEN_KEY = 'auth_refresh_token';
   private readonly USER_KEY = 'auth_user';
   private readonly TOKEN_EXPIRY_KEY = 'auth_token_expiry';
 
@@ -33,6 +34,14 @@ export class StorageService {
     return token;
   }
 
+  setRefreshToken(refreshToken: string): void {
+    localStorage.setItem(this.REFRESH_TOKEN_KEY, refreshToken);
+  }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem(this.REFRESH_TOKEN_KEY);
+  }
+
   setUser(user: AuthUser): void {
     localStorage.setItem(this.USER_KEY, JSON.stringify(user));
   }
@@ -52,18 +61,24 @@ export class StorageService {
     localStorage.removeItem(this.TOKEN_EXPIRY_KEY);
   }
 
+  removeRefreshToken(): void {
+    localStorage.removeItem(this.REFRESH_TOKEN_KEY);
+  }
+
   removeUser(): void {
     localStorage.removeItem(this.USER_KEY);
   }
 
   clearAuth(): void {
     this.removeToken();
+    this.removeRefreshToken();
     this.removeUser();
   }
 
   hasStoredAuth(): boolean {
     const token = this.getToken(); // This will check expiry
+    const refreshToken = this.getRefreshToken();
     const user = this.getUser();
-    return !!token && !!user;
+    return !!token && !!refreshToken && !!user;
   }
 }

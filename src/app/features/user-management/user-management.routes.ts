@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { RoleGuard } from '@app/core/guards/role.guard';
-import { RoleType } from '@app/core/models/role.enum';
+import { PermissionGuard } from '@app/core/guards/permission.guard';
+import { PermissionType } from '@app/core/models/permission.enum';
 
 export const USER_MANAGEMENT_ROUTES: Routes = [
   {
@@ -17,9 +17,9 @@ export const USER_MANAGEMENT_ROUTES: Routes = [
           import('./pages/user-list/user-list.module').then(
             (m) => m.UserListModule
           ),
-        canActivate: [RoleGuard],
+        canActivate: [PermissionGuard],
         data: {
-          roles: [RoleType.MUNICIPALITY_ADMIN],
+          permissions: [PermissionType.VIEW_USER],
           breadcrumb: {
             label: 'Users',
             translationKey: 'user.list.title',
@@ -33,9 +33,9 @@ export const USER_MANAGEMENT_ROUTES: Routes = [
           import('./pages/user-create/user-create.module').then(
             (m) => m.UserCreateModule
           ),
-        canActivate: [RoleGuard],
+        canActivate: [PermissionGuard],
         data: {
-          roles: [RoleType.MUNICIPALITY_ADMIN],
+          permissions: [PermissionType.CREATE_USER],
           breadcrumb: {
             label: 'Create User',
             translationKey: 'user.create.title',
@@ -49,9 +49,9 @@ export const USER_MANAGEMENT_ROUTES: Routes = [
           import('./pages/user-edit/user-edit.module').then(
             (m) => m.UserEditModule
           ),
-        canActivate: [RoleGuard],
+        canActivate: [PermissionGuard],
         data: {
-          roles: [RoleType.MUNICIPALITY_ADMIN],
+          permissions: [PermissionType.EDIT_USER],
           breadcrumb: {
             label: 'Edit User',
             translationKey: 'user.edit.title',

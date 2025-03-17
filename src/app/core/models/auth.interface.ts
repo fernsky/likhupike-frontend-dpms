@@ -1,4 +1,34 @@
-import { RoleType } from './role.enum';
+import { PermissionType } from './permission.enum';
+
+export interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  message?: string;
+  error?: ApiError;
+}
+
+export interface ApiError {
+  code: string;
+  message: string;
+  details: Record<string, unknown>;
+  status: number;
+}
+
+export interface LoginSuccessData {
+  token: string;
+  refreshToken: string;
+  userId: string;
+  email: string;
+  permissions: Set<PermissionType>;
+  expiresIn: number;
+  isWardLevelUser: boolean;
+  wardNumber?: number;
+}
+
+export interface RegistrationSuccessData {
+  email: string;
+  message: string;
+}
 
 export interface LoginRequest {
   email: string;
@@ -11,15 +41,6 @@ export interface RegisterRequest {
   confirmPassword: string;
   isWardLevelUser: boolean;
   wardNumber?: number;
-}
-
-export interface AuthResponse {
-  token: string;
-  refreshToken: string;
-  email: string;
-  roles: RoleType[];
-  userId: string;
-  expiresIn: number;
 }
 
 export interface RequestPasswordResetRequest {

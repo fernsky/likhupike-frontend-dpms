@@ -6,9 +6,10 @@ export const environment: Environment = {
     'http://localhost:4200',
     'http://localhost:3000',
     'https://likhupike-admin.intensivestudy.com.np',
+    'https://localhost:8080',
   ],
   version: '1.0.0-dev', // Add version
-  apiUrl: 'https://likhupike-api.intensivestudy.com.np/api/v1',
+  apiUrl: 'http://localhost:8080/api/v1',
   baseUrl: '', // Empty string for development as assets are served from root
   auth: {
     loginEndpoint: '/auth/login',

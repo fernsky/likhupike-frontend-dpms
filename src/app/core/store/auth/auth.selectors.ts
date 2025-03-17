@@ -1,6 +1,7 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { AuthState } from './auth.types';
 import { RoleType } from '../../models/role.enum';
+import { PermissionType } from '../../models/permission.enum';
 
 // Feature selector
 export const selectAuthState = createFeatureSelector<AuthState>('auth');
@@ -14,6 +15,11 @@ export const selectUser = createSelector(
 export const selectToken = createSelector(
   selectAuthState,
   (state: AuthState) => state.token
+);
+
+export const selectRefreshToken = createSelector(
+  selectAuthState,
+  (state: AuthState) => state.refreshToken
 );
 
 export const selectAuthError = createSelector(
@@ -38,8 +44,23 @@ export const selectUserRoles = createSelector(
   () => [RoleType.MUNICIPALITY_ADMIN]
 );
 
-// Role-based selectors
 export const selectUserPermissions = createSelector(
+  selectUser,
+  (user) => user?.permissions || new Set<PermissionType>()
+);
+
+export const selectIsWardUser = createSelector(
+  selectUser,
+  (user) => user?.isWardLevelUser || false
+);
+
+export const selectWardNumber = createSelector(
+  selectUser,
+  (user) => user?.wardNumber
+);
+
+// Role-based selectors
+export const selectUserPermissionsOld = createSelector(
   selectUserRoles,
   (roles) => ({
     isSuperAdmin: roles.includes(RoleType.SUPER_ADMIN),

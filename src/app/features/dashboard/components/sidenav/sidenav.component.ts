@@ -33,7 +33,7 @@ import {
   TranslocoService,
 } from '@jsverse/transloco';
 
-import { RoleType } from '@app/core/models/role.enum';
+import { PermissionType } from '@app/core/models/permission.enum';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -48,7 +48,7 @@ interface NavItem {
   labelNp: string;
   icon: string;
   route?: string;
-  roles?: RoleType[];
+  permissions?: PermissionType[];
   children?: NavItem[];
   badge?: {
     value: number;
@@ -125,100 +125,28 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   readonly navigationItems: NavItem[] = [
     {
-      id: 'dashboard',
-      label: 'Dashboard',
-      labelNp: 'ड्यासबोर्ड',
-      icon: 'dashboard',
-      route: '/dashboard',
-    },
-    {
-      id: 'profiles',
-      label: 'Digital Profiles',
-      labelNp: 'डिजिटल प्रोफाइल',
-      icon: 'account_box',
-      children: [
-        {
-          id: 'profile-list',
-          label: 'Profile List',
-          labelNp: 'प्रोफाइल सूची',
-          icon: 'list',
-          route: '/dashboard/profiles',
-          roles: [RoleType.MUNICIPALITY_ADMIN, RoleType.MUNICIPALITY_ADMIN],
-        },
-        {
-          id: 'profile-approval',
-          label: 'Pending Approvals',
-          labelNp: 'स्वीकृति पर्खिएको',
-          icon: 'pending_actions',
-          route: '/dashboard/profiles/pending',
-          roles: [RoleType.MUNICIPALITY_ADMIN],
-          badge: {
-            value: 5,
-            color: 'warn',
-          },
-        },
-      ],
-    },
-    {
-      id: 'reports',
-      label: 'Reports',
-      labelNp: 'प्रतिवेदनहरू',
-      icon: 'assessment',
-      roles: [RoleType.MUNICIPALITY_ADMIN],
-      children: [
-        {
-          id: 'statistics',
-          label: 'Statistics',
-          labelNp: 'तथ्यांक',
-          icon: 'bar_chart',
-          route: '/dashboard/reports/statistics',
-        },
-        {
-          id: 'analytics',
-          label: 'Analytics',
-          labelNp: 'विश्लेषण',
-          icon: 'insights',
-          route: '/dashboard/reports/analytics',
-        },
-      ],
-    },
-    {
       id: 'user-management',
       label: 'User Management',
       labelNp: 'प्रयोगकर्ता व्यवस्थापन',
       icon: 'people',
-      roles: [RoleType.MUNICIPALITY_ADMIN],
       children: [
         {
           id: 'user-list',
-          label: 'Users',
-          labelNp: 'प्रयोगकर्ताहरू',
+          label: 'User List',
+          labelNp: 'प्रयोगकर्ता सूची',
           icon: 'list',
           route: '/dashboard/users/list',
+          permissions: [PermissionType.VIEW_USER],
         },
         {
           id: 'user-create',
-          label: 'Add User',
-          labelNp: 'प्रयोगकर्ता थप्नुहोस्',
+          label: 'Add New User',
+          labelNp: 'नयाँ प्रयोगकर्ता',
           icon: 'person_add',
           route: '/dashboard/users/create',
+          permissions: [PermissionType.CREATE_USER],
         },
       ],
-    },
-    {
-      id: 'settings',
-      label: 'Settings',
-      labelNp: 'सेटिङ्स',
-      icon: 'settings',
-      route: '/dashboard/settings',
-      roles: [RoleType.MUNICIPALITY_ADMIN],
-    },
-    {
-      id: 'help',
-      label: 'Help',
-      labelNp: 'सहायता',
-      icon: 'help_outline',
-      route: '/dashboard/help',
     },
   ];
 
@@ -305,16 +233,17 @@ export class SidenavComponent implements OnInit, OnDestroy {
     return undefined;
   }
 
-  hasRole(requiredRoles?: RoleType[]): Observable<boolean> {
-    if (!requiredRoles || requiredRoles.length === 0) return of(true);
+  hasPermission(requiredPermissions?: PermissionType[]): Observable<boolean> {
+    if (!requiredPermissions?.length) return of(true);
 
-    return this.store
-      .select(AuthSelectors.selectUserRoles)
-      .pipe(
-        map((userRoles) =>
-          requiredRoles.some((role) => userRoles.includes(role))
+    return this.store.select(AuthSelectors.selectUserPermissions).pipe(
+      map((permissions) => Array.from(permissions)),
+      map((userPermissions) =>
+        requiredPermissions.every((permission) =>
+          userPermissions.includes(permission)
         )
-      );
+      )
+    );
   }
 
   onLogout(): void {
