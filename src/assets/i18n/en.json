@@ -32,5 +32,17 @@
     "WARD_ADMIN": "Ward Admin",
     "EDITOR": "Editor",
     "VIEWER": "Viewer"
+  },
+  "languages": {
+    "en": {
+      "name": "English",
+      "localName": "English"
+    },
+    "ne": {
+      "name": "Nepali",
+      "localName": "नेपाली"
+    },
+    "chooseLanguage": "Choose Language",
+    "selectLanguageAria": "Select language"
   }
 }

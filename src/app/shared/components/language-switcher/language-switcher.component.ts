@@ -5,10 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRippleModule } from '@angular/material/core';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import {
-  Language,
-  LanguageService,
-} from '../../../core/services/language.service';
+import { LanguageService } from '../../../core/services/language.service';
 import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 
 @Component({
@@ -61,4 +58,12 @@ export class LanguageSwitcherComponent implements OnInit {
   getLocalizedLocalName(lang: Language): string {
     return this.translocoService.translate(`languages.${lang.code}.localName`);
   }
+}
+
+// Update or add this to your Language interface in language.service.ts
+interface Language {
+  code: string;
+  icon: string; // Changed from flag to icon
+  name: string;
+  localName: string;
 }

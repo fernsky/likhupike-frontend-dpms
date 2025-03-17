@@ -32,5 +32,19 @@
     "WARD_ADMIN": "वडा प्रशासक",
     "EDITOR": "सम्पादक",
     "VIEWER": "दर्शक"
+  },
+  "languages": {
+    "change": "भाषा परिवर्तन गर्नुहोस्",
+    "selectLanguage": "भाषा चयन गर्नुहोस्",
+    "en": {
+      "name": "English",
+      "localName": "English"
+    },
+    "ne": {
+      "name": "Nepali",
+      "localName": "नेपाली"
+    },
+    "chooseLanguage": "Choose Language",
+    "selectLanguageAria": "Select language"
   }
 }

@@ -4,8 +4,25 @@ import { BehaviorSubject } from 'rxjs';
 
 export interface Language {
   code: string;
-  flag: string;
+  icon: string;
+  name: string;
+  localName: string;
 }
+
+export const AVAILABLE_LANGUAGES: Language[] = [
+  {
+    code: 'en',
+    icon: 'language',
+    name: 'English',
+    localName: 'English',
+  },
+  {
+    code: 'ne',
+    icon: 'translate',
+    name: 'Nepali',
+    localName: 'नेपाली',
+  },
+];
 
 @Injectable({
   providedIn: 'root',
@@ -13,16 +30,7 @@ export interface Language {
 export class LanguageService {
   private readonly LANGUAGE_KEY = 'selected_language';
 
-  readonly availableLanguages: Language[] = [
-    {
-      code: 'en',
-      flag: '🇬🇧',
-    },
-    {
-      code: 'ne',
-      flag: '🇳🇵',
-    },
-  ];
+  readonly availableLanguages: Language[] = AVAILABLE_LANGUAGES;
 
   private currentLanguageSubject = new BehaviorSubject<Language>(
     this.availableLanguages[0]
