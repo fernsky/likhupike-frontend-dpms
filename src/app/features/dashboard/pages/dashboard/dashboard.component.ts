@@ -18,6 +18,7 @@ import { SharedModule } from '@shared/shared.module';
 
 import { SidenavComponent } from '../../components/sidenav/sidenav.component';
 import { MenuToggleComponent } from '../../components/menu-toggle/menu-toggle.component';
+import { HeaderComponent } from '../../components/header/header.component';
 
 // Import additional Angular Material modules
 import { MatIconModule } from '@angular/material/icon';
@@ -47,6 +48,7 @@ import { TranslocoModule } from '@jsverse/transloco';
     TranslocoModule,
     SidenavComponent,
     MenuToggleComponent,
+    HeaderComponent, // Ensure HeaderComponent is included in imports
   ],
 })
 export class DashboardComponent implements OnInit {
@@ -54,17 +56,13 @@ export class DashboardComponent implements OnInit {
 
   currentYear = new Date().getFullYear();
 
+  isSidenavOpen = false; // Changed to false by default
   isMobileOpen = false;
 
   // Layout observables
   sidenavMode$: Observable<MatDrawerMode> = this.breakpointObserver
     .observe([Breakpoints.Handset, '(max-width: 1199px)'])
-    .pipe(map((result) => (result.matches ? 'over' : 'side')));
-
-  // Update sidenavOpened$ to be more responsive
-  sidenavOpened$: Observable<boolean> = this.breakpointObserver
-    .observe([Breakpoints.Handset, '(max-width: 1199px)'])
-    .pipe(map((result) => !result.matches));
+    .pipe(map((result) => 'over')); // Changed to always use 'over' mode
 
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe([Breakpoints.Handset])
@@ -104,6 +102,13 @@ export class DashboardComponent implements OnInit {
     this.isMobileOpen = false;
     if (this.sidenav) {
       this.sidenav.close();
+    }
+  }
+
+  onHeaderMenuToggle(): void {
+    this.isSidenavOpen = !this.isSidenavOpen;
+    if (this.sidenav) {
+      this.sidenav.toggle();
     }
   }
 

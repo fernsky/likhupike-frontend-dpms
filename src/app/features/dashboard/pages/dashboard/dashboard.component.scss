@@ -1,10 +1,10 @@
 // Layout Variables
 $header-height: 70px;
 $footer-height: 64px;
-$navy-dark: #1A2942;    // Lighter deep navy
-$navy-medium: #233B72;   // Lighter rich navy
-$navy-light: #2A4894;    // Lighter bright navy
-$gold-accent: #D4AF37;   // Royal gold accent
+$navy-dark: #1a2942; // Lighter deep navy
+$navy-medium: #233b72; // Lighter rich navy
+$navy-light: #2a4894; // Lighter bright navy
+$gold-accent: #d4af37; // Royal gold accent
 
 // Main Container
 .dashboard-container {
@@ -18,9 +18,14 @@ $gold-accent: #D4AF37;   // Royal gold accent
 .sidenav-container {
   flex: 1;
   height: 100vh;
+  margin-top: 64px; // Height of header
+
+  .mat-drawer {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
   ::ng-deep .mat-drawer-container {
-    height: 100%;
+    height: calc(100vh - 64px);
   }
 
   ::ng-deep .mat-drawer-content {
@@ -32,6 +37,21 @@ $gold-accent: #D4AF37;   // Royal gold accent
 
 .sidenav {
   width: 290px;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  transform: translateX(-100%);
+
+  &.mat-drawer-opened {
+    transform: translateX(0);
+  }
+}
+
+.mat-sidenav-content {
+  margin-left: 0 !important;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.content-shifted {
+    margin-left: 290px;
+  }
 }
 
 // Main Content Layout
@@ -70,6 +90,14 @@ $gold-accent: #D4AF37;   // Royal gold accent
     margin-left: 0 !important;
     width: 100% !important;
   }
+
+  .mat-sidenav-content {
+    margin-left: 0 !important;
+
+    &.content-shifted {
+      margin-left: 0 !important;
+    }
+  }
 }
 
 // Government Branding
@@ -107,8 +135,6 @@ $gold-accent: #D4AF37;   // Royal gold accent
   }
 }
 
-
-
 // Additional Global Styles for Premium Components
 ::ng-deep {
   // Card styling
@@ -116,7 +142,9 @@ $gold-accent: #D4AF37;   // Royal gold accent
     border-radius: 12px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
     background: white;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
     overflow: hidden;
 
     &:hover {
@@ -127,7 +155,11 @@ $gold-accent: #D4AF37;   // Royal gold accent
     .card-header {
       padding: 16px 20px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-      background: linear-gradient(to right, rgba(18, 55, 114, 0.01), rgba(18, 55, 114, 0.03));
+      background: linear-gradient(
+        to right,
+        rgba(18, 55, 114, 0.01),
+        rgba(18, 55, 114, 0.03)
+      );
 
       h3 {
         margin: 0;

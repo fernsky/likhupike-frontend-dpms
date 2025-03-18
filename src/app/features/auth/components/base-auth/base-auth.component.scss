@@ -66,13 +66,14 @@
 
 .auth-header {
   position: relative;
-  z-index: 2;
+  z-index: 3; // Increased z-index to ensure header stays on top
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  height: 100px; // Fixed height
+  height: 94px; // Reduced fixed height
   display: flex;
   align-items: center;
+  width: 100%;
 
   app-gov-branding {
     display: block;
@@ -88,15 +89,12 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
-  padding: 3rem 2rem;
+  padding: 2rem;
   max-width: 1400px;
-  margin: 0 auto;
+  margin: 64px auto 0; // Add top margin equal to header height
   width: 100%;
   align-items: center; // Center content vertically
-  min-height: calc(100vh - 20px); // Update to match new header height
-  margin-top: -1rem; // Reduced from -2rem
-  padding-top: 0; // Remove top padding
-  padding-bottom: 2rem; // Adjust bottom padding
+  min-height: calc(100vh - 120px); // Update to match new header height
   position: relative;
   z-index: 2;
 
@@ -112,6 +110,8 @@
     border-radius: 24px;
     overflow: hidden;
     margin: auto 0; // Help with vertical centering
+    position: relative; // Ensure card stays above background
+    z-index: 2;
   }
 
   app-system-features {
@@ -131,16 +131,20 @@
 }
 
 @media (max-width: 1028px) {
+  .auth-header {
+    height: 100px; // Slightly smaller on mobile
+  }
+
   .auth-content {
     grid-template-columns: 1fr;
     gap: 0;
     justify-items: center;
-    padding: 2rem 1rem;
-    min-height: calc(100vh - 64px); // Smaller height adjustment for mobile
+    padding: 1.5rem 1rem;
+    min-height: calc(100vh - 100px); // Smaller height adjustment for mobile
     align-items: center; // Center only on mobile
     padding-top: 1rem;
     padding-bottom: 3rem;
-    margin-top: -0.5rem; // Reduced for mobile
+    margin-top: 56px; // Match header height
 
     app-system-features {
       display: none;
@@ -168,6 +172,17 @@
     &::before {
       clip-path: ellipse(200% 90% at 50% 0%);
     }
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-header {
+    height: 80px; // Even smaller on very small devices
+  }
+
+  .auth-content {
+    margin-top: 48px;
+    min-height: calc(100vh - 200px);
   }
 }
 

@@ -1,0 +1,68 @@
+:host {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.app-header {
+  height: 64px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+
+  .header-start {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .menu-toggle {
+      margin-right: 8px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #1a73e8;
+      gap: 12px;
+
+      .logo {
+        height: 32px;
+        width: auto;
+      }
+
+      .brand-text {
+        font-size: 20px;
+        font-weight: 500;
+        letter-spacing: 0.15px;
+      }
+    }
+  }
+
+  .header-end {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+// Override Material styles for user menu
+::ng-deep {
+  .user-menu {
+    min-width: 200px !important;
+
+    .mat-mdc-menu-item {
+      gap: 12px;
+
+      mat-icon {
+        margin: 0;
+      }
+    }
+  }
+}
