@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +8,13 @@ import { RouterModule } from '@angular/router';
 import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 import { MatDivider } from '@angular/material/divider';
 import { HeaderLanguageToggleComponent } from '@shared/components/header-language-toggle/header-language-toggle.component';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 
 @Component({
   selector: 'app-header',
@@ -35,8 +42,16 @@ import { HeaderLanguageToggleComponent } from '@shared/components/header-languag
       alias: 'govBranding',
     }),
   ],
+  animations: [
+    trigger('rotateAnimation', [
+      state('collapsed', style({ transform: 'rotate(0)' })),
+      state('expanded', style({ transform: 'rotate(180deg)' })),
+      transition('collapsed <=> expanded', animate('300ms ease-out')),
+    ]),
+  ],
 })
 export class HeaderComponent {
+  @Input() isExpanded = false;
   @Output() menuToggle = new EventEmitter<void>();
 
   onMenuToggle(): void {

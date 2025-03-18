@@ -4,9 +4,12 @@
       mat-icon-button
       class="menu-toggle"
       (click)="onMenuToggle()"
+      [class.expanded]="isExpanded"
       [attr.aria-label]="'header.menuToggle' | transloco"
     >
-      <mat-icon>menu</mat-icon>
+      <mat-icon [@rotateAnimation]="isExpanded ? 'expanded' : 'collapsed'">
+        {{ isExpanded ? "close" : "menu" }}
+      </mat-icon>
     </button>
     <a class="brand" routerLink="/dashboard">
       <img

@@ -25,6 +25,14 @@
 
     .menu-toggle {
       margin-right: 8px;
+
+      &.expanded {
+        background-color: rgba(0, 0, 0, 0.04);
+
+        .mat-icon {
+          color: #1a73e8;
+        }
+      }
     }
 
     ::ng-deep app-gov-branding {

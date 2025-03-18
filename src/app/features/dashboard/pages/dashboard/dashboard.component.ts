@@ -107,7 +107,10 @@ export class DashboardComponent implements OnInit {
   onHeaderMenuToggle(): void {
     this.isSidenavOpen = !this.isSidenavOpen;
     if (this.sidenav) {
-      this.sidenav.toggle();
+      this.sidenav.toggle().then(() => {
+        // Optional: Dispatch analytics event
+        console.log('Sidenav toggled:', this.isSidenavOpen);
+      });
     }
   }
 
