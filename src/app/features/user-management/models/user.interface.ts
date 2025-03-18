@@ -3,9 +3,9 @@ import { PermissionType } from '@app/core/models/permission.enum';
 export interface CreateUserRequest {
   email: string;
   password: string;
-  permissions: { [key in PermissionType]: boolean };
   isWardLevelUser: boolean;
-  wardNumber?: number | null;
+  wardNumber: number | null;
+  permissions: { [key in PermissionType]: boolean };
 }
 
 export interface UpdateUserRequest {
@@ -17,30 +17,61 @@ export interface UpdateUserRequest {
 export interface UserResponse {
   id: string;
   email: string;
-  permissions: { [key in PermissionType]: boolean };
+  permissions: PermissionType[];
   isWardLevelUser: boolean;
-  wardNumber?: number;
+  wardNumber: number | null;
   isApproved: boolean;
-  approvedBy?: string;
-  approvedAt?: string;
+  approvedBy: string | null;
+  approvedAt: string | null;
   createdAt: string;
-  updatedAt?: string;
-  active: boolean;
+  updatedAt: string;
 }
 
 export interface UserFilter {
-  search?: string;
-  wardNumber?: number;
-  permissions?: PermissionType[];
+  email?: string;
+  searchTerm?: string;
+  isApproved?: boolean;
   isWardLevelUser?: boolean;
-  pageSize: number;
-  pageIndex: number;
+  wardNumberFrom?: number;
+  wardNumberTo?: number;
+  createdAfter?: string; // LocalDate will be sent as ISO string
+  createdBefore?: string;
+  permissions?: PermissionType[];
+  columns?: string[];
+  page?: number;
+  size?: number;
+  sortBy?: string;
+  sortDirection?: 'ASC' | 'DESC';
+}
+
+export const ALLOWED_COLUMNS = [
+  'id',
+  'email',
+  'isWardLevelUser',
+  'wardNumber',
+  'isApproved',
+  'approvedBy',
+  'approvedAt',
+  'createdAt',
+  'updatedAt',
+  'permissions',
+] as const;
+
+export interface ApiError {
+  code: string;
+  message: string;
+  details: unknown | null;
+  status: number;
+}
+
+export interface ApiErrorResponse {
+  success: boolean;
+  error: ApiError;
 }
 
 export interface UserValidationError {
-  email?: string[];
-  password?: string[];
-  permissions?: string[];
-  isWardLevelUser?: string[];
-  wardNumber?: string[];
+  code: string;
+  message: string;
+  details: unknown | null;
+  status: number;
 }

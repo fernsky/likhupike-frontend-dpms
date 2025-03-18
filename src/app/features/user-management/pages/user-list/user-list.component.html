@@ -11,43 +11,96 @@
   <!-- Filters -->
   <div class="filters-section" [formGroup]="filterForm">
     <mat-form-field appearance="outline">
-      <mat-label>{{ "user.list.search" | transloco }}</mat-label>
-      <input matInput formControlName="search" type="text" />
+      <mat-label>{{ "user.list.searchTerm" | transloco }}</mat-label>
+      <input matInput formControlName="searchTerm" type="text" />
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>{{ "user.list.wardFilter" | transloco }}</mat-label>
-      <mat-select formControlName="wardNumber">
-        <mat-option [value]="null">{{
-          "user.list.allWards" | transloco
-        }}</mat-option>
-        <mat-option [value]="0">{{
-          "user.municipality" | transloco
-        }}</mat-option>
-        <mat-option
-          *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
-          [value]="i"
-        >
-          {{ "user.ward" | transloco }} {{ i }}
-        </mat-option>
-      </mat-select>
+      <mat-label>{{ "user.list.email" | transloco }}</mat-label>
+      <input matInput formControlName="email" type="email" />
     </mat-form-field>
 
+    <div class="ward-range">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.list.wardFrom" | transloco }}</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="wardNumberFrom"
+          min="1"
+          max="33"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.list.wardTo" | transloco }}</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="wardNumberTo"
+          min="1"
+          max="33"
+        />
+      </mat-form-field>
+    </div>
+
     <mat-form-field appearance="outline">
-      <mat-label>{{ "user.list.statusFilter" | transloco }}</mat-label>
-      <mat-select formControlName="active">
+      <mat-label>{{ "user.list.approvalStatus" | transloco }}</mat-label>
+      <mat-select formControlName="isApproved">
         <mat-option [value]="null">{{
           "user.list.allStatuses" | transloco
         }}</mat-option>
         <mat-option [value]="true">{{
-          "user.list.active" | transloco
+          "user.list.approved" | transloco
         }}</mat-option>
         <mat-option [value]="false">{{
-          "user.list.inactive" | transloco
+          "user.list.notApproved" | transloco
         }}</mat-option>
       </mat-select>
     </mat-form-field>
+
+    <div class="date-range">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.list.createdAfter" | transloco }}</mat-label>
+        <input
+          matInput
+          [matDatepicker]="afterPicker"
+          formControlName="createdAfter"
+          readonly
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="afterPicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #afterPicker></mat-datepicker>
+        <mat-error
+          *ngIf="filterForm?.get('createdAfter')?.errors?.['matDatepickerMax']"
+        >
+          {{ "user.list.errors.dateRange" | transloco }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.list.createdBefore" | transloco }}</mat-label>
+        <input
+          matInput
+          [matDatepicker]="beforePicker"
+          formControlName="createdBefore"
+          readonly
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="beforePicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #beforePicker></mat-datepicker>
+        <mat-error
+          *ngIf="filterForm?.get('createdBefore')?.errors?.['matDatepickerMin']"
+        >
+          {{ "user.list.errors.dateRange" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
   </div>
 
   <!-- Table -->
@@ -131,11 +184,32 @@
         </th>
         <td mat-cell *matCellDef="let user">
           <mat-chip-set>
-            <mat-chip [color]="user.active ? 'primary' : 'warn'" highlighted>
+            <mat-chip [color]="user.isActive ? 'primary' : 'warn'" highlighted>
               {{
-                user.active
+                user.isActive
                   ? ("user.list.active" | transloco)
                   : ("user.list.inactive" | transloco)
+              }}
+            </mat-chip>
+          </mat-chip-set>
+        </td>
+      </ng-container>
+
+      <!-- Approval Status Column -->
+      <ng-container matColumnDef="approvalStatus">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ "user.list.columns.approvalStatus" | transloco }}
+        </th>
+        <td mat-cell *matCellDef="let user">
+          <mat-chip-set>
+            <mat-chip
+              [color]="user.isApproved ? 'primary' : 'warn'"
+              highlighted
+            >
+              {{
+                user.isApproved
+                  ? ("user.list.approved" | transloco)
+                  : ("user.list.notApproved" | transloco)
               }}
             </mat-chip>
           </mat-chip-set>
@@ -159,9 +233,11 @@
               <span>{{ "common.actions.edit" | transloco }}</span>
             </button>
             <button mat-menu-item (click)="onToggleStatus(user)">
-              <mat-icon>{{ user.active ? "block" : "check_circle" }}</mat-icon>
+              <mat-icon>{{
+                user.isApproved ? "block" : "check_circle"
+              }}</mat-icon>
               <span>{{
-                (user.active ? "user.list.deactivate" : "user.list.activate")
+                (user.isApproved ? "user.list.disapprove" : "user.list.approve")
                   | transloco
               }}</span>
             </button>
@@ -184,7 +260,8 @@
       [length]="totalUsers$ | async"
       [pageSize]="10"
       [pageSizeOptions]="[5, 10, 25, 50]"
-      showFirstLastButtons
+      [showFirstLastButtons]="true"
+      (page)="loadUsers()"
     >
     </mat-paginator>
   </div>

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import {
   HttpClient,
-  HttpParams,
   HttpErrorResponse,
+  HttpParams,
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from '@env/environment';
+import { ApiResponse, ApiErrorResponse } from '../models/api.interface';
 import {
   CreateUserRequest,
   UpdateUserRequest,
@@ -23,49 +24,54 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   createUser(request: CreateUserRequest): Observable<UserResponse> {
-    return this.http
-      .post<UserResponse>(this.apiUrl, request)
-      .pipe(catchError(this.handleError));
+    return this.http.post<ApiResponse<UserResponse>>(this.apiUrl, request).pipe(
+      map((response) => {
+        if (!response.success) {
+          throw response.error;
+        }
+        return response.data;
+      }),
+      catchError(this.handleError)
+    );
   }
 
   getUsers(
     filter: UserFilter
   ): Observable<{ users: UserResponse[]; total: number }> {
-    let params = new HttpParams()
-      .set('pageSize', filter.pageSize.toString())
-      .set('pageIndex', filter.pageIndex.toString());
-
-    if (filter.search) {
-      params = params.set('search', filter.search);
-    }
-    if (filter.wardNumber) {
-      params = params.set('wardNumber', filter.wardNumber.toString());
-    }
-    if (filter.permissions?.length) {
-      params = params.set('permissions', filter.permissions.join(','));
-    }
-
+    const params = this.convertFilterToParams(filter);
     return this.http
-      .get<{ users: UserResponse[]; total: number }>(this.apiUrl, { params })
-      .pipe(catchError(this.handleError));
+      .get<ApiResponse<UserResponse[]>>(this.apiUrl, { params })
+      .pipe(
+        map((response) => {
+          if (!response.success) {
+            throw response.error;
+          }
+          return {
+            users: response.data,
+            total: response.meta?.totalElements || 0,
+          };
+        }),
+        catchError(this.handleError)
+      );
   }
 
   getUserById(id: string): Observable<UserResponse> {
     return this.http
-      .get<UserResponse>(`${this.apiUrl}/${id}`)
-      .pipe(catchError(this.handleError));
+      .get<ApiResponse<UserResponse>>(`${this.apiUrl}/${id}`)
+      .pipe(
+        map((response) => {
+          if (!response.success) {
+            throw response.error;
+          }
+          return response.data;
+        }),
+        catchError(this.handleError)
+      );
   }
 
   updateUser(id: string, request: UpdateUserRequest): Observable<UserResponse> {
-    // Convert undefined values to null to match Kotlin nullable types
-    const nullableRequest: UpdateUserRequest = {
-      email: request.email ?? null,
-      isWardLevelUser: request.isWardLevelUser ?? null,
-      wardNumber: request.wardNumber ?? null,
-    };
-
     return this.http
-      .patch<UserResponse>(`${this.apiUrl}/${id}`, nullableRequest)
+      .patch<UserResponse>(`${this.apiUrl}/${id}`, request)
       .pipe(catchError(this.handleError));
   }
 
@@ -81,8 +87,47 @@ export class UserService {
       .pipe(catchError(this.handleError));
   }
 
-  private handleError(error: HttpErrorResponse) {
-    console.error('An error occurred:', error);
-    return throwError(() => error.error || 'Server error');
+  private convertFilterToParams(filter: UserFilter): HttpParams {
+    let params = new HttpParams();
+
+    if (filter.email) params = params.set('email', filter.email);
+    if (filter.searchTerm) params = params.set('searchTerm', filter.searchTerm);
+    if (filter.isApproved !== undefined)
+      params = params.set('isApproved', filter.isApproved.toString());
+    if (filter.isWardLevelUser !== undefined)
+      params = params.set('isWardLevelUser', filter.isWardLevelUser.toString());
+    if (filter.wardNumberFrom)
+      params = params.set('wardNumberFrom', filter.wardNumberFrom.toString());
+    if (filter.wardNumberTo)
+      params = params.set('wardNumberTo', filter.wardNumberTo.toString());
+    if (filter.createdAfter)
+      params = params.set('createdAfter', filter.createdAfter);
+    if (filter.createdBefore)
+      params = params.set('createdBefore', filter.createdBefore);
+    if (filter.permissions?.length)
+      params = params.set('permissions', filter.permissions.join(','));
+    if (filter.columns?.length)
+      params = params.set('columns', filter.columns.join(','));
+
+    // Pagination and sorting (with defaults)
+    params = params.set('page', (filter.page || 0).toString());
+    params = params.set('size', (filter.size || 10).toString());
+    params = params.set('sortBy', filter.sortBy || 'createdAt');
+    params = params.set('sortDirection', filter.sortDirection || 'DESC');
+
+    return params;
+  }
+
+  private handleError(error: HttpErrorResponse | ApiErrorResponse) {
+    console.error('API Error:', error);
+    if ('error' in error && error instanceof HttpErrorResponse) {
+      return throwError(() => error.error);
+    }
+    return throwError(() => ({
+      code: 'UNKNOWN_ERROR',
+      message: 'An unknown error occurred',
+      details: null,
+      status: error instanceof HttpErrorResponse ? error.status : 500,
+    }));
   }
 }

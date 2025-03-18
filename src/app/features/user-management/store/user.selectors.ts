@@ -57,7 +57,7 @@ export const selectLastUpdated = createSelector(
 // Derived selectors
 export const selectUsersByPermission = (permission: PermissionType) =>
   createSelector(selectUsers, (users) =>
-    users.filter((user) => user.permissions[permission])
+    users.filter((user) => user.permissions.includes(permission))
   );
 
 export const selectWardUsers = (wardNumber: number) =>
@@ -65,8 +65,8 @@ export const selectWardUsers = (wardNumber: number) =>
     users.filter((user) => user.wardNumber === wardNumber)
   );
 
-export const selectActiveUsers = createSelector(selectUsers, (users) =>
-  users.filter((user) => user.active)
+export const selectApprovedUsers = createSelector(selectUsers, (users) =>
+  users.filter((user) => user.isApproved)
 );
 
 export const selectWardLevelUsers = createSelector(selectUsers, (users) =>
@@ -76,12 +76,14 @@ export const selectWardLevelUsers = createSelector(selectUsers, (users) =>
 // Stats selectors
 export const selectUserStats = createSelector(selectUsers, (users) => ({
   total: users.length,
-  active: users.filter((user) => user.active).length,
+  approved: users.filter((user) => user.isApproved).length,
   wardLevel: users.filter((user) => user.isWardLevelUser).length,
   byPermission: Object.values(PermissionType).reduce(
     (acc, permission) => ({
       ...acc,
-      [permission]: users.filter((user) => user.permissions[permission]).length,
+      [permission]: users.filter((user) =>
+        user.permissions.includes(permission)
+      ).length,
     }),
     {} as Record<PermissionType, number>
   ),
@@ -101,7 +103,7 @@ export const selectFilteredUsers = (filter: {
   search?: string;
   permissions?: PermissionType[];
   wardNumber?: number;
-  active?: boolean;
+  isApproved?: boolean;
 }) =>
   createSelector(selectUsers, (users: UserResponse[]) => {
     return users.filter((user) => {
@@ -111,17 +113,21 @@ export const selectFilteredUsers = (filter: {
 
       const matchesPermissions = !filter.permissions?.length
         ? true
-        : filter.permissions.some((permission) => user.permissions[permission]);
+        : filter.permissions.some((permission) =>
+            user.permissions.includes(permission)
+          );
 
       const matchesWard = !filter.wardNumber
         ? true
         : user.wardNumber === filter.wardNumber;
 
-      const matchesActive =
-        filter.active === undefined ? true : user.active === filter.active;
+      const matchesApproved =
+        filter.isApproved === undefined
+          ? true
+          : user.isApproved === filter.isApproved;
 
       return (
-        matchesSearch && matchesPermissions && matchesWard && matchesActive
+        matchesSearch && matchesPermissions && matchesWard && matchesApproved
       );
     });
   });

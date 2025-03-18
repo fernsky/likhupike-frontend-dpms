@@ -29,6 +29,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { Location } from '@angular/common';
 
 import {
   CreateUserRequest,
@@ -75,7 +76,8 @@ export class UserFormComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private numberFormat: NumberFormatService,
-    private translocoService: TranslocoService
+    private translocoService: TranslocoService,
+    private location: Location // Add Location service
   ) {
     this.initForm();
   }
@@ -83,33 +85,28 @@ export class UserFormComponent implements OnInit, OnDestroy {
   private initForm(): void {
     const baseControls = {
       email: ['', [Validators.required, Validators.email]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(
+            /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/
+          ),
+        ],
+      ],
       isWardLevelUser: [false],
       wardNumber: [{ value: null, disabled: true }],
+      permissions: this.fb.group(
+        Object.values(PermissionType).reduce(
+          (acc, permission) => ({
+            ...acc,
+            [permission]: [false],
+          }),
+          {}
+        )
+      ),
     };
-
-    if (!this.isEdit) {
-      Object.assign(baseControls, {
-        password: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(8),
-            Validators.pattern(
-              /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/
-            ),
-          ],
-        ],
-        permissions: this.fb.group(
-          Object.values(PermissionType).reduce(
-            (acc, permission) => ({
-              ...acc,
-              [permission]: [false],
-            }),
-            {}
-          )
-        ),
-      });
-    }
 
     this.userForm = this.fb.group(baseControls, {
       validators: [this.wardNumberValidator()],
@@ -178,29 +175,21 @@ export class UserFormComponent implements OnInit, OnDestroy {
   onSubmit(): void {
     if (this.userForm.valid) {
       const formValue = this.userForm.getRawValue();
-      if (this.isEdit) {
-        const updateRequest: UpdateUserRequest = {
-          email: formValue.email || null,
-          isWardLevelUser: formValue.isWardLevelUser || null,
-          wardNumber: formValue.wardNumber || null,
-        };
-        this.submitUpdateForm.emit(updateRequest);
-      } else {
-        const createRequest: CreateUserRequest = {
-          email: formValue.email,
-          password: formValue.password,
-          isWardLevelUser: formValue.isWardLevelUser,
-          wardNumber: formValue.wardNumber || null,
-          permissions: Object.entries(formValue.permissions).reduce(
-            (acc, [key, value]) => ({
-              ...acc,
-              [key]: value as boolean,
-            }),
-            {} as { [key in PermissionType]: boolean }
-          ),
-        };
-        this.submitForm.emit(createRequest);
-      }
+      console.log('Raw form value:', formValue);
+
+      const createRequest: CreateUserRequest = {
+        email: formValue.email,
+        password: formValue.password,
+        isWardLevelUser: formValue.isWardLevelUser,
+        wardNumber: formValue.isWardLevelUser ? formValue.wardNumber : null,
+        permissions: formValue.permissions,
+      };
+
+      console.log('Emitting create request:', createRequest);
+      this.submitForm.emit(createRequest);
+    } else {
+      console.log('Form validation errors:', this.userForm.errors);
+      this.markFormGroupTouched(this.userForm);
     }
   }
 
@@ -211,6 +200,10 @@ export class UserFormComponent implements OnInit, OnDestroy {
         this.markFormGroupTouched(control);
       }
     });
+  }
+
+  onCancel(): void {
+    this.location.back();
   }
 
   ngOnDestroy(): void {

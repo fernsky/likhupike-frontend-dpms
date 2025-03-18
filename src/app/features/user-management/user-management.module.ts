@@ -27,11 +27,24 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { UserCreateComponent } from './pages/user-create/user-create.component';
+import { UserListComponent } from './pages/user-list/user-list.component';
+import { UserService } from './services/user.service';
 
 @NgModule({
+  declarations: [],
   imports: [
     CommonModule,
-    RouterModule,
+    RouterModule.forChild([
+      {
+        path: 'create',
+        component: UserCreateComponent,
+      },
+      {
+        path: 'list',
+        component: UserListComponent,
+      },
+    ]),
     ReactiveFormsModule,
     SharedModule,
     TranslocoModule,
@@ -56,6 +69,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatProgressSpinnerModule,
   ],
   providers: [
+    UserService,
     provideTranslocoScope({
       scope: 'user-management',
       alias: 'user',

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-
 import { of } from 'rxjs';
 import { map, catchError, exhaustMap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslocoService } from '@jsverse/transloco';
 import { UserActions } from './user.actions';
@@ -14,7 +14,8 @@ export class UserEffects {
     private actions$: Actions,
     private userService: UserService,
     private snackBar: MatSnackBar,
-    private transloco: TranslocoService
+    private transloco: TranslocoService,
+    private router: Router
   ) {}
 
   createUser$ = createEffect(() =>
@@ -24,10 +25,12 @@ export class UserEffects {
         this.userService.createUser(request).pipe(
           map((user) => {
             this.showSuccess('user.messages.createSuccess');
+            this.router.navigate(['/dashboard/users/list']);
             return UserActions.createUserSuccess({ user });
           }),
           catchError((error) => {
-            this.showError('user.messages.createError');
+            console.error('Create user error:', error);
+            this.showError(error.message || 'Failed to create user');
             return of(UserActions.createUserFailure({ error }));
           })
         )
@@ -44,7 +47,7 @@ export class UserEffects {
             UserActions.loadUsersSuccess({ users, total })
           ),
           catchError((error) => {
-            this.showError('user.messages.loadError');
+            this.showError(error.message || 'Failed to load users');
             return of(UserActions.loadUsersFailure({ error }));
           })
         )
@@ -134,16 +137,16 @@ export class UserEffects {
     this.snackBar.open(
       this.transloco.translate(key),
       this.transloco.translate('common.actions.close'),
-      { duration: 3000 }
+      { duration: 3000, panelClass: ['success-snackbar'] }
     );
   }
 
   // Helper method to show error messages
-  private showError(key: string): void {
+  private showError(message: string): void {
     this.snackBar.open(
-      this.transloco.translate(key),
+      this.transloco.translate(message),
       this.transloco.translate('common.actions.close'),
-      { duration: 5000 }
+      { duration: 5000, panelClass: ['error-snackbar'] }
     );
   }
 }

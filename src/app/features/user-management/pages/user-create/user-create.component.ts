@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
-import { takeUntil, filter } from 'rxjs/operators';
+import { takeUntil, filter, take } from 'rxjs/operators';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
 import { UserFormComponent } from '../../components/user-form/user-form.component';
@@ -13,6 +13,7 @@ import * as UserSelectors from '../../store/user.selectors';
 import { PasswordValidatorService } from '@app/shared/validators/password-validator.service';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { PageTitleComponent } from '@app/shared/components/page-title/page-title.component';
+import { PermissionType } from '@app/core/models/permission.enum';
 
 @Component({
   selector: 'app-user-create',
@@ -46,10 +47,10 @@ export class UserCreateComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Clear any existing errors when component initializes
+    // Clear any existing errors
     this.store.dispatch(UserActions.clearErrors());
 
-    // Set up subscription for navigation after successful creation
+    // Subscribe to creation status
     this.store
       .select(UserSelectors.selectUserCreating)
       .pipe(
@@ -60,17 +61,35 @@ export class UserCreateComponent implements OnInit, OnDestroy {
         this.store
           .select(UserSelectors.selectUserErrors)
           .pipe(
-            takeUntil(this.destroy$),
-            filter((errors) => !errors || Object.keys(errors).length === 0)
+            take(1),
+            filter((errors) => !errors)
           )
           .subscribe(() => {
-            this.navigateBack();
+            this.router.navigate(['/dashboard/users/list']);
           });
       });
   }
 
   onSubmit(request: CreateUserRequest): void {
-    this.store.dispatch(UserActions.createUser({ request }));
+    console.log('CreateComponent received request:', request);
+
+    // Ensure all required permissions are initialized
+    const formattedRequest: CreateUserRequest = {
+      email: request.email,
+      password: request.password,
+      isWardLevelUser: request.isWardLevelUser,
+      wardNumber: request.isWardLevelUser ? request.wardNumber : null,
+      permissions: Object.values(PermissionType).reduce(
+        (acc, permission) => ({
+          ...acc,
+          [permission]: Boolean(request.permissions?.[permission]),
+        }),
+        {} as { [key in PermissionType]: boolean }
+      ),
+    };
+
+    console.log('Dispatching formatted request:', formattedRequest);
+    this.store.dispatch(UserActions.createUser({ request: formattedRequest }));
   }
 
   onCancel(): void {
