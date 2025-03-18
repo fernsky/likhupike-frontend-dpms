@@ -49,5 +49,8 @@
     },
     "chooseLanguage": "Choose Language",
     "selectLanguageAria": "Select language"
+  },
+  "breadcrumbs": {
+   
   }
 }

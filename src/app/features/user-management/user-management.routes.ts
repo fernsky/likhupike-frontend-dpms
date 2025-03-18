@@ -5,6 +5,12 @@ import { PermissionType } from '@app/core/models/permission.enum';
 export const USER_MANAGEMENT_ROUTES: Routes = [
   {
     path: '',
+    data: {
+      breadcrumb: {
+        translationKey: 'users',
+        icon: 'people',
+      },
+    },
     children: [
       {
         path: '',
@@ -21,9 +27,8 @@ export const USER_MANAGEMENT_ROUTES: Routes = [
         data: {
           permissions: [PermissionType.VIEW_USER],
           breadcrumb: {
-            label: 'Users',
-            translationKey: 'user.list.title',
-            icon: 'people',
+            translationKey: 'userList',
+            icon: 'format_list_bulleted',
           },
         },
       },
@@ -37,8 +42,7 @@ export const USER_MANAGEMENT_ROUTES: Routes = [
         data: {
           permissions: [PermissionType.CREATE_USER],
           breadcrumb: {
-            label: 'Create User',
-            translationKey: 'user.create.title',
+            translationKey: 'createUser',
             icon: 'person_add',
           },
         },
@@ -53,8 +57,7 @@ export const USER_MANAGEMENT_ROUTES: Routes = [
         data: {
           permissions: [PermissionType.EDIT_USER],
           breadcrumb: {
-            label: 'Edit User',
-            translationKey: 'user.edit.title',
+            translationKey: 'editUser',
             icon: 'edit',
           },
         },

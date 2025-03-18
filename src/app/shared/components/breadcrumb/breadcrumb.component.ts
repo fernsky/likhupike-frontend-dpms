@@ -7,16 +7,13 @@ import {
   RouterModule,
 } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslocoModule } from '@jsverse/transloco';
+import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 import { filter, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-
-interface BreadcrumbItem {
-  label: string;
-  translationKey?: string;
-  url: string;
-  icon?: string;
-}
+import {
+  Breadcrumb,
+  BreadcrumbConfig,
+} from './breadcrumb.interface';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -24,13 +21,20 @@ interface BreadcrumbItem {
   styleUrls: ['./breadcrumb.component.scss'],
   standalone: true,
   imports: [CommonModule, RouterModule, MatIconModule, TranslocoModule],
+  providers: [
+    provideTranslocoScope({
+      scope: 'breadcrumbs',
+      alias: 'breadcrumbs',
+    }),
+  ],
 })
 export class BreadcrumbComponent implements OnInit, OnDestroy {
-  @Input() showHome = true;
-  @Input() homeIcon = 'home';
-  @Input() separator = 'chevron_right';
+  @Input() config: BreadcrumbConfig = {
+    separator: 'chevron_right',
+    showIcons: true,
+  };
 
-  breadcrumbs: BreadcrumbItem[] = [];
+  breadcrumbs: Breadcrumb[] = [];
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -39,6 +43,9 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    console.log('Breadcrumb component initialized');
+    this.updateBreadcrumbs();
+
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
@@ -46,44 +53,50 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
-        this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root);
+        console.log('Navigation ended, updating breadcrumbs');
+        this.updateBreadcrumbs();
       });
   }
 
-  private createBreadcrumbs(
-    route: ActivatedRoute,
-    url: string = '',
-    breadcrumbs: BreadcrumbItem[] = []
-  ): BreadcrumbItem[] {
-    const children = route.children;
-
-    if (children.length === 0) {
-      return breadcrumbs;
+  private updateBreadcrumbs(): void {
+    let currentRoute: ActivatedRoute | null = this.activatedRoute;
+    while (currentRoute?.firstChild) {
+      currentRoute = currentRoute.firstChild;
     }
 
-    for (const child of children) {
-      const routeURL = child.snapshot.url
-        .map((segment) => segment.path)
-        .join('/');
-      if (routeURL !== '') {
-        url += `/${routeURL}`;
-      }
+    const paths: Breadcrumb[] = [];
+    let url = '';
 
-      const label = child.snapshot.data['breadcrumb'];
-      if (label) {
-        breadcrumbs.push({
-          label: typeof label === 'string' ? label : label.label,
-          translationKey:
-            typeof label === 'string' ? undefined : label.translationKey,
-          url: url,
-          icon: typeof label === 'string' ? undefined : label.icon,
+    while (currentRoute) {
+      const snapshot = currentRoute.snapshot;
+      const data = snapshot.data;
+      console.log('Processing route:', {
+        url: snapshot.url,
+        data: data,
+        params: snapshot.params,
+      });
+
+      if (data['breadcrumb']) {
+        const breadcrumbData = data['breadcrumb'];
+        const routeUrl = snapshot.url.map((segment) => segment.path).join('/');
+        if (routeUrl) {
+          url += `/${routeUrl}`;
+        }
+
+        paths.push({
+          label: breadcrumbData.label || '',
+          translationKey: breadcrumbData.translationKey,
+          url: url || '/',
+          icon: breadcrumbData.icon,
+          queryParams: snapshot.queryParams,
         });
       }
 
-      return this.createBreadcrumbs(child, url, breadcrumbs);
+      currentRoute = currentRoute.parent;
     }
 
-    return breadcrumbs;
+    this.breadcrumbs = paths.reverse();
+    console.log('Updated breadcrumbs:', this.breadcrumbs);
   }
 
   ngOnDestroy(): void {
