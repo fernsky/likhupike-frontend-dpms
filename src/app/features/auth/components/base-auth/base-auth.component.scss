@@ -10,47 +10,32 @@
   min-height: 100vh;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(to bottom, #0a1526 0%, #0d1930 100%);
+  background: linear-gradient(
+    165deg,
+    #123772 0%,
+    rgba(18, 55, 114, 0.95) 45%,
+    rgba(10, 21, 38, 0.98) 75%,
+    #0a1526 100%
+  );
   display: flex;
   flex-direction: column;
   padding-bottom: 4rem;
 
   &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 90vh;
-    background: linear-gradient(
-      160deg,
-      rgba(11, 31, 66, 1) 0%,
-      rgba(18, 55, 114, 0.98) 40%,
-      rgba(26, 72, 148, 0.95) 100%
-    );
-    clip-path: ellipse(140% 100% at 50% 0%);
-    z-index: 0;
-    backdrop-filter: none;
+    content: none; // Remove the separate gradient layer
   }
 
   &::after {
     content: "";
     position: absolute;
     inset: 0;
-    background:
-      radial-gradient(
-        ellipse at top,
-        rgba(41, 98, 255, 0.12) 0%,
-        transparent 60%
-      ),
-      radial-gradient(
-        ellipse at bottom,
-        rgba(255, 255, 255, 0.05) 0%,
-        transparent 60%
-      );
+    background: radial-gradient(
+      circle at top center,
+      rgba(41, 98, 255, 0.15) 0%,
+      transparent 60%
+    );
     z-index: 0;
     pointer-events: none;
-    backdrop-filter: none;
   }
 }
 
