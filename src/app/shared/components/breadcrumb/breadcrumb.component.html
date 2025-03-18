@@ -9,9 +9,11 @@
       *ngFor="let item of breadcrumbs; let last = last; let first = first"
     >
       <li>
-        <mat-icon *ngIf="!first" class="separator" aria-hidden="true">
-          {{ config.separator }}
-        </mat-icon>
+        <p *ngIf="!first">
+          <mat-icon class="separator" aria-hidden="true">
+            {{ config.separator }}
+          </mat-icon>
+        </p>
         <a
           [routerLink]="[item.path]"
           [queryParams]="item.queryParams"
@@ -26,9 +28,11 @@
               : ''
           "
         >
-          <mat-icon *ngIf="config.showIcons && item.icon" class="item-icon">
-            {{ item.icon }}
-          </mat-icon>
+          <p *ngIf="config.showIcons && item.icon">
+            <mat-icon class="item-icon">
+              {{ item.icon }}
+            </mat-icon>
+          </p>
           <span *ngIf="!showOnlyIcons" class="breadcrumb-text">
             {{
               item.translationKey
