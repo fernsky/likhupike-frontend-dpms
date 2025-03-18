@@ -37,12 +37,9 @@ $gold-accent: #d4af37; // Royal gold accent
   flex-direction: column;
   transition: width 0.3s $transition-timing;
   position: relative;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden; // Change this to hidden
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
-  border-radius: 0; // Reset to 0 to remove container rounded corners
-  border-right: none; // Remove border
-  height: 100vh;
+  height: 100%; // Set to 100% instead of 100vh
 
   // Remove fixed positioning as it's handled by mat-sidenav
   position: relative;
@@ -112,82 +109,7 @@ $gold-accent: #d4af37; // Royal gold accent
 
   // Scrollbar styling
   &::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 3px;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.3);
-    }
-  }
-
-  @media (max-width: 1199px) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    z-index: 1000;
-    width: $sidenav-width !important; // Force full width on mobile
-    transition: transform 0.3s $transition-timing;
-    transform: translateX(-100%);
-
-    &.mobile-open {
-      transform: translateX(0);
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-    }
-
-    &.collapsed {
-      width: $sidenav-width !important; // Keep full width on mobile
-
-      // Override collapsed state styles for mobile
-      .hidden {
-        opacity: 1 !important;
-        width: auto !important;
-        height: auto !important;
-        overflow: visible !important;
-      }
-
-      .nav-icon {
-        margin-right: 1rem !important;
-      }
-
-      .submenu {
-        display: block !important;
-      }
-
-      .badge {
-        opacity: 1 !important;
-        width: auto !important;
-        overflow: visible !important;
-      }
-
-      .expand-icon {
-        opacity: 1 !important;
-        width: auto !important;
-        overflow: visible !important;
-      }
-
-      .nav-label {
-        opacity: 1 !important;
-        width: auto !important;
-        overflow: visible !important;
-      }
-
-      .header-titles {
-        opacity: 1 !important;
-        transform: none !important;
-        height: auto !important;
-        overflow: visible !important;
-      }
-    }
+    display: none;
   }
 
   // Main navigation area becomes scrollable
@@ -196,16 +118,20 @@ $gold-accent: #d4af37; // Royal gold accent
     display: flex;
     flex-direction: column;
     min-height: 0; // Important for Firefox
+    overflow: hidden; // Add this
 
     .nav-list {
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
       padding: 1rem 0.75rem;
+      margin-right: -8px; // Compensate for scrollbar
+      height: 100%; // Add this
 
       // Custom scrollbar
       &::-webkit-scrollbar {
         width: 4px;
+        height: 4px;
       }
 
       &::-webkit-scrollbar-track {
@@ -247,9 +173,12 @@ $gold-accent: #d4af37; // Royal gold accent
   // Footer stays at bottom
   .secondary-actions {
     flex-shrink: 0;
-    margin-top: auto;
     padding: 1rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    z-index: 3;
   }
 }
 
@@ -552,55 +481,11 @@ $gold-accent: #d4af37; // Royal gold accent
 }
 
 // Improved Responsive Design
-@media (max-width: 1199px) {
-  // For tablet and smaller screens, sidenav starts hidden and appears as overlay
-  .sidenav-container {
-    position: fixed;
-    top: 0;
-    left: -$sidenav-width; // Start off-screen
-    bottom: 0;
-    z-index: 1000;
-    width: $sidenav-width;
-    transition: left 0.3s $transition-timing;
-
-    &.mobile-open {
-      left: 0; // Slide in from left when open
-      box-shadow: 5px 0 25px rgba(0, 0, 0, 0.4);
-    }
-
-    // When collapsed in mobile, hide it completely
-    &.collapsed:not(.mobile-open) {
-      left: -$sidenav-width;
-    }
-  }
-
-  // Mobile backdrop
-  .sidenav-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    visibility: hidden;
-    transition:
-      opacity 0.3s ease,
-      visibility 0.3s ease;
-
-    &.visible {
-      opacity: 1;
-      visibility: visible;
-    }
-  }
-}
 
 // High Contrast Mode
 @media (prefers-contrast: more) {
   .sidenav-container {
     background: #000;
-    border-right: 2px solid #fff;
   }
 
   .nav-item.active::before {
@@ -656,45 +541,8 @@ $gold-accent: #d4af37; // Royal gold accent
   }
 }
 
-// Update mobile styles
-@media (max-width: 1199px) {
-  .sidenav-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    z-index: 1001; // Increase z-index to appear above toggle button
-    width: $sidenav-width !important;
-    transform: translateX(-100%);
-    transition: transform 0.3s $transition-timing;
-    box-shadow: none;
-
-    &.mobile-open {
-      transform: translateX(0);
-      box-shadow: 4px 0 25px rgba(0, 0, 0, 0.3);
-    }
-  }
-
-  // Enhance backdrop for mobile
-  .sidenav-backdrop {
-    display: block;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease;
-
-    &.visible {
-      opacity: 1;
-      visibility: visible;
-    }
-  }
-}
+// Remove duplicate media query block to avoid conflicts
+// Delete the other @media (max-width: 1199px) block
 
 // Add touch handling for mobile devices
 @media (hover: none) {

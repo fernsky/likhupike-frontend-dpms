@@ -37,8 +37,15 @@ $gold-accent: #d4af37; // Royal gold accent
 
 .sidenav {
   width: 290px;
-  border-right: 1px solid rgba(0, 0, 0, 0.12);
-  transform: translateX(-100%);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: none;
+
+  @media (max-width: 1199px) {
+    position: fixed;
+    height: 100%;
+  }
 
   &.mat-drawer-opened {
     transform: translateX(0);

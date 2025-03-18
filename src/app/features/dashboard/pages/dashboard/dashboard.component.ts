@@ -99,6 +99,7 @@ export class DashboardComponent implements OnInit {
 
   onMobileClose(): void {
     this.isMobileOpen = false;
+    this.isSidenavOpen = false; // Add this line to sync state
     if (this.sidenav) {
       this.sidenav.close();
     }
@@ -111,6 +112,14 @@ export class DashboardComponent implements OnInit {
         // Optional: Dispatch analytics event
         console.log('Sidenav toggled:', this.isSidenavOpen);
       });
+    }
+  }
+
+  onBackdropClick(): void {
+    this.isSidenavOpen = false;
+    this.isMobileOpen = false;
+    if (this.sidenav) {
+      this.sidenav.close();
     }
   }
 
