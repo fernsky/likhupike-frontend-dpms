@@ -23,6 +23,7 @@ export const USER_MANAGEMENT_ROUTES: Routes = [
           breadcrumb: {
             translationKey: 'userList',
             icon: 'format_list_bulleted',
+            path: '/dashboard/users/list',
           },
         },
       },
@@ -38,6 +39,7 @@ export const USER_MANAGEMENT_ROUTES: Routes = [
           breadcrumb: {
             translationKey: 'createUser',
             icon: 'person_add',
+            path: '/dashboard/users/create',
           },
         },
       },

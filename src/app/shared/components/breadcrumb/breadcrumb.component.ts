@@ -11,13 +11,20 @@ import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 import { filter, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { Breadcrumb, BreadcrumbConfig } from './breadcrumb.interface';
-
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MatTooltipModule } from '@angular/material/tooltip';
 @Component({
   selector: 'app-breadcrumb',
   templateUrl: './breadcrumb.component.html',
   styleUrls: ['./breadcrumb.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterModule, MatIconModule, TranslocoModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatIconModule,
+    TranslocoModule,
+    MatTooltipModule,
+  ],
   providers: [
     provideTranslocoScope({
       scope: 'breadcrumbs',
@@ -33,11 +40,22 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
 
   breadcrumbs: Breadcrumb[] = [];
   private destroy$ = new Subject<void>();
+  isCompact = false;
+  showOnlyIcons = false;
 
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute
-  ) {}
+    private activatedRoute: ActivatedRoute,
+    private breakpointObserver: BreakpointObserver
+  ) {
+    this.breakpointObserver
+      .observe([Breakpoints.XSmall, Breakpoints.Small])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((result) => {
+        this.isCompact = result.matches;
+        this.showOnlyIcons = result.breakpoints[Breakpoints.XSmall];
+      });
+  }
 
   ngOnInit(): void {
     console.log('Breadcrumb component initialized');
@@ -62,7 +80,6 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
     }
 
     const paths: Breadcrumb[] = [];
-    let url = '';
     const processedKeys = new Set<string>();
 
     while (currentRoute) {
@@ -71,18 +88,14 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
 
       if (data['breadcrumb']) {
         const breadcrumbData = data['breadcrumb'];
-        const routeUrl = snapshot.url.map((segment) => segment.path).join('/');
-        if (routeUrl) {
-          url += `/${routeUrl}`;
-        }
 
-        // Only add if translation key hasn't been processed
         if (!processedKeys.has(breadcrumbData.translationKey)) {
           processedKeys.add(breadcrumbData.translationKey);
           paths.push({
             label: breadcrumbData.label || '',
             translationKey: breadcrumbData.translationKey,
-            url: url || '/',
+            url: breadcrumbData.path,
+            path: breadcrumbData.path,
             icon: breadcrumbData.icon,
             queryParams: snapshot.queryParams,
           });

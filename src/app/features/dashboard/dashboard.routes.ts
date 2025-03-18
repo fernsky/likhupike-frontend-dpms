@@ -10,6 +10,7 @@ export const DASHBOARD_ROUTES: Routes = [
       breadcrumb: {
         translationKey: 'dashboard',
         icon: 'dashboard',
+        path: '/dashboard',
       },
     },
     children: [
@@ -19,6 +20,7 @@ export const DASHBOARD_ROUTES: Routes = [
           breadcrumb: {
             translationKey: 'users',
             icon: 'group',
+            path: '/dashboard/users',
           },
         },
         loadChildren: () =>
