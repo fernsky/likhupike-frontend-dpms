@@ -310,16 +310,25 @@ $transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 
       .item-icon {
         font-size: 1rem;
+        margin-right: 0;
       }
 
       .breadcrumb-text {
         display: none; // Hide text for non-active items
       }
 
-      &.active .breadcrumb-text {
-        display: inline-block; // Show text for active item
-        max-width: 160px; // Limit width for mobile
-        margin-left: 4px; // Add some space after icon
+      &.active {
+        padding: 0.25rem 0.5rem;
+
+        .breadcrumb-text {
+          display: inline-block; // Show text for active item
+          max-width: 160px;
+          margin-left: 4px;
+        }
+
+        .item-icon {
+          margin-right: 4px;
+        }
       }
     }
   }
