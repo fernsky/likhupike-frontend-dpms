@@ -10,10 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 import { filter, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import {
-  Breadcrumb,
-  BreadcrumbConfig,
-} from './breadcrumb.interface';
+import { Breadcrumb, BreadcrumbConfig } from './breadcrumb.interface';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -66,15 +63,11 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
 
     const paths: Breadcrumb[] = [];
     let url = '';
+    const processedKeys = new Set<string>();
 
     while (currentRoute) {
       const snapshot = currentRoute.snapshot;
       const data = snapshot.data;
-      console.log('Processing route:', {
-        url: snapshot.url,
-        data: data,
-        params: snapshot.params,
-      });
 
       if (data['breadcrumb']) {
         const breadcrumbData = data['breadcrumb'];
@@ -83,13 +76,17 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
           url += `/${routeUrl}`;
         }
 
-        paths.push({
-          label: breadcrumbData.label || '',
-          translationKey: breadcrumbData.translationKey,
-          url: url || '/',
-          icon: breadcrumbData.icon,
-          queryParams: snapshot.queryParams,
-        });
+        // Only add if translation key hasn't been processed
+        if (!processedKeys.has(breadcrumbData.translationKey)) {
+          processedKeys.add(breadcrumbData.translationKey);
+          paths.push({
+            label: breadcrumbData.label || '',
+            translationKey: breadcrumbData.translationKey,
+            url: url || '/',
+            icon: breadcrumbData.icon,
+            queryParams: snapshot.queryParams,
+          });
+        }
       }
 
       currentRoute = currentRoute.parent;

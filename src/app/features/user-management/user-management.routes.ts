@@ -5,12 +5,6 @@ import { PermissionType } from '@app/core/models/permission.enum';
 export const USER_MANAGEMENT_ROUTES: Routes = [
   {
     path: '',
-    data: {
-      breadcrumb: {
-        translationKey: 'users',
-        icon: 'people',
-      },
-    },
     children: [
       {
         path: '',
