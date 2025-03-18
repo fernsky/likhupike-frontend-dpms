@@ -8,7 +8,7 @@ export const environment: Environment = {
     'https://likhupike-admin.intensivestudy.com.np',
   ],
   version: '1.0.0', // Add version with environment variable support
-  apiUrl: 'https://likhupike-api.intensivestudy.com.np/api/v1',
+  apiUrl: 'https://likhupike-dpms-api.intensivestudy.com.np/api/v1',
   baseUrl: '/dpms', // Production base URL for assets
   auth: {
     loginEndpoint: '/auth/login',
