@@ -1,79 +1,102 @@
 <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="user-form">
-  <div class="form-grid">
-    <!-- Email Field -->
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "user.form.email" | transloco }}</mat-label>
-      <input matInput formControlName="email" type="email" />
-      <mat-error *ngIf="userForm.get('email')?.errors?.['required']">
-        {{ "user.form.errors.emailRequired" | transloco }}
-      </mat-error>
-      <mat-error *ngIf="userForm.get('email')?.errors?.['email']">
-        {{ "user.form.errors.emailInvalid" | transloco }}
-      </mat-error>
-    </mat-form-field>
+  <!-- Basic Information Section -->
+  <div class="form-section">
+    <div class="section-header">
+      <mat-icon>person</mat-icon>
+      <h2>{{ "user.form.sections.basic" | transloco }}</h2>
+    </div>
 
-    <!-- Password Field - Only for Create -->
-    <mat-form-field *ngIf="!isEdit" appearance="outline">
-      <mat-label>{{ "user.form.password" | transloco }}</mat-label>
-      <input matInput formControlName="password" type="password" />
-      <mat-icon
-        matSuffix
-        [matTooltip]="'user.form.passwordRequirements' | transloco"
-        >info</mat-icon
-      >
-      <mat-error *ngIf="userForm.get('password')?.errors?.['required']">
-        {{ "user.form.errors.passwordRequired" | transloco }}
-      </mat-error>
-      <mat-error *ngIf="userForm.get('password')?.errors?.['minlength']">
-        {{ "user.form.errors.passwordLength" | transloco }}
-      </mat-error>
-      <mat-error *ngIf="userForm.get('password')?.errors?.['pattern']">
-        {{ "user.form.errors.passwordPattern" | transloco }}
-      </mat-error>
-    </mat-form-field>
+    <div class="section-content basic-info">
+      <div class="credentials-group">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "user.form.email" | transloco }}</mat-label>
+          <input matInput formControlName="email" type="email" />
+          <mat-error *ngIf="userForm.get('email')?.errors?.['required']">
+            {{ "user.form.errors.emailRequired" | transloco }}
+          </mat-error>
+          <mat-error *ngIf="userForm.get('email')?.errors?.['email']">
+            {{ "user.form.errors.emailInvalid" | transloco }}
+          </mat-error>
+        </mat-form-field>
 
-    <!-- Ward Level User Toggle -->
-    <mat-checkbox formControlName="isWardLevelUser">
-      {{ "user.form.isWardLevelUser" | transloco }}
-    </mat-checkbox>
+        <mat-form-field *ngIf="!isEdit" appearance="outline">
+          <mat-label>{{ "user.form.password" | transloco }}</mat-label>
+          <input matInput formControlName="password" type="password" />
+          <mat-icon
+            matSuffix
+            [matTooltip]="'user.form.passwordRequirements' | transloco"
+            >info</mat-icon
+          >
+          <mat-error *ngIf="userForm.get('password')?.errors?.['required']">
+            {{ "user.form.errors.passwordRequired" | transloco }}
+          </mat-error>
+          <mat-error *ngIf="userForm.get('password')?.errors?.['minlength']">
+            {{ "user.form.errors.passwordLength" | transloco }}
+          </mat-error>
+          <mat-error *ngIf="userForm.get('password')?.errors?.['pattern']">
+            {{ "user.form.errors.passwordPattern" | transloco }}
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-    <!-- Ward Number -->
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "user.form.wardNumber" | transloco }}</mat-label>
-      <mat-select formControlName="wardNumber">
-        <mat-option [value]="null">{{
-          "user.form.selectWard" | transloco
-        }}</mat-option>
-        <mat-option
-          *ngFor="
-            let ward of [
-              1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-              20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
-            ]
-          "
-          [value]="ward"
-        >
-          {{ "user.ward" | transloco }} {{ ward }}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="userForm.errors?.['wardNumberRequired']">
-        {{ "user.form.errors.wardNumberRequired" | transloco }}
-      </mat-error>
-      <mat-error *ngIf="userForm.errors?.['wardNumberRange']">
-        {{ "user.form.errors.wardNumberRange" | transloco }}
-      </mat-error>
-    </mat-form-field>
-
-    <!-- Permissions Section - Only for Create -->
-    <div *ngIf="!isEdit" class="permissions-section">
-      <h3>{{ "user.form.permissions" | transloco }}</h3>
-      <div formGroupName="permissions" class="permissions-grid">
-        <mat-checkbox
-          *ngFor="let permission of permissionTypes"
-          [formControlName]="permission"
-        >
-          {{ "user.permissions." + permission | transloco }}
+      <div class="ward-assignment">
+        <mat-checkbox formControlName="isWardLevelUser">
+          {{ "user.form.isWardLevelUser" | transloco }}
         </mat-checkbox>
+
+        <mat-form-field
+          appearance="outline"
+          *ngIf="userForm.get('isWardLevelUser')?.value"
+        >
+          <mat-label>{{ "user.form.wardNumber" | transloco }}</mat-label>
+          <mat-select formControlName="wardNumber">
+            <mat-option [value]="null">{{
+              "user.form.selectWard" | transloco
+            }}</mat-option>
+            <mat-option
+              *ngFor="
+                let ward of [
+                  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+                  19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
+                ]
+              "
+              [value]="ward"
+            >
+              {{ "user.ward" | transloco }} {{ ward }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="userForm.errors?.['wardNumberRequired']">
+            {{ "user.form.errors.wardNumberRequired" | transloco }}
+          </mat-error>
+          <mat-error *ngIf="userForm.errors?.['wardNumberRange']">
+            {{ "user.form.errors.wardNumberRange" | transloco }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <!-- Permissions Section -->
+  <div class="form-section" *ngIf="!isEdit">
+    <div class="section-header">
+      <mat-icon>security</mat-icon>
+      <h2>{{ "user.form.sections.permissions" | transloco }}</h2>
+    </div>
+
+    <div class="section-content permissions">
+      <div formGroupName="permissions" class="permissions-grid">
+        <div *ngFor="let permission of permissionTypes" class="permission-item">
+          <mat-checkbox [formControlName]="permission">
+            <div class="permission-label">
+              <span class="permission-name">{{
+                "user.permissions." + permission + ".title" | transloco
+              }}</span>
+              <span class="permission-description">{{
+                "user.permissions." + permission + ".description" | transloco
+              }}</span>
+            </div>
+          </mat-checkbox>
+        </div>
       </div>
     </div>
   </div>

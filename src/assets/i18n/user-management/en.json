@@ -46,10 +46,15 @@
     "selectWard": "Select Ward",
     "roles": "User Roles",
     "isMunicipalityLevel": "This is a municipality-level position",
-    "isWardLevelUser": "This is a ward level user",
+    "isWardLevelUser": "This is a ward level user.",
     "profilePicture": "Profile Picture",
     "uploadPhoto": "Click to upload photo",
     "permissions": "User Permissions",
+    "sections": {
+      "basic": "Basic Information",
+      "wardAssignment": "Ward Assignment",
+      "permissions": "User Permissions"
+    },
     "errors": {
       "emailRequired": "Email is required",
       "emailInvalid": "Please provide a valid email address",
@@ -87,11 +92,29 @@
   "municipality": "Municipality Level",
   "ward": "Ward",
   "permissions": {
-    "CREATE_USER": "Create User",
-    "APPROVE_USER": "Approve User",
-    "EDIT_USER": "Edit User",
-    "DELETE_USER": "Delete User",
-    "VIEW_USER": "View User",
-    "RESET_USER_PASSWORD": "Reset User Password"
+    "CREATE_USER": {
+      "title": "Create User",
+      "description": "Can create new user accounts in the system"
+    },
+    "APPROVE_USER": {
+      "title": "Approve User",
+      "description": "Can approve and activate user accounts in the system"
+    },
+    "EDIT_USER": {
+      "title": "Edit User",
+      "description": "Can modify existing user accounts in the system"
+    },
+    "DELETE_USER": {
+      "title": "Delete User",
+      "description": "Can remove user accounts from the system"
+    },
+    "VIEW_USER": {
+      "title": "View User",
+      "description": "Can view user account details in the system"
+    },
+    "RESET_USER_PASSWORD": {
+      "title": "Reset User Password",
+      "description": "Can reset passwords for user accounts in the system"
+    }
   }
 }

@@ -82,6 +82,9 @@ $gold-accent: #d4af37; // Royal gold accent
     margin: 0 auto;
     padding: 0 2rem;
     width: 100%;
+    min-height: calc(100vh - 64px); // Ensure minimum height
+    display: flex;
+    flex-direction: column;
 
     @media (max-width: 768px) {
       padding: 0 1rem;
@@ -92,6 +95,9 @@ $gold-accent: #d4af37; // Royal gold accent
 .router-outlet-container {
   min-height: 100%;
   padding: 1.5rem 0;
+  margin-bottom: 2rem; // Add margin at the bottom
+  padding-bottom: 5rem;
+  position: relative; // Add position relative
 }
 
 @media (max-width: 1199px) {
