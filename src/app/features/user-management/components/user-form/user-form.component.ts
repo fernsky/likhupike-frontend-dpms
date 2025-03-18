@@ -1,9 +1,9 @@
 import {
   Component,
   Input,
-  OnInit,
   Output,
   EventEmitter,
+  OnInit,
   OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -13,6 +13,8 @@ import {
   Validators,
   ReactiveFormsModule,
   AbstractControl,
+  ValidatorFn,
+  ValidationErrors,
 } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -28,9 +30,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoModule } from '@jsverse/transloco';
 import { provideNativeDateAdapter } from '@angular/material/core';
 
-import { RoleType } from '@app/core/models/role.enum';
-import { CreateUserRequest, UserResponse } from '../../models/user.interface';
-import { PasswordValidatorService } from '@app/shared/validators/password-validator.service';
+import {
+  CreateUserRequest,
+  UpdateUserRequest,
+  UserResponse,
+} from '../../models/user.interface';
+import { PermissionType } from '@app/core/models/permission.enum';
 
 @Component({
   selector: 'app-user-form',
@@ -58,110 +63,139 @@ export class UserFormComponent implements OnInit, OnDestroy {
   @Input() errors: Record<string, string[]> | null = null;
   @Input() user: UserResponse | null = null;
   @Input() isEdit = false;
-
   @Output() submitForm = new EventEmitter<CreateUserRequest>();
+  @Output() submitUpdateForm = new EventEmitter<UpdateUserRequest>();
   @Output() cancelForm = new EventEmitter<void>();
 
-  userForm: FormGroup;
-  roleTypes = Object.values(RoleType);
-  selectedFile: File | null = null;
-  previewUrl: string | null = null;
-  passwordErrors: string[] = [];
+  userForm!: FormGroup;
+  permissionTypes = Object.values(PermissionType);
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private fb: FormBuilder,
-    private passwordValidator: PasswordValidatorService
-  ) {
-    this.userForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: [
-        '',
-        [
-          Validators.required,
-          (control: AbstractControl) =>
-            this.passwordValidator.validatePassword(control),
-        ],
-      ],
-      fullName: ['', [Validators.required]],
-      fullNameNepali: ['', [Validators.required]],
-      dateOfBirth: ['', [Validators.required]],
-      address: ['', [Validators.required]],
-      officePost: ['', [Validators.required]],
-      wardNumber: [null],
-      isMunicipalityLevel: [false],
-      roles: [[], [Validators.required]],
-      profilePicture: [null],
-    });
+  constructor(private fb: FormBuilder) {
+    this.initForm();
+  }
 
-    if (this.isEdit) {
-      this.userForm.get('password')?.clearValidators();
-      this.userForm.get('password')?.updateValueAndValidity();
+  private initForm(): void {
+    const baseControls = {
+      email: ['', [Validators.required, Validators.email]],
+      isWardLevelUser: [false],
+      wardNumber: [{ value: null, disabled: true }],
+    };
+
+    if (!this.isEdit) {
+      Object.assign(baseControls, {
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(8),
+            Validators.pattern(
+              /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/
+            ),
+          ],
+        ],
+        permissions: this.fb.group(
+          Object.values(PermissionType).reduce(
+            (acc, permission) => ({
+              ...acc,
+              [permission]: [false],
+            }),
+            {}
+          )
+        ),
+      });
     }
+
+    this.userForm = this.fb.group(baseControls, {
+      validators: [this.wardNumberValidator()],
+    });
+  }
+
+  private wardNumberValidator(): ValidatorFn {
+    return (formGroup: AbstractControl): ValidationErrors | null => {
+      const isWardLevel = formGroup.get('isWardLevelUser')?.value;
+      const wardNumber = formGroup.get('wardNumber')?.value;
+
+      if (isWardLevel && !wardNumber) {
+        return { wardNumberRequired: true };
+      }
+
+      if (wardNumber && (wardNumber < 1 || wardNumber > 33)) {
+        return { wardNumberRange: true };
+      }
+
+      return null;
+    };
   }
 
   ngOnInit(): void {
     if (this.user) {
-      this.userForm.patchValue({
-        ...this.user,
-        password: '',
-      });
-      this.previewUrl = this.user.profilePictureUrl || null;
+      const formValue = this.isEdit
+        ? {
+            email: this.user.email,
+            isWardLevelUser: this.user.isWardLevelUser,
+            wardNumber: this.user.wardNumber,
+          }
+        : {
+            email: this.user.email,
+            isWardLevelUser: this.user.isWardLevelUser,
+            wardNumber: this.user.wardNumber,
+            permissions: Object.entries(this.user.permissions).reduce(
+              (acc, [key, value]) => ({
+                ...acc,
+                [key]: value,
+              }),
+              {}
+            ),
+          };
+
+      this.userForm.patchValue(formValue);
     }
 
-    // Watch for municipality level changes
+    this.setupWardLevelSubscription();
+  }
+
+  private setupWardLevelSubscription(): void {
     this.userForm
-      .get('isMunicipalityLevel')
+      .get('isWardLevelUser')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((isMunicipal) => {
+      .subscribe((isWardLevel) => {
         const wardControl = this.userForm.get('wardNumber');
-        if (isMunicipal) {
-          wardControl?.setValue(null);
-          wardControl?.disable();
-        } else {
+        if (isWardLevel) {
           wardControl?.enable();
+        } else {
+          wardControl?.disable();
+          wardControl?.setValue(null);
         }
       });
   }
 
-  onFileSelected(event: Event): void {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      this.selectedFile = file;
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.previewUrl = reader.result as string;
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  removeImage(): void {
-    this.selectedFile = null;
-    this.previewUrl = null;
-    this.userForm.patchValue({ profilePicture: null });
-  }
-
   onSubmit(): void {
     if (this.userForm.valid) {
-      const formData: CreateUserRequest = {
-        ...this.userForm.value,
-        profilePicture: this.selectedFile,
-      };
-      this.submitForm.emit(formData);
-    } else {
-      this.markFormGroupTouched(this.userForm);
-    }
-  }
-
-  onPasswordChange(): void {
-    const passwordControl = this.userForm.get('password');
-    if (passwordControl?.errors) {
-      this.passwordErrors = this.passwordValidator.getPasswordErrorMessages(
-        passwordControl.errors
-      );
-    } else {
-      this.passwordErrors = [];
+      const formValue = this.userForm.getRawValue();
+      if (this.isEdit) {
+        const updateRequest: UpdateUserRequest = {
+          email: formValue.email || null,
+          isWardLevelUser: formValue.isWardLevelUser || null,
+          wardNumber: formValue.wardNumber || null,
+        };
+        this.submitUpdateForm.emit(updateRequest);
+      } else {
+        const createRequest: CreateUserRequest = {
+          email: formValue.email,
+          password: formValue.password,
+          isWardLevelUser: formValue.isWardLevelUser,
+          wardNumber: formValue.wardNumber || null,
+          permissions: Object.entries(formValue.permissions).reduce(
+            (acc, [key, value]) => ({
+              ...acc,
+              [key]: value as boolean,
+            }),
+            {} as { [key in PermissionType]: boolean }
+          ),
+        };
+        this.submitForm.emit(createRequest);
+      }
     }
   }
 

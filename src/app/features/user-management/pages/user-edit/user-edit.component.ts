@@ -7,7 +7,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TranslocoModule } from '@jsverse/transloco';
 import { UserFormComponent } from '../../components/user-form/user-form.component';
 import { UserActions } from '../../store/user.actions';
-import { CreateUserRequest } from '../../models/user.interface';
+import { UpdateUserRequest } from '../../models/user.interface';
 import * as UserSelectors from '../../store/user.selectors';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
@@ -38,7 +38,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.store.dispatch(UserActions.clearUserErrors());
+    this.store.dispatch(UserActions.clearErrors());
 
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.userId = params['id'];
@@ -68,16 +68,31 @@ export class UserEditComponent implements OnInit, OnDestroy {
       });
   }
 
-  onSubmit(request: CreateUserRequest): void {
+  onSubmit(request: UpdateUserRequest): void {
+    // Convert any undefined values to null to match Kotlin nullable types
+    const nullableRequest: UpdateUserRequest = {
+      email: request.email ?? null,
+      isWardLevelUser: request.isWardLevelUser ?? null,
+      wardNumber: request.wardNumber ?? null,
+    };
+
     this.store.dispatch(
       UserActions.updateUser({
         id: this.userId,
-        request: {
-          ...request,
-          password: request.password || undefined,
-        },
+        request: nullableRequest,
       })
     );
+
+    // Subscribe to update completion
+    this.store
+      .select(UserSelectors.selectUserErrors)
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((errors) => !errors)
+      )
+      .subscribe(() => {
+        this.navigateBack();
+      });
   }
 
   onCancel(): void {

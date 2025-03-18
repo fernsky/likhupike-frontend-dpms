@@ -36,7 +36,7 @@
   "form": {
     "email": "इमेल ठेगाना",
     "password": "पासवर्ड",
-    "passwordRequirements": "पासवर्ड कम्तिमा ८ वर्णको हुनुपर्छ र ठूलो अक्षर, सानो अक्षर, नम्बर र विशेष वर्णहरू समावेश हुनुपर्छ",
+    "passwordRequirements": "पासवर्डमा कम्तिमा एउटा अंक, सानो अक्षर, ठूलो अक्षर र विशेष क्यारेक्टर हुनुपर्छ",
     "fullName": "पूरा नाम (अंग्रेजीमा)",
     "fullNameNepali": "पूरा नाम (नेपालीमा)",
     "dateOfBirth": "जन्म मिति",
@@ -46,17 +46,23 @@
     "selectWard": "वडा छान्नुहोस्",
     "roles": "प्रयोगकर्ता भूमिकाहरू",
     "isMunicipalityLevel": "यो नगरपालिका स्तरको पद हो",
+    "isWardLevelUser": "यो वडा स्तरको प्रयोगकर्ता हो",
+    "permissions": "प्रयोगकर्ता अनुमतिहरू",
     "errors": {
       "emailRequired": "इमेल आवश्यक छ",
       "emailInvalid": "कृपया मान्य इमेल ठेगाना हाल्नुहोस्",
       "passwordRequired": "पासवर्ड आवश्यक छ",
       "passwordInvalid": "पासवर्डले आवश्यकताहरू पूरा गर्दैन",
+      "passwordLength": "पासवर्ड कम्तिमा ८ वर्णको हुनुपर्छ",
+      "passwordPattern": "पासवर्डमा कम्तिमा एउटा अंक, सानो अक्षर, ठूलो अक्षर र विशेष क्यारेक्टर हुनुपर्छ",
       "fullNameRequired": "पूरा नाम आवश्यक छ",
       "fullNameNepaliRequired": "नेपाली नाम आवश्यक छ",
       "dateOfBirthRequired": "जन्म मिति आवश्यक छ",
       "addressRequired": "ठेगाना आवश्यक छ",
       "officePostRequired": "कार्यालय पद आवश्यक छ",
-      "rolesRequired": "कम्तिमा एउटा भूमिका छान्नुपर्छ"
+      "rolesRequired": "कम्तिमा एउटा भूमिका छान्नुपर्छ",
+      "wardNumberRequired": "वडा स्तरको प्रयोगकर्ताको लागि वडा नम्बर आवश्यक छ",
+      "wardNumberRange": "वडा नम्बर १ देखि ३३ सम्म हुनुपर्छ"
     }
   },
   "delete": {
@@ -78,5 +84,13 @@
     "deactivateError": "प्रयोगकर्ता निष्क्रिय गर्न असफल"
   },
   "municipality": "नगरपालिका स्तर",
-  "ward": "वडा"
+  "ward": "वडा",
+  "permissions": {
+    "CREATE_USER": "प्रयोगकर्ता सिर्जना",
+    "APPROVE_USER": "प्रयोगकर्ता स्वीकृत",
+    "EDIT_USER": "प्रयोगकर्ता सम्पादन",
+    "DELETE_USER": "प्रयोगकर्ता मेटाउने",
+    "VIEW_USER": "प्रयोगकर्ता हेर्ने",
+    "RESET_USER_PASSWORD": "प्रयोगकर्ता पासवर्ड रिसेट"
+  }
 }

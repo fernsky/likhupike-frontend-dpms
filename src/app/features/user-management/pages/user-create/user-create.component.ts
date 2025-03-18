@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -35,7 +35,7 @@ import { PageTitleComponent } from '@app/shared/components/page-title/page-title
     PasswordValidatorService,
   ],
 })
-export class UserCreateComponent implements OnDestroy {
+export class UserCreateComponent implements OnInit, OnDestroy {
   loading$ = this.store.select(UserSelectors.selectUserCreating);
   errors$ = this.store.select(UserSelectors.selectUserErrors);
   private destroy$ = new Subject<void>();
@@ -43,14 +43,13 @@ export class UserCreateComponent implements OnDestroy {
   constructor(
     private store: Store,
     private router: Router
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     // Clear any existing errors when component initializes
-    this.store.dispatch(UserActions.clearUserErrors());
-  }
+    this.store.dispatch(UserActions.clearErrors());
 
-  onSubmit(request: CreateUserRequest): void {
-    this.store.dispatch(UserActions.createUser({ request }));
-
+    // Set up subscription for navigation after successful creation
     this.store
       .select(UserSelectors.selectUserCreating)
       .pipe(
@@ -68,6 +67,10 @@ export class UserCreateComponent implements OnDestroy {
             this.navigateBack();
           });
       });
+  }
+
+  onSubmit(request: CreateUserRequest): void {
+    this.store.dispatch(UserActions.createUser({ request }));
   }
 
   onCancel(): void {

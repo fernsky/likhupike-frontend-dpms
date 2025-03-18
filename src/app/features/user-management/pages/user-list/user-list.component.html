@@ -35,15 +35,6 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>{{ "user.list.roleFilter" | transloco }}</mat-label>
-      <mat-select formControlName="roles" multiple>
-        <mat-option *ngFor="let role of roleTypes" [value]="role">
-          {{ getRoleLabel(role) }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
       <mat-label>{{ "user.list.statusFilter" | transloco }}</mat-label>
       <mat-select formControlName="active">
         <mat-option [value]="null">{{
@@ -117,19 +108,17 @@
         </td>
       </ng-container>
 
-      <!-- Roles Column -->
-      <ng-container matColumnDef="roles">
+      <!-- Permissions Column -->
+      <ng-container matColumnDef="permissions">
         <th mat-header-cell *matHeaderCellDef>
-          {{ "user.list.columns.roles" | transloco }}
+          {{ "user.list.columns.permissions" | transloco }}
         </th>
         <td mat-cell *matCellDef="let user">
           <mat-chip-set>
             <mat-chip
-              *ngFor="let role of user.roles"
-              [color]="role === 'MUNICIPALITY_ADMIN' ? 'primary' : 'accent'"
-              [highlighted]="role === 'MUNICIPALITY_ADMIN'"
+              *ngFor="let label of getPermissionLabels(user.permissions)"
             >
-              {{ getRoleLabel(role) }}
+              {{ label }}
             </mat-chip>
           </mat-chip-set>
         </td>

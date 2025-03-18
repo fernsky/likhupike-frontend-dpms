@@ -22,10 +22,10 @@ export const userReducer = createReducer(
     totalUsers: state.totalUsers + 1,
     lastUpdated: new Date(),
   })),
-  on(UserActions.createUserFailure, (state, { errors }) => ({
+  on(UserActions.createUserFailure, (state, { error }) => ({
     ...state,
     creating: false,
-    errors,
+    errors: error,
   })),
 
   // Load Users
@@ -61,10 +61,29 @@ export const userReducer = createReducer(
     errors: null,
     lastUpdated: new Date(),
   })),
-  on(UserActions.updateUserFailure, (state, { errors }) => ({
+  on(UserActions.updateUserFailure, (state, { error }) => ({
     ...state,
     updating: false,
-    errors,
+    errors: error,
+  })),
+
+  // Active Status
+  on(UserActions.setActiveStatus, (state) => ({
+    ...state,
+    updating: true,
+    errors: null,
+  })),
+  on(UserActions.setActiveStatusSuccess, (state, { user }) => ({
+    ...state,
+    users: state.users.map((u) => (u.id === user.id ? user : u)),
+    updating: false,
+    errors: null,
+    lastUpdated: new Date(),
+  })),
+  on(UserActions.setActiveStatusFailure, (state, { error }) => ({
+    ...state,
+    updating: false,
+    errors: error,
   })),
 
   // Delete User
@@ -88,7 +107,7 @@ export const userReducer = createReducer(
   })),
 
   // Clear Errors
-  on(UserActions.clearUserErrors, (state) => ({
+  on(UserActions.clearErrors, (state) => ({
     ...state,
     errors: null,
   }))

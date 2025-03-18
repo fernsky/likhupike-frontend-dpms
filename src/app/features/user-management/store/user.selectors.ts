@@ -1,32 +1,32 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { USER_FEATURE_KEY } from './user.reducer';
 import { UserState } from './user.state';
-import { RoleType } from '@app/core/models/role.enum';
+import { PermissionType } from '@app/core/models/permission.enum';
 import { UserResponse } from '../models/user.interface';
 
 // Feature selector
 export const selectUserState =
   createFeatureSelector<UserState>(USER_FEATURE_KEY);
 
-// Basic selectors
+// Basic selectors with null checks
 export const selectUsers = createSelector(
   selectUserState,
-  (state) => state.users
+  (state) => state?.users ?? []
 );
 
 export const selectSelectedUser = createSelector(
   selectUserState,
-  (state) => state.selectedUser
+  (state) => state?.selectedUser ?? null
 );
 
 export const selectUserLoading = createSelector(
   selectUserState,
-  (state) => state.loading
+  (state) => state?.loading ?? false
 );
 
 export const selectUserCreating = createSelector(
   selectUserState,
-  (state) => state.creating
+  (state) => state?.creating ?? false
 );
 
 export const selectUserUpdating = createSelector(
@@ -55,12 +55,12 @@ export const selectLastUpdated = createSelector(
 );
 
 // Derived selectors
-export const selectUsersByRole = (role: RoleType) =>
+export const selectUsersByPermission = (permission: PermissionType) =>
   createSelector(selectUsers, (users) =>
-    users.filter((user) => user.roles.includes(role))
+    users.filter((user) => user.permissions[permission])
   );
 
-export const selectUsersByWard = (wardNumber: number) =>
+export const selectWardUsers = (wardNumber: number) =>
   createSelector(selectUsers, (users) =>
     users.filter((user) => user.wardNumber === wardNumber)
   );
@@ -69,24 +69,21 @@ export const selectActiveUsers = createSelector(selectUsers, (users) =>
   users.filter((user) => user.active)
 );
 
-export const selectMunicipalityLevelUsers = createSelector(
-  selectUsers,
-  (users) => users.filter((user) => user.isMunicipalityLevel)
+export const selectWardLevelUsers = createSelector(selectUsers, (users) =>
+  users.filter((user) => user.isWardLevelUser)
 );
 
 // Stats selectors
 export const selectUserStats = createSelector(selectUsers, (users) => ({
   total: users.length,
   active: users.filter((user) => user.active).length,
-  municipalityLevel: users.filter((user) => user.isMunicipalityLevel).length,
-  byRole: users.reduce(
-    (acc, user) => {
-      user.roles.forEach((role) => {
-        acc[role] = (acc[role] || 0) + 1;
-      });
-      return acc;
-    },
-    {} as Record<RoleType, number>
+  wardLevel: users.filter((user) => user.isWardLevelUser).length,
+  byPermission: Object.values(PermissionType).reduce(
+    (acc, permission) => ({
+      ...acc,
+      [permission]: users.filter((user) => user.permissions[permission]).length,
+    }),
+    {} as Record<PermissionType, number>
   ),
   byWard: users.reduce(
     (acc, user) => {
@@ -102,7 +99,7 @@ export const selectUserStats = createSelector(selectUsers, (users) => ({
 // Search and filter selectors
 export const selectFilteredUsers = (filter: {
   search?: string;
-  roles?: RoleType[];
+  permissions?: PermissionType[];
   wardNumber?: number;
   active?: boolean;
 }) =>
@@ -110,19 +107,11 @@ export const selectFilteredUsers = (filter: {
     return users.filter((user) => {
       const matchesSearch = !filter.search
         ? true
-        : Object.values({
-            fullName: user.fullName,
-            fullNameNepali: user.fullNameNepali,
-            email: user.email,
-            address: user.address,
-            officePost: user.officePost,
-          }).some((value) =>
-            value.toLowerCase().includes(filter.search!.toLowerCase())
-          );
+        : user.email.toLowerCase().includes(filter.search.toLowerCase());
 
-      const matchesRoles = !filter.roles?.length
+      const matchesPermissions = !filter.permissions?.length
         ? true
-        : filter.roles.some((role) => user.roles.includes(role));
+        : filter.permissions.some((permission) => user.permissions[permission]);
 
       const matchesWard = !filter.wardNumber
         ? true
@@ -131,7 +120,9 @@ export const selectFilteredUsers = (filter: {
       const matchesActive =
         filter.active === undefined ? true : user.active === filter.active;
 
-      return matchesSearch && matchesRoles && matchesWard && matchesActive;
+      return (
+        matchesSearch && matchesPermissions && matchesWard && matchesActive
+      );
     });
   });
 

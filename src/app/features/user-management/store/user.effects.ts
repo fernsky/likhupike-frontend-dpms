@@ -1,29 +1,34 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
+
 import { of } from 'rxjs';
-import { map, catchError, exhaustMap, withLatestFrom } from 'rxjs/operators';
+import { map, catchError, exhaustMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslocoService } from '@jsverse/transloco';
 import { UserActions } from './user.actions';
 import { UserService } from '../services/user.service';
-import * as AuthSelectors from '@app/core/store/auth/auth.selectors';
 
 @Injectable()
 export class UserEffects {
+  constructor(
+    private actions$: Actions,
+    private userService: UserService,
+    private snackBar: MatSnackBar,
+    private transloco: TranslocoService
+  ) {}
+
   createUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.createUser),
-      withLatestFrom(this.store.select(AuthSelectors.selectMunicipality)),
-      exhaustMap(([action, municipality]) =>
-        this.userService.createUser(action.request, municipality?.code).pipe(
+      exhaustMap(({ request }) =>
+        this.userService.createUser(request).pipe(
           map((user) => {
-            this.showSuccess('messages.createSuccess');
+            this.showSuccess('user.messages.createSuccess');
             return UserActions.createUserSuccess({ user });
           }),
           catchError((error) => {
-            this.showError('messages.createError');
-            return of(UserActions.createUserFailure({ errors: error.errors }));
+            this.showError('user.messages.createError');
+            return of(UserActions.createUserFailure({ error }));
           })
         )
       )
@@ -33,15 +38,29 @@ export class UserEffects {
   loadUsers$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.loadUsers),
-      withLatestFrom(this.store.select(AuthSelectors.selectMunicipality)),
-      exhaustMap(([action, municipality]) =>
-        this.userService.getUsers(action.filter, municipality?.code).pipe(
+      exhaustMap(({ filter }) =>
+        this.userService.getUsers(filter).pipe(
           map(({ users, total }) =>
             UserActions.loadUsersSuccess({ users, total })
           ),
           catchError((error) => {
-            this.showError('messages.loadError');
-            return of(UserActions.loadUsersFailure({ error: error.message }));
+            this.showError('user.messages.loadError');
+            return of(UserActions.loadUsersFailure({ error }));
+          })
+        )
+      )
+    )
+  );
+
+  loadUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.loadUser),
+      exhaustMap(({ id }) =>
+        this.userService.getUserById(id).pipe(
+          map((user) => UserActions.loadUserSuccess({ user })),
+          catchError((error) => {
+            this.showError('user.messages.loadError');
+            return of(UserActions.loadUserFailure({ error }));
           })
         )
       )
@@ -51,22 +70,17 @@ export class UserEffects {
   updateUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.updateUser),
-      withLatestFrom(this.store.select(AuthSelectors.selectMunicipality)),
-      exhaustMap(([action, municipality]) =>
-        this.userService
-          .updateUser(action.id, action.request, municipality?.code)
-          .pipe(
-            map((user) => {
-              this.showSuccess('messages.updateSuccess');
-              return UserActions.updateUserSuccess({ user });
-            }),
-            catchError((error) => {
-              this.showError('messages.updateError');
-              return of(
-                UserActions.updateUserFailure({ errors: error.errors })
-              );
-            })
-          )
+      exhaustMap(({ id, request }) =>
+        this.userService.updateUser(id, request).pipe(
+          map((user) => {
+            this.showSuccess('user.messages.updateSuccess');
+            return UserActions.updateUserSuccess({ user });
+          }),
+          catchError((error) => {
+            this.showError('user.messages.updateError');
+            return of(UserActions.updateUserFailure({ error }));
+          })
+        )
       )
     )
   );
@@ -74,88 +88,62 @@ export class UserEffects {
   deleteUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.deleteUser),
-      withLatestFrom(this.store.select(AuthSelectors.selectMunicipality)),
-      exhaustMap(([action, municipality]) =>
-        this.userService.deleteUser(action.id, municipality?.code).pipe(
+      exhaustMap(({ id }) =>
+        this.userService.deleteUser(id).pipe(
           map(() => {
-            this.showSuccess('messages.deleteSuccess');
-            return UserActions.deleteUserSuccess({ id: action.id });
+            this.showSuccess('user.messages.deleteSuccess');
+            return UserActions.deleteUserSuccess({ id });
           }),
           catchError((error) => {
-            this.showError('messages.deleteError');
-            return of(UserActions.deleteUserFailure({ error: error.message }));
+            this.showError('user.messages.deleteError');
+            return of(UserActions.deleteUserFailure({ error }));
           })
         )
       )
     )
   );
 
-  setUserActiveStatus$ = createEffect(() =>
+  setActiveStatus$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(UserActions.setUserActiveStatus),
-      withLatestFrom(this.store.select(AuthSelectors.selectMunicipality)),
-      exhaustMap(([action, municipality]) =>
-        this.userService
-          .setUserActiveStatus(action.id, action.active, municipality?.code)
-          .pipe(
-            map((user) => {
-              this.showSuccess(
-                action.active
-                  ? 'messages.activateSuccess'
-                  : 'messages.deactivateSuccess'
-              );
-              return UserActions.setUserActiveStatusSuccess({ user });
-            }),
-            catchError((error) => {
-              this.showError(
-                action.active
-                  ? 'messages.activateError'
-                  : 'messages.deactivateError'
-              );
-              return of(
-                UserActions.setUserActiveStatusFailure({ error: error.message })
-              );
-            })
-          )
+      ofType(UserActions.setActiveStatus),
+      exhaustMap(({ id, active }) =>
+        this.userService.setUserActiveStatus(id, active).pipe(
+          map((user) => {
+            this.showSuccess(
+              active
+                ? 'user.messages.activateSuccess'
+                : 'user.messages.deactivateSuccess'
+            );
+            return UserActions.setActiveStatusSuccess({ user });
+          }),
+          catchError((error) => {
+            this.showError(
+              active
+                ? 'user.messages.activateError'
+                : 'user.messages.deactivateError'
+            );
+            return of(UserActions.setActiveStatusFailure({ error }));
+          })
+        )
       )
     )
   );
 
   // Helper method to show success messages
   private showSuccess(key: string): void {
-    const message = this.transloco.translate('user.' + key);
     this.snackBar.open(
-      message,
+      this.transloco.translate(key),
       this.transloco.translate('common.actions.close'),
-      {
-        duration: 3000,
-        horizontalPosition: 'end',
-        verticalPosition: 'top',
-        panelClass: ['success-snackbar'],
-      }
+      { duration: 3000 }
     );
   }
 
   // Helper method to show error messages
   private showError(key: string): void {
-    const message = this.transloco.translate('user.' + key);
     this.snackBar.open(
-      message,
+      this.transloco.translate(key),
       this.transloco.translate('common.actions.close'),
-      {
-        duration: 5000,
-        horizontalPosition: 'end',
-        verticalPosition: 'top',
-        panelClass: ['error-snackbar'],
-      }
+      { duration: 5000 }
     );
   }
-
-  constructor(
-    private actions$: Actions,
-    private store: Store,
-    private userService: UserService,
-    private snackBar: MatSnackBar,
-    private transloco: TranslocoService
-  ) {}
 }

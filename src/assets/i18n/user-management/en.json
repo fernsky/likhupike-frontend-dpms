@@ -36,7 +36,7 @@
   "form": {
     "email": "Email Address",
     "password": "Password",
-    "passwordRequirements": "Password must be at least 8 characters and contain uppercase, lowercase, number and special characters",
+    "passwordRequirements": "Password must contain at least one digit, one lowercase, one uppercase letter and one special character",
     "fullName": "Full Name (English)",
     "fullNameNepali": "Full Name (Nepali)",
     "dateOfBirth": "Date of Birth",
@@ -46,19 +46,24 @@
     "selectWard": "Select Ward",
     "roles": "User Roles",
     "isMunicipalityLevel": "This is a municipality-level position",
+    "isWardLevelUser": "This is a ward level user",
     "profilePicture": "Profile Picture",
     "uploadPhoto": "Click to upload photo",
+    "permissions": "User Permissions",
     "errors": {
       "emailRequired": "Email is required",
-      "emailInvalid": "Please enter a valid email address",
+      "emailInvalid": "Please provide a valid email address",
       "passwordRequired": "Password is required",
-      "passwordInvalid": "Password does not meet requirements",
+      "passwordLength": "Password must be at least 8 characters long",
+      "passwordPattern": "Password must contain at least one digit, lowercase, uppercase letter and special character",
       "fullNameRequired": "Full name is required",
       "fullNameNepaliRequired": "Nepali name is required",
       "dateOfBirthRequired": "Date of birth is required",
       "addressRequired": "Address is required",
       "officePostRequired": "Office position is required",
-      "rolesRequired": "At least one role must be selected"
+      "rolesRequired": "At least one role must be selected",
+      "wardNumberRequired": "Ward number is required for ward level users",
+      "wardNumberRange": "Ward number must be between 1 and 33"
     }
   },
   "delete": {
@@ -80,5 +85,13 @@
     "deactivateError": "Failed to deactivate user"
   },
   "municipality": "Municipality Level",
-  "ward": "Ward"
+  "ward": "Ward",
+  "permissions": {
+    "CREATE_USER": "Create User",
+    "APPROVE_USER": "Approve User",
+    "EDIT_USER": "Edit User",
+    "DELETE_USER": "Delete User",
+    "VIEW_USER": "View User",
+    "RESET_USER_PASSWORD": "Reset User Password"
+  }
 }

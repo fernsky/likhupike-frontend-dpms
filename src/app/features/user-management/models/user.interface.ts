@@ -1,42 +1,38 @@
-import { RoleType } from '@app/core/models/role.enum';
+import { PermissionType } from '@app/core/models/permission.enum';
 
 export interface CreateUserRequest {
   email: string;
   password: string;
-  fullName: string;
-  fullNameNepali: string;
-  dateOfBirth: string;
-  address: string;
-  officePost: string;
-  wardNumber?: number;
-  isMunicipalityLevel: boolean;
-  profilePicture?: File;
-  roles: RoleType[];
+  permissions: { [key in PermissionType]: boolean };
+  isWardLevelUser: boolean;
+  wardNumber?: number | null;
+}
+
+export interface UpdateUserRequest {
+  email?: string | null;
+  isWardLevelUser?: boolean | null;
+  wardNumber?: number | null;
 }
 
 export interface UserResponse {
   id: string;
   email: string;
-  fullName: string;
-  fullNameNepali: string;
-  dateOfBirth: string;
-  address: string;
-  officePost: string;
+  permissions: { [key in PermissionType]: boolean };
+  isWardLevelUser: boolean;
   wardNumber?: number;
-  isMunicipalityLevel: boolean;
-  profilePictureUrl?: string;
-  roles: RoleType[];
+  isApproved: boolean;
+  approvedBy?: string;
+  approvedAt?: string;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
   active: boolean;
 }
 
 export interface UserFilter {
   search?: string;
   wardNumber?: number;
-  roles?: RoleType[];
-  officePost?: string;
-  active?: boolean;
+  permissions?: PermissionType[];
+  isWardLevelUser?: boolean;
   pageSize: number;
   pageIndex: number;
 }
@@ -44,12 +40,7 @@ export interface UserFilter {
 export interface UserValidationError {
   email?: string[];
   password?: string[];
-  fullName?: string[];
-  fullNameNepali?: string[];
-  dateOfBirth?: string[];
-  address?: string[];
-  officePost?: string[];
+  permissions?: string[];
+  isWardLevelUser?: string[];
   wardNumber?: string[];
-  roles?: string[];
-  profilePicture?: string[];
 }

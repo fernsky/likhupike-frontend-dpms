@@ -26,6 +26,7 @@ import { UserResponse } from '../../models/user.interface';
 import { UserActions } from '../../store/user.actions';
 import * as UserSelectors from '../../store/user.selectors';
 import { RoleType } from '@app/core/models/role.enum';
+import { PermissionType } from '@app/core/models/permission.enum';
 
 @Component({
   selector: 'app-user-list',
@@ -57,12 +58,9 @@ export class UserListComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort!: MatSort;
 
   displayedColumns: string[] = [
-    'profilePicture',
-    'fullName',
     'email',
-    'officePost',
     'wardNumber',
-    'roles',
+    'permissions',
     'status',
     'actions',
   ];
@@ -84,7 +82,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     this.filterForm = this.fb.group({
       search: [''],
       wardNumber: [null],
-      roles: [[]],
+      permissions: [[]],
       active: [null],
     });
   }
@@ -95,10 +93,8 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   private initializeData(): void {
-    // Load initial data
     this.loadUsers();
 
-    // Subscribe to users data
     this.store
       .select(UserSelectors.selectUsers)
       .pipe(takeUntil(this.destroy$))
@@ -137,7 +133,7 @@ export class UserListComponent implements OnInit, OnDestroy {
       data: {
         title: this.transloco.translate('user.delete.confirmTitle'),
         message: this.transloco.translate('user.delete.confirmMessage', {
-          name: user.fullName,
+          name: user.email,
         }),
         confirmButton: this.transloco.translate('common.delete'),
         cancelButton: this.transloco.translate('common.cancel'),
@@ -153,15 +149,24 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   onToggleStatus(user: UserResponse): void {
     this.store.dispatch(
-      UserActions.setUserActiveStatus({
+      UserActions.setActiveStatus({
         id: user.id,
         active: !user.active,
       })
     );
   }
 
-  getRoleLabel(role: RoleType): string {
-    return this.transloco.translate(`roles.${role}`);
+  getPermissionLabels(permissions: {
+    [key in PermissionType]: boolean;
+  }): string[] {
+    return (
+      Object.entries(permissions)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .filter(([_, enabled]) => enabled)
+        .map(([permission]) =>
+          this.transloco.translate(`user.permissions.${permission}`)
+        )
+    );
   }
 
   getWardLabel(wardNumber: number | undefined): string {

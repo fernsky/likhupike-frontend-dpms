@@ -10,18 +10,10 @@
     class="page-loading-bar"
   ></mat-progress-bar>
 
-  <ng-container *ngIf="user$ | async as user; else loading">
-    <app-user-form
-      [user]="user"
-      [isEdit]="true"
-      (submitForm)="onSubmit($event)"
-      (cancel)="onCancel()"
-    ></app-user-form>
-  </ng-container>
-
-  <ng-template #loading>
-    <div *ngIf="loading$ | async" class="loading-state">
-      {{ "common.loading" | transloco }}
-    </div>
-  </ng-template>
+  <app-user-form
+    [isEdit]="true"
+    [user]="user$ | async"
+    (submitUpdateForm)="onSubmit($event)"
+    (cancelForm)="onCancel()"
+  ></app-user-form>
 </div>
