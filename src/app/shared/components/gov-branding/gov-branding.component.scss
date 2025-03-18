@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  padding: 1rem 2rem;
+  padding: 0.75rem 2rem;
   width: 100%;
 
   .branding-content {
@@ -14,7 +14,7 @@
   }
 
   .gov-logo {
-    width: 80px;
+    width: 60px;
     height: auto;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
     transition: transform 0.3s ease;
@@ -66,7 +66,7 @@
 // Responsive styles
 @media (max-width: 1024px) {
   .gov-branding {
-    padding: 1rem;
+    padding: 0.75rem;
 
     .titles .system-title {
       font-size: 1.5rem;
