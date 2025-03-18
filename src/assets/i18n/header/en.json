@@ -1,3 +1,11 @@
 {
- 
+  "brand": {
+    "title": "Likhu Pike Rural Municipality",
+    "subtitle": "Digital Profile Management System"
+  },
+  "notifications": "Notifications",
+  "profile": "Profile",
+  "settings": "Settings",
+  "logout": "Logout",
+  "menuToggle": "Toggle navigation menu"
 }

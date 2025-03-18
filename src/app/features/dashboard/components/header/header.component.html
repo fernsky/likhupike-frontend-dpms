@@ -4,19 +4,29 @@
       mat-icon-button
       class="menu-toggle"
       (click)="onMenuToggle()"
-      aria-label="Toggle navigation menu"
+      [attr.aria-label]="'header.menuToggle' | transloco"
     >
       <mat-icon>menu</mat-icon>
     </button>
     <a class="brand" routerLink="/dashboard">
-      <img src="assets/images/logo.png" alt="Logo" class="logo" />
-      <span class="brand-text">Digital Profile</span>
+      <img
+        src="assets/images/nepal-government-logo.png"
+        [alt]="'header.brand.title' | transloco"
+        class="logo"
+      />
+      <div class="brand-text">
+        <span class="brand-title">{{ "header.brand.title" | transloco }}</span>
+        <span class="brand-subtitle">{{
+          "header.brand.subtitle" | transloco
+        }}</span>
+      </div>
     </a>
   </div>
 
   <div class="header-end">
-    <button mat-icon-button matTooltip="Notifications">
-      <mat-icon>notifications</mat-icon>
+    <app-header-language-toggle></app-header-language-toggle>
+    <button mat-icon-button [matTooltip]="'header.notifications' | transloco">
+      <mat-icon matBadgeColor="warn">notifications</mat-icon>
     </button>
     <button
       mat-icon-button
@@ -31,15 +41,15 @@
 <mat-menu #userMenu="matMenu" class="user-menu">
   <button mat-menu-item>
     <mat-icon>person</mat-icon>
-    <span>Profile</span>
+    <span>{{ "header.profile" | transloco }}</span>
   </button>
   <button mat-menu-item>
     <mat-icon>settings</mat-icon>
-    <span>Settings</span>
+    <span>{{ "header.settings" | transloco }}</span>
   </button>
   <mat-divider></mat-divider>
   <button mat-menu-item>
     <mat-icon>logout</mat-icon>
-    <span>Logout</span>
+    <span>{{ "header.logout" | transloco }}</span>
   </button>
 </mat-menu>

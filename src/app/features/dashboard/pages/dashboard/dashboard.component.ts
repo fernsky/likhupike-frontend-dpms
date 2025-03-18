@@ -17,7 +17,6 @@ import * as AuthActions from '@app/core/store/auth/auth.actions';
 import { SharedModule } from '@shared/shared.module';
 
 import { SidenavComponent } from '../../components/sidenav/sidenav.component';
-import { MenuToggleComponent } from '../../components/menu-toggle/menu-toggle.component';
 import { HeaderComponent } from '../../components/header/header.component';
 
 // Import additional Angular Material modules
@@ -47,7 +46,7 @@ import { TranslocoModule } from '@jsverse/transloco';
     MatBadgeModule,
     TranslocoModule,
     SidenavComponent,
-    MenuToggleComponent,
+
     HeaderComponent, // Ensure HeaderComponent is included in imports
   ],
 })
@@ -62,7 +61,7 @@ export class DashboardComponent implements OnInit {
   // Layout observables
   sidenavMode$: Observable<MatDrawerMode> = this.breakpointObserver
     .observe([Breakpoints.Handset, '(max-width: 1199px)'])
-    .pipe(map((result) => 'over')); // Changed to always use 'over' mode
+    .pipe(map(() => 'over')); // Changed to always use 'over' mode
 
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe([Breakpoints.Handset])
