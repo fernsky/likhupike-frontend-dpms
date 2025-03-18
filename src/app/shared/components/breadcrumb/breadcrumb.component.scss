@@ -1,7 +1,7 @@
 // Variables - Match with design system
-$navy-dark: #1A2942;
-$navy-medium: #233B72;
-$navy-light: #2A4894;
+$navy-dark: #1a2942;
+$navy-medium: #233b72;
+$navy-light: #2a4894;
 $transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 
 .breadcrumb-list {
@@ -100,6 +100,23 @@ $transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
     }
   }
 
+  .separator,
+  .item-icon {
+    font-family: "Material Icons";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .separator {
+    opacity: 0.5;
+    margin: 0 2px;
+  }
+
   .breadcrumb-link {
     display: flex;
     align-items: center;
@@ -114,7 +131,8 @@ $transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
       color: var(--primary-color);
       background: rgba(var(--primary-color-rgb), 0.04);
 
-      .item-icon, &.home-link mat-icon {
+      .item-icon,
+      &.home-link mat-icon {
         color: var(--primary-color);
       }
     }
@@ -137,6 +155,10 @@ $transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
       mat-icon {
         color: var(--text-secondary);
       }
+    }
+
+    .item-icon {
+      margin-right: 4px;
     }
   }
 }
