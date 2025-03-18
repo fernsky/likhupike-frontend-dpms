@@ -71,12 +71,16 @@
       &.active {
         color: white;
       }
+
+      span.lang-text {
+        padding: 0 2px; // Add padding to prevent text touching borders
+      }
     }
 
     .slider {
       position: absolute;
       z-index: 1;
-      width: 50%;
+      width: calc(50% - 4px); // Reduce width slightly
       height: calc(100% - 4px);
       background: var(--primary-main);
       border-radius: 20px;
@@ -86,7 +90,7 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 
       &.nepali {
-        transform: translateX(98px);
+        transform: translateX(calc(100% + 2px)); // Adjust translation
       }
     }
   }
@@ -114,7 +118,7 @@
 
 @media (max-width: 480px) {
   .toggle-track {
-    width: 84px !important;
+    width: 90px !important; // Slightly wider to accommodate text
     height: 32px !important;
 
     .language-option {
@@ -127,6 +131,7 @@
       span.lang-text {
         font-size: 12px !important;
         font-weight: 600 !important;
+        padding: 0 4px; // More padding on mobile
 
         &::after {
           content: attr(data-short-name) !important;
@@ -135,10 +140,11 @@
     }
 
     .slider {
+      width: calc(50% - 4px);
       height: calc(100% - 4px);
 
       &.nepali {
-        transform: translateX(40px) !important;
+        transform: translateX(calc(100% + 2px)) !important;
       }
     }
   }
