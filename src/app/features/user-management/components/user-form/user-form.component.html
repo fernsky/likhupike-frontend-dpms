@@ -62,7 +62,8 @@
               "
               [value]="ward"
             >
-              {{ "user.ward" | transloco }} {{ ward }}
+              {{ "user.ward" | transloco }}
+              {{ getFormattedWardNumber(ward) }}
             </mat-option>
           </mat-select>
           <mat-error *ngIf="userForm.errors?.['wardNumberRequired']">

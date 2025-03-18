@@ -157,6 +157,7 @@
         }
 
         .ward-assignment {
+          min-height: 120px; // Fixed height for desktop
           background: #f8fafb;
           border-radius: 8px;
           padding: 1.5rem;
@@ -170,11 +171,14 @@
             width: 100%; // Take full width of the column
             font-size: 1rem;
             white-space: nowrap;
+            display: flex;
           }
 
           mat-form-field {
             width: 100%; // Take full width of the column
             margin: 0;
+            display: flex;
+            align-items: center;
           }
         }
       }
@@ -360,6 +364,15 @@
       button {
         width: 100%;
       }
+    }
+  }
+
+  .ward-assignment {
+    min-height: auto !important; // Remove fixed height on mobile
+    grid-template-columns: 1fr !important;
+
+    mat-checkbox {
+      justify-content: flex-start !important;
     }
   }
 }

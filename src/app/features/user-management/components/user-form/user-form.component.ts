@@ -27,7 +27,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { TranslocoModule } from '@jsverse/transloco';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { provideNativeDateAdapter } from '@angular/material/core';
 
 import {
@@ -36,6 +36,7 @@ import {
   UserResponse,
 } from '../../models/user.interface';
 import { PermissionType } from '@app/core/models/permission.enum';
+import { NumberFormatService } from '@app/shared/services/number-format.service';
 
 @Component({
   selector: 'app-user-form',
@@ -71,7 +72,11 @@ export class UserFormComponent implements OnInit, OnDestroy {
   permissionTypes = Object.values(PermissionType);
   private destroy$ = new Subject<void>();
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private numberFormat: NumberFormatService,
+    private translocoService: TranslocoService
+  ) {
     this.initForm();
   }
 
@@ -211,5 +216,9 @@ export class UserFormComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  getFormattedWardNumber(number: number): string {
+    return this.numberFormat.formatNumber(number);
   }
 }
