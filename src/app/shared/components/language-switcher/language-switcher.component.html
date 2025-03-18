@@ -1,6 +1,9 @@
 <div class="language-switcher">
   <button mat-button class="language-button" [matMenuTriggerFor]="menu">
-    <div class="button-content">
+    <div
+      class="button-content"
+      *ngIf="currentLanguage$ | async as currentLanguage"
+    >
       <mat-icon class="lang-icon">{{ currentLanguage.icon }}</mat-icon>
       <span class="language-code">{{
         getDisplayLanguageCode(currentLanguage)
@@ -10,23 +13,27 @@
   </button>
 
   <mat-menu #menu="matMenu" class="language-menu" [overlapTrigger]="false">
-    <button
-      mat-menu-item
-      *ngFor="let lang of languages"
-      (click)="switchLanguage(lang)"
-      [class.active]="currentLanguage.code === lang.code"
-      class="language-option"
-    >
-      <div class="language-option-content">
-        <mat-icon class="lang-icon">{{ lang.icon }}</mat-icon>
-        <div class="language-info">
-          <span class="primary-name">{{ getLocalizedName(lang) }}</span>
-          <span class="secondary-name">{{ getLocalizedLocalName(lang) }}</span>
+    <ng-container *ngIf="currentLanguage$ | async as currentLanguage">
+      <button
+        mat-menu-item
+        *ngFor="let lang of languages"
+        (click)="switchLanguage(lang)"
+        [class.active]="currentLanguage.code === lang.code"
+        class="language-option"
+      >
+        <div class="language-option-content">
+          <mat-icon class="lang-icon">{{ lang.icon }}</mat-icon>
+          <div class="language-info">
+            <span class="primary-name">{{ getLocalizedName(lang) }}</span>
+            <span class="secondary-name">{{
+              getLocalizedLocalName(lang)
+            }}</span>
+          </div>
+          <p *ngIf="currentLanguage.code === lang.code">
+            <mat-icon class="check-icon">check</mat-icon>
+          </p>
         </div>
-        <p *ngIf="currentLanguage.code === lang.code">
-          <mat-icon class="check-icon">check</mat-icon>
-        </p>
-      </div>
-    </button>
+      </button>
+    </ng-container>
   </mat-menu>
 </div>

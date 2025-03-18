@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,6 +7,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { TranslocoService } from '@jsverse/transloco';
 import { LanguageService } from '../../../core/services/language.service';
 import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
+import { BaseLanguageSwitcherComponent } from '../base-language-switcher/base-language-switcher.component';
 
 @Component({
   selector: 'app-language-switcher',
@@ -19,7 +20,6 @@ import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
     MatButtonModule,
     MatIconModule,
     MatRippleModule,
-
     TranslocoModule,
   ],
   providers: [
@@ -29,45 +29,11 @@ import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
     }),
   ],
 })
-export class LanguageSwitcherComponent implements OnInit {
-  currentLanguage: Language;
-  languages: Language[];
-
+export class LanguageSwitcherComponent extends BaseLanguageSwitcherComponent {
   constructor(
-    private languageService: LanguageService,
-    private translocoService: TranslocoService
+    languageService: LanguageService,
+    translocoService: TranslocoService
   ) {
-    this.currentLanguage = this.languageService.getCurrentLanguage();
-    this.languages = this.languageService.availableLanguages;
+    super(languageService, translocoService);
   }
-
-  ngOnInit(): void {
-    this.languageService.currentLanguage$.subscribe(
-      (language) => (this.currentLanguage = language)
-    );
-  }
-
-  switchLanguage(language: Language): void {
-    this.languageService.setLanguage(language);
-  }
-
-  getLocalizedName(lang: Language): string {
-    return this.translocoService.translate(`languages.${lang.code}.name`);
-  }
-
-  getLocalizedLocalName(lang: Language): string {
-    return this.translocoService.translate(`languages.${lang.code}.localName`);
-  }
-
-  getDisplayLanguageCode(lang: Language): string {
-    return lang.code === 'en' ? 'नेपाली' : 'English';
-  }
-}
-
-// Update or add this to your Language interface in language.service.ts
-interface Language {
-  code: string;
-  icon: string; // Changed from flag to icon
-  name: string;
-  localName: string;
 }
