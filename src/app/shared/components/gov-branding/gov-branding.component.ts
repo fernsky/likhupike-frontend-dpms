@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
+import { SlideToggleLanguageSwitcherComponent } from '../slide-toggle-language-switcher/slide-toggle-language-switcher.component';
 import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 
 @Component({
@@ -11,7 +11,7 @@ import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
   standalone: true,
   imports: [
     CommonModule,
-    LanguageSwitcherComponent,
+    SlideToggleLanguageSwitcherComponent,
     TranslocoPipe,
     TranslocoModule,
   ],

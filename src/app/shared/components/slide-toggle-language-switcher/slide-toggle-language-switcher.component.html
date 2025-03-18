@@ -1,0 +1,39 @@
+<div
+  class="language-switcher"
+  *ngIf="currentLanguage$ | async as currentLanguage"
+>
+  <div
+    class="toggle-container"
+    (click)="
+      switchLanguage(
+        currentLanguage.code === 'en' ? languages[1] : languages[0]
+      )
+    "
+  >
+    <div class="toggle-track" [class.nepali]="currentLanguage.code === 'ne'">
+      <div
+        class="language-option english"
+        [class.active]="currentLanguage.code === 'en'"
+      >
+        <mat-icon>language</mat-icon>
+        <span
+          class="lang-text"
+          data-full-name="English"
+          data-short-name="EN"
+        ></span>
+      </div>
+      <div
+        class="language-option nepali"
+        [class.active]="currentLanguage.code === 'ne'"
+      >
+        <mat-icon>translate</mat-icon>
+        <span
+          class="lang-text"
+          data-full-name="नेपाली"
+          data-short-name="ने"
+        ></span>
+      </div>
+      <div class="slider" [class.nepali]="currentLanguage.code === 'ne'"></div>
+    </div>
+  </div>
+</div>
