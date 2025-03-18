@@ -18,6 +18,7 @@
         class="logo"
       />
       <div class="brand-text">
+        <!-- This div will be hidden on mobile -->
         <span class="brand-title">{{ "header.brand.title" | transloco }}</span>
         <span class="brand-subtitle">{{
           "header.brand.subtitle" | transloco
@@ -27,9 +28,16 @@
   </div>
 
   <div class="header-end">
+    <!-- These components will be hidden on mobile -->
     <app-header-language-toggle></app-header-language-toggle>
-    <button mat-icon-button [matTooltip]="'header.notifications' | transloco">
-      <mat-icon matBadgeColor="warn">notifications</mat-icon>
+    <button
+      mat-icon-button
+      [matTooltip]="'header.notifications' | transloco"
+      class="notification-btn"
+      matBadgeColor="warn"
+      matBadgeSize="small"
+    >
+      <mat-icon>notifications</mat-icon>
     </button>
     <button
       mat-icon-button

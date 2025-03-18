@@ -23,6 +23,10 @@
     flex: 1;
     min-width: 0;
 
+    @media (max-width: 480px) {
+      gap: 0px;
+    }
+
     .menu-toggle {
       margin-right: 8px;
 
@@ -189,6 +193,17 @@
             }
           }
         }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header {
+    .header-end {
+      app-header-language-toggle,
+      .user-menu {
+        display: none;
       }
     }
   }
