@@ -1,6 +1,6 @@
 services:
   dpms-web:
-    image: isresearch/dpms-web:latest
+    image: isresearch/likhupike-dpms-web:latest
     environment:
       - NODE_ENV=production
     ports:

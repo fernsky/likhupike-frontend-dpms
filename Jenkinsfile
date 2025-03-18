@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'isresearch/dpms-web'
+        DOCKER_IMAGE = 'isresearch/likhupike-dpms-web'
         DOCKER_CREDENTIALS = credentials('docker-hub-credentials')
         NODE_VERSION = '20'
     }
