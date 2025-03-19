@@ -1,24 +1,26 @@
 <div class="page-title-container">
-  <div class="title-content">
-    <div class="icon-wrapper" *ngIf="icon">
-      <div class="icon-container">
-        <mat-icon class="title-icon" [inline]="true">{{ icon }}</mat-icon>
+  <div class="title-wrapper">
+    <div class="title-content">
+      <div class="icon-wrapper" *ngIf="icon">
+        <div class="icon-container">
+          <mat-icon class="title-icon" [inline]="true">{{ icon }}</mat-icon>
+        </div>
+      </div>
+      <div class="text-content">
+        <h1 class="title">
+          {{ titleTranslationKey ? (titleTranslationKey | transloco) : title }}
+        </h1>
+        <p class="description" *ngIf="description || descriptionTranslationKey">
+          {{
+            descriptionTranslationKey
+              ? (descriptionTranslationKey | transloco)
+              : description
+          }}
+        </p>
       </div>
     </div>
-    <div class="text-content">
-      <h1 class="title">
-        {{ titleTranslationKey ? (titleTranslationKey | transloco) : title }}
-      </h1>
-      <p class="description" *ngIf="description || descriptionTranslationKey">
-        {{
-          descriptionTranslationKey
-            ? (descriptionTranslationKey | transloco)
-            : description
-        }}
-      </p>
+    <div class="actions" *ngIf="actionsTemplate">
+      <ng-container *ngTemplateOutlet="actionsTemplate"></ng-container>
     </div>
-  </div>
-  <div class="actions" *ngIf="hasContent">
-    <ng-content></ng-content>
   </div>
 </div>

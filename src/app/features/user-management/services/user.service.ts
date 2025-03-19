@@ -90,6 +90,7 @@ export class UserService {
   private convertFilterToParams(filter: UserFilter): HttpParams {
     let params = new HttpParams();
 
+    if (filter.searchTerm) params = params.set('searchTerm', filter.searchTerm);
     if (filter.email) params = params.set('email', filter.email);
     if (filter.isApproved !== undefined)
       params = params.set('isApproved', filter.isApproved.toString());

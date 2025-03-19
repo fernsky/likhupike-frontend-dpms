@@ -1,0 +1,119 @@
+<div class="table-container">
+  <!-- Loading Overlay -->
+  <div class="loading-shade" *ngIf="loading">
+    <mat-spinner diameter="48"></mat-spinner>
+  </div>
+
+  <!-- Empty State -->
+  <app-empty-state
+    *ngIf="totalUsers === 0 && !loading"
+    icon="group"
+    [title]="'user.list.emptyState.title' | transloco"
+    [description]="'user.list.emptyState.description' | transloco"
+  >
+  </app-empty-state>
+
+  <!-- Table -->
+  <table mat-table [dataSource]="dataSource" matSort *ngIf="totalUsers > 0">
+    <!-- Email Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <mat-icon>email</mat-icon>
+        {{ "user.list.columns.email" | transloco }}
+      </th>
+      <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+    </ng-container>
+
+    <!-- Ward Column -->
+    <ng-container matColumnDef="ward">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-icon>location_city</mat-icon>
+        {{ "user.list.columns.ward" | transloco }}
+      </th>
+      <td mat-cell *matCellDef="let user">
+        <span *ngIf="user.isWardLevelUser">{{
+          getWardLabel(user.wardNumber)
+        }}</span>
+      </td>
+    </ng-container>
+
+    <!-- Permissions Column -->
+    <ng-container matColumnDef="permissions">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-icon>security</mat-icon>
+        {{ "user.list.columns.permissions" | transloco }}
+      </th>
+      <td mat-cell *matCellDef="let user">
+        <mat-chip-set>
+          <mat-chip *ngFor="let permission of user.permissions">
+            {{ permission | lowercase }}
+          </mat-chip>
+        </mat-chip-set>
+      </td>
+    </ng-container>
+
+    <!-- Approval Status Column -->
+    <ng-container matColumnDef="approvalStatus">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-icon>verified</mat-icon>
+        {{ "user.list.columns.approvalStatus" | transloco }}
+      </th>
+      <td mat-cell *matCellDef="let user">
+        <mat-chip-set>
+          <mat-chip [color]="user.isApproved ? 'primary' : 'warn'" highlighted>
+            {{
+              (user.isApproved ? "user.list.approved" : "user.list.notApproved")
+                | transloco
+            }}
+          </mat-chip>
+        </mat-chip-set>
+      </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let user">
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Actions">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="edit.emit(user.id)">
+            <mat-icon>edit</mat-icon>
+            <span>{{ "common.actions.edit" | transloco }}</span>
+          </button>
+          <button mat-menu-item (click)="toggleStatus.emit(user)">
+            <mat-icon>{{
+              user.isApproved ? "block" : "check_circle"
+            }}</mat-icon>
+            <span>
+              {{
+                (user.isApproved ? "user.list.disapprove" : "user.list.approve")
+                  | transloco
+              }}
+            </span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="delete.emit(user)" color="warn">
+            <mat-icon color="warn">delete</mat-icon>
+            <span class="text-warn">{{
+              "common.actions.delete" | transloco
+            }}</span>
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <mat-paginator
+    [length]="totalUsers"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 25, 50]"
+    [showFirstLastButtons]="true"
+    (page)="pageChange.emit()"
+  >
+  </mat-paginator>
+</div>

@@ -11,7 +11,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import {
   takeUntil,
   debounceTime,
@@ -45,6 +45,9 @@ import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.co
 import { EmptyStateComponent } from '@shared/components/empty-state/empty-state.component';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { PageTitleComponent } from '@shared/components/page-title/page-title.component';
+import { UserSearchComponent } from '../../components/user-search/user-search.component';
+import { UserFiltersComponent } from '../../components/user-filters/user-filters.component';
+import { UsersTableComponent } from '../../components/users-table/users-table.component';
 
 // Models & Actions
 import {
@@ -85,6 +88,9 @@ import { PermissionType } from '@app/core/models/permission.enum';
     MatDatepickerModule,
     TranslocoModule,
     PageTitleComponent,
+    UserSearchComponent,
+    UserFiltersComponent,
+    UsersTableComponent,
   ],
   providers: [
     provideNativeDateAdapter(),
@@ -133,10 +139,24 @@ export class UserListComponent implements OnInit, OnDestroy {
   );
 
   roleTypes = Object.values(RoleType);
+  permissionTypes = Object.values(PermissionType); // Add this line
   private destroy$ = new Subject<void>();
 
   showFilters = false;
   searchControl = new FormControl('');
+
+  // Add ViewChild refs for the new components
+  @ViewChild(UsersTableComponent) usersTable!: UsersTableComponent;
+
+  // Prevent jittery updates by using BehaviorSubjects
+  private filtersSubject = new BehaviorSubject<UserFilter>({});
+  filters$ = this.filtersSubject
+    .asObservable()
+    .pipe(
+      distinctUntilChanged(
+        (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
+      )
+    );
 
   constructor(
     private store: Store,
@@ -146,6 +166,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     private transloco: TranslocoService
   ) {
     this.filterForm = this.fb.group({
+      searchTerm: [''], // Add searchTerm to the form
       email: [''],
       isApproved: [null],
       isWardLevelUser: [null],
@@ -160,6 +181,13 @@ export class UserListComponent implements OnInit, OnDestroy {
       sortBy: ['createdAt'],
       sortDirection: ['DESC'],
     });
+
+    // Subscribe to filter changes with proper debounce
+    this.filters$
+      .pipe(debounceTime(300), takeUntil(this.destroy$))
+      .subscribe((filters) => {
+        this.loadUsers(filters);
+      });
   }
 
   ngOnInit(): void {
@@ -168,6 +196,8 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   private initializeData(): void {
+    // Reset search on init
+    this.searchControl.setValue('');
     this.loadUsers();
 
     this.store
@@ -181,7 +211,26 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   private setupFilterSubscription(): void {
-    // Add type safety to form values
+    // Search control with throttling
+    this.searchControl.valueChanges
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(300), // Wait for 300ms after last input
+        distinctUntilChanged(),
+        map((value) => value?.trim() || '') // Sanitize input
+      )
+      .subscribe((searchTerm) => {
+        // Update the form with search term
+        this.filterForm.patchValue({ searchTerm }, { emitEvent: false });
+        // Trigger the search
+        this.loadUsers({
+          ...this.filterForm.value,
+          searchTerm: searchTerm || undefined,
+          page: 0, // Reset to first page on search
+        });
+      });
+
+    // Filter form changes (excluding search)
     this.filterForm.valueChanges
       .pipe(
         takeUntil(this.destroy$),
@@ -199,6 +248,10 @@ export class UserListComponent implements OnInit, OnDestroy {
   private sanitizeFilterValues(formValue: UserFilterFormValue): UserFilter {
     return {
       ...formValue,
+      searchTerm: formValue.searchTerm?.trim() || undefined,
+      permissions: formValue.permissions?.length
+        ? formValue.permissions
+        : undefined,
       createdAfter: formValue.createdAfter
         ? new Date(formValue.createdAfter).toISOString().split('T')[0]
         : undefined,
@@ -215,8 +268,9 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   loadUsers(filterOverride?: UserFilter): void {
     const formValue = this.filterForm.value;
-    const filter: UserFilter = filterOverride || {
-      ...formValue,
+    const filter: UserFilter = {
+      ...(filterOverride || formValue),
+      searchTerm: formValue.searchTerm || undefined,
       createdAfter: formValue.createdAfter?.toISOString().split('T')[0],
       createdBefore: formValue.createdBefore?.toISOString().split('T')[0],
     };
@@ -225,7 +279,8 @@ export class UserListComponent implements OnInit, OnDestroy {
     Object.keys(filter).forEach(
       (key) =>
         (filter[key as keyof UserFilter] === null ||
-          filter[key as keyof UserFilter] === undefined) &&
+          filter[key as keyof UserFilter] === undefined ||
+          filter[key as keyof UserFilter] === '') &&
         delete filter[key as keyof UserFilter]
     );
 
@@ -312,5 +367,30 @@ export class UserListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  // Update filter handling
+  private updateFilters(newFilters: Partial<UserFilter>) {
+    this.filtersSubject.next({
+      ...this.filtersSubject.value,
+      ...newFilters,
+    });
+  }
+
+  onSearch(searchTerm: string) {
+    const currentFilters = this.filterForm.value;
+    this.filterForm.patchValue({
+      searchTerm,
+      page: 0, // Reset to first page when searching
+    });
+    this.loadUsers({
+      ...currentFilters,
+      searchTerm,
+      page: 0,
+    });
+  }
+
+  onFiltersChange(filters: UserFilter) {
+    this.filterForm.patchValue(filters);
   }
 }

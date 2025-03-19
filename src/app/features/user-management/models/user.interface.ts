@@ -41,6 +41,7 @@ export interface UserFilter {
   size?: number;
   sortBy?: string;
   sortDirection?: 'ASC' | 'DESC';
+  searchTerm?: string; // Add searchTerm to filters
 }
 
 export interface UserFilterFormValue {
@@ -57,6 +58,7 @@ export interface UserFilterFormValue {
   size: number;
   sortBy: string;
   sortDirection: 'ASC' | 'DESC';
+  searchTerm: string | null;
 }
 
 export const ALLOWED_COLUMNS = [

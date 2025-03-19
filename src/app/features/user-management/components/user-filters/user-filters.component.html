@@ -1,0 +1,108 @@
+<div class="filters-panel" *ngIf="show" @slideInOut>
+  <div class="filters-section" [formGroup]="filterForm">
+    <div class="filters-grid">
+      <!-- Email Filter -->
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.list.email" | transloco }}</mat-label>
+        <input matInput formControlName="email" type="email" />
+      </mat-form-field>
+
+      <!-- Ward Range -->
+      <div class="ward-range">
+        <mat-form-field appearance="outline">
+          <mat-label>{{
+            "user.list.filters.ward.range.from" | transloco
+          }}</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="wardNumberFrom"
+            min="1"
+            max="33"
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{
+            "user.list.filters.ward.range.to" | transloco
+          }}</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="wardNumberTo"
+            min="1"
+            max="33"
+          />
+        </mat-form-field>
+      </div>
+
+      <!-- Permissions Multi-select -->
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.list.permissions" | transloco }}</mat-label>
+        <mat-select formControlName="permissions" multiple>
+          <mat-option
+            *ngFor="let permission of permissionTypes"
+            [value]="permission"
+          >
+            {{ "user.permissions." + permission + ".title" | transloco }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Approval Status -->
+      <mat-form-field appearance="outline">
+        <mat-label>{{
+          "user.list.filters.approvalStatus.label" | transloco
+        }}</mat-label>
+        <mat-select formControlName="isApproved">
+          <mat-option [value]="null">{{
+            "user.list.filters.approvalStatus.all" | transloco
+          }}</mat-option>
+          <mat-option [value]="true">{{
+            "user.list.filters.approvalStatus.approved" | transloco
+          }}</mat-option>
+          <mat-option [value]="false">{{
+            "user.list.filters.approvalStatus.pending" | transloco
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Date Range -->
+      <div class="date-range">
+        <mat-form-field appearance="outline">
+          <mat-label>{{
+            "user.list.filters.dateRange.from" | transloco
+          }}</mat-label>
+          <input
+            matInput
+            [matDatepicker]="fromPicker"
+            formControlName="createdAfter"
+            readonly
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="fromPicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #fromPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{
+            "user.list.filters.dateRange.to" | transloco
+          }}</mat-label>
+          <input
+            matInput
+            [matDatepicker]="toPicker"
+            formControlName="createdBefore"
+            readonly
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="toPicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #toPicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</div>

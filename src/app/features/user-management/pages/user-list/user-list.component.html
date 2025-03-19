@@ -1,324 +1,56 @@
 <div class="user-list-container">
-  <!-- Breadcrumb -->
   <app-breadcrumb></app-breadcrumb>
 
-  <!-- Page Title -->
   <app-page-title
     titleTranslationKey="user.list.title"
     descriptionTranslationKey="user.list.subtitle"
     icon="manage_accounts"
   >
+    <ng-template #actions>
+      <button mat-raised-button class="create-button" (click)="onCreateUser()">
+        <mat-icon>add</mat-icon>
+        {{ "user.list.createButton" | transloco }}
+      </button>
+    </ng-template>
   </app-page-title>
 
   <!-- Search and Actions -->
   <div class="actions-bar">
-    <div class="search-section">
-      <div class="search-box">
-        <mat-form-field appearance="outline">
-          <mat-icon matPrefix>search</mat-icon>
-          <input
-            matInput
-            [placeholder]="'user.list.search.placeholder' | transloco"
-            [formControl]="searchControl"
-          />
-        </mat-form-field>
-      </div>
-      <button
-        mat-stroked-button
-        class="filter-button"
-        [class.active]="showFilters"
-        (click)="toggleFilters()"
-      >
-        <mat-icon>filter_list</mat-icon>
-        {{
-          (showFilters
-            ? "user.list.search.hideFilters"
-            : "user.list.search.showFilters"
-          ) | transloco
-        }}
-      </button>
-    </div>
+    <app-user-search
+      [initialValue]="searchControl.value ?? ''"
+      (searchChange)="onSearch($event)"
+    ></app-user-search>
 
-    <button mat-raised-button class="create-button" (click)="onCreateUser()">
-      <mat-icon>add</mat-icon>
-      {{ "user.list.createButton" | transloco }}
+    <button
+      mat-stroked-button
+      class="filter-button"
+      [class.active]="showFilters"
+      (click)="toggleFilters()"
+    >
+      <mat-icon>filter_list</mat-icon>
+      {{
+        (showFilters
+          ? "user.list.search.hideFilters"
+          : "user.list.search.showFilters"
+        ) | transloco
+      }}
     </button>
   </div>
 
-  <!-- Advanced Filters -->
-  <div class="filters-panel" *ngIf="showFilters" @slideInOut>
-    <div class="filters-section" [formGroup]="filterForm">
-      <mat-form-field appearance="outline">
-        <mat-label>{{ "user.list.email" | transloco }}</mat-label>
-        <input matInput formControlName="email" type="email" />
-      </mat-form-field>
+  <!-- Update filters section -->
+  <app-user-filters
+    [show]="showFilters"
+    [filterForm]="filterForm"
+    (filtersChange)="onFiltersChange($event)"
+  ></app-user-filters>
 
-      <div class="ward-range">
-        <mat-form-field appearance="outline">
-          <mat-label>{{ "user.list.wardFrom" | transloco }}</mat-label>
-          <input
-            matInput
-            type="number"
-            formControlName="wardNumberFrom"
-            min="1"
-            max="33"
-          />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>{{ "user.list.wardTo" | transloco }}</mat-label>
-          <input
-            matInput
-            type="number"
-            formControlName="wardNumberTo"
-            min="1"
-            max="33"
-          />
-        </mat-form-field>
-      </div>
-
-      <mat-form-field appearance="outline">
-        <mat-label>{{ "user.list.approvalStatus" | transloco }}</mat-label>
-        <mat-select formControlName="isApproved">
-          <mat-option [value]="null">{{
-            "user.list.allStatuses" | transloco
-          }}</mat-option>
-          <mat-option [value]="true">{{
-            "user.list.approved" | transloco
-          }}</mat-option>
-          <mat-option [value]="false">{{
-            "user.list.notApproved" | transloco
-          }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <div class="date-range">
-        <mat-form-field appearance="outline">
-          <mat-label>{{ "user.list.createdAfter" | transloco }}</mat-label>
-          <input
-            matInput
-            [matDatepicker]="afterPicker"
-            formControlName="createdAfter"
-            readonly
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="afterPicker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #afterPicker></mat-datepicker>
-          <mat-error
-            *ngIf="
-              filterForm?.get('createdAfter')?.errors?.['matDatepickerMax']
-            "
-          >
-            {{ "user.list.errors.dateRange" | transloco }}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>{{ "user.list.createdBefore" | transloco }}</mat-label>
-          <input
-            matInput
-            [matDatepicker]="beforePicker"
-            formControlName="createdBefore"
-            readonly
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="beforePicker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #beforePicker></mat-datepicker>
-          <mat-error
-            *ngIf="
-              filterForm?.get('createdBefore')?.errors?.['matDatepickerMin']
-            "
-          >
-            {{ "user.list.errors.dateRange" | transloco }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-  </div>
-
-  <!-- Table Container -->
-  <div class="table-container">
-    <!-- Loading Overlay -->
-    <div class="loading-shade" *ngIf="loading$ | async">
-      <mat-spinner diameter="48"></mat-spinner>
-    </div>
-
-    <!-- Empty State -->
-    <app-empty-state
-      *ngIf="(totalUsers$ | async) === 0 && (loading$ | async) === false"
-      icon="group"
-      [title]="'user.list.emptyState.title' | transloco"
-      [description]="'user.list.emptyState.description' | transloco"
-      [actionLabel]="'user.list.emptyState.createFirst' | transloco"
-      (actionClick)="onCreateUser()"
-    >
-    </app-empty-state>
-
-    <!-- Table -->
-    <table
-      mat-table
-      [dataSource]="dataSource"
-      matSort
-      *ngIf="(totalUsers$ | async) !== 0"
-    >
-      <!-- Profile Picture Column -->
-      <ng-container matColumnDef="profilePicture">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let user">
-          <div class="avatar-container">
-            <img
-              [src]="
-                user.profilePictureUrl || 'assets/images/default-avatar.png'
-              "
-              [alt]="user.email"
-              class="user-avatar"
-            />
-          </div>
-        </td>
-      </ng-container>
-
-      <!-- Name Column -->
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          <mat-icon>person</mat-icon>
-          {{ "user.list.columns.name" | transloco }}
-        </th>
-        <td mat-cell *matCellDef="let user">
-          <div class="name-container">
-            <span class="user-name">{{ user.email }}</span>
-          </div>
-        </td>
-      </ng-container>
-
-      <!-- Email Column -->
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          <mat-icon>email</mat-icon>
-          {{ "user.list.columns.email" | transloco }}
-        </th>
-        <td mat-cell *matCellDef="let user">{{ user.email }}</td>
-      </ng-container>
-
-      <!-- Ward Column -->
-      <ng-container matColumnDef="ward">
-        <th mat-header-cell *matHeaderCellDef>
-          <mat-icon>location_city</mat-icon>
-          {{ "user.list.columns.ward" | transloco }}
-        </th>
-        <td mat-cell *matCellDef="let user">
-          <span *ngIf="user.isWardLevelUser">{{
-            getWardLabel(user.wardNumber)
-          }}</span>
-        </td>
-      </ng-container>
-
-      <!-- Permissions Column -->
-      <ng-container matColumnDef="permissions">
-        <th mat-header-cell *matHeaderCellDef>
-          <mat-icon>security</mat-icon>
-          {{ "user.list.columns.permissions" | transloco }}
-        </th>
-        <td mat-cell *matCellDef="let user">
-          <mat-chip-set>
-            <mat-chip *ngFor="let permission of user.permissions">
-              {{ permission | lowercase }}
-            </mat-chip>
-          </mat-chip-set>
-        </td>
-      </ng-container>
-
-      <!-- Status Column -->
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef>
-          <mat-icon>toggle_on</mat-icon>
-          {{ "user.list.columns.status" | transloco }}
-        </th>
-        <td mat-cell *matCellDef="let user">
-          <mat-chip-set>
-            <mat-chip [color]="user.isActive ? 'primary' : 'warn'" highlighted>
-              {{
-                user.isActive
-                  ? ("user.list.active" | transloco)
-                  : ("user.list.inactive" | transloco)
-              }}
-            </mat-chip>
-          </mat-chip-set>
-        </td>
-      </ng-container>
-
-      <!-- Approval Status Column -->
-      <ng-container matColumnDef="approvalStatus">
-        <th mat-header-cell *matHeaderCellDef>
-          <mat-icon>verified</mat-icon>
-          {{ "user.list.columns.approvalStatus" | transloco }}
-        </th>
-        <td mat-cell *matCellDef="let user">
-          <mat-chip-set>
-            <mat-chip
-              [color]="user.isApproved ? 'primary' : 'warn'"
-              highlighted
-            >
-              {{
-                user.isApproved
-                  ? ("user.list.approved" | transloco)
-                  : ("user.list.notApproved" | transloco)
-              }}
-            </mat-chip>
-          </mat-chip-set>
-        </td>
-      </ng-container>
-
-      <!-- Actions Column -->
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let user">
-          <button
-            mat-icon-button
-            [matMenuTriggerFor]="menu"
-            aria-label="Actions"
-          >
-            <mat-icon>more_vert</mat-icon>
-          </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="onEditUser(user.id)">
-              <mat-icon>edit</mat-icon>
-              <span>{{ "common.actions.edit" | transloco }}</span>
-            </button>
-            <button mat-menu-item (click)="onToggleStatus(user)">
-              <mat-icon>{{
-                user.isApproved ? "block" : "check_circle"
-              }}</mat-icon>
-              <span>{{
-                (user.isApproved ? "user.list.disapprove" : "user.list.approve")
-                  | transloco
-              }}</span>
-            </button>
-            <mat-divider></mat-divider>
-            <button mat-menu-item (click)="onDeleteUser(user)" color="warn">
-              <mat-icon color="warn">delete</mat-icon>
-              <span class="text-warn">{{
-                "common.actions.delete" | transloco
-              }}</span>
-            </button>
-          </mat-menu>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
-
-    <mat-paginator
-      [length]="totalUsers$ | async"
-      [pageSize]="10"
-      [pageSizeOptions]="[5, 10, 25, 50]"
-      [showFirstLastButtons]="true"
-      (page)="loadUsers()"
-    >
-    </mat-paginator>
-  </div>
+  <app-users-table
+    [dataSource]="dataSource"
+    [loading]="(loading$ | async) ?? false"
+    [totalUsers]="(totalUsers$ | async) ?? 0"
+    (edit)="onEditUser($event)"
+    (delete)="onDeleteUser($event)"
+    (toggleStatus)="onToggleStatus($event)"
+    (pageChange)="loadUsers()"
+  ></app-users-table>
 </div>

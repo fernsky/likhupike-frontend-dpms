@@ -1,0 +1,98 @@
+.search-section {
+  flex: 1;
+  width: 100%; // Take full width
+  max-width: 1000px; // Increased max-width
+  min-width: 0; // Allow flex item to shrink below its minimum content size
+
+  .search-box {
+    width: 100%;
+
+    mat-form-field {
+      width: 100%;
+
+      ::ng-deep {
+        .mat-form-field-wrapper {
+          padding: 0;
+          margin: 0;
+        }
+
+        .mat-form-field-flex {
+          padding: 0 1.5rem;
+          background: white;
+          border-radius: 24px;
+          height: 52px;
+          align-items: center;
+          border: 1px solid rgba(0, 0, 0, 0.08);
+          transition: all 0.2s ease;
+
+          &:hover {
+            border-color: rgba(0, 0, 0, 0.12);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+          }
+        }
+
+        .mat-form-field-outline {
+          border-radius: 24px;
+        }
+
+        .mat-form-field-infix {
+          padding: 0.5rem 0;
+          border-top: none;
+        }
+
+        input {
+          font-size: 0.875rem;
+        }
+      }
+    }
+
+    .search-icon {
+      color: #64748b;
+      margin-right: 0.5rem;
+    }
+
+    .clear-button {
+      color: #94a3b8;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+
+      &:hover {
+        color: #64748b;
+      }
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .search-section {
+    max-width: none;
+
+    .search-box {
+      mat-form-field {
+        ::ng-deep {
+          .mat-form-field-flex {
+            height: 44px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Reduced Motion
+@media (prefers-reduced-motion: reduce) {
+  .search-box {
+    ::ng-deep * {
+      transition: none !important;
+    }
+  }
+}

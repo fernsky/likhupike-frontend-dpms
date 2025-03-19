@@ -3,6 +3,7 @@ import {
   Input,
   AfterContentInit,
   ContentChild,
+  TemplateRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslocoModule } from '@jsverse/transloco';
@@ -25,6 +26,7 @@ export class PageTitleComponent implements AfterContentInit {
   hasContent = false;
 
   @ContentChild('*') content!: unknown;
+  @ContentChild('actions') actionsTemplate?: TemplateRef<unknown>;
 
   ngAfterContentInit() {
     this.hasContent = !!this.content;
