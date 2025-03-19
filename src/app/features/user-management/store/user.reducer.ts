@@ -13,6 +13,7 @@ export const userReducer = createReducer(
     ...state,
     creating: true,
     errors: null,
+    lastUpdated: null, // Reset lastUpdated when starting creation
   })),
   on(UserActions.createUserSuccess, (state, { user }) => ({
     ...state,
@@ -26,6 +27,7 @@ export const userReducer = createReducer(
     ...state,
     creating: false,
     errors: error,
+    lastUpdated: null,
   })),
 
   // Load Users

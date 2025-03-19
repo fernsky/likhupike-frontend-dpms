@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
-import { takeUntil, filter, take } from 'rxjs/operators';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
 import { UserFormComponent } from '../../components/user-form/user-form.component';
@@ -47,27 +46,7 @@ export class UserCreateComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Clear any existing errors
     this.store.dispatch(UserActions.clearErrors());
-
-    // Subscribe to creation status
-    this.store
-      .select(UserSelectors.selectUserCreating)
-      .pipe(
-        takeUntil(this.destroy$),
-        filter((creating) => !creating)
-      )
-      .subscribe(() => {
-        this.store
-          .select(UserSelectors.selectUserErrors)
-          .pipe(
-            take(1),
-            filter((errors) => !errors)
-          )
-          .subscribe(() => {
-            this.router.navigate(['/dashboard/users/list']);
-          });
-      });
   }
 
   onSubmit(request: CreateUserRequest): void {

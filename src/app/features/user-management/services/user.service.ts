@@ -40,7 +40,7 @@ export class UserService {
   ): Observable<{ users: UserResponse[]; total: number }> {
     const params = this.convertFilterToParams(filter);
     return this.http
-      .get<ApiResponse<UserResponse[]>>(this.apiUrl, { params })
+      .get<ApiResponse<UserResponse[]>>(`${this.apiUrl}/search`, { params })
       .pipe(
         map((response) => {
           if (!response.success) {
