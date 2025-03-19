@@ -27,7 +27,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
+import {
+  provideTranslocoScope,
+  TranslocoModule,
+  TranslocoService,
+} from '@jsverse/transloco';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { Location } from '@angular/common';
 
@@ -58,7 +62,13 @@ import { NumberFormatService } from '@app/shared/services/number-format.service'
     MatTooltipModule,
     MatProgressSpinnerModule,
   ],
-  providers: [provideNativeDateAdapter()],
+  providers: [
+    provideNativeDateAdapter(),
+    provideTranslocoScope({
+      scope: 'user-management',
+      alias: 'user',
+    }),
+  ],
 })
 export class UserFormComponent implements OnInit, OnDestroy {
   @Input() loading = false;

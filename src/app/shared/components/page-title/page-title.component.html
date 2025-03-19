@@ -2,7 +2,7 @@
   <div class="title-content">
     <div class="icon-wrapper" *ngIf="icon">
       <div class="icon-container">
-        <mat-icon class="title-icon">{{ icon }}</mat-icon>
+        <mat-icon class="title-icon" [inline]="true">{{ icon }}</mat-icon>
       </div>
     </div>
     <div class="text-content">
@@ -18,7 +18,7 @@
       </p>
     </div>
   </div>
-  <div class="actions">
+  <div class="actions" *ngIf="hasContent">
     <ng-content></ng-content>
   </div>
 </div>

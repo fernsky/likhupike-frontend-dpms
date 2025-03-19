@@ -70,16 +70,15 @@ $transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .breadcrumb {
-  padding: 0.875rem 0;
-  margin: -0.5rem 0 1rem;
-  background: transparent;
+  padding: 0.75rem 0;
+  margin-bottom: 0.75rem;
 
   &.compact {
     padding: 0.5rem 0;
-    margin: 0 0 0.5rem;
+    margin-bottom: 0.5rem;
 
     .breadcrumb-link {
-      padding: 0.25rem;
+      padding: 0.25rem 0.5rem;
 
       .breadcrumb-text {
         max-width: 120px;
@@ -97,14 +96,17 @@ $transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 
   &.icons-only {
     .breadcrumb-link {
-      padding: 0.25rem;
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
+      padding: 0;
       justify-content: center;
 
       .item-icon {
         margin: 0;
-        font-size: 1.25rem;
+      }
+
+      .breadcrumb-text {
+        display: none;
       }
     }
 
@@ -118,10 +120,10 @@ $transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   ol {
     display: flex;
     align-items: center;
-    padding: 0;
-    margin: 0;
     list-style: none;
-    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    gap: 0.5rem;
     flex-wrap: nowrap;
     overflow-x: auto;
     scrollbar-width: none;
@@ -139,9 +141,9 @@ $transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 400;
 
     .separator {
-      color: var(--text-secondary);
+      color: #94a3b8;
       opacity: 0.25;
-      margin: 0 0.125rem;
+      margin: 0 0.25rem;
       font-size: 1.25rem;
       height: 1.25rem;
       width: 1.25rem;
@@ -169,18 +171,18 @@ $transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   .breadcrumb-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.375rem;
-    padding: 0.375rem 0.5rem;
-    color: var(--text-secondary);
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    color: #64748b;
     text-decoration: none;
-    border-radius: 6px;
+    border-radius: 8px;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: inherit;
     line-height: 1.2;
     white-space: nowrap;
 
     .item-icon {
-      color: inherit;
+      color: #94a3b8;
       opacity: 0.5;
       font-size: 1.25rem;
       height: 1.25rem;
@@ -195,12 +197,13 @@ $transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     &:hover {
-      color: var(--primary-color);
-      background: rgba(var(--primary-color-rgb), 0.04);
+      color: #123772;
+      background: rgba(18, 55, 114, 0.04);
 
       .item-icon {
+        color: #123772;
         opacity: 1;
-        transform: translateY(-0.5px) scale(1.1);
+        transform: translateY(-1px);
       }
 
       span {
@@ -209,14 +212,14 @@ $transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     &.active {
-      color: var(--text-primary);
+      background: #f1f5f9;
+      color: #0b1f42;
       font-weight: 500;
       pointer-events: none;
-      background: rgba(var(--primary-color-rgb), 0.08);
 
       .item-icon {
+        color: #123772;
         opacity: 1;
-        color: var(--primary-color);
       }
     }
 
@@ -338,9 +341,11 @@ $transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 @media (prefers-contrast: more) {
   .breadcrumb {
     .breadcrumb-link {
-      &:hover {
-        background: var(--primary-color);
-        color: white;
+      outline: 1px solid currentColor;
+
+      &:hover,
+      &:focus {
+        outline-width: 2px;
       }
     }
   }
@@ -383,10 +388,33 @@ $transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   .breadcrumb {
     ol {
       -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
 
     .breadcrumb-link:active {
       background: rgba(var(--primary-color-rgb), 0.12);
+    }
+  }
+}
+
+// Dark mode enhancements
+@media (prefers-color-scheme: dark) {
+  .breadcrumb {
+    .breadcrumb-link {
+      color: #94a3b8;
+
+      &:hover {
+        color: #e2e8f0;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      &.active {
+        background: rgba(255, 255, 255, 0.03);
+        color: #f8fafc;
+      }
     }
   }
 }

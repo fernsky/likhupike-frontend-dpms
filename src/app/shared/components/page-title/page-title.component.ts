@@ -1,4 +1,9 @@
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  Input,
+  AfterContentInit,
+  ContentChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslocoModule } from '@jsverse/transloco';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,10 +15,18 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [CommonModule, TranslocoModule, MatIconModule],
 })
-export class PageTitleComponent {
+export class PageTitleComponent implements AfterContentInit {
   @Input() title = '';
   @Input() titleTranslationKey?: string;
   @Input() description = '';
   @Input() descriptionTranslationKey?: string;
   @Input() icon?: string;
+
+  hasContent = false;
+
+  @ContentChild('*') content!: unknown;
+
+  ngAfterContentInit() {
+    this.hasContent = !!this.content;
+  }
 }

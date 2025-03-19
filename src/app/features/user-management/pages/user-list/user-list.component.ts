@@ -44,6 +44,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
 import { EmptyStateComponent } from '@shared/components/empty-state/empty-state.component';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
+import { PageTitleComponent } from '@shared/components/page-title/page-title.component';
 
 // Models & Actions
 import {
@@ -83,6 +84,7 @@ import { PermissionType } from '@app/core/models/permission.enum';
     MatDividerModule,
     MatDatepickerModule,
     TranslocoModule,
+    PageTitleComponent,
   ],
   providers: [
     provideNativeDateAdapter(),

@@ -2,13 +2,13 @@
   <!-- Breadcrumb -->
   <app-breadcrumb></app-breadcrumb>
 
-  <!-- Header -->
-  <div class="page-header">
-    <div class="title-section">
-      <h1>{{ "user.list.title" | transloco }}</h1>
-      <p>{{ "user.list.subtitle" | transloco }}</p>
-    </div>
-  </div>
+  <!-- Page Title -->
+  <app-page-title
+    titleTranslationKey="user.list.title"
+    descriptionTranslationKey="user.list.subtitle"
+    icon="manage_accounts"
+  >
+  </app-page-title>
 
   <!-- Search and Actions -->
   <div class="actions-bar">
