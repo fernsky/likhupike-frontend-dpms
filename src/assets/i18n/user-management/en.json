@@ -2,6 +2,9 @@
   "list": {
     "title": "User Management",
     "subtitle": "Manage and monitor all system users",
+    "loading": "Loading users...",
+    "email": "Email Address",
+    "permissions": "User Permissions",
     "breadcrumb": {
       "dashboard": "Dashboard",
       "users": "Users"
@@ -49,7 +52,8 @@
       "email": "Email Address",
       "post": "Position",
       "ward": "Ward Assignment",
-      "status": "Status",
+      "permissions": "Permissions",
+      "approvalStatus": "Approval Status",
       "actions": "Actions"
     },
     "emptyState": {

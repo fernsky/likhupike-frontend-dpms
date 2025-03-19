@@ -19,6 +19,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoModule } from '@jsverse/transloco';
 import { EmptyStateComponent } from '@shared/components/empty-state/empty-state.component';
 import { UserResponse } from '../../models/user.interface';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-users-table',
@@ -38,6 +39,21 @@ import { UserResponse } from '../../models/user.interface';
     MatProgressSpinnerModule,
     TranslocoModule,
     EmptyStateComponent, // Add EmptyStateComponent to imports
+  ],
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('300ms ease-in', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [animate('200ms ease-out', style({ opacity: 0 }))]),
+    ]),
+    trigger('scaleIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.9)', opacity: 0 }),
+        animate('300ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
+      ]),
+    ]),
   ],
 })
 export class UsersTableComponent implements AfterViewInit {

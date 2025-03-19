@@ -4,6 +4,9 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   position: relative;
+  min-height: 400px; // Set minimum height
+  display: flex;
+  flex-direction: column;
 
   // Loading Overlay
   .loading-shade {
@@ -12,12 +15,56 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.92);
     z-index: 2;
     display: flex;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(2px);
+    min-height: 400px;
+    transition: all 0.3s ease;
+
+    .loading-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+
+      .spinner-wrapper {
+        margin-bottom: 1.25rem;
+
+        ::ng-deep .mat-mdc-progress-spinner {
+          width: 48px !important;
+          height: 48px !important;
+
+          circle {
+            stroke: #123772;
+            stroke-width: 3px;
+          }
+        }
+      }
+
+      .loading-text {
+        color: #475569;
+        font-size: 0.9375rem;
+        font-weight: 500;
+        margin: 0;
+        line-height: 1.5;
+
+        &::after {
+          content: "...";
+          animation: ellipsis 1.5s infinite;
+        }
+      }
+    }
+  }
+
+  // Table wrapper to maintain consistent height
+  .table-wrapper {
+    flex: 1;
+    position: relative;
+    min-height: 338px; // 400px - paginator height - padding
+    overflow: auto;
   }
 
   // Table Styles
@@ -25,6 +72,7 @@
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
+    min-height: 338px; // Match wrapper min-height
 
     th {
       background: #f8fafb;
@@ -100,10 +148,25 @@
     }
   }
 
+  // Empty state styles
+  app-empty-state {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 338px; // Match table min-height
+  }
+
   // Paginator Styles
   mat-paginator {
     border-top: 1px solid rgba(0, 0, 0, 0.06);
     background: #f8fafb;
+    height: 56px; // Fixed height for paginator
+    flex-shrink: 0; // Prevent shrinking
   }
 }
 
@@ -128,5 +191,17 @@
         padding: 0 8px;
       }
     }
+  }
+}
+
+@keyframes ellipsis {
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.3;
   }
 }
