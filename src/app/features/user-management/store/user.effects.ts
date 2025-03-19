@@ -30,7 +30,7 @@ export class UserEffects {
           }),
           catchError((error) => {
             console.error('Create user error:', error);
-            this.showError(error.message || 'Failed to create user');
+            this.showError(error.message);
             return of(UserActions.createUserFailure({ error }));
           })
         )
@@ -47,7 +47,7 @@ export class UserEffects {
             UserActions.loadUsersSuccess({ users, total })
           ),
           catchError((error) => {
-            this.showError(error.message || 'Failed to load users');
+            this.showError(error.message);
             return of(UserActions.loadUsersFailure({ error }));
           })
         )
@@ -143,8 +143,12 @@ export class UserEffects {
 
   // Helper method to show error messages
   private showError(message: string): void {
+    const messageToShow = message.startsWith('user.messages.')
+      ? this.transloco.translate(message)
+      : message;
+
     this.snackBar.open(
-      this.transloco.translate(message),
+      messageToShow,
       this.transloco.translate('common.actions.close'),
       { duration: 5000, panelClass: ['error-snackbar'] }
     );

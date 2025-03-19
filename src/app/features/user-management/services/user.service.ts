@@ -120,9 +120,22 @@ export class UserService {
 
   private handleError(error: HttpErrorResponse | ApiErrorResponse) {
     console.error('API Error:', error);
-    if ('error' in error && error instanceof HttpErrorResponse) {
+
+    // If it's an HTTP error with a structured error response
+    if (
+      error instanceof HttpErrorResponse &&
+      error.error &&
+      !error.error.success
+    ) {
+      return throwError(() => error.error.error);
+    }
+
+    // If it's already an ApiErrorResponse
+    if ('error' in error && !('status' in error)) {
       return throwError(() => error.error);
     }
+
+    // Fallback for unexpected errors
     return throwError(() => ({
       code: 'UNKNOWN_ERROR',
       message: 'An unknown error occurred',
