@@ -17,6 +17,7 @@ import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { AuthEffects } from './core/store/auth/auth.effects';
 import { authReducer } from './core/store/auth/auth.reducer';
 import { AuthFacade } from './core/facades/auth.facade';
+import { apiInterceptor } from './core/interceptors/api.interceptor';
 
 const FONT_FAMILY =
   '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif';
@@ -25,7 +26,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, withComponentInputBinding()),
     provideAnimations(),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([apiInterceptor, authInterceptor])),
     provideStore({ auth: authReducer }),
     provideEffects([AuthEffects]),
     provideClientHydration(),

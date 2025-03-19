@@ -9,7 +9,7 @@ export const environment: Environment = {
     'https://localhost:8080',
   ],
   version: '1.0.0-dev', // Add version
-  apiUrl: 'https://likhupike-dpms-api.intensivestudy.com.np/api/v1',
+  apiUrl: 'http://localhost:8080/api/v1',
   baseUrl: '', // Empty string for development as assets are served from root
   auth: {
     loginEndpoint: '/auth/login',
