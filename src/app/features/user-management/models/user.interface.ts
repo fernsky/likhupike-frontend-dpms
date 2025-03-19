@@ -29,19 +29,34 @@ export interface UserResponse {
 
 export interface UserFilter {
   email?: string;
-  searchTerm?: string;
   isApproved?: boolean;
   isWardLevelUser?: boolean;
   wardNumberFrom?: number;
   wardNumberTo?: number;
-  createdAfter?: string; // LocalDate will be sent as ISO string
-  createdBefore?: string;
+  createdAfter?: string; // ISO string
+  createdBefore?: string; // ISO string
   permissions?: PermissionType[];
   columns?: string[];
   page?: number;
   size?: number;
   sortBy?: string;
   sortDirection?: 'ASC' | 'DESC';
+}
+
+export interface UserFilterFormValue {
+  email: string | null;
+  isApproved: boolean | null;
+  isWardLevelUser: boolean | null;
+  wardNumberFrom: number | null;
+  wardNumberTo: number | null;
+  createdAfter: Date | null;
+  createdBefore: Date | null;
+  permissions: PermissionType[];
+  columns: string[];
+  page: number;
+  size: number;
+  sortBy: string;
+  sortDirection: 'ASC' | 'DESC';
 }
 
 export const ALLOWED_COLUMNS = [

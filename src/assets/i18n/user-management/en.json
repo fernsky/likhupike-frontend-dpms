@@ -1,25 +1,69 @@
 {
   "list": {
     "title": "User Management",
-    "createButton": "Create User",
-    "search": "Search users...",
-    "wardFilter": "Filter by Ward",
-    "roleFilter": "Filter by Role",
-    "statusFilter": "Filter by Status",
-    "allWards": "All Wards",
-    "allRoles": "All Roles",
-    "allStatuses": "All Statuses",
-    "active": "Active",
-    "inactive": "Inactive",
-    "activate": "Activate User",
-    "deactivate": "Deactivate User",
+    "subtitle": "Manage and monitor all system users",
+    "breadcrumb": {
+      "dashboard": "Dashboard",
+      "users": "Users"
+    },
+    "search": {
+      "placeholder": "Search by email or name...",
+      "button": "Search",
+      "filters": "Filters",
+      "showFilters": "Show Filters",
+      "hideFilters": "Hide Filters",
+      "clearFilters": "Clear Filters"
+    },
+    "filters": {
+      "title": "Advanced Filters",
+      "ward": {
+        "label": "Ward",
+        "all": "All Wards",
+        "municipality": "Municipality Level",
+        "range": {
+          "from": "From Ward",
+          "to": "To Ward"
+        }
+      },
+      "status": {
+        "label": "Status",
+        "all": "All Statuses",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "approvalStatus": {
+        "label": "Approval Status",
+        "all": "All",
+        "approved": "Approved",
+        "pending": "Pending"
+      },
+      "dateRange": {
+        "label": "Date Range",
+        "from": "From Date",
+        "to": "To Date"
+      }
+    },
+    "createButton": "Create New User",
     "columns": {
-      "name": "Name",
-      "email": "Email",
+      "user": "User Information",
+      "email": "Email Address",
       "post": "Position",
-      "ward": "Ward",
-      "roles": "Roles",
-      "status": "Status"
+      "ward": "Ward Assignment",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "emptyState": {
+      "title": "No Users Found",
+      "description": "Try adjusting your search or filter criteria",
+      "createFirst": "Create your first user"
+    },
+    "actions": {
+      "edit": "Edit User",
+      "delete": "Delete User",
+      "activate": "Activate User",
+      "deactivate": "Deactivate User",
+      "approve": "Approve User",
+      "disapprove": "Disapprove User"
     }
   },
   "create": {

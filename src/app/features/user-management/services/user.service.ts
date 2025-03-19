@@ -91,7 +91,6 @@ export class UserService {
     let params = new HttpParams();
 
     if (filter.email) params = params.set('email', filter.email);
-    if (filter.searchTerm) params = params.set('searchTerm', filter.searchTerm);
     if (filter.isApproved !== undefined)
       params = params.set('isApproved', filter.isApproved.toString());
     if (filter.isWardLevelUser !== undefined)
