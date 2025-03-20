@@ -5,37 +5,28 @@
     gap: 0.75rem;
     align-items: center;
 
-    .ward-range,
     .date-range {
       display: flex;
-      gap: 0.25rem;
       align-items: center;
-
-      .date-icon {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
-        margin-right: 8px;
-        vertical-align: middle;
-        opacity: 0.7;
-      }
+      gap: 4px;
 
       .date-separator {
         color: #64748b;
         font-size: 0.75rem;
-        margin: 0 -0.25rem;
-        line-height: 32px;
+        line-height: 24px;
+        padding: 0 2px;
       }
 
       mat-form-field {
+        width: auto;
+
         ::ng-deep {
-          .mat-form-field-wrapper {
-            margin: 0;
+          .mat-mdc-form-field-flex {
+            padding-right: 2px;
           }
 
-          .mat-form-field-hint {
-            font-size: 0.75rem;
-            opacity: 0.7;
+          input.mat-mdc-input-element {
+            width: 90px;
           }
         }
       }
@@ -63,6 +54,7 @@
           height: 24px;
         }
 
+        // Hide unnecessary elements
         .mat-mdc-form-field-subscript-wrapper,
         .mat-form-field-outline,
         .mat-mdc-form-field-underline,
@@ -71,20 +63,13 @@
           display: none !important;
         }
 
-        .mat-mdc-select-value {
-          width: auto;
-          font-size: 0.75rem;
-          color: #475569;
-          padding: 0;
-        }
-
-        // Make form fields more compact
         .mat-mdc-form-field-flex {
-          background: transparent !important;
           min-height: 24px !important;
-
-          border: none !important;
+          padding: 0 6px;
           align-items: center;
+          gap: 4px;
+          background: transparent !important;
+          border: none !important;
 
           &::before,
           &::after {
@@ -92,20 +77,67 @@
           }
         }
 
-        .mat-datepicker-toggle {
-          scale: 0.8;
-          width: 24px;
-          height: 24px;
-          margin: 0;
-          color: #64748b;
+        // Select styling
+        .mat-mdc-select {
+          display: flex;
+          align-items: center;
+          font-size: 0.75rem;
+          color: #475569;
+          padding: 2px 0;
 
-          .mat-datepicker-toggle-default-icon {
-            width: 18px;
-            height: 18px;
+          .mat-mdc-select-value {
+            font-size: 0.75rem;
+            color: #475569;
+            margin-right: 8px;
+            width: auto;
+            padding: 0;
+          }
+
+          .mat-mdc-select-arrow {
+            color: #94a3b8;
+            width: 8px;
+            height: 8px;
+            margin: 0;
           }
         }
 
-        // Consistent spacing for prefix icons
+        // Datepicker styling
+        .mat-datepicker-toggle {
+          scale: 0.8;
+          width: 20px;
+          height: 20px;
+          margin: 0;
+          padding: 0;
+          color: #94a3b8;
+
+          button {
+            width: 20px;
+            height: 20px;
+          }
+
+          .mat-datepicker-toggle-default-icon {
+            width: 16px;
+            height: 16px;
+          }
+        }
+
+        // Input styling
+        input.mat-mdc-input-element {
+          margin: 0;
+          height: 24px;
+          line-height: 24px;
+          font-size: 0.75rem;
+          padding: 0;
+          min-width: 80px;
+          color: #475569;
+
+          &::placeholder {
+            color: #94a3b8;
+            opacity: 1;
+          }
+        }
+
+        // Icon prefix styling
         .mat-mdc-form-field-icon-prefix {
           padding-right: 8px;
           height: 18px;
@@ -117,141 +149,6 @@
             font-size: 16px;
             line-height: 16px;
             color: #64748b;
-          }
-        }
-
-        input.mat-mdc-input-element {
-          margin: 0;
-          height: 24px;
-          line-height: 24px;
-          font-size: 0.75rem;
-          padding: 0;
-          width: auto;
-          min-width: 80px;
-        }
-      }
-    }
-
-    // Style the select fields
-    .mat-mdc-select {
-      font-size: 0.875rem;
-    }
-
-    // Style the datepicker input
-    .mat-datepicker-toggle {
-      color: #64748b;
-    }
-  }
-}
-
-.filters-panel {
-  .filters-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    align-items: center;
-
-    mat-form-field {
-      width: auto;
-      font-size: 0.75rem;
-
-      ::ng-deep {
-        .mat-mdc-form-field-infix {
-          width: auto;
-          min-width: 0;
-          padding: 0;
-          min-height: 24px;
-        }
-
-        .mat-mdc-form-field-flex {
-          min-height: 24px !important;
-          padding: 0 6px;
-          align-items: center;
-          gap: 4px;
-          background: transparent;
-
-          .mat-mdc-select {
-            display: flex;
-            align-items: center;
-            font-size: 0.75rem;
-            color: #475569;
-            padding: 2px 0;
-
-            .mat-mdc-select-value {
-              font-size: 0.75rem;
-              color: #475569;
-              margin-right: 8px; // Add space between text and arrow
-            }
-
-            .mat-mdc-select-arrow {
-              color: #94a3b8;
-              width: 8px;
-              height: 8px;
-              margin: 0;
-            }
-          }
-
-          .mat-datepicker-toggle {
-            color: #94a3b8;
-            scale: 0.8;
-            margin: 0;
-            padding: 0;
-            width: 20px;
-            height: 20px;
-
-            button {
-              width: 20px;
-              height: 20px;
-            }
-
-            .mat-datepicker-toggle-default-icon {
-              width: 16px;
-              height: 16px;
-            }
-          }
-        }
-
-        // Date input specific styling
-        input.mat-mdc-input-element {
-          &[matDatepicker] {
-            color: #475569;
-            font-size: 0.75rem;
-            width: 80px;
-            padding-right: 4px;
-
-            &::placeholder {
-              color: #94a3b8;
-              font-size: 0.75rem;
-              opacity: 1;
-            }
-          }
-        }
-      }
-    }
-
-    .date-range {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-
-      .date-separator {
-        color: #64748b;
-        font-size: 0.75rem;
-        line-height: 24px;
-        padding: 0 2px;
-      }
-
-      // Make date inputs more compact
-      mat-form-field {
-        width: auto;
-
-        ::ng-deep {
-          .mat-mdc-form-field-flex {
-            padding-right: 2px;
-          }
-
-          input.mat-mdc-input-element {
-            width: 90px;
           }
         }
       }
@@ -268,7 +165,6 @@
     .filters-grid {
       gap: 1rem;
 
-      .ward-range,
       .date-range {
         grid-template-columns: 1fr;
         gap: 0.75rem;
