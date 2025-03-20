@@ -147,23 +147,38 @@ export class PaginatorComponent implements OnChanges {
 
   private calculateVisiblePages(): number[] {
     const totalPages = this.totalPages;
+
+    // If there's only 1 page, return empty array (don't show page numbers)
+    if (totalPages <= 1) {
+      return [];
+    }
+
     const current = this._pageIndex;
     const delta = 1;
-
     const range = [];
     const rangeWithDots: number[] = [];
     let l: number | undefined;
 
-    range.push(0); // Always include first page
-
-    for (let i = current - delta; i <= current + delta; i++) {
-      if (i > 0 && i < totalPages - 1) {
-        range.push(i);
-      }
+    // Only add first page if we have more than 1 page
+    if (totalPages > 1) {
+      range.push(0);
     }
 
-    range.push(totalPages - 1); // Always include last page
+    // Calculate range around current page
+    for (
+      let i = Math.max(1, current - delta);
+      i < Math.min(totalPages - 1, current + delta + 1);
+      i++
+    ) {
+      range.push(i);
+    }
 
+    // Only add last page if it's different from first page
+    if (totalPages > 1 && totalPages - 1 !== range[range.length - 1]) {
+      range.push(totalPages - 1);
+    }
+
+    // Add dots and numbers
     for (const i of range) {
       if (l) {
         if (i - l === 2) {
