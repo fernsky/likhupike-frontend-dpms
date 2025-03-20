@@ -29,7 +29,7 @@ export const initialUserState: UserState = {
   totalUsers: 0,
   lastUpdated: null,
   pagination: {
-    currentPage: 0,
+    currentPage: 1,
     pageSize: 10,
     totalElements: 0,
     totalPages: 0,

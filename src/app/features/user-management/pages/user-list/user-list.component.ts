@@ -164,7 +164,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     );
 
   // Add currentPage state
-  currentPage = 0;
+  currentPage = 1;
 
   // Add pagination selectors
   currentPage$ = this.store.select(UserSelectors.selectCurrentPage);
@@ -189,10 +189,10 @@ export class UserListComponent implements OnInit, OnDestroy {
       createdBefore: [null],
       permissions: [[]],
       columns: [ALLOWED_COLUMNS],
-      page: [0],
+      page: [1], // Always start at page 1
       size: [10],
-      sortBy: ['createdAt'],
-      sortDirection: ['DESC'],
+      sortBy: ['createdAt'], // Ensure default sort is createdAt
+      sortDirection: ['DESC'], // Ensure default direction is DESC
     });
 
     // Modify filter subscription to handle pagination
@@ -212,7 +212,7 @@ export class UserListComponent implements OnInit, OnDestroy {
           JSON.stringify({ ...filters, page: undefined }) !==
           JSON.stringify({ ...this.filterForm.value, page: undefined })
         ) {
-          this.filterForm.patchValue({ page: 0 }, { emitEvent: false });
+          this.filterForm.patchValue({ page: 1 }, { emitEvent: false });
         }
         this.loadUsers(filters);
       });
@@ -228,7 +228,7 @@ export class UserListComponent implements OnInit, OnDestroy {
       this.filterForm.patchValue(
         {
           ...userFilter,
-          page: userFilter.page ?? 0,
+          page: userFilter.page ?? 1,
           size: userFilter.size ?? 10,
           sortBy: userFilter.sortBy ?? 'createdAt',
           sortDirection: userFilter.sortDirection ?? 'DESC',
@@ -287,18 +287,27 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   private initializeData(initialFilter?: UserFilter): void {
+    const defaultFilter: UserFilter = {
+      page: initialFilter?.page ?? 1, // Ensure page is 1-based
+      size: 10,
+      sortBy: 'createdAt',
+      sortDirection: 'DESC',
+      ...initialFilter,
+    };
+
     this.searchControl.setValue('');
     this.dataSource = new MatTableDataSource<UserResponse>([]);
 
-    // Load initial data
-    this.loadUsers(
-      initialFilter || {
-        page: 0,
-        size: 10,
-        sortBy: 'createdAt',
-        sortDirection: 'DESC',
-      }
+    // Ensure we start with page 1 in the form
+    this.filterForm.patchValue(
+      {
+        ...defaultFilter,
+        page: defaultFilter.page || 1,
+      },
+      { emitEvent: false }
     );
+
+    this.loadUsers(defaultFilter);
   }
 
   private setupFilterSubscription(): void {
@@ -317,7 +326,7 @@ export class UserListComponent implements OnInit, OnDestroy {
         this.loadUsers({
           ...this.filterForm.value,
           searchTerm: searchTerm || undefined,
-          page: 0, // Reset to first page on search
+          page: 1, // Reset to first page on search
         });
       });
 
@@ -359,11 +368,10 @@ export class UserListComponent implements OnInit, OnDestroy {
   private loadUsers(filter: UserFilter): void {
     // Ensure all required pagination values are present
     const finalFilter: UserFilter = {
-      page: filter.page ?? this.currentPage,
+      page: filter.page ?? 1, // Default to page 1
       size: filter.size ?? this.filterForm.get('size')?.value ?? 10,
-      sortBy: filter.sortBy ?? this.filterForm.get('sortBy')?.value,
-      sortDirection:
-        filter.sortDirection ?? this.filterForm.get('sortDirection')?.value,
+      sortBy: filter.sortBy ?? 'createdAt',
+      sortDirection: filter.sortDirection ?? 'DESC',
       ...filter,
     };
 
@@ -469,7 +477,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     const newFilters = {
       ...currentFilters,
       searchTerm,
-      page: 0, // Reset to first page when searching
+      page: 1, // Reset to first page when searching
     };
 
     this.filterForm.patchValue(newFilters, { emitEvent: false });
@@ -480,7 +488,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     const newFilters = {
       ...this.filterForm.value,
       ...filters,
-      page: 0, // Reset to first page when filters change
+      page: 1, // Reset to first page when filters change
     };
 
     this.filterForm.patchValue(newFilters, { emitEvent: false });
@@ -503,24 +511,14 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   onPageEvent(event: PageEvent): void {
-    // Prevent loading if we're already on this page
-    if (
-      event.pageIndex === this.currentPage &&
-      event.pageSize === this.filterForm.get('size')?.value
-    ) {
-      return;
-    }
-
+    // event.pageIndex is already 1-based from our paginator
     const newFilters: UserFilter = {
       ...this.filterForm.value,
       page: event.pageIndex,
       size: event.pageSize,
     };
 
-    // Update form silently
     this.filterForm.patchValue(newFilters, { emitEvent: false });
-
-    // Load data with new page
     this.loadUsers(newFilters);
   }
 }

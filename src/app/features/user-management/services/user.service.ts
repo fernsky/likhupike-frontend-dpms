@@ -52,11 +52,12 @@ export class UserService {
           if (!response.success) {
             throw response.error;
           }
+          // Use the API's pagination meta directly without modification
           return {
             users: response.data,
             total: response.meta?.totalElements || 0,
             meta: response.meta || {
-              page: 0,
+              page: 1,
               size: 10,
               totalElements: 0,
               totalPages: 0,
@@ -104,33 +105,57 @@ export class UserService {
   private convertFilterToParams(filter: UserFilter): HttpParams {
     let params = new HttpParams();
 
-    // Ensure pagination params are always set first
-    params = params.set('page', (filter.page ?? 0).toString());
+    // Set defaults for pagination and sorting
+    params = params.set('page', (filter.page ?? 1).toString());
     params = params.set('size', (filter.size ?? 10).toString());
+    params = params.set('sortBy', filter.sortBy ?? 'createdAt');
+    params = params.set('sortDirection', filter.sortDirection ?? 'DESC');
 
-    // Sort params
-    if (filter.sortBy) {
+    // Sort params - safer null checks
+    if (filter.sortBy && filter.sortDirection) {
       params = params.set('sortBy', filter.sortBy);
-      params = params.set('sortDirection', filter.sortDirection || 'DESC');
+      params = params.set('sortDirection', filter.sortDirection);
     }
 
-    // Rest of the filter params
-    if (filter.searchTerm) params = params.set('searchTerm', filter.searchTerm);
-    if (filter.email) params = params.set('email', filter.email);
-    if (filter.isApproved !== undefined)
+    // Rest of the filter params with null checks
+    if (filter.searchTerm?.trim()) {
+      params = params.set('searchTerm', filter.searchTerm.trim());
+    }
+
+    if (filter.email?.trim()) {
+      params = params.set('email', filter.email.trim());
+    }
+
+    if (filter.isApproved !== undefined && filter.isApproved !== null) {
       params = params.set('isApproved', filter.isApproved.toString());
-    if (filter.isWardLevelUser !== undefined)
+    }
+
+    if (
+      filter.isWardLevelUser !== undefined &&
+      filter.isWardLevelUser !== null
+    ) {
       params = params.set('isWardLevelUser', filter.isWardLevelUser.toString());
-    if (filter.wardNumber !== undefined)
+    }
+
+    if (filter.wardNumber !== undefined && filter.wardNumber !== null) {
       params = params.set('wardNumber', filter.wardNumber.toString());
-    if (filter.createdAfter)
+    }
+
+    if (filter.createdAfter) {
       params = params.set('createdAfter', filter.createdAfter);
-    if (filter.createdBefore)
+    }
+
+    if (filter.createdBefore) {
       params = params.set('createdBefore', filter.createdBefore);
-    if (filter.permissions?.length)
+    }
+
+    if (Array.isArray(filter.permissions) && filter.permissions.length > 0) {
       params = params.set('permissions', filter.permissions.join(','));
-    if (filter.columns?.length)
+    }
+
+    if (Array.isArray(filter.columns) && filter.columns.length > 0) {
       params = params.set('columns', filter.columns.join(','));
+    }
 
     return params;
   }

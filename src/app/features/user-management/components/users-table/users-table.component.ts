@@ -81,7 +81,7 @@ export class UsersTableComponent implements AfterViewInit {
   @Input() loading = false;
   @Input() totalUsers = 0;
   @Input() pageSize = 10;
-  @Input() pageIndex = 0;
+  @Input() pageIndex = 1;
   @Output() edit = new EventEmitter<string>();
   @Output() delete = new EventEmitter<UserResponse>();
   @Output() toggleStatus = new EventEmitter<UserResponse>();
@@ -128,6 +128,7 @@ export class UsersTableComponent implements AfterViewInit {
   }
 
   onPageChange(event: PageEvent) {
+    // Pass through the event as-is since we're using 1-based pagination
     this.pageChange.emit(event);
   }
 

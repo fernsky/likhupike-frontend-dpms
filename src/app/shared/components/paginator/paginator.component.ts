@@ -45,7 +45,7 @@ export class PaginatorComponent implements OnChanges {
 
   // Track internal state
   private _pageSize = 10;
-  private _pageIndex = 0;
+  private _pageIndex = 1;
 
   @Input() set pageSize(value: number) {
     if (this._pageSize !== value) {
@@ -58,11 +58,8 @@ export class PaginatorComponent implements OnChanges {
   }
 
   @Input() set pageIndex(value: number) {
-    if (this._pageIndex !== value) {
-      this._pageIndex = value;
-      // Force update of visible pages when pageIndex changes
-      this._visiblePages = this.calculateVisiblePages();
-    }
+    this._pageIndex = value || 1;
+    this._visiblePages = this.calculateVisiblePages();
   }
   get pageIndex(): number {
     return this._pageIndex;
@@ -77,20 +74,22 @@ export class PaginatorComponent implements OnChanges {
   }
 
   get rangeStart(): number {
-    return this.totalElements === 0 ? 0 : this.pageIndex * this.pageSize + 1;
+    return this.totalElements === 0
+      ? 0
+      : (this.pageIndex - 1) * this.pageSize + 1;
   }
 
   get rangeEnd(): number {
-    const end = (this.pageIndex + 1) * this.pageSize;
+    const end = this.pageIndex * this.pageSize;
     return Math.min(end, this.totalElements);
   }
 
   get isFirstPage(): boolean {
-    return this.pageIndex === 0;
+    return this.pageIndex === 1;
   }
 
   get isLastPage(): boolean {
-    return this.pageIndex === this.totalPages - 1;
+    return this.pageIndex >= this.totalPages;
   }
 
   formatNumber(value: number): string {
@@ -98,20 +97,36 @@ export class PaginatorComponent implements OnChanges {
   }
 
   onPageSizeChange(size: number): void {
-    const newPageIndex = Math.floor((this.pageIndex * this.pageSize) / size);
+    const newPageIndex =
+      Math.floor(((this.pageIndex - 1) * this.pageSize) / size) + 1;
     this.emitPageEvent(newPageIndex, size);
   }
 
-  goToPage(index: number): void {
-    if (index === this._pageIndex || index < 0 || index >= this.totalPages)
+  goToPage(pageNumber: number): void {
+    // Ensure we're working with valid page numbers
+    if (
+      pageNumber === this._pageIndex ||
+      pageNumber < 1 ||
+      pageNumber > this.totalPages
+    ) {
       return;
-    this._pageIndex = index;
+    }
+
+    this._pageIndex = pageNumber;
     this._visiblePages = this.calculateVisiblePages();
-    this.emitPageEvent(index, this.pageSize);
+    this.emitPageEvent(pageNumber, this.pageSize);
   }
 
   private emitPageEvent(pageIndex: number, pageSize: number): void {
+    // Always emit 1-based page numbers
     this.pageChange.emit({ pageIndex, pageSize });
+  }
+
+  onPageChange(event: PageEvent) {
+    this.pageChange.emit({
+      ...event,
+      pageIndex: event.pageIndex,
+    });
   }
 
   // Update pagination logic
@@ -128,10 +143,7 @@ export class PaginatorComponent implements OnChanges {
 
   private updatePaginationState(): void {
     // Ensure pageIndex is within bounds
-    const maxPage = Math.max(
-      0,
-      Math.ceil(this.totalElements / this.pageSize) - 1
-    );
+    const maxPage = Math.max(0, Math.ceil(this.totalElements / this.pageSize));
     if (this._pageIndex > maxPage) {
       this._pageIndex = maxPage;
       this.pageChange.emit({
@@ -147,11 +159,7 @@ export class PaginatorComponent implements OnChanges {
 
   private calculateVisiblePages(): number[] {
     const totalPages = this.totalPages;
-
-    // If there's only 1 page, return empty array (don't show page numbers)
-    if (totalPages <= 1) {
-      return [];
-    }
+    if (totalPages <= 1) return [];
 
     const current = this._pageIndex;
     const delta = 1;
@@ -159,23 +167,20 @@ export class PaginatorComponent implements OnChanges {
     const rangeWithDots: number[] = [];
     let l: number | undefined;
 
-    // Only add first page if we have more than 1 page
     if (totalPages > 1) {
-      range.push(0);
+      range.push(1);
     }
 
-    // Calculate range around current page
     for (
-      let i = Math.max(1, current - delta);
-      i < Math.min(totalPages - 1, current + delta + 1);
+      let i = Math.max(2, current - delta);
+      i <= Math.min(totalPages, current + delta);
       i++
     ) {
       range.push(i);
     }
 
-    // Only add last page if it's different from first page
-    if (totalPages > 1 && totalPages - 1 !== range[range.length - 1]) {
-      range.push(totalPages - 1);
+    if (totalPages > 1 && range[range.length - 1] !== totalPages) {
+      range.push(totalPages);
     }
 
     // Add dots and numbers

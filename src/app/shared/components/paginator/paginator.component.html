@@ -33,7 +33,7 @@
         <button
           mat-icon-button
           [disabled]="isFirstPage || disabled"
-          (click)="goToPage(0)"
+          (click)="goToPage(1)"
           class="nav-button"
         >
           <mat-icon>first_page</mat-icon>
@@ -58,7 +58,7 @@
               [disabled]="disabled"
               (click)="goToPage(page)"
             >
-              {{ formatNumber(page + 1) }}
+              {{ formatNumber(page) }}
             </button>
           </ng-container>
         </div>
@@ -74,7 +74,7 @@
         <button
           mat-icon-button
           [disabled]="isLastPage || disabled"
-          (click)="goToPage(totalPages - 1)"
+          (click)="goToPage(totalPages)"
           class="nav-button"
         >
           <mat-icon>last_page</mat-icon>

@@ -44,7 +44,7 @@ export const userReducer = createReducer(
     errors: null,
     lastUpdated: new Date(),
     pagination: {
-      currentPage: meta.page,
+      currentPage: meta.page || 1, // Ensure we always have a valid page number
       pageSize: meta.size,
       totalElements: meta.totalElements,
       totalPages: meta.totalPages,
