@@ -292,3 +292,49 @@ button {
     padding: 0 20px !important; // More horizontal padding
   }
 }
+
+// Filter-specific Select Panel Styles
+.filter-select-panel {
+  &.mat-mdc-select-panel,
+  &.mat-mdc-menu-panel {
+    background: white !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 4px !important;
+    margin-top: 4px !important;
+    min-width: 160px !important;
+
+    .mat-mdc-option {
+      min-height: 32px;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      margin: 1px 0;
+      padding: 0 8px;
+      letter-spacing: -0.01em;
+
+      .mat-mdc-option-text {
+        font-size: 0.75rem;
+      }
+
+      &:hover:not(.mat-mdc-option-disabled) {
+        background: rgba(0, 0, 0, 0.02) !important;
+      }
+
+      &.mat-mdc-option-active,
+      &:focus {
+        background: rgba(0, 0, 0, 0.04) !important;
+      }
+
+      &.mat-selected:not(.mat-mdc-option-disabled) {
+        background: rgba(18, 55, 114, 0.06) !important;
+        color: #475569;
+        font-weight: 500;
+      }
+
+      .mdc-list-item__primary-text {
+        font-size: 0.75rem;
+      }
+    }
+  }
+}

@@ -5,6 +5,7 @@
       <mat-select
         formControlName="wardNumber"
         placeholder="{{ 'user.list.filters.ward.label' | transloco }}"
+        panelClass="filter-select-panel"
       >
         <mat-option [value]="null">{{
           "user.list.filters.ward.all" | transloco
@@ -21,6 +22,7 @@
         formControlName="permissions"
         multiple
         placeholder="{{ 'user.list.permissions' | transloco }}"
+        panelClass="filter-select-panel"
       >
         <mat-option
           *ngFor="let permission of permissionTypes"
@@ -36,6 +38,7 @@
       <mat-select
         formControlName="isApproved"
         placeholder="{{ 'user.list.filters.approvalStatus.label' | transloco }}"
+        panelClass="filter-select-panel"
       >
         <mat-option [value]="null">{{
           "user.list.filters.approvalStatus.all" | transloco
@@ -83,5 +86,16 @@
         <mat-datepicker #toPicker></mat-datepicker>
       </mat-form-field>
     </div>
+  </div>
+  <div class="filters-actions">
+    <button
+      mat-button
+      class="clear-filters"
+      (click)="clearFilters()"
+      [disabled]="!hasActiveFilters"
+    >
+      <mat-icon>close</mat-icon>
+      {{ "user.list.search.clearFilters" | transloco }}
+    </button>
   </div>
 </div>

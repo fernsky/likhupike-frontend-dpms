@@ -23,6 +23,10 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { NumberFormatService } from '@app/shared/services/number-format.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PermissionType } from '@app/core/models/permission.enum';
+import {
+  PaginatorComponent,
+  PageEvent,
+} from '@shared/components/paginator/paginator.component';
 
 @Component({
   selector: 'app-users-table',
@@ -43,6 +47,7 @@ import { PermissionType } from '@app/core/models/permission.enum';
     TranslocoModule,
     EmptyStateComponent, // Add EmptyStateComponent to imports
     MatTooltipModule,
+    PaginatorComponent,
   ],
   animations: [
     trigger('fadeInOut', [
@@ -64,10 +69,12 @@ export class UsersTableComponent implements AfterViewInit {
   @Input() dataSource!: MatTableDataSource<UserResponse>;
   @Input() loading = false;
   @Input() totalUsers = 0;
+  @Input() pageSize = 10;
+  @Input() pageIndex = 0;
   @Output() edit = new EventEmitter<string>();
   @Output() delete = new EventEmitter<UserResponse>();
   @Output() toggleStatus = new EventEmitter<UserResponse>();
-  @Output() pageChange = new EventEmitter<void>();
+  @Output() pageChange = new EventEmitter<PageEvent>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -107,5 +114,9 @@ export class UsersTableComponent implements AfterViewInit {
       .slice(2)
       .map((perm) => this.transloco.translate(`user.permissions.${perm}.title`))
       .join('\n');
+  }
+
+  onPageChange(event: PageEvent) {
+    this.pageChange.emit(event);
   }
 }

@@ -43,12 +43,13 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 
 // Components
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
-import { EmptyStateComponent } from '@shared/components/empty-state/empty-state.component';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { PageTitleComponent } from '@shared/components/page-title/page-title.component';
 import { UserSearchComponent } from '../../components/user-search/user-search.component';
 import { UserFiltersComponent } from '../../components/user-filters/user-filters.component';
 import { UsersTableComponent } from '../../components/users-table/users-table.component';
+import { SortControlsComponent } from '../../components/sort-controls/sort-controls.component';
+import { PageEvent } from '@shared/components/paginator/paginator.component';
 
 // Models & Actions
 import {
@@ -72,7 +73,6 @@ import { PermissionType } from '@app/core/models/permission.enum';
     ReactiveFormsModule,
     TranslocoModule,
     BreadcrumbComponent,
-    EmptyStateComponent,
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
@@ -92,6 +92,7 @@ import { PermissionType } from '@app/core/models/permission.enum';
     UserSearchComponent,
     UserFiltersComponent,
     UsersTableComponent,
+    SortControlsComponent,
   ],
   providers: [
     provideNativeDateAdapter(),
@@ -391,5 +392,20 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   onFiltersChange(filters: UserFilter) {
     this.filterForm.patchValue(filters);
+  }
+
+  onSortChange(event: { sortBy: string; direction: 'ASC' | 'DESC' }) {
+    this.filterForm.patchValue({
+      sortBy: event.sortBy,
+      sortDirection: event.direction,
+    });
+  }
+
+  onPageEvent(event: PageEvent) {
+    this.filterForm.patchValue({
+      page: event.pageIndex,
+      size: event.pageSize,
+    });
+    this.loadUsers();
   }
 }

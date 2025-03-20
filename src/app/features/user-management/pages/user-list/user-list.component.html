@@ -22,20 +22,28 @@
         (searchChange)="onSearch($event)"
       ></app-user-search>
 
-      <button
-        mat-stroked-button
-        class="filter-button"
-        [class.active]="showFilters"
-        (click)="toggleFilters()"
-      >
-        <mat-icon>filter_list</mat-icon>
-        {{
-          (showFilters
-            ? "user.list.search.hideFilters"
-            : "user.list.search.showFilters"
-          ) | transloco
-        }}
-      </button>
+      <div class="list-controls">
+        <app-sort-controls
+          [currentSort]="filterForm.get('sortBy')?.value"
+          [currentDirection]="filterForm.get('sortDirection')?.value"
+          (sortChange)="onSortChange($event)"
+        ></app-sort-controls>
+
+        <button
+          mat-stroked-button
+          class="filter-button"
+          [class.active]="showFilters"
+          (click)="toggleFilters()"
+        >
+          <mat-icon>filter_list</mat-icon>
+          {{
+            (showFilters
+              ? "user.list.search.hideFilters"
+              : "user.list.search.showFilters"
+            ) | transloco
+          }}
+        </button>
+      </div>
     </div>
 
     <!-- Update filters section -->
@@ -53,6 +61,6 @@
     (edit)="onEditUser($event)"
     (delete)="onDeleteUser($event)"
     (toggleStatus)="onToggleStatus($event)"
-    (pageChange)="loadUsers()"
+    (pageChange)="onPageEvent($event)"
   ></app-users-table>
 </div>

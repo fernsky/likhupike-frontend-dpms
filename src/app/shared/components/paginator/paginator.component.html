@@ -1,0 +1,80 @@
+<div class="paginator" [class.disabled]="disabled">
+  <div class="paginator-content">
+    <!-- Items per page select -->
+    <div class="items-per-page">
+      <mat-form-field appearance="outline" class="slim-select">
+        <mat-select
+          [value]="pageSize"
+          (selectionChange)="onPageSizeChange($event.value)"
+          [disabled]="disabled"
+        >
+          <mat-option *ngFor="let size of pageSizeOptions" [value]="size">
+            {{ formatNumber(size) }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <span class="per-page-label">{{
+        "common.pagination.itemsPerPage" | transloco
+      }}</span>
+    </div>
+
+    <!-- Range info -->
+    <div class="range-info">
+      {{ formatNumber(rangeStart) }}-{{ formatNumber(rangeEnd) }}
+      {{ "common.pagination.of" | transloco }} {{ formatNumber(totalElements) }}
+    </div>
+
+    <!-- Navigation -->
+    <div class="navigation">
+      <button
+        mat-icon-button
+        [disabled]="isFirstPage || disabled"
+        (click)="goToPage(0)"
+        class="nav-button"
+      >
+        <mat-icon>first_page</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        [disabled]="isFirstPage || disabled"
+        (click)="goToPage(pageIndex - 1)"
+        class="nav-button"
+      >
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      <div class="page-numbers">
+        <ng-container *ngFor="let page of getVisiblePages()">
+          <span class="ellipsis" *ngIf="page === -1">…</span>
+          <button
+            *ngIf="page !== -1"
+            mat-button
+            class="page-button"
+            [class.active]="page === pageIndex"
+            [disabled]="disabled"
+            (click)="goToPage(page)"
+          >
+            {{ formatNumber(page + 1) }}
+          </button>
+        </ng-container>
+      </div>
+
+      <button
+        mat-icon-button
+        [disabled]="isLastPage || disabled"
+        (click)="goToPage(pageIndex + 1)"
+        class="nav-button"
+      >
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        [disabled]="isLastPage || disabled"
+        (click)="goToPage(totalPages - 1)"
+        class="nav-button"
+      >
+        <mat-icon>last_page</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

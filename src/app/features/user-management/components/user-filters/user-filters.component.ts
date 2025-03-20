@@ -19,6 +19,7 @@ import { UserFilter } from '../../models/user.interface';
 import { PermissionType } from '@app/core/models/permission.enum';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
 import { NumberFormatService } from '@app/shared/services/number-format.service';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-user-filters',
@@ -34,6 +35,7 @@ import { NumberFormatService } from '@app/shared/services/number-format.service'
     MatDatepickerModule,
     MatIconModule,
     TranslocoModule,
+    MatButtonModule,
   ],
   animations: [
     trigger('slideInOut', [
@@ -72,6 +74,27 @@ export class UserFiltersComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  get hasActiveFilters(): boolean {
+    const values = this.filterForm.value;
+    return (
+      values.wardNumber != null ||
+      values.permissions?.length > 0 ||
+      values.isApproved != null ||
+      values.createdAfter != null ||
+      values.createdBefore != null
+    );
+  }
+
+  clearFilters(): void {
+    this.filterForm.patchValue({
+      wardNumber: null,
+      permissions: [],
+      isApproved: null,
+      createdAfter: null,
+      createdBefore: null,
+    });
   }
 
   formatWardNumber(number: number): string {

@@ -5,7 +5,18 @@
       "cancel": "Cancel",
       "save": "Save",
       "close": "Close",
-      "create": "Create"
+      "create": "Create",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "pagination": {
+      "itemsPerPage": "Items per page",
+      "showing": "Showing",
+      "of": "of",
+      "next": "Next page",
+      "previous": "Previous page",
+      "first": "First page",
+      "last": "Last page"
     }
   },
   "auth": {

@@ -5,7 +5,18 @@
       "cancel": "रद्द गर्नुहोस्",
       "save": "सुरक्षित गर्नुहोस्",
       "close": "बन्द गर्नुहोस्",
-      "create": "सिर्जना गर्नुहोस्"
+      "create": "सिर्जना गर्नुहोस्",
+      "edit": "सम्पादन गर्नुहोस्",
+      "delete": "मेटाउनुहोस्"
+    },
+    "pagination": {
+      "itemsPerPage": "प्रति पृष्ठ वस्तुहरू",
+      "showing": "देखाउँदै",
+      "of": "मध्ये",
+      "next": "अर्को पृष्ठ",
+      "previous": "अघिल्लो पृष्ठ",
+      "first": "पहिलो पृष्ठ",
+      "last": "अन्तिम पृष्ठ"
     }
   },
   "auth": {
@@ -50,7 +61,5 @@
     "chooseLanguage": "Choose Language",
     "selectLanguageAria": "Select language"
   },
-  "breadcrumbs": {
-   
-  }
+  "breadcrumbs": {}
 }

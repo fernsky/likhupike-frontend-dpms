@@ -74,6 +74,15 @@
       "deactivate": "Deactivate User",
       "approve": "Approve User",
       "disapprove": "Disapprove User"
+    },
+    "sort": {
+      "label": "Sort by",
+      "createdAt": "Created Date",
+      "updatedAt": "Updated Date",
+      "direction": {
+        "asc": "Sort Ascending",
+        "desc": "Sort Descending"
+      }
     }
   },
   "create": {
