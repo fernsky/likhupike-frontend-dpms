@@ -36,13 +36,19 @@ export const userReducer = createReducer(
     loading: true,
     errors: null,
   })),
-  on(UserActions.loadUsersSuccess, (state, { users, total }) => ({
+  on(UserActions.loadUsersSuccess, (state, { users, total, meta }) => ({
     ...state,
     users,
     totalUsers: total,
     loading: false,
     errors: null,
     lastUpdated: new Date(),
+    pagination: {
+      currentPage: meta.page,
+      pageSize: meta.size,
+      totalElements: meta.totalElements,
+      totalPages: meta.totalPages,
+    },
   })),
   on(UserActions.loadUsersFailure, (state, { error }) => ({
     ...state,

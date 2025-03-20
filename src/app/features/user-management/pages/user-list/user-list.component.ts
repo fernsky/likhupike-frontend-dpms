@@ -12,7 +12,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { Router } from '@angular/router';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { Subject, BehaviorSubject, combineLatest } from 'rxjs';
 import {
   takeUntil,
   debounceTime,
@@ -160,6 +160,13 @@ export class UserListComponent implements OnInit, OnDestroy {
       )
     );
 
+  // Add currentPage state
+  currentPage = 0;
+
+  // Add pagination selectors
+  currentPage$ = this.store.select(UserSelectors.selectCurrentPage);
+  pageSize$ = this.store.select(UserSelectors.selectPageSize);
+
   constructor(
     private store: Store,
     private fb: FormBuilder,
@@ -183,10 +190,25 @@ export class UserListComponent implements OnInit, OnDestroy {
       sortDirection: ['DESC'],
     });
 
-    // Subscribe to filter changes with proper debounce
+    // Modify filter subscription to handle pagination
     this.filters$
-      .pipe(debounceTime(300), takeUntil(this.destroy$))
+      .pipe(
+        debounceTime(300),
+        takeUntil(this.destroy$),
+        distinctUntilChanged(
+          (prev, curr) =>
+            JSON.stringify({ ...prev, page: undefined }) ===
+            JSON.stringify({ ...curr, page: undefined })
+        )
+      )
       .subscribe((filters) => {
+        // If filters changed (excluding page), reset to first page
+        if (
+          JSON.stringify({ ...filters, page: undefined }) !==
+          JSON.stringify({ ...this.filterForm.value, page: undefined })
+        ) {
+          this.filterForm.patchValue({ page: 0 }, { emitEvent: false });
+        }
         this.loadUsers(filters);
       });
   }
@@ -194,6 +216,23 @@ export class UserListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initializeData();
     this.setupFilterSubscription();
+
+    // Subscribe to pagination changes
+    combineLatest([this.currentPage$, this.pageSize$])
+      .pipe(
+        takeUntil(this.destroy$),
+        distinctUntilChanged(
+          (prev, curr) => prev[0] === curr[0] && prev[1] === curr[1]
+        )
+      )
+      .subscribe(([page, size]) => {
+        if (
+          this.filterForm.get('page')?.value !== page ||
+          this.filterForm.get('size')?.value !== size
+        ) {
+          this.filterForm.patchValue({ page, size }, { emitEvent: false });
+        }
+      });
   }
 
   private initializeData(): void {
@@ -273,16 +312,23 @@ export class UserListComponent implements OnInit, OnDestroy {
       searchTerm: formValue.searchTerm || undefined,
       createdAfter: formValue.createdAfter?.toISOString().split('T')[0],
       createdBefore: formValue.createdBefore?.toISOString().split('T')[0],
+      // Ensure pagination values are always included
+      page: (filterOverride?.page ?? formValue.page) || 0,
+      size: (filterOverride?.size ?? formValue.size) || 10,
     };
 
-    // Clean up undefined/null values
-    Object.keys(filter).forEach(
-      (key) =>
+    // Clean up undefined/null values except pagination
+    Object.keys(filter).forEach((key) => {
+      if (
+        key !== 'page' &&
+        key !== 'size' &&
         (filter[key as keyof UserFilter] === null ||
           filter[key as keyof UserFilter] === undefined ||
-          filter[key as keyof UserFilter] === '') &&
-        delete filter[key as keyof UserFilter]
-    );
+          filter[key as keyof UserFilter] === '')
+      ) {
+        delete filter[key as keyof UserFilter];
+      }
+    });
 
     this.store.dispatch(UserActions.loadUsers({ filter }));
   }
@@ -394,18 +440,39 @@ export class UserListComponent implements OnInit, OnDestroy {
     this.filterForm.patchValue(filters);
   }
 
-  onSortChange(event: { sortBy: string; direction: 'ASC' | 'DESC' }) {
-    this.filterForm.patchValue({
+  onSortChange(event: { sortBy: string; direction: 'ASC' | 'DESC' }): void {
+    const currentFilters = this.filterForm.value;
+    const newFilters = {
+      ...currentFilters,
       sortBy: event.sortBy,
       sortDirection: event.direction,
-    });
+      // Maintain current page when sorting
+      page: this.currentPage,
+      size: currentFilters.size,
+    };
+
+    this.filterForm.patchValue(newFilters, { emitEvent: false });
+    this.loadUsers(newFilters);
   }
 
-  onPageEvent(event: PageEvent) {
-    this.filterForm.patchValue({
+  onPageEvent(event: PageEvent): void {
+    // Update current page state
+    this.currentPage = event.pageIndex;
+
+    const currentFilters = this.filterForm.value;
+    const newFilters = {
+      ...currentFilters,
       page: event.pageIndex,
       size: event.pageSize,
-    });
-    this.loadUsers();
+      // Maintain current sort state
+      sortBy: currentFilters.sortBy,
+      sortDirection: currentFilters.sortDirection,
+    };
+
+    // Update form without triggering valueChanges
+    this.filterForm.patchValue(newFilters, { emitEvent: false });
+
+    // Load users with updated filters
+    this.loadUsers(newFilters);
   }
 }

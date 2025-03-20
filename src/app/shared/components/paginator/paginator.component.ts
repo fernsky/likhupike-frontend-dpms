@@ -60,12 +60,15 @@ export class PaginatorComponent implements OnChanges {
   @Input() set pageIndex(value: number) {
     if (this._pageIndex !== value) {
       this._pageIndex = value;
-      this.updatePaginationState();
+      // Force update of visible pages when pageIndex changes
+      this._visiblePages = this.calculateVisiblePages();
     }
   }
   get pageIndex(): number {
     return this._pageIndex;
   }
+
+  private _visiblePages: number[] = [];
 
   constructor(private numberFormat: NumberFormatService) {}
 
@@ -100,8 +103,10 @@ export class PaginatorComponent implements OnChanges {
   }
 
   goToPage(index: number): void {
-    if (index === this.pageIndex || index < 0 || index >= this.totalPages)
+    if (index === this._pageIndex || index < 0 || index >= this.totalPages)
       return;
+    this._pageIndex = index;
+    this._visiblePages = this.calculateVisiblePages();
     this.emitPageEvent(index, this.pageSize);
   }
 
@@ -117,6 +122,7 @@ export class PaginatorComponent implements OnChanges {
       changes['pageIndex']
     ) {
       this.updatePaginationState();
+      this._visiblePages = this.calculateVisiblePages();
     }
   }
 
@@ -136,35 +142,40 @@ export class PaginatorComponent implements OnChanges {
   }
 
   getVisiblePages(): number[] {
+    return this._visiblePages;
+  }
+
+  private calculateVisiblePages(): number[] {
     const totalPages = this.totalPages;
-    const current = this.pageIndex;
-    const delta = 1; // Number of pages to show on each side of current page
+    const current = this._pageIndex;
+    const delta = 1;
 
     const range = [];
-    for (
-      let i = Math.max(0, current - delta);
-      i <= Math.min(totalPages - 1, current + delta);
-      i++
-    ) {
-      range.push(i);
-    }
+    const rangeWithDots: number[] = [];
+    let l: number | undefined;
 
-    // Add first page if not included
-    if (range[0] > 0) {
-      if (range[0] > 1) {
-        range.unshift(-1); // Add ellipsis
+    range.push(0); // Always include first page
+
+    for (let i = current - delta; i <= current + delta; i++) {
+      if (i > 0 && i < totalPages - 1) {
+        range.push(i);
       }
-      range.unshift(0);
     }
 
-    // Add last page if not included
-    if (range[range.length - 1] < totalPages - 1) {
-      if (range[range.length - 1] < totalPages - 2) {
-        range.push(-1); // Add ellipsis
+    range.push(totalPages - 1); // Always include last page
+
+    for (const i of range) {
+      if (l) {
+        if (i - l === 2) {
+          rangeWithDots.push(l + 1);
+        } else if (i - l !== 1) {
+          rangeWithDots.push(-1); // Represents dots
+        }
       }
-      range.push(totalPages - 1);
+      rangeWithDots.push(i);
+      l = i;
     }
 
-    return range;
+    return rangeWithDots;
   }
 }

@@ -7,7 +7,11 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '@env/environment';
-import { ApiResponse, ApiErrorResponse } from '../models/api.interface';
+import {
+  ApiResponse,
+  ApiErrorResponse,
+  ApiPaginationMeta,
+} from '../models/api.interface';
 import {
   CreateUserRequest,
   UpdateUserRequest,
@@ -35,9 +39,11 @@ export class UserService {
     );
   }
 
-  getUsers(
-    filter: UserFilter
-  ): Observable<{ users: UserResponse[]; total: number }> {
+  getUsers(filter: UserFilter): Observable<{
+    users: UserResponse[];
+    total: number;
+    meta: ApiPaginationMeta;
+  }> {
     const params = this.convertFilterToParams(filter);
     return this.http
       .get<ApiResponse<UserResponse[]>>(`${this.apiUrl}/search`, { params })
@@ -49,6 +55,14 @@ export class UserService {
           return {
             users: response.data,
             total: response.meta?.totalElements || 0,
+            meta: response.meta || {
+              page: 0,
+              size: 10,
+              totalElements: 0,
+              totalPages: 0,
+              isFirst: true,
+              isLast: true,
+            },
           };
         }),
         catchError(this.handleError)
@@ -90,6 +104,17 @@ export class UserService {
   private convertFilterToParams(filter: UserFilter): HttpParams {
     let params = new HttpParams();
 
+    // Ensure pagination params are always set first
+    params = params.set('page', (filter.page ?? 0).toString());
+    params = params.set('size', (filter.size ?? 10).toString());
+
+    // Sort params
+    if (filter.sortBy) {
+      params = params.set('sortBy', filter.sortBy);
+      params = params.set('sortDirection', filter.sortDirection || 'DESC');
+    }
+
+    // Rest of the filter params
     if (filter.searchTerm) params = params.set('searchTerm', filter.searchTerm);
     if (filter.email) params = params.set('email', filter.email);
     if (filter.isApproved !== undefined)
@@ -106,12 +131,6 @@ export class UserService {
       params = params.set('permissions', filter.permissions.join(','));
     if (filter.columns?.length)
       params = params.set('columns', filter.columns.join(','));
-
-    // Pagination and sorting (with defaults)
-    params = params.set('page', (filter.page || 0).toString());
-    params = params.set('size', (filter.size || 10).toString());
-    params = params.set('sortBy', filter.sortBy || 'createdAt');
-    params = params.set('sortDirection', filter.sortDirection || 'DESC');
 
     return params;
   }

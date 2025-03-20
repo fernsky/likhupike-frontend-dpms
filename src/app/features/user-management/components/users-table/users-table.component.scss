@@ -4,9 +4,9 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   position: relative;
-  min-height: 600px; // Increased from 500px
-  height: 600px; // Increased from 500px
-  max-height: 70vh; // Add max height to prevent too large displays
+  min-height: auto; // Remove fixed min-height
+  height: auto; // Remove fixed height
+  max-height: none; // Remove max-height constraint
   display: flex;
   flex-direction: column;
 
@@ -22,7 +22,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 400px;
+    min-height: 300px; // Only apply min-height during loading
     transition: all 0.3s ease;
 
     .loading-content {
@@ -65,9 +65,9 @@
   .table-wrapper {
     flex: 1;
     position: relative;
-    height: calc(100% - 56px); // Full height minus paginator
+    height: auto; // Remove fixed height
     min-height: 0; // Allow flex child to shrink
-    overflow: auto;
+    overflow: visible; // Change from auto to visible
     display: block; // Changed from flex to block
 
     table {
@@ -89,14 +89,14 @@
       }
 
       tr {
-        height: 72px; // Fixed height for rows
+        height: 52px; // Reduce row height
         vertical-align: middle;
       }
 
       th,
       td {
-        height: 72px;
-        padding: 1rem 1.5rem;
+        height: 52px; // Match row height
+        padding: 0.75rem 1.25rem; // Slightly reduce padding
         box-sizing: border-box;
         border-bottom: 1px solid rgba(0, 0, 0, 0.06);
         color: #334155;
@@ -140,8 +140,8 @@
       }
 
       td {
-        height: 72px;
-        padding: 1rem 1.5rem;
+        height: 52px;
+        padding: 0.75rem 1.25rem;
         border-bottom: 1px solid rgba(0, 0, 0, 0.06);
         color: #334155;
         font-size: 0.875rem;
@@ -203,7 +203,7 @@
       }
 
       tr {
-        height: 72px; // Fixed row height at TR level too
+        height: 52px; // Reduce row height
 
         &:hover {
           td {
@@ -321,6 +321,7 @@
     height: 100%;
     opacity: 0;
     animation: fadeIn 0.2s ease-out forwards;
+    min-height: 300px; // Only apply min-height for empty state
   }
 
   // Paginator Styles
@@ -329,6 +330,15 @@
     background: #f8fafb;
     height: 56px; // Fixed height for paginator
     flex-shrink: 0; // Prevent shrinking
+  }
+
+  // Paginator styling - make it stick to bottom of table
+  app-paginator {
+    position: sticky;
+    bottom: 0;
+    background: #f8fafb;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    z-index: 2;
   }
 }
 

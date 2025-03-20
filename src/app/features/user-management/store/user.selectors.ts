@@ -141,3 +141,18 @@ export const selectAnyLoading = createSelector(
   (loading, creating, updating, deleting) =>
     loading || creating || updating || deleting
 );
+
+export const selectPagination = createSelector(
+  selectUserState,
+  (state) => state.pagination
+);
+
+export const selectCurrentPage = createSelector(
+  selectPagination,
+  (pagination) => pagination.currentPage
+);
+
+export const selectPageSize = createSelector(
+  selectPagination,
+  (pagination) => pagination.pageSize
+);

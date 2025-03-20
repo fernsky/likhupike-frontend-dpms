@@ -5,6 +5,7 @@ import {
   UserFilter,
   UserResponse,
 } from '../models/user.interface';
+import { ApiPaginationMeta } from '../models/api.interface';
 
 export const UserActions = createActionGroup({
   source: 'User Management',
@@ -23,7 +24,11 @@ export const UserActions = createActionGroup({
 
     // Load Users
     'Load Users': props<{ filter: UserFilter }>(),
-    'Load Users Success': props<{ users: UserResponse[]; total: number }>(),
+    'Load Users Success': props<{
+      users: UserResponse[];
+      total: number;
+      meta: ApiPaginationMeta; // Added meta property
+    }>(),
     'Load Users Failure': props<{
       error: {
         code: string;

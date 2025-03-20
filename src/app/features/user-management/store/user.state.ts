@@ -10,6 +10,12 @@ export interface UserState {
   errors: UserValidationError | null;
   totalUsers: number;
   lastUpdated: Date | null;
+  pagination: {
+    currentPage: number;
+    pageSize: number;
+    totalElements: number;
+    totalPages: number;
+  };
 }
 
 export const initialUserState: UserState = {
@@ -22,4 +28,10 @@ export const initialUserState: UserState = {
   errors: null,
   totalUsers: 0,
   lastUpdated: null,
+  pagination: {
+    currentPage: 0,
+    pageSize: 10,
+    totalElements: 0,
+    totalPages: 0,
+  },
 };

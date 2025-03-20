@@ -43,8 +43,10 @@ export class UserEffects {
       ofType(UserActions.loadUsers),
       exhaustMap(({ filter }) =>
         this.userService.getUsers(filter).pipe(
-          map(({ users, total }) =>
-            UserActions.loadUsersSuccess({ users, total })
+          map(
+            (
+              { users, total, meta } // Add meta to destructuring
+            ) => UserActions.loadUsersSuccess({ users, total, meta }) // Include meta in the action
           ),
           catchError((error) => {
             this.showError(error.message);

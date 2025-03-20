@@ -149,5 +149,7 @@
     [totalElements]="totalUsers"
     [disabled]="loading"
     (pageChange)="onPageChange($event)"
+    [pageSizeOptions]="[5, 10, 25, 50]"
+    [showFirstLastButtons]="true"
   ></app-paginator>
 </div>

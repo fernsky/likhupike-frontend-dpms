@@ -1,12 +1,14 @@
 <div class="paginator" [class.disabled]="disabled">
   <div class="paginator-content">
-    <!-- Items per page select -->
+    <!-- Updated Items per page select -->
     <div class="items-per-page">
       <mat-form-field appearance="outline" class="slim-select">
         <mat-select
           [value]="pageSize"
           (selectionChange)="onPageSizeChange($event.value)"
           [disabled]="disabled"
+          disableOptionCentering
+          panelClass="compact-select-panel"
         >
           <mat-option *ngFor="let size of pageSizeOptions" [value]="size">
             {{ formatNumber(size) }}
