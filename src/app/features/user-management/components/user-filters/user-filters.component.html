@@ -1,98 +1,87 @@
 <div class="filters-panel" *ngIf="show" @slideInOut>
-  <div class="filters-section" [formGroup]="filterForm">
-    <div class="filters-grid">
-      <!-- Email Filter -->
-      <mat-form-field appearance="outline">
-        <mat-label>{{ "user.list.email" | transloco }}</mat-label>
-        <input matInput formControlName="email" type="email" />
-      </mat-form-field>
+  <div class="filters-grid" [formGroup]="filterForm">
+    <!-- Ward Number -->
+    <mat-form-field appearance="outline">
+      <mat-select
+        formControlName="wardNumber"
+        placeholder="{{ 'user.list.filters.ward.label' | transloco }}"
+      >
+        <mat-option [value]="null">
+          {{ "user.list.filters.ward.all" | transloco }}
+        </mat-option>
+        <mat-option *ngFor="let number of wardNumbers" [value]="number">
+          {{ formatWardNumber(number) }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-      <!-- Ward Number -->
+    <!-- Permissions Multi-select -->
+    <mat-form-field appearance="outline">
+      <mat-select
+        formControlName="permissions"
+        multiple
+        placeholder="{{ 'user.list.permissions' | transloco }}"
+      >
+        <mat-option
+          *ngFor="let permission of permissionTypes"
+          [value]="permission"
+        >
+          {{ "user.permissions." + permission + ".title" | transloco }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Approval Status -->
+    <mat-form-field appearance="outline">
+      <mat-select
+        formControlName="isApproved"
+        placeholder="{{ 'user.list.filters.approvalStatus.label' | transloco }}"
+      >
+        <mat-option [value]="null">
+          {{ "user.list.filters.approvalStatus.all" | transloco }}
+        </mat-option>
+        <mat-option [value]="true">
+          {{ "user.list.filters.approvalStatus.approved" | transloco }}
+        </mat-option>
+        <mat-option [value]="false">
+          {{ "user.list.filters.approvalStatus.pending" | transloco }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Date Range -->
+    <div class="date-range">
       <mat-form-field appearance="outline">
-        <mat-label>{{ "user.list.filters.ward.number" | transloco }}</mat-label>
         <input
           matInput
-          type="number"
-          formControlName="wardNumber"
-          min="1"
-          max="5"
-          placeholder="1-5"
+          [matDatepicker]="fromPicker"
+          formControlName="createdAfter"
+          readonly
+          placeholder="{{ 'user.list.filters.dateRange.from' | transloco }}"
         />
-        <mat-error *ngIf="filterForm.get('wardNumber')?.errors?.['min']">
-          {{ "user.list.filters.ward.error.min" | transloco }}
-        </mat-error>
-        <mat-error *ngIf="filterForm.get('wardNumber')?.errors?.['max']">
-          {{ "user.list.filters.ward.error.max" | transloco }}
-        </mat-error>
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="fromPicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #fromPicker></mat-datepicker>
       </mat-form-field>
 
-      <!-- Permissions Multi-select -->
+      <span class="date-separator">-</span>
+
       <mat-form-field appearance="outline">
-        <mat-label>{{ "user.list.permissions" | transloco }}</mat-label>
-        <mat-select formControlName="permissions" multiple>
-          <mat-option
-            *ngFor="let permission of permissionTypes"
-            [value]="permission"
-          >
-            {{ "user.permissions." + permission + ".title" | transloco }}
-          </mat-option>
-        </mat-select>
+        <input
+          matInput
+          [matDatepicker]="toPicker"
+          formControlName="createdBefore"
+          readonly
+          placeholder="{{ 'user.list.filters.dateRange.to' | transloco }}"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="toPicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #toPicker></mat-datepicker>
       </mat-form-field>
-
-      <!-- Approval Status -->
-      <mat-form-field appearance="outline">
-        <mat-label>{{
-          "user.list.filters.approvalStatus.label" | transloco
-        }}</mat-label>
-        <mat-select formControlName="isApproved">
-          <mat-option [value]="null">{{
-            "user.list.filters.approvalStatus.all" | transloco
-          }}</mat-option>
-          <mat-option [value]="true">{{
-            "user.list.filters.approvalStatus.approved" | transloco
-          }}</mat-option>
-          <mat-option [value]="false">{{
-            "user.list.filters.approvalStatus.pending" | transloco
-          }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <!-- Date Range -->
-      <div class="date-range">
-        <mat-form-field appearance="outline">
-          <mat-label>{{
-            "user.list.filters.dateRange.from" | transloco
-          }}</mat-label>
-          <input
-            matInput
-            [matDatepicker]="fromPicker"
-            formControlName="createdAfter"
-            readonly
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="fromPicker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #fromPicker></mat-datepicker>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>{{
-            "user.list.filters.dateRange.to" | transloco
-          }}</mat-label>
-          <input
-            matInput
-            [matDatepicker]="toPicker"
-            formControlName="createdBefore"
-            readonly
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="toPicker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #toPicker></mat-datepicker>
-        </mat-form-field>
-      </div>
     </div>
   </div>
 </div>

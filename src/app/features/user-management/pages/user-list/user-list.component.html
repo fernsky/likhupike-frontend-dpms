@@ -15,34 +15,36 @@
   </app-page-title>
 
   <!-- Search and Actions -->
-  <div class="actions-bar">
-    <app-user-search
-      [initialValue]="searchControl.value ?? ''"
-      (searchChange)="onSearch($event)"
-    ></app-user-search>
+  <div class="search-and-filter-bar">
+    <div class="actions-bar">
+      <app-user-search
+        [initialValue]="searchControl.value ?? ''"
+        (searchChange)="onSearch($event)"
+      ></app-user-search>
 
-    <button
-      mat-stroked-button
-      class="filter-button"
-      [class.active]="showFilters"
-      (click)="toggleFilters()"
-    >
-      <mat-icon>filter_list</mat-icon>
-      {{
-        (showFilters
-          ? "user.list.search.hideFilters"
-          : "user.list.search.showFilters"
-        ) | transloco
-      }}
-    </button>
+      <button
+        mat-stroked-button
+        class="filter-button"
+        [class.active]="showFilters"
+        (click)="toggleFilters()"
+      >
+        <mat-icon>filter_list</mat-icon>
+        {{
+          (showFilters
+            ? "user.list.search.hideFilters"
+            : "user.list.search.showFilters"
+          ) | transloco
+        }}
+      </button>
+    </div>
+
+    <!-- Update filters section -->
+    <app-user-filters
+      [show]="showFilters"
+      [filterForm]="filterForm"
+      (filtersChange)="onFiltersChange($event)"
+    ></app-user-filters>
   </div>
-
-  <!-- Update filters section -->
-  <app-user-filters
-    [show]="showFilters"
-    [filterForm]="filterForm"
-    (filtersChange)="onFiltersChange($event)"
-  ></app-user-filters>
 
   <app-users-table
     [dataSource]="dataSource"

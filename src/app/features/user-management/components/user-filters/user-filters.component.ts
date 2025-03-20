@@ -13,11 +13,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslocoModule } from '@jsverse/transloco';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { UserFilter } from '../../models/user.interface';
 import { PermissionType } from '@app/core/models/permission.enum';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
+import { NumberFormatService } from '@app/shared/services/number-format.service';
 
 @Component({
   selector: 'app-user-filters',
@@ -53,6 +54,12 @@ export class UserFiltersComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
   permissionTypes = Object.values(PermissionType);
+  wardNumbers = Array.from({ length: 5 }, (_, i) => i + 1);
+
+  constructor(
+    private numberFormat: NumberFormatService,
+    private transloco: TranslocoService
+  ) {}
 
   ngOnInit() {
     this.filterForm.valueChanges
@@ -65,5 +72,11 @@ export class UserFiltersComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  formatWardNumber(number: number): string {
+    return `${this.transloco.translate('user.list.filters.ward.prefix', {
+      number: this.numberFormat.formatNumber(number),
+    })}`;
   }
 }
