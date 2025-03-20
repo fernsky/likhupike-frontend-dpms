@@ -96,10 +96,8 @@ export class UserService {
       params = params.set('isApproved', filter.isApproved.toString());
     if (filter.isWardLevelUser !== undefined)
       params = params.set('isWardLevelUser', filter.isWardLevelUser.toString());
-    if (filter.wardNumberFrom)
-      params = params.set('wardNumberFrom', filter.wardNumberFrom.toString());
-    if (filter.wardNumberTo)
-      params = params.set('wardNumberTo', filter.wardNumberTo.toString());
+    if (filter.wardNumber !== undefined)
+      params = params.set('wardNumber', filter.wardNumber.toString());
     if (filter.createdAfter)
       params = params.set('createdAfter', filter.createdAfter);
     if (filter.createdBefore)

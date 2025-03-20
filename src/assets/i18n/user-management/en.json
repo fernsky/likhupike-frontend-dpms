@@ -26,6 +26,12 @@
         "range": {
           "from": "From Ward",
           "to": "To Ward"
+        },
+        "prefix": "Ward {{number}}",
+        "number": "Ward Number",
+        "error": {
+          "min": "Ward number must be at least 1",
+          "max": "Ward number cannot exceed 5"
         }
       },
       "status": {
@@ -41,9 +47,9 @@
         "pending": "Pending"
       },
       "dateRange": {
-        "label": "Date Range",
-        "from": "From Date",
-        "to": "To Date"
+        "label": "User Creation Date",
+        "from": "Created From",
+        "to": "Created To"
       }
     },
     "createButton": "Create New User",

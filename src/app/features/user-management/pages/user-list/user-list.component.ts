@@ -6,6 +6,7 @@ import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -166,12 +167,11 @@ export class UserListComponent implements OnInit, OnDestroy {
     private transloco: TranslocoService
   ) {
     this.filterForm = this.fb.group({
-      searchTerm: [''], // Add searchTerm to the form
+      searchTerm: [''],
       email: [''],
       isApproved: [null],
       isWardLevelUser: [null],
-      wardNumberFrom: [null],
-      wardNumberTo: [null],
+      wardNumber: [null, [Validators.min(1), Validators.max(5)]], // Updated ward number control
       createdAfter: [null],
       createdBefore: [null],
       permissions: [[]],
@@ -261,8 +261,7 @@ export class UserListComponent implements OnInit, OnDestroy {
       email: formValue.email || undefined,
       isApproved: formValue.isApproved ?? undefined,
       isWardLevelUser: formValue.isWardLevelUser ?? undefined,
-      wardNumberFrom: formValue.wardNumberFrom ?? undefined,
-      wardNumberTo: formValue.wardNumberTo ?? undefined,
+      wardNumber: formValue.wardNumber ?? undefined,
     };
   }
 

@@ -7,34 +7,24 @@
         <input matInput formControlName="email" type="email" />
       </mat-form-field>
 
-      <!-- Ward Range -->
-      <div class="ward-range">
-        <mat-form-field appearance="outline">
-          <mat-label>{{
-            "user.list.filters.ward.range.from" | transloco
-          }}</mat-label>
-          <input
-            matInput
-            type="number"
-            formControlName="wardNumberFrom"
-            min="1"
-            max="33"
-          />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>{{
-            "user.list.filters.ward.range.to" | transloco
-          }}</mat-label>
-          <input
-            matInput
-            type="number"
-            formControlName="wardNumberTo"
-            min="1"
-            max="33"
-          />
-        </mat-form-field>
-      </div>
+      <!-- Ward Number -->
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.list.filters.ward.number" | transloco }}</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="wardNumber"
+          min="1"
+          max="5"
+          placeholder="1-5"
+        />
+        <mat-error *ngIf="filterForm.get('wardNumber')?.errors?.['min']">
+          {{ "user.list.filters.ward.error.min" | transloco }}
+        </mat-error>
+        <mat-error *ngIf="filterForm.get('wardNumber')?.errors?.['max']">
+          {{ "user.list.filters.ward.error.max" | transloco }}
+        </mat-error>
+      </mat-form-field>
 
       <!-- Permissions Multi-select -->
       <mat-form-field appearance="outline">

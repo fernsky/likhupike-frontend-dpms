@@ -1,0 +1,20 @@
+<div class="empty-state" [class.integrated]="appearance === 'integrated'">
+  <div class="icon-wrapper">
+    <div class="icon-container">
+      <mat-icon class="empty-icon">{{ icon }}</mat-icon>
+    </div>
+  </div>
+  <div class="content">
+    <h3 class="title">{{ title }}</h3>
+    <p class="description">{{ description }}</p>
+    <button
+      *ngIf="actionLabel"
+      mat-raised-button
+      color="primary"
+      class="action-button"
+      (click)="actionClick.emit()"
+    >
+      {{ actionLabel }}
+    </button>
+  </div>
+</div>

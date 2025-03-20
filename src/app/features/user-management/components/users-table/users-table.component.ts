@@ -16,10 +16,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { TranslocoModule } from '@jsverse/transloco';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { EmptyStateComponent } from '@shared/components/empty-state/empty-state.component';
 import { UserResponse } from '../../models/user.interface';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { NumberFormatService } from '@app/shared/services/number-format.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { PermissionType } from '@app/core/models/permission.enum';
 
 @Component({
   selector: 'app-users-table',
@@ -39,6 +42,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
     MatProgressSpinnerModule,
     TranslocoModule,
     EmptyStateComponent, // Add EmptyStateComponent to imports
+    MatTooltipModule,
   ],
   animations: [
     trigger('fadeInOut', [
@@ -76,6 +80,11 @@ export class UsersTableComponent implements AfterViewInit {
     'actions',
   ];
 
+  constructor(
+    private numberFormat: NumberFormatService,
+    private transloco: TranslocoService
+  ) {}
+
   ngAfterViewInit() {
     if (this.dataSource) {
       this.dataSource.paginator = this.paginator;
@@ -84,6 +93,19 @@ export class UsersTableComponent implements AfterViewInit {
   }
 
   getWardLabel(wardNumber: number | null): string {
-    return wardNumber === null ? 'Municipality' : `Ward ${wardNumber}`;
+    if (wardNumber === null) {
+      return this.transloco.translate('user.list.filters.ward.municipality');
+    }
+
+    return this.transloco.translate('user.list.filters.ward.prefix', {
+      number: this.numberFormat.formatNumber(wardNumber),
+    });
+  }
+
+  getPermissionsList(permissions: PermissionType[]): string {
+    return permissions
+      .slice(2)
+      .map((perm) => this.transloco.translate(`user.permissions.${perm}.title`))
+      .join('\n');
   }
 }

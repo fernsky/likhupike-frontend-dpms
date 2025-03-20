@@ -10,15 +10,6 @@
   </div>
 
   <div class="table-wrapper">
-    <!-- Empty State -->
-    <app-empty-state
-      *ngIf="totalUsers === 0 && !loading"
-      icon="group"
-      [title]="'user.list.emptyState.title' | transloco"
-      [description]="'user.list.emptyState.description' | transloco"
-    >
-    </app-empty-state>
-
     <!-- Table -->
     <table mat-table [dataSource]="dataSource" matSort *ngIf="totalUsers > 0">
       <!-- Email Column -->
@@ -51,8 +42,17 @@
         </th>
         <td mat-cell *matCellDef="let user">
           <mat-chip-set>
-            <mat-chip *ngFor="let permission of user.permissions">
-              {{ permission | lowercase }}
+            <mat-chip
+              *ngFor="let permission of user.permissions | slice: 0 : 2"
+            >
+              {{ "user.permissions." + permission + ".title" | transloco }}
+            </mat-chip>
+            <mat-chip
+              class="more-chip"
+              *ngIf="user.permissions.length > 2"
+              [matTooltip]="getPermissionsList(user.permissions)"
+            >
+              +{{ user.permissions.length - 2 }}
             </mat-chip>
           </mat-chip-set>
         </td>
@@ -121,9 +121,26 @@
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <thead>
+        <tr
+          mat-header-row
+          *matHeaderRowDef="displayedColumns; sticky: true"
+        ></tr>
+      </thead>
+      <tbody>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </tbody>
     </table>
+
+    <!-- Empty State -->
+    <app-empty-state
+      *ngIf="totalUsers === 0 && !loading"
+      icon="group"
+      [appearance]="'integrated'"
+      [title]="'user.list.emptyState.title' | transloco"
+      [description]="'user.list.emptyState.description' | transloco"
+    >
+    </app-empty-state>
   </div>
 
   <mat-paginator

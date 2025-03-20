@@ -31,8 +31,7 @@ export interface UserFilter {
   email?: string;
   isApproved?: boolean;
   isWardLevelUser?: boolean;
-  wardNumberFrom?: number;
-  wardNumberTo?: number;
+  wardNumber?: number; // Changed from wardNumberFrom/To to single wardNumber
   createdAfter?: string; // ISO string
   createdBefore?: string; // ISO string
   permissions?: PermissionType[];
@@ -48,8 +47,7 @@ export interface UserFilterFormValue {
   email: string | null;
   isApproved: boolean | null;
   isWardLevelUser: boolean | null;
-  wardNumberFrom: number | null;
-  wardNumberTo: number | null;
+  wardNumber: number | null; // Changed to single wardNumber
   createdAfter: Date | null;
   createdBefore: Date | null;
   permissions: PermissionType[];

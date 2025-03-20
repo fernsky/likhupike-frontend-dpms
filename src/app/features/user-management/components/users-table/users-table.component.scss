@@ -4,7 +4,9 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   position: relative;
-  min-height: 400px; // Set minimum height
+  min-height: 600px; // Increased from 500px
+  height: 600px; // Increased from 500px
+  max-height: 70vh; // Add max height to prevent too large displays
   display: flex;
   flex-direction: column;
 
@@ -63,8 +65,153 @@
   .table-wrapper {
     flex: 1;
     position: relative;
-    min-height: 338px; // 400px - paginator height - padding
+    height: calc(100% - 56px); // Full height minus paginator
+    min-height: 0; // Allow flex child to shrink
     overflow: auto;
+    display: block; // Changed from flex to block
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      table-layout: fixed; // Add this to control table layout
+
+      thead {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: white;
+      }
+
+      tbody {
+        vertical-align: top; // Align content to top
+        background: white;
+      }
+
+      tr {
+        height: 72px; // Fixed height for rows
+        vertical-align: middle;
+      }
+
+      th,
+      td {
+        height: 72px;
+        padding: 1rem 1.5rem;
+        box-sizing: border-box;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        color: #334155;
+        font-size: 0.875rem;
+      }
+
+      th {
+        background: #f8fafb;
+        color: #64748b;
+        font-weight: 500;
+        font-size: 0.875rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        white-space: nowrap;
+
+        // Column widths
+        &:nth-child(1) {
+          width: 25%;
+        } // Email
+        &:nth-child(2) {
+          width: 15%;
+        } // Ward
+        &:nth-child(3) {
+          width: 30%;
+        } // Permissions
+        &:nth-child(4) {
+          width: 20%;
+        } // Status
+        &:nth-child(5) {
+          width: 10%;
+        } // Actions
+
+        mat-icon {
+          font-size: 1.125rem;
+          width: 1.125rem;
+          height: 1.125rem;
+          margin-right: 0.5rem;
+          vertical-align: text-bottom;
+          color: #123772;
+          opacity: 0.7;
+        }
+      }
+
+      td {
+        height: 72px;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        color: #334155;
+        font-size: 0.875rem;
+        vertical-align: middle;
+
+        // Email cell
+        &:nth-child(1) {
+          font-weight: 500;
+          color: #123772;
+        }
+
+        // Ward cell
+        &:nth-child(2) {
+          color: #64748b;
+        }
+
+        // Permissions cell
+        .mat-chip-set {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4px;
+          max-height: 32px; // Limit height to show only first row
+          overflow: hidden;
+          position: relative;
+
+          .mat-chip {
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 0.75rem;
+            height: 24px;
+            padding: 0 8px;
+            font-weight: 500;
+            margin: 2px;
+
+            &.more-chip {
+              background: #e2e8f0;
+              color: #64748b;
+              cursor: pointer;
+
+              &:hover {
+                background: #cbd5e1;
+                color: #475569;
+              }
+            }
+          }
+        }
+
+        // Status Chips
+        .mat-chip {
+          &.mat-primary {
+            background: rgba(46, 204, 113, 0.1);
+            color: #27ae60;
+          }
+          &.mat-warn {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+          }
+        }
+      }
+
+      tr {
+        height: 72px; // Fixed row height at TR level too
+
+        &:hover {
+          td {
+            background: #f8fafb;
+          }
+        }
+      }
+    }
   }
 
   // Table Styles
@@ -72,7 +219,7 @@
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    min-height: 338px; // Match wrapper min-height
+    height: 100%; // Take full height
 
     th {
       background: #f8fafb;
@@ -99,6 +246,7 @@
       border-bottom: 1px solid rgba(0, 0, 0, 0.06);
       color: #334155;
       font-size: 0.875rem;
+      height: 72px; // Fixed row height
 
       // Email cell
       &:nth-child(1) {
@@ -116,13 +264,29 @@
         display: flex;
         flex-wrap: wrap;
         gap: 4px;
+        max-height: 32px; // Limit height to show only first row
+        overflow: hidden;
+        position: relative;
 
         .mat-chip {
           background: #f1f5f9;
           color: #475569;
           font-size: 0.75rem;
-          min-height: 24px;
+          height: 24px;
+          padding: 0 8px;
           font-weight: 500;
+          margin: 2px;
+
+          &.more-chip {
+            background: #e2e8f0;
+            color: #64748b;
+            cursor: pointer;
+
+            &:hover {
+              background: #cbd5e1;
+              color: #475569;
+            }
+          }
         }
       }
 
@@ -140,6 +304,8 @@
     }
 
     tr {
+      height: 72px; // Fixed row height at TR level too
+
       &:hover {
         td {
           background: #f8fafb;
@@ -151,14 +317,10 @@
   // Empty state styles
   app-empty-state {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 338px; // Match table min-height
+    inset: 0;
+    height: 100%;
+    opacity: 0;
+    animation: fadeIn 0.2s ease-out forwards;
   }
 
   // Paginator Styles
@@ -203,5 +365,14 @@
   }
   100% {
     opacity: 0.3;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
