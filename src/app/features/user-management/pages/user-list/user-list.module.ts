@@ -3,15 +3,18 @@ import { RouterModule } from '@angular/router';
 import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
 import { UserListComponent } from './user-list.component';
 
-const routes = [
-  {
-    path: '',
-    component: UserListComponent,
-  },
-];
-
 @NgModule({
-  imports: [RouterModule.forChild(routes), TranslocoModule],
+  imports: [
+    RouterModule.forChild([
+      {
+        path: '',
+        component: UserListComponent,
+      },
+    ]),
+    // Import the component itself since it's standalone
+    UserListComponent,
+    TranslocoModule,
+  ],
   providers: [
     provideTranslocoScope({
       scope: 'user-management',

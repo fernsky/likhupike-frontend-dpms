@@ -21,9 +21,9 @@ export const USER_MANAGEMENT_ROUTES: Routes = [
       },
       {
         path: 'list',
-        loadChildren: () =>
-          import('./pages/user-list/user-list.module').then(
-            (m) => m.UserListModule
+        loadComponent: () =>
+          import('./pages/user-list/user-list.component').then(
+            (m) => m.UserListComponent
           ),
         canActivate: [PermissionGuard],
         data: {

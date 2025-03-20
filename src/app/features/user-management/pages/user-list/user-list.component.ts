@@ -18,6 +18,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   map,
+  take,
 } from 'rxjs/operators';
 import {
   provideTranslocoScope,
@@ -26,6 +27,8 @@ import {
 } from '@jsverse/transloco';
 import { MatDialog } from '@angular/material/dialog';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { ActivatedRoute } from '@angular/router';
+import { UrlParamsService } from '../../services/url-params.service';
 
 // Material Imports
 import { MatButtonModule } from '@angular/material/button';
@@ -172,7 +175,9 @@ export class UserListComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private router: Router,
     private dialog: MatDialog,
-    private transloco: TranslocoService
+    private transloco: TranslocoService,
+    private route: ActivatedRoute,
+    private urlParamsService: UrlParamsService
   ) {
     this.filterForm = this.fb.group({
       searchTerm: [''],
@@ -214,6 +219,21 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // Subscribe to query params changes
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params) => {
+        const validParams = this.urlParamsService.parseQueryParams(params);
+        const userFilter =
+          this.urlParamsService.convertToUserFilter(validParams);
+
+        // Update form with valid params without triggering valueChanges
+        this.filterForm.patchValue(validParams, { emitEvent: false });
+
+        // Load users with the parsed filter
+        this.loadUsers(userFilter);
+      });
+
     this.initializeData();
     this.setupFilterSubscription();
 
@@ -236,18 +256,33 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   private initializeData(): void {
-    // Reset search on init
+    // Replace the initialization code
     this.searchControl.setValue('');
-    this.loadUsers();
 
+    // Create new data source and initialize with empty array
+    this.dataSource = new MatTableDataSource<UserResponse>([]);
+
+    // Subscribe to users and update data source
     this.store
       .select(UserSelectors.selectUsers)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        distinctUntilChanged(
+          (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
+        )
+      )
       .subscribe((users) => {
         this.dataSource.data = users;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        console.log('Users updated:', users); // Debug log
       });
+
+    // Initial load from URL params
+    this.route.queryParams.pipe(take(1)).subscribe((params) => {
+      const validParams = this.urlParamsService.parseQueryParams(params);
+      const userFilter = this.urlParamsService.convertToUserFilter(validParams);
+      this.filterForm.patchValue(validParams, { emitEvent: false });
+      this.loadUsers(userFilter);
+    });
   }
 
   private setupFilterSubscription(): void {
@@ -305,32 +340,18 @@ export class UserListComponent implements OnInit, OnDestroy {
     };
   }
 
-  loadUsers(filterOverride?: UserFilter): void {
-    const formValue = this.filterForm.value;
-    const filter: UserFilter = {
-      ...(filterOverride || formValue),
-      searchTerm: formValue.searchTerm || undefined,
-      createdAfter: formValue.createdAfter?.toISOString().split('T')[0],
-      createdBefore: formValue.createdBefore?.toISOString().split('T')[0],
-      // Ensure pagination values are always included
-      page: (filterOverride?.page ?? formValue.page) || 0,
-      size: (filterOverride?.size ?? formValue.size) || 10,
+  private loadUsers(filter?: UserFilter): void {
+    const currentFilter = filter || this.filterForm.value;
+    // Ensure pagination values
+    const finalFilter: UserFilter = {
+      page: this.filterForm.get('page')?.value ?? 0,
+      size: this.filterForm.get('size')?.value ?? 10,
+      ...currentFilter,
     };
 
-    // Clean up undefined/null values except pagination
-    Object.keys(filter).forEach((key) => {
-      if (
-        key !== 'page' &&
-        key !== 'size' &&
-        (filter[key as keyof UserFilter] === null ||
-          filter[key as keyof UserFilter] === undefined ||
-          filter[key as keyof UserFilter] === '')
-      ) {
-        delete filter[key as keyof UserFilter];
-      }
-    });
-
-    this.store.dispatch(UserActions.loadUsers({ filter }));
+    console.log('Loading users with filter:', finalFilter); // Debug log
+    this.store.dispatch(UserActions.loadUsers({ filter: finalFilter }));
+    this.urlParamsService.updateQueryParams(finalFilter);
   }
 
   onCreateUser(): void {
@@ -425,19 +446,25 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   onSearch(searchTerm: string) {
     const currentFilters = this.filterForm.value;
-    this.filterForm.patchValue({
-      searchTerm,
-      page: 0, // Reset to first page when searching
-    });
-    this.loadUsers({
+    const newFilters = {
       ...currentFilters,
       searchTerm,
-      page: 0,
-    });
+      page: 0, // Reset to first page when searching
+    };
+
+    this.filterForm.patchValue(newFilters, { emitEvent: false });
+    this.loadUsers(newFilters);
   }
 
   onFiltersChange(filters: UserFilter) {
-    this.filterForm.patchValue(filters);
+    const newFilters = {
+      ...this.filterForm.value,
+      ...filters,
+      page: 0, // Reset to first page when filters change
+    };
+
+    this.filterForm.patchValue(newFilters, { emitEvent: false });
+    this.loadUsers(newFilters);
   }
 
   onSortChange(event: { sortBy: string; direction: 'ASC' | 'DESC' }): void {

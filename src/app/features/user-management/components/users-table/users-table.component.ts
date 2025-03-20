@@ -66,7 +66,18 @@ import {
   ],
 })
 export class UsersTableComponent implements AfterViewInit {
-  @Input() dataSource!: MatTableDataSource<UserResponse>;
+  @Input() set dataSource(value: MatTableDataSource<UserResponse>) {
+    if (value) {
+      this._dataSource = value;
+      this._dataSource.paginator = this.paginator;
+      this._dataSource.sort = this.sort;
+    }
+  }
+  get dataSource(): MatTableDataSource<UserResponse> {
+    return this._dataSource;
+  }
+  private _dataSource = new MatTableDataSource<UserResponse>();
+
   @Input() loading = false;
   @Input() totalUsers = 0;
   @Input() pageSize = 10;
@@ -93,9 +104,9 @@ export class UsersTableComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit() {
-    if (this.dataSource) {
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+    if (this._dataSource) {
+      this._dataSource.paginator = this.paginator;
+      this._dataSource.sort = this.sort;
     }
   }
 
@@ -118,5 +129,9 @@ export class UsersTableComponent implements AfterViewInit {
 
   onPageChange(event: PageEvent) {
     this.pageChange.emit(event);
+  }
+
+  getData(): UserResponse[] {
+    return this._dataSource.data;
   }
 }

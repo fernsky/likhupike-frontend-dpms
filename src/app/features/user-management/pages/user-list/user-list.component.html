@@ -58,6 +58,8 @@
     [dataSource]="dataSource"
     [loading]="(loading$ | async) ?? false"
     [totalUsers]="(totalUsers$ | async) ?? 0"
+    [pageSize]="filterForm.get('size')?.value ?? 10"
+    [pageIndex]="filterForm.get('page')?.value ?? 0"
     (edit)="onEditUser($event)"
     (delete)="onDeleteUser($event)"
     (toggleStatus)="onToggleStatus($event)"

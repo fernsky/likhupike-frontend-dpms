@@ -1,6 +1,6 @@
 <div class="table-container">
   <!-- Loading Overlay -->
-  <div class="loading-shade" *ngIf="loading" @fadeInOut>
+  <div class="loading-shade" *ngIf="loading === true" @fadeInOut>
     <div class="loading-content" @scaleIn>
       <div class="spinner-wrapper">
         <mat-spinner diameter="56" strokeWidth="3"></mat-spinner>
@@ -10,6 +10,11 @@
   </div>
 
   <div class="table-wrapper">
+    <!-- Add debug info -->
+    <div *ngIf="dataSource.data.length > 0" style="display: none">
+      Data available: {{ dataSource.data.length }} items
+    </div>
+
     <!-- Table -->
     <table mat-table [dataSource]="dataSource" matSort *ngIf="totalUsers > 0">
       <!-- Email Column -->
@@ -134,7 +139,7 @@
 
     <!-- Empty State -->
     <app-empty-state
-      *ngIf="totalUsers === 0 && !loading"
+      *ngIf="!loading && (!dataSource.data || dataSource.data.length === 0)"
       icon="group"
       [appearance]="'integrated'"
       [title]="'user.list.emptyState.title' | transloco"
