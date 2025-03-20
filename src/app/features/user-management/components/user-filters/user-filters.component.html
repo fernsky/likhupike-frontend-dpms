@@ -6,9 +6,9 @@
         formControlName="wardNumber"
         placeholder="{{ 'user.list.filters.ward.label' | transloco }}"
       >
-        <mat-option [value]="null">
-          {{ "user.list.filters.ward.all" | transloco }}
-        </mat-option>
+        <mat-option [value]="null">{{
+          "user.list.filters.ward.all" | transloco
+        }}</mat-option>
         <mat-option *ngFor="let number of wardNumbers" [value]="number">
           {{ formatWardNumber(number) }}
         </mat-option>
@@ -37,15 +37,15 @@
         formControlName="isApproved"
         placeholder="{{ 'user.list.filters.approvalStatus.label' | transloco }}"
       >
-        <mat-option [value]="null">
-          {{ "user.list.filters.approvalStatus.all" | transloco }}
-        </mat-option>
-        <mat-option [value]="true">
-          {{ "user.list.filters.approvalStatus.approved" | transloco }}
-        </mat-option>
-        <mat-option [value]="false">
-          {{ "user.list.filters.approvalStatus.pending" | transloco }}
-        </mat-option>
+        <mat-option [value]="null">{{
+          "user.list.filters.approvalStatus.all" | transloco
+        }}</mat-option>
+        <mat-option [value]="true">{{
+          "user.list.filters.approvalStatus.approved" | transloco
+        }}</mat-option>
+        <mat-option [value]="false">{{
+          "user.list.filters.approvalStatus.pending" | transloco
+        }}</mat-option>
       </mat-select>
     </mat-form-field>
 
@@ -60,7 +60,7 @@
           placeholder="{{ 'user.list.filters.dateRange.from' | transloco }}"
         />
         <mat-datepicker-toggle
-          matSuffix
+          matIconSuffix
           [for]="fromPicker"
         ></mat-datepicker-toggle>
         <mat-datepicker #fromPicker></mat-datepicker>
@@ -77,7 +77,7 @@
           placeholder="{{ 'user.list.filters.dateRange.to' | transloco }}"
         />
         <mat-datepicker-toggle
-          matSuffix
+          matIconSuffix
           [for]="toPicker"
         ></mat-datepicker-toggle>
         <mat-datepicker #toPicker></mat-datepicker>
