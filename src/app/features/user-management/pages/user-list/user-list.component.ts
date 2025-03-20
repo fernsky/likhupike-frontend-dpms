@@ -219,70 +219,86 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Subscribe to query params changes
-    this.route.queryParams
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((params) => {
-        const validParams = this.urlParamsService.parseQueryParams(params);
-        const userFilter =
-          this.urlParamsService.convertToUserFilter(validParams);
+    // First handle URL parameters
+    this.route.queryParams.pipe(take(1)).subscribe((params) => {
+      const validParams = this.urlParamsService.parseQueryParams(params);
+      const userFilter = this.urlParamsService.convertToUserFilter(validParams);
 
-        // Update form with valid params without triggering valueChanges
-        this.filterForm.patchValue(validParams, { emitEvent: false });
+      // Set initial form values
+      this.filterForm.patchValue(
+        {
+          ...userFilter,
+          page: userFilter.page ?? 0,
+          size: userFilter.size ?? 10,
+          sortBy: userFilter.sortBy ?? 'createdAt',
+          sortDirection: userFilter.sortDirection ?? 'DESC',
+        },
+        { emitEvent: false }
+      );
 
-        // Load users with the parsed filter
-        this.loadUsers(userFilter);
-      });
+      // Initialize data with these parameters
+      this.initializeData(userFilter);
+    });
 
-    this.initializeData();
-    this.setupFilterSubscription();
-
-    // Subscribe to pagination changes
-    combineLatest([this.currentPage$, this.pageSize$])
-      .pipe(
-        takeUntil(this.destroy$),
-        distinctUntilChanged(
-          (prev, curr) => prev[0] === curr[0] && prev[1] === curr[1]
-        )
-      )
-      .subscribe(([page, size]) => {
-        if (
-          this.filterForm.get('page')?.value !== page ||
-          this.filterForm.get('size')?.value !== size
-        ) {
-          this.filterForm.patchValue({ page, size }, { emitEvent: false });
-        }
-      });
+    // Then set up subscriptions
+    this.setupSubscriptions();
   }
 
-  private initializeData(): void {
-    // Replace the initialization code
-    this.searchControl.setValue('');
-
-    // Create new data source and initialize with empty array
-    this.dataSource = new MatTableDataSource<UserResponse>([]);
-
-    // Subscribe to users and update data source
-    this.store
-      .select(UserSelectors.selectUsers)
+  private setupSubscriptions(): void {
+    // Subscribe to store selectors
+    combineLatest([
+      this.store.select(UserSelectors.selectUsers),
+      this.store.select(UserSelectors.selectPagination),
+      this.store.select(UserSelectors.selectUserLoading),
+    ])
       .pipe(
         takeUntil(this.destroy$),
         distinctUntilChanged(
           (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
         )
       )
-      .subscribe((users) => {
+      .subscribe(([users, pagination, loading]) => {
+        // Update data source
         this.dataSource.data = users;
-        console.log('Users updated:', users); // Debug log
+
+        // Update pagination state
+        if (!loading) {
+          this.currentPage = pagination.currentPage;
+          if (
+            this.filterForm.get('page')?.value !== pagination.currentPage ||
+            this.filterForm.get('size')?.value !== pagination.pageSize
+          ) {
+            this.filterForm.patchValue(
+              {
+                page: pagination.currentPage,
+                size: pagination.pageSize,
+              },
+              { emitEvent: false }
+            );
+
+            // Update URL params
+            this.urlParamsService.updateQueryParams(this.filterForm.value);
+          }
+        }
       });
 
-    // Initial load from URL params
-    this.route.queryParams.pipe(take(1)).subscribe((params) => {
-      const validParams = this.urlParamsService.parseQueryParams(params);
-      const userFilter = this.urlParamsService.convertToUserFilter(validParams);
-      this.filterForm.patchValue(validParams, { emitEvent: false });
-      this.loadUsers(userFilter);
-    });
+    // Set up other subscriptions
+    this.setupFilterSubscription();
+  }
+
+  private initializeData(initialFilter?: UserFilter): void {
+    this.searchControl.setValue('');
+    this.dataSource = new MatTableDataSource<UserResponse>([]);
+
+    // Load initial data
+    this.loadUsers(
+      initialFilter || {
+        page: 0,
+        size: 10,
+        sortBy: 'createdAt',
+        sortDirection: 'DESC',
+      }
+    );
   }
 
   private setupFilterSubscription(): void {
@@ -340,18 +356,22 @@ export class UserListComponent implements OnInit, OnDestroy {
     };
   }
 
-  private loadUsers(filter?: UserFilter): void {
-    const currentFilter = filter || this.filterForm.value;
-    // Ensure pagination values
+  private loadUsers(filter: UserFilter): void {
+    // Ensure all required pagination values are present
     const finalFilter: UserFilter = {
-      page: this.filterForm.get('page')?.value ?? 0,
-      size: this.filterForm.get('size')?.value ?? 10,
-      ...currentFilter,
+      page: filter.page ?? this.currentPage,
+      size: filter.size ?? this.filterForm.get('size')?.value ?? 10,
+      sortBy: filter.sortBy ?? this.filterForm.get('sortBy')?.value,
+      sortDirection:
+        filter.sortDirection ?? this.filterForm.get('sortDirection')?.value,
+      ...filter,
     };
 
-    console.log('Loading users with filter:', finalFilter); // Debug log
-    this.store.dispatch(UserActions.loadUsers({ filter: finalFilter }));
+    // Update URL first
     this.urlParamsService.updateQueryParams(finalFilter);
+
+    // Then dispatch action
+    this.store.dispatch(UserActions.loadUsers({ filter: finalFilter }));
   }
 
   onCreateUser(): void {
@@ -483,23 +503,24 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   onPageEvent(event: PageEvent): void {
-    // Update current page state
-    this.currentPage = event.pageIndex;
+    // Prevent loading if we're already on this page
+    if (
+      event.pageIndex === this.currentPage &&
+      event.pageSize === this.filterForm.get('size')?.value
+    ) {
+      return;
+    }
 
-    const currentFilters = this.filterForm.value;
-    const newFilters = {
-      ...currentFilters,
+    const newFilters: UserFilter = {
+      ...this.filterForm.value,
       page: event.pageIndex,
       size: event.pageSize,
-      // Maintain current sort state
-      sortBy: currentFilters.sortBy,
-      sortDirection: currentFilters.sortDirection,
     };
 
-    // Update form without triggering valueChanges
+    // Update form silently
     this.filterForm.patchValue(newFilters, { emitEvent: false });
 
-    // Load users with updated filters
+    // Load data with new page
     this.loadUsers(newFilters);
   }
 }

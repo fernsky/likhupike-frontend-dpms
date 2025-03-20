@@ -43,11 +43,24 @@ export class UserEffects {
       ofType(UserActions.loadUsers),
       exhaustMap(({ filter }) =>
         this.userService.getUsers(filter).pipe(
-          map(
-            (
-              { users, total, meta } // Add meta to destructuring
-            ) => UserActions.loadUsersSuccess({ users, total, meta }) // Include meta in the action
-          ),
+          map(({ users, total, meta }) => {
+            // Calculate pagination values with all required properties
+            const validMeta = {
+              page: meta.page ?? filter.page ?? 0,
+              size: meta.size ?? filter.size ?? 10,
+              totalElements: total,
+              totalPages: Math.ceil(total / (meta.size ?? filter.size ?? 10)),
+              isFirst: (meta.page ?? filter.page ?? 0) === 0,
+              isLast:
+                (meta.page ?? filter.page ?? 0) >=
+                Math.ceil(total / (meta.size ?? filter.size ?? 10)) - 1,
+            };
+            return UserActions.loadUsersSuccess({
+              users,
+              total,
+              meta: validMeta,
+            });
+          }),
           catchError((error) => {
             this.showError(error.message);
             return of(UserActions.loadUsersFailure({ error }));

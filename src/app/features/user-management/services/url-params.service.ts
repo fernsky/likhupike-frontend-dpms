@@ -134,34 +134,72 @@ export class UrlParamsService {
     // Convert filter to URL params with type safety
     const urlParams: Partial<Record<UrlParamKey, string>> = {};
 
-    // Type-safe assignments
-    if (filter.page !== undefined) urlParams['page'] = filter.page.toString();
-    if (filter.size !== undefined) urlParams['size'] = filter.size.toString();
-    if (filter.sortBy) urlParams['sortBy'] = filter.sortBy;
-    if (filter.sortDirection) urlParams['sortDirection'] = filter.sortDirection;
-    if (filter.searchTerm) urlParams['searchTerm'] = filter.searchTerm;
-    if (filter.email) urlParams['email'] = filter.email;
-    if (filter.isApproved !== undefined)
+    // Only include defined values
+    if (filter.page !== undefined && filter.page > 0) {
+      urlParams['page'] = filter.page.toString();
+    }
+    if (filter.size !== undefined && filter.size !== 10) {
+      urlParams['size'] = filter.size.toString();
+    }
+    if (filter.sortBy && filter.sortBy !== 'createdAt') {
+      urlParams['sortBy'] = filter.sortBy;
+    }
+    if (filter.sortDirection && filter.sortDirection !== 'DESC') {
+      urlParams['sortDirection'] = filter.sortDirection;
+    }
+    if (filter.searchTerm) {
+      urlParams['searchTerm'] = filter.searchTerm;
+    }
+    if (filter.email) {
+      urlParams['email'] = filter.email;
+    }
+    if (filter.isApproved !== undefined && filter.isApproved !== null) {
       urlParams['isApproved'] = filter.isApproved.toString();
-    if (filter.isWardLevelUser !== undefined)
+    }
+    if (
+      filter.isWardLevelUser !== undefined &&
+      filter.isWardLevelUser !== null
+    ) {
       urlParams['isWardLevelUser'] = filter.isWardLevelUser.toString();
-    if (filter.wardNumber !== undefined)
+    }
+    if (filter.wardNumber !== undefined && filter.wardNumber !== null) {
       urlParams['wardNumber'] = filter.wardNumber.toString();
-    if (filter.permissions?.length)
+    }
+    if (filter.permissions?.length) {
       urlParams['permissions'] = filter.permissions.join(',');
-    if (filter.createdAfter) urlParams['createdAfter'] = filter.createdAfter;
-    if (filter.createdBefore) urlParams['createdBefore'] = filter.createdBefore;
+    }
+    if (filter.createdAfter) {
+      urlParams['createdAfter'] = filter.createdAfter;
+    }
+    if (filter.createdBefore) {
+      urlParams['createdBefore'] = filter.createdBefore;
+    }
 
-    // Update URL without triggering navigation
-    this.location.replaceState(
-      this.router
-        .createUrlTree([], {
-          relativeTo: this.route,
-          queryParams: urlParams,
-          queryParamsHandling: 'merge',
-        })
-        .toString()
-    );
+    // Get current params
+    const currentParams = new URLSearchParams(window.location.search);
+    const clearedParams = new Set<string>();
+
+    // Check which params need to be cleared
+    currentParams.forEach((_, key) => {
+      if (!(key in urlParams) && key !== 'page' && key !== 'size') {
+        clearedParams.add(key);
+      }
+    });
+
+    // Update URL by navigating to preserve history
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        ...urlParams,
+        // Clear removed params by setting them to null
+        ...[...clearedParams].reduce(
+          (acc, key) => ({ ...acc, [key]: null }),
+          {}
+        ),
+      },
+      queryParamsHandling: 'merge',
+      replaceUrl: true, // Use replaceUrl to avoid browser history entries
+    });
   }
 
   convertToUserFilter(params: UrlParams): UserFilter {
