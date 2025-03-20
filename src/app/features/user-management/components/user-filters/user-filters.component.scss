@@ -22,11 +22,13 @@
 
         ::ng-deep {
           .mat-mdc-form-field-flex {
-            padding-right: 2px;
+            padding-right: 8px;
           }
 
           input.mat-mdc-input-element {
             width: 90px;
+            letter-spacing: normal;
+            font-size: 0.75rem;
           }
         }
       }
@@ -103,21 +105,27 @@
 
         // Datepicker styling
         .mat-datepicker-toggle {
-          scale: 0.8;
-          width: 20px;
-          height: 20px;
+          scale: 1.2;
+          width: 28px;
+          height: 28px;
           margin: 0;
           padding: 0;
-          color: #94a3b8;
+          color: #64748b;
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
           button {
-            width: 20px;
-            height: 20px;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
 
           .mat-datepicker-toggle-default-icon {
-            width: 16px;
-            height: 16px;
+            width: 24px;
+            height: 24px;
           }
         }
 
@@ -130,10 +138,12 @@
           padding: 0;
           min-width: 80px;
           color: #475569;
+          letter-spacing: normal;
 
           &::placeholder {
             color: #94a3b8;
             opacity: 1;
+            letter-spacing: normal;
           }
         }
 
