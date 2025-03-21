@@ -102,6 +102,20 @@ export class UserService {
       .pipe(catchError(this.handleError));
   }
 
+  approveUser(id: string): Observable<UserResponse> {
+    return this.http
+      .post<ApiResponse<UserResponse>>(`${this.apiUrl}/${id}/approve`, {})
+      .pipe(
+        map((response) => {
+          if (!response.success) {
+            throw response.error;
+          }
+          return response.data;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   private convertFilterToParams(filter: UserFilter): HttpParams {
     let params = new HttpParams();
 

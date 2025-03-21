@@ -147,6 +147,24 @@ export class UserEffects {
     )
   );
 
+  approveUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.approveUser),
+      exhaustMap(({ id }) =>
+        this.userService.approveUser(id).pipe(
+          map((user) => {
+            this.showSuccess('user.messages.approveSuccess');
+            return UserActions.approveUserSuccess({ user });
+          }),
+          catchError((error) => {
+            this.showError('user.messages.approveError');
+            return of(UserActions.approveUserFailure({ error }));
+          })
+        )
+      )
+    )
+  );
+
   // Helper method to show success messages
   private showSuccess(key: string): void {
     this.snackBar.open(

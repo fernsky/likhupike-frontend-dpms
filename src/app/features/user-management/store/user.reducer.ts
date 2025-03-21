@@ -94,6 +94,25 @@ export const userReducer = createReducer(
     errors: error,
   })),
 
+  // Approve User
+  on(UserActions.approveUser, (state) => ({
+    ...state,
+    updating: true,
+    errors: null,
+  })),
+  on(UserActions.approveUserSuccess, (state, { user }) => ({
+    ...state,
+    users: state.users.map((u) => (u.id === user.id ? user : u)),
+    updating: false,
+    errors: null,
+    lastUpdated: new Date(),
+  })),
+  on(UserActions.approveUserFailure, (state, { error }) => ({
+    ...state,
+    updating: false,
+    errors: error,
+  })),
+
   // Delete User
   on(UserActions.deleteUser, (state) => ({
     ...state,

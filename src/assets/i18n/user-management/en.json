@@ -181,5 +181,9 @@
       "title": "Reset User Password",
       "description": "Can reset passwords for user accounts in the system"
     }
+  },
+  "approve": {
+    "confirmTitle": "Approve User",
+    "confirmMessage": "Are you sure you want to approve this user? This action cannot be undone."
   }
 }
