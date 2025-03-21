@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  width: 100%; // Take full width of parent
+  margin: 0 auto; // Center in parent
 
   .user-card {
     background: white;
@@ -14,6 +16,8 @@
     transition: all 0.2s ease;
     position: relative;
     overflow: hidden;
+    width: 100%; // Full width of the list
+    box-sizing: border-box;
 
     &::before {
       content: "";
