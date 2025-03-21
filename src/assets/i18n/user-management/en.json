@@ -6,6 +6,7 @@
     "email": "Email Address",
     "permissions": "User Permissions",
     "createShort": "Create User",
+    "approve": "Approve",
     "breadcrumb": {
       "dashboard": "Dashboard",
       "users": "Users"
