@@ -430,32 +430,29 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   onToggleStatus(user: UserResponse): void {
+    // Only show dialog for approving users
+    if (user.isApproved) {
+      return; // Do nothing if user is already approved
+    }
+
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: this.transloco.translate(
-          user.isApproved
-            ? 'user.disapprove.confirmTitle'
-            : 'user.approve.confirmTitle'
-        ),
-        message: this.transloco.translate(
-          user.isApproved
-            ? 'user.disapprove.confirmMessage'
-            : 'user.approve.confirmMessage',
-          { email: user.email }
-        ),
-        confirmButton: this.transloco.translate(
-          user.isApproved ? 'common.disapprove' : 'common.approve'
-        ),
+        title: this.transloco.translate('user.approve.confirmTitle'),
+        message: this.transloco.translate('user.approve.confirmMessage', {
+          email: user.email,
+        }),
+        confirmButton: this.transloco.translate('common.approve'),
         cancelButton: this.transloco.translate('common.cancel'),
       },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        // Uncomment and implement your approval action here
         // this.store.dispatch(
         //   UserActions.setApprovalStatus({
         //     id: user.id,
-        //     approved: !user.isApproved,
+        //     approved: true,
         //   })
         // );
       }

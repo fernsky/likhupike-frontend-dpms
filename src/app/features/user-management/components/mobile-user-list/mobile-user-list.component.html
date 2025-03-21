@@ -53,14 +53,14 @@
           <mat-icon>edit</mat-icon>
           <span>{{ "common.actions.edit" | transloco }}</span>
         </button>
-        <button mat-menu-item (click)="toggleStatus.emit(user)">
-          <mat-icon>{{ user.isApproved ? "block" : "check_circle" }}</mat-icon>
-          <span>
-            {{
-              (user.isApproved ? "user.list.disapprove" : "user.list.approve")
-                | transloco
-            }}
-          </span>
+        <!-- Only show approve button for unapproved users -->
+        <button
+          mat-menu-item
+          *ngIf="!user.isApproved"
+          (click)="toggleStatus.emit(user)"
+        >
+          <mat-icon>check_circle</mat-icon>
+          <span>{{ "user.list.approve" | transloco }}</span>
         </button>
         <mat-divider></mat-divider>
         <button mat-menu-item (click)="delete.emit(user)" class="warn-action">
