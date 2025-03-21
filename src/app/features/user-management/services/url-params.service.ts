@@ -63,7 +63,10 @@ export class UrlParamsService {
     // Type-safe parameter parsing
     if ('page' in params) {
       const page = parseNumber(params['page']);
-      if (page !== undefined && page >= 0) validParams.page = page;
+      if (page !== undefined) {
+        // Convert 0-based to 1-based if needed
+        validParams.page = page === 0 ? 1 : page;
+      }
     }
 
     if ('size' in params) {
@@ -131,23 +134,18 @@ export class UrlParamsService {
   }
 
   updateQueryParams(filter: UserFilter): void {
-    const urlParams: Partial<Record<UrlParamKey, string>> = {
-      // Always include these base params
-      page: (filter.page ?? 1).toString(),
-      sortBy: filter.sortBy ?? 'createdAt',
-      sortDirection: filter.sortDirection ?? 'DESC',
-    };
+    const urlParams: Partial<Record<UrlParamKey, string>> = {};
 
-    // Optional params
-    if (filter.size !== undefined && filter.size !== 10) {
-      urlParams['size'] = filter.size.toString();
-    }
-    if (filter.searchTerm) {
-      urlParams['searchTerm'] = filter.searchTerm;
-    }
-    if (filter.email) {
-      urlParams['email'] = filter.email;
-    }
+    // Always include pagination and sort params
+    urlParams['page'] = (filter.page ?? 1).toString();
+    urlParams['size'] = (filter.size ?? 10).toString();
+    urlParams['sortBy'] = filter.sortBy ?? 'createdAt';
+    urlParams['sortDirection'] = filter.sortDirection ?? 'DESC';
+
+    // Include all other defined params without any filtering
+    if (filter.searchTerm) urlParams['searchTerm'] = filter.searchTerm;
+    if (filter.permissions?.length)
+      urlParams['permissions'] = filter.permissions.join(',');
     if (filter.isApproved !== undefined && filter.isApproved !== null) {
       urlParams['isApproved'] = filter.isApproved.toString();
     }
@@ -160,64 +158,38 @@ export class UrlParamsService {
     if (filter.wardNumber !== undefined && filter.wardNumber !== null) {
       urlParams['wardNumber'] = filter.wardNumber.toString();
     }
-    if (filter.permissions?.length) {
-      urlParams['permissions'] = filter.permissions.join(',');
-    }
-    if (filter.createdAfter) {
-      urlParams['createdAfter'] = filter.createdAfter;
-    }
-    if (filter.createdBefore) {
-      urlParams['createdBefore'] = filter.createdBefore;
-    }
+    if (filter.email) urlParams['email'] = filter.email;
+    if (filter.createdAfter) urlParams['createdAfter'] = filter.createdAfter;
+    if (filter.createdBefore) urlParams['createdBefore'] = filter.createdBefore;
 
-    // Get current params
-    const currentParams = new URLSearchParams(window.location.search);
-    const clearedParams = new Set<string>();
-
-    // Check which params need to be cleared
-    currentParams.forEach((_, key) => {
-      if (!(key in urlParams) && key !== 'page' && key !== 'size') {
-        clearedParams.add(key);
-      }
-    });
-
-    // Update URL by navigating to preserve history
+    // Update URL preserving query parameters that are not being updated
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: {
-        ...urlParams,
-        // Clear removed params by setting them to null
-        ...[...clearedParams].reduce(
-          (acc, key) => ({ ...acc, [key]: null }),
-          {}
-        ),
-      },
-      queryParamsHandling: 'merge',
-      replaceUrl: true, // Use replaceUrl to avoid browser history entries
+      queryParams: urlParams,
+      queryParamsHandling: null, // Don't merge
+      replaceUrl: true,
     });
   }
 
   convertToUserFilter(params: UrlParams): UserFilter {
-    // Start with empty filter, let component handle defaults
     const filter: UserFilter = {};
 
-    // Only add params that are explicitly present in URL
-    if (params.page !== undefined) filter.page = params.page;
-    if (params.size !== undefined) filter.size = params.size;
+    // Only add params that exist in URL, no defaults
+    if (params.page) filter.page = Math.max(1, params.page);
+    if (params.size) filter.size = params.size;
     if (params.sortBy) filter.sortBy = params.sortBy;
     if (params.sortDirection) filter.sortDirection = params.sortDirection;
     if (params.searchTerm) filter.searchTerm = params.searchTerm;
-    if (params.email) filter.email = params.email;
-    if (params.isApproved !== undefined) filter.isApproved = params.isApproved;
-    if (params.isWardLevelUser !== undefined)
-      filter.isWardLevelUser = params.isWardLevelUser;
-    if (params.wardNumber !== undefined) filter.wardNumber = params.wardNumber;
     if (params.permissions) {
-      // Convert comma-separated string to PermissionType array
       filter.permissions = params.permissions
         .split(',')
         .filter((p): p is PermissionType => p in PermissionType);
     }
+    if (params.isApproved !== undefined) filter.isApproved = params.isApproved;
+    if (params.isWardLevelUser !== undefined)
+      filter.isWardLevelUser = params.isWardLevelUser;
+    if (params.wardNumber !== undefined) filter.wardNumber = params.wardNumber;
+    if (params.email) filter.email = params.email;
     if (params.createdAfter) filter.createdAfter = params.createdAfter;
     if (params.createdBefore) filter.createdBefore = params.createdBefore;
 

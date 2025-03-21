@@ -219,26 +219,35 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // First handle URL parameters
+    // Handle URL parameters
     this.route.queryParams.pipe(take(1)).subscribe((params) => {
       const validParams = this.urlParamsService.parseQueryParams(params);
       const userFilter = this.urlParamsService.convertToUserFilter(validParams);
 
-      // Ensure default sort values are set
+      // Only apply defaults for missing values
       const initialFilter = {
-        ...userFilter,
-        sortBy: userFilter.sortBy || 'createdAt',
-        sortDirection: userFilter.sortDirection || 'DESC',
+        page: userFilter.page ?? 1,
+        size: userFilter.size ?? 10,
+        sortBy: userFilter.sortBy ?? 'createdAt',
+        sortDirection: userFilter.sortDirection ?? 'DESC',
+        ...userFilter, // Keep all other filter values as is
       };
 
-      // Set initial form values
+      // Apply filters to form without triggering defaults
       this.filterForm.patchValue(initialFilter, { emitEvent: false });
 
-      // Initialize data with these parameters
-      this.initializeData(initialFilter);
+      // Initialize search if present
+      if (userFilter.searchTerm) {
+        this.searchControl.setValue(userFilter.searchTerm, {
+          emitEvent: false,
+        });
+      }
+
+      // Load data with exact filter values
+      this.loadUsers(initialFilter);
     });
 
-    // Then set up subscriptions
+    // Setup subscriptions
     this.setupSubscriptions();
   }
 
@@ -340,37 +349,56 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   private sanitizeFilterValues(formValue: UserFilterFormValue): UserFilter {
-    return {
-      ...formValue,
-      searchTerm: formValue.searchTerm?.trim() || undefined,
-      permissions: formValue.permissions?.length
-        ? formValue.permissions
-        : undefined,
-      createdAfter: formValue.createdAfter
-        ? new Date(formValue.createdAfter).toISOString().split('T')[0]
-        : undefined,
-      createdBefore: formValue.createdBefore
-        ? new Date(formValue.createdBefore).toISOString().split('T')[0]
-        : undefined,
-      email: formValue.email || undefined,
-      isApproved: formValue.isApproved ?? undefined,
-      isWardLevelUser: formValue.isWardLevelUser ?? undefined,
-      wardNumber: formValue.wardNumber ?? undefined,
+    const filter: UserFilter = {
+      page: formValue.page,
+      size: formValue.size,
+      sortBy: formValue.sortBy,
+      sortDirection: formValue.sortDirection,
     };
+
+    // Only add other filters if they have values
+    if (formValue.searchTerm?.trim())
+      filter.searchTerm = formValue.searchTerm.trim();
+    if (formValue.permissions?.length)
+      filter.permissions = formValue.permissions;
+    if (formValue.email?.trim()) filter.email = formValue.email.trim();
+    if (formValue.isApproved !== null) filter.isApproved = formValue.isApproved;
+    if (formValue.isWardLevelUser !== null)
+      filter.isWardLevelUser = formValue.isWardLevelUser;
+    if (formValue.wardNumber !== null) filter.wardNumber = formValue.wardNumber;
+    if (formValue.createdAfter) {
+      filter.createdAfter = new Date(formValue.createdAfter)
+        .toISOString()
+        .split('T')[0];
+    }
+    if (formValue.createdBefore) {
+      filter.createdBefore = new Date(formValue.createdBefore)
+        .toISOString()
+        .split('T')[0];
+    }
+
+    return filter;
   }
 
   private loadUsers(filter: UserFilter): void {
-    // Only apply defaults for missing values
+    // Preserve all filter values, including defaults and existing values
     const finalFilter: UserFilter = {
-      page: filter.page ?? 1,
-      size: filter.size ?? 10,
-      ...filter, // Keep existing sort values if present
+      ...this.filterForm.value, // Keep existing form values
+      ...filter, // Apply new filter values
+      page: filter.page ?? this.filterForm.get('page')?.value ?? 1,
+      size: filter.size ?? this.filterForm.get('size')?.value ?? 10,
+      sortBy:
+        filter.sortBy ?? this.filterForm.get('sortBy')?.value ?? 'createdAt',
+      sortDirection:
+        filter.sortDirection ??
+        this.filterForm.get('sortDirection')?.value ??
+        'DESC',
     };
 
-    // Update URL with actual values, not defaults
+    // Update URL with complete filter state
     this.urlParamsService.updateQueryParams(finalFilter);
 
-    // Then dispatch action
+    // Dispatch action with complete filter
     this.store.dispatch(UserActions.loadUsers({ filter: finalFilter }));
   }
 
