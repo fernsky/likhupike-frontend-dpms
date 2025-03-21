@@ -187,15 +187,24 @@
           }
         }
 
-        // Status Chips
-        .mat-chip {
-          &.mat-primary {
-            background: rgba(46, 204, 113, 0.1);
-            color: #27ae60;
-          }
-          &.mat-warn {
-            background: rgba(231, 76, 60, 0.1);
-            color: #e74c3c;
+        .approvalStatus {
+          ::ng-deep .mat-mdc-chip-set {
+            .mat-mdc-chip {
+              height: 32px;
+              font-size: 0.75rem;
+              padding: 0 0.625rem;
+              border-radius: 12px;
+
+              &.mat-primary {
+                background: rgba(46, 204, 113, 0.1);
+                color: #27ae60;
+              }
+
+              &.mat-warn {
+                background: rgba(231, 76, 60, 0.1);
+                color: #e74c3c;
+              }
+            }
           }
         }
       }
@@ -313,7 +322,7 @@
         }
       }
 
-      // Status Chips
+      // Status Chips - Update to match mobile view colors
       .mat-chip {
         &.mat-primary {
           background: rgba(46, 204, 113, 0.1);

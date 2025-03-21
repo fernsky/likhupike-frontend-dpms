@@ -75,7 +75,7 @@
           <mat-icon>verified</mat-icon>
           {{ "user.list.columns.approvalStatus" | transloco }}
         </th>
-        <td mat-cell *matCellDef="let user">
+        <td mat-cell *matCellDef="let user" class="approvalStatus">
           <mat-chip-set>
             <mat-chip
               [color]="user.isApproved ? 'primary' : 'warn'"

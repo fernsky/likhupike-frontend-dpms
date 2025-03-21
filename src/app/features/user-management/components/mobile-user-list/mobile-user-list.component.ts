@@ -1,4 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -26,10 +32,20 @@ import { MatDividerModule } from '@angular/material/divider';
   ],
 })
 export class MobileUserListComponent {
-  @Input() users: UserResponse[] = [];
+  @Input() set users(value: UserResponse[]) {
+    this._users = value;
+    this.cdr.detectChanges(); // Force change detection when users are updated
+  }
+  get users(): UserResponse[] {
+    return this._users;
+  }
+  private _users: UserResponse[] = [];
+
   @Output() edit = new EventEmitter<string>();
   @Output() delete = new EventEmitter<UserResponse>();
   @Output() toggleStatus = new EventEmitter<UserResponse>();
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
   trackByFn(index: number, item: UserResponse): string {
     return item.id;
