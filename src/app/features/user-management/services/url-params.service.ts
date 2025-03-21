@@ -131,10 +131,16 @@ export class UrlParamsService {
   }
 
   updateQueryParams(filter: UserFilter): void {
-    // Convert filter to URL params with type safety
     const urlParams: Partial<Record<UrlParamKey, string>> = {};
 
-    // Only include defined values
+    // Only include sort parameters if they are explicitly set
+    if (filter.sortBy) {
+      urlParams['sortBy'] = filter.sortBy;
+    }
+    if (filter.sortDirection) {
+      urlParams['sortDirection'] = filter.sortDirection;
+    }
+
     if (filter.page !== undefined && filter.page > 0) {
       urlParams['page'] = filter.page.toString();
     }
@@ -203,8 +209,10 @@ export class UrlParamsService {
   }
 
   convertToUserFilter(params: UrlParams): UserFilter {
+    // Start with empty filter, let component handle defaults
     const filter: UserFilter = {};
 
+    // Only add params that are explicitly present in URL
     if (params.page !== undefined) filter.page = params.page;
     if (params.size !== undefined) filter.size = params.size;
     if (params.sortBy) filter.sortBy = params.sortBy;

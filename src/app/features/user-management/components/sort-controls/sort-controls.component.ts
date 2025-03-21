@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -29,22 +29,43 @@ export interface SortOption {
     MatTooltipModule,
   ],
 })
-export class SortControlsComponent {
+export class SortControlsComponent implements OnInit {
   @Input() sortOptions: SortOption[] = [
     { value: 'email', label: 'user.list.columns.email' },
     { value: 'createdAt', label: 'user.list.sort.createdAt' },
     { value: 'updatedAt', label: 'user.list.sort.updatedAt' },
   ];
 
-  @Input() currentSort = 'createdAt';
-  @Input() currentDirection: 'ASC' | 'DESC' = 'DESC';
+  private _currentSort = 'createdAt';
+  private _currentDirection: 'ASC' | 'DESC' = 'DESC';
+
+  @Input()
+  set currentSort(value: string) {
+    if (value && this._currentSort !== value) {
+      this._currentSort = value;
+      this.sortControl.setValue(value, { emitEvent: false });
+    }
+  }
+  get currentSort(): string {
+    return this._currentSort;
+  }
+
+  @Input()
+  set currentDirection(value: 'ASC' | 'DESC') {
+    if (value && this._currentDirection !== value) {
+      this._currentDirection = value;
+    }
+  }
+  get currentDirection(): 'ASC' | 'DESC' {
+    return this._currentDirection;
+  }
 
   @Output() sortChange = new EventEmitter<{
     sortBy: string;
     direction: 'ASC' | 'DESC';
   }>();
 
-  sortControl = new FormControl(this.currentSort);
+  sortControl = new FormControl(this._currentSort);
 
   toggleDirection() {
     this.currentDirection = this.currentDirection === 'ASC' ? 'DESC' : 'ASC';
@@ -61,5 +82,10 @@ export class SortControlsComponent {
       sortBy: this.currentSort,
       direction: this.currentDirection,
     });
+  }
+
+  ngOnInit() {
+    // Initialize with default values
+    this.sortControl.setValue(this._currentSort);
   }
 }

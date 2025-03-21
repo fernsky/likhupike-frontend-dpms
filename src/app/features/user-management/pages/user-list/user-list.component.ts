@@ -224,20 +224,18 @@ export class UserListComponent implements OnInit, OnDestroy {
       const validParams = this.urlParamsService.parseQueryParams(params);
       const userFilter = this.urlParamsService.convertToUserFilter(validParams);
 
+      // Ensure default sort values are set
+      const initialFilter = {
+        ...userFilter,
+        sortBy: userFilter.sortBy || 'createdAt',
+        sortDirection: userFilter.sortDirection || 'DESC',
+      };
+
       // Set initial form values
-      this.filterForm.patchValue(
-        {
-          ...userFilter,
-          page: userFilter.page ?? 1,
-          size: userFilter.size ?? 10,
-          sortBy: userFilter.sortBy ?? 'createdAt',
-          sortDirection: userFilter.sortDirection ?? 'DESC',
-        },
-        { emitEvent: false }
-      );
+      this.filterForm.patchValue(initialFilter, { emitEvent: false });
 
       // Initialize data with these parameters
-      this.initializeData(userFilter);
+      this.initializeData(initialFilter);
     });
 
     // Then set up subscriptions
@@ -287,27 +285,23 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   private initializeData(initialFilter?: UserFilter): void {
+    // Apply defaults only if values are not provided in filter
     const defaultFilter: UserFilter = {
-      page: initialFilter?.page ?? 1, // Ensure page is 1-based
+      page: 1,
       size: 10,
       sortBy: 'createdAt',
       sortDirection: 'DESC',
-      ...initialFilter,
+    };
+
+    const finalFilter = {
+      ...defaultFilter,
+      ...initialFilter, // Let URL params override defaults
     };
 
     this.searchControl.setValue('');
     this.dataSource = new MatTableDataSource<UserResponse>([]);
-
-    // Ensure we start with page 1 in the form
-    this.filterForm.patchValue(
-      {
-        ...defaultFilter,
-        page: defaultFilter.page || 1,
-      },
-      { emitEvent: false }
-    );
-
-    this.loadUsers(defaultFilter);
+    this.filterForm.patchValue(finalFilter, { emitEvent: false });
+    this.loadUsers(finalFilter);
   }
 
   private setupFilterSubscription(): void {
@@ -366,16 +360,14 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   private loadUsers(filter: UserFilter): void {
-    // Ensure all required pagination values are present
+    // Only apply defaults for missing values
     const finalFilter: UserFilter = {
-      page: filter.page ?? 1, // Default to page 1
-      size: filter.size ?? this.filterForm.get('size')?.value ?? 10,
-      sortBy: filter.sortBy ?? 'createdAt',
-      sortDirection: filter.sortDirection ?? 'DESC',
-      ...filter,
+      page: filter.page ?? 1,
+      size: filter.size ?? 10,
+      ...filter, // Keep existing sort values if present
     };
 
-    // Update URL first
+    // Update URL with actual values, not defaults
     this.urlParamsService.updateQueryParams(finalFilter);
 
     // Then dispatch action
@@ -501,9 +493,7 @@ export class UserListComponent implements OnInit, OnDestroy {
       ...currentFilters,
       sortBy: event.sortBy,
       sortDirection: event.direction,
-      // Maintain current page when sorting
       page: this.currentPage,
-      size: currentFilters.size,
     };
 
     this.filterForm.patchValue(newFilters, { emitEvent: false });
