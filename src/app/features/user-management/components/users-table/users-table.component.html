@@ -16,7 +16,12 @@
     </div>
 
     <!-- Table -->
-    <table mat-table [dataSource]="dataSource" matSort *ngIf="totalUsers > 0">
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      matSort
+      *ngIf="!loading && totalUsers > 0"
+    >
       <!-- Email Column -->
       <ng-container matColumnDef="email">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -139,7 +144,7 @@
 
     <!-- Empty State -->
     <app-empty-state
-      *ngIf="!loading && (!dataSource.data || dataSource.data.length === 0)"
+      *ngIf="!loading && totalUsers === 0"
       icon="group"
       [appearance]="'integrated'"
       [title]="'user.list.emptyState.title' | transloco"
@@ -148,7 +153,9 @@
     </app-empty-state>
   </div>
 
+  <!-- Show paginator only when there's data -->
   <app-paginator
+    *ngIf="totalUsers > 0"
     [pageSize]="pageSize"
     [pageIndex]="pageIndex"
     [totalElements]="totalUsers"

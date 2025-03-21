@@ -45,7 +45,7 @@ import {
     MatDividerModule,
     MatProgressSpinnerModule,
     TranslocoModule,
-    EmptyStateComponent, // Add EmptyStateComponent to imports
+    EmptyStateComponent,
     MatTooltipModule,
     PaginatorComponent,
   ],

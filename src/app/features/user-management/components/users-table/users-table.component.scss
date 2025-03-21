@@ -1,5 +1,4 @@
 .table-container {
-  background: white;
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   overflow: hidden;
@@ -22,7 +21,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 300px; // Only apply min-height during loading
+    min-height: auto; // Remove fixed min-height
     transition: all 0.3s ease;
 
     .loading-content {
@@ -66,9 +65,10 @@
     flex: 1;
     position: relative;
     height: auto; // Remove fixed height
-    min-height: 0; // Allow flex child to shrink
+    min-height: 360px; // Add minimum height for empty state
+    display: flex; // Change to flex
+    flex-direction: column;
     overflow: visible; // Change from auto to visible
-    display: block; // Changed from flex to block
 
     table {
       width: 100%;
@@ -85,7 +85,6 @@
 
       tbody {
         vertical-align: top; // Align content to top
-        background: white;
       }
 
       tr {
@@ -212,6 +211,17 @@
         }
       }
     }
+
+    // Update empty state styles
+    app-empty-state {
+      position: relative; // Change from absolute
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1; // Remove opacity
+      animation: none; // Remove animation that was causing issues
+    }
   }
 
   // Table Styles
@@ -312,16 +322,6 @@
         }
       }
     }
-  }
-
-  // Empty state styles
-  app-empty-state {
-    position: absolute;
-    inset: 0;
-    height: 100%;
-    opacity: 0;
-    animation: fadeIn 0.2s ease-out forwards;
-    min-height: 300px; // Only apply min-height for empty state
   }
 
   // Paginator Styles
