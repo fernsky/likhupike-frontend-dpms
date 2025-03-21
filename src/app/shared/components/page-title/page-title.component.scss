@@ -154,6 +154,107 @@
   }
 }
 
+@media (max-width: 768px) {
+  .page-title-container {
+    margin: 0 0 0.75rem;
+    padding-bottom: 0.5rem;
+
+    .title-wrapper {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .title-content {
+      gap: 0.75rem;
+      padding: 0;
+
+      .icon-wrapper {
+        .icon-container {
+          width: 36px; // Smaller icon container
+          height: 36px;
+          border-radius: 10px;
+
+          .title-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+          }
+        }
+      }
+
+      .text-content {
+        .title {
+          font-size: 1.125rem;
+          margin: 0;
+        }
+
+        .description {
+          font-size: 0.75rem;
+          margin-top: 0.125rem;
+        }
+      }
+    }
+
+    .actions {
+      padding: 0;
+      margin: 0;
+
+      ::ng-deep .create-button {
+        height: 36px;
+        width: 36px;
+        min-width: 36px;
+        padding: 0;
+        border-radius: 50%;
+
+        mat-icon {
+          margin: 0;
+          font-size: 20px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title-container {
+    margin: 0 0 0.5rem;
+
+    .title-wrapper {
+      gap: 0.5rem;
+    }
+
+    .title-content {
+      gap: 0.5rem;
+
+      .icon-wrapper {
+        .icon-container {
+          width: 32px; // Even smaller for mobile
+          height: 32px;
+          border-radius: 8px;
+
+          .title-icon {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+
+      .text-content {
+        .title {
+          font-size: 1rem;
+        }
+        .description {
+          font-size: 0.75rem;
+          opacity: 0.85;
+        }
+      }
+    }
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   .page-title-container {
     .title {

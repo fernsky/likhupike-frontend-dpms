@@ -5,11 +5,17 @@
     titleTranslationKey="user.list.title"
     descriptionTranslationKey="user.list.subtitle"
     icon="manage_accounts"
+    class="responsive-title"
   >
     <ng-template #actions>
       <button mat-raised-button class="create-button" (click)="onCreateUser()">
-        <mat-icon>add</mat-icon>
-        {{ "user.list.createButton" | transloco }}
+        <mat-icon class="add-icon">add</mat-icon>
+        <span class="full-text">{{
+          "user.list.createButton" | transloco
+        }}</span>
+        <span class="medium-text">{{
+          "user.list.createShort" | transloco
+        }}</span>
       </button>
     </ng-template>
   </app-page-title>
@@ -34,14 +40,22 @@
           class="filter-button"
           [class.active]="showFilters"
           (click)="toggleFilters()"
+          [matTooltip]="
+            (showFilters
+              ? 'user.list.search.hideFilters'
+              : 'user.list.search.showFilters'
+            ) | transloco
+          "
         >
           <mat-icon>filter_list</mat-icon>
-          {{
-            (showFilters
-              ? "user.list.search.hideFilters"
-              : "user.list.search.showFilters"
-            ) | transloco
-          }}
+          <span class="filter-text">
+            {{
+              (showFilters
+                ? "user.list.search.hideFilters"
+                : "user.list.search.showFilters"
+              ) | transloco
+            }}
+          </span>
         </button>
       </div>
     </div>

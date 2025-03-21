@@ -5,6 +5,7 @@
     "loading": "Loading users...",
     "email": "Email Address",
     "permissions": "User Permissions",
+    "createShort": "Create User",
     "breadcrumb": {
       "dashboard": "Dashboard",
       "users": "Users"
