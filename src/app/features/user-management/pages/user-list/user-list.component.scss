@@ -82,10 +82,31 @@
   }
 
   app-users-table {
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-    display: block;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+    background: transparent;
+
+    ::ng-deep {
+      .table-container {
+        background: transparent;
+        box-shadow: none;
+
+        .table-wrapper {
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 1px 3px rgba(18, 55, 114, 0.08);
+          overflow: hidden;
+        }
+
+        app-paginator {
+          margin-top: 0.75rem;
+          background: transparent;
+          border: none;
+          box-shadow: none;
+        }
+      }
+    }
   }
 }
 
@@ -155,6 +176,17 @@
             span {
               display: none;
             }
+          }
+        }
+      }
+    }
+
+    app-users-table {
+      ::ng-deep {
+        .table-container {
+          .mobile-wrapper {
+            margin: 0 -1rem; // Negative margin to allow full-width cards
+            padding: 0 1rem; // Add padding back to maintain content alignment
           }
         }
       }

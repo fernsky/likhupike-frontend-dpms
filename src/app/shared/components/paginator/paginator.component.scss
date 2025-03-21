@@ -222,6 +222,60 @@
   }
 }
 
+@media (max-width: 768px) {
+  .paginator {
+    background: transparent;
+    padding: 0.5rem 0;
+    border: none;
+
+    .paginator-content {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+
+      .range-info {
+        order: -1;
+        width: 100%;
+        text-align: center;
+        padding-bottom: 0.5rem;
+        color: #64748b;
+        font-size: 0.813rem;
+        font-weight: normal;
+      }
+
+      .items-per-page {
+        order: 2;
+      }
+
+      .navigation {
+        order: 1;
+        flex: 1;
+        justify-content: center;
+
+        .nav-button {
+          width: 32px;
+          height: 32px;
+          color: #64748b;
+          border-radius: 6px;
+
+          &:hover:not(:disabled) {
+            background: rgba(0, 0, 0, 0.04);
+          }
+        }
+
+        .page-numbers {
+          .page-button {
+            min-width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            font-size: 0.813rem;
+          }
+        }
+      }
+    }
+  }
+}
+
 @media (max-width: 480px) {
   .paginator {
     padding: 0.625rem;

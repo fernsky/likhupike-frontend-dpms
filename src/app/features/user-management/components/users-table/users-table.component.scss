@@ -1,13 +1,11 @@
 .table-container {
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
   position: relative;
-  min-height: auto; // Remove fixed min-height
-  height: auto; // Remove fixed height
-  max-height: none; // Remove max-height constraint
   display: flex;
   flex-direction: column;
+  background: transparent;
 
   // Loading Overlay
   .loading-shade {
@@ -64,11 +62,13 @@
   .table-wrapper {
     flex: 1;
     position: relative;
-    height: auto; // Remove fixed height
-    min-height: 360px; // Add minimum height for empty state
-    display: flex; // Change to flex
+    min-height: 360px;
+    display: flex;
     flex-direction: column;
-    overflow: visible; // Change from auto to visible
+    overflow: visible;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(18, 55, 114, 0.08);
 
     table {
       width: 100%;
@@ -224,6 +224,14 @@
     }
   }
 
+  // Mobile wrapper - remove table styling
+  .mobile-wrapper {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+
   // Table Styles
   table {
     width: 100%;
@@ -339,6 +347,10 @@
     background: #f8fafb;
     border-top: 1px solid rgba(0, 0, 0, 0.06);
     z-index: 2;
+    margin-top: 0.75rem;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 1px 3px rgba(18, 55, 114, 0.08);
   }
 }
 
