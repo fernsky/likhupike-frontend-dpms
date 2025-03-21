@@ -172,27 +172,33 @@
 
       .icon-wrapper {
         .icon-container {
-          width: 36px; // Smaller icon container
-          height: 36px;
-          border-radius: 10px;
+          width: 40px; // Increased from 36px
+          height: 40px;
+          border-radius: 12px;
 
           .title-icon {
-            font-size: 18px;
-            width: 18px;
-            height: 18px;
+            font-size: 20px; // Increased from 18px
+            width: 20px;
+            height: 20px;
           }
         }
       }
 
       .text-content {
         .title {
-          font-size: 1.125rem;
+          font-size: 1.375rem; // Increased from 1.125rem
           margin: 0;
+          letter-spacing: -0.02em;
+          font-weight: 600;
+          color: #0b1f42; // Keep original color
+          line-height: 1.2;
         }
 
         .description {
-          font-size: 0.75rem;
-          margin-top: 0.125rem;
+          font-size: 0.875rem; // Increased from 0.75rem
+          margin-top: 0.25rem;
+          line-height: 1.4;
+          color: #546e7a; // Keep original color
         }
       }
     }
@@ -230,8 +236,8 @@
 
       .icon-wrapper {
         .icon-container {
-          width: 32px; // Even smaller for mobile
-          height: 32px;
+          width: 36px; // Still keeping it reasonably sized
+          height: 36px;
           border-radius: 8px;
 
           .title-icon {
@@ -244,10 +250,12 @@
 
       .text-content {
         .title {
-          font-size: 1rem;
+          font-size: 1.25rem; // Increased from 1rem
+          color: #0b1f42; // Keep original color
         }
         .description {
-          font-size: 0.75rem;
+          font-size: 0.813rem; // Increased from 0.75rem
+          color: #546e7a; // Keep original color
           opacity: 0.85;
         }
       }

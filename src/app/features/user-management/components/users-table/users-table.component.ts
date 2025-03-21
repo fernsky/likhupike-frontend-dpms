@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 import {
   Component,
   Input,
@@ -5,6 +6,8 @@ import {
   EventEmitter,
   ViewChild,
   AfterViewInit,
+  OnInit,
+  OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -27,6 +30,10 @@ import {
   PaginatorComponent,
   PageEvent,
 } from '@shared/components/paginator/paginator.component';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MobileUserListComponent } from '../mobile-user-list/mobile-user-list.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-users-table',
@@ -48,6 +55,7 @@ import {
     EmptyStateComponent,
     MatTooltipModule,
     PaginatorComponent,
+    MobileUserListComponent,
   ],
   animations: [
     trigger('fadeInOut', [
@@ -65,7 +73,7 @@ import {
     ]),
   ],
 })
-export class UsersTableComponent implements AfterViewInit {
+export class UsersTableComponent implements AfterViewInit, OnInit, OnDestroy {
   @Input() set dataSource(value: MatTableDataSource<UserResponse>) {
     if (value) {
       this._dataSource = value;
@@ -98,10 +106,23 @@ export class UsersTableComponent implements AfterViewInit {
     'actions',
   ];
 
+  isMobile = false;
+  private destroy$ = new Subject<void>();
+
   constructor(
     private numberFormat: NumberFormatService,
-    private transloco: TranslocoService
-  ) {}
+    private transloco: TranslocoService,
+    private breakpointObserver: BreakpointObserver
+  ) {
+    this.breakpointObserver
+      .observe([Breakpoints.HandsetPortrait, Breakpoints.TabletPortrait])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((result) => {
+        this.isMobile = result.matches;
+      });
+  }
+
+  ngOnInit(): void {}
 
   ngAfterViewInit() {
     if (this._dataSource) {
@@ -134,5 +155,10 @@ export class UsersTableComponent implements AfterViewInit {
 
   getData(): UserResponse[] {
     return this._dataSource.data;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

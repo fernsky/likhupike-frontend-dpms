@@ -9,7 +9,8 @@
     </div>
   </div>
 
-  <div class="table-wrapper">
+  <!-- Desktop View -->
+  <div class="table-wrapper" *ngIf="!isMobile">
     <!-- Add debug info -->
     <div *ngIf="dataSource.data.length > 0" style="display: none">
       Data available: {{ dataSource.data.length }} items
@@ -153,7 +154,17 @@
     </app-empty-state>
   </div>
 
-  <!-- Show paginator only when there's data -->
+  <!-- Mobile View -->
+  <div class="mobile-wrapper" *ngIf="isMobile">
+    <app-mobile-user-list
+      [users]="dataSource.data"
+      (edit)="edit.emit($event)"
+      (delete)="delete.emit($event)"
+      (toggleStatus)="toggleStatus.emit($event)"
+    ></app-mobile-user-list>
+  </div>
+
+  <!-- Show paginator for both views -->
   <app-paginator
     *ngIf="totalUsers > 0"
     [pageSize]="pageSize"
