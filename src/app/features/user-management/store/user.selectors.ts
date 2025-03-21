@@ -156,3 +156,9 @@ export const selectPageSize = createSelector(
   selectPagination,
   (pagination) => pagination.pageSize
 );
+
+export const selectCurrentFilter = createSelector(selectUserState, (state) => ({
+  page: state.pagination.currentPage,
+  size: state.pagination.pageSize,
+  // Add other filter properties as needed
+}));

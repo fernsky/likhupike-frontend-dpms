@@ -102,7 +102,7 @@ export class UserService {
       .pipe(catchError(this.handleError));
   }
 
-  approveUser(id: string): Observable<UserResponse> {
+  approveUser(id: string): Observable<{ user: UserResponse; message: string }> {
     return this.http
       .post<ApiResponse<UserResponse>>(`${this.apiUrl}/${id}/approve`, {})
       .pipe(
@@ -110,7 +110,10 @@ export class UserService {
           if (!response.success) {
             throw response.error;
           }
-          return response.data;
+          return {
+            user: response.data,
+            message: response.message, // Include the success message
+          };
         }),
         catchError(this.handleError)
       );

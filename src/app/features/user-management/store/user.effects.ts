@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import { map, catchError, exhaustMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -15,7 +16,8 @@ export class UserEffects {
     private userService: UserService,
     private snackBar: MatSnackBar,
     private transloco: TranslocoService,
-    private router: Router
+    private router: Router,
+    private store: Store // Add Store injection
   ) {}
 
   createUser$ = createEffect(() =>
@@ -152,12 +154,12 @@ export class UserEffects {
       ofType(UserActions.approveUser),
       exhaustMap(({ id }) =>
         this.userService.approveUser(id).pipe(
-          map((user) => {
-            this.showSuccess('user.messages.approveSuccess');
-            return UserActions.approveUserSuccess({ user });
+          map(({ user, message }) => {
+            this.showSuccess(message); // Use API success message
+            return UserActions.approveUserSuccess({ user, message });
           }),
           catchError((error) => {
-            this.showError('user.messages.approveError');
+            this.showError(error.message); // Use API error message
             return of(UserActions.approveUserFailure({ error }));
           })
         )
@@ -176,12 +178,8 @@ export class UserEffects {
 
   // Helper method to show error messages
   private showError(message: string): void {
-    const messageToShow = message.startsWith('user.messages.')
-      ? this.transloco.translate(message)
-      : message;
-
     this.snackBar.open(
-      messageToShow,
+      message, // Use the error message directly from the API
       this.transloco.translate('common.actions.close'),
       { duration: 5000, panelClass: ['error-snackbar'] }
     );

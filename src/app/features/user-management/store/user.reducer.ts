@@ -102,7 +102,12 @@ export const userReducer = createReducer(
   })),
   on(UserActions.approveUserSuccess, (state, { user }) => ({
     ...state,
-    users: state.users.map((u) => (u.id === user.id ? user : u)),
+    // Update the user in the list while maintaining array order
+    users: state.users.map((u) =>
+      u.id === user.id
+        ? { ...u, isApproved: true } // Just update the approval status
+        : u
+    ),
     updating: false,
     errors: null,
     lastUpdated: new Date(),

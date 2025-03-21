@@ -88,7 +88,10 @@ export const UserActions = createActionGroup({
 
     // Approve User
     'Approve User': props<{ id: string }>(),
-    'Approve User Success': props<{ user: UserResponse }>(),
+    'Approve User Success': props<{
+      user: UserResponse;
+      message: string;
+    }>(),
     'Approve User Failure': props<{
       error: {
         code: string;
