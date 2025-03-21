@@ -131,27 +131,16 @@ export class UrlParamsService {
   }
 
   updateQueryParams(filter: UserFilter): void {
-    const urlParams: Partial<Record<UrlParamKey, string>> = {};
+    const urlParams: Partial<Record<UrlParamKey, string>> = {
+      // Always include these base params
+      page: (filter.page ?? 1).toString(),
+      sortBy: filter.sortBy ?? 'createdAt',
+      sortDirection: filter.sortDirection ?? 'DESC',
+    };
 
-    // Only include sort parameters if they are explicitly set
-    if (filter.sortBy) {
-      urlParams['sortBy'] = filter.sortBy;
-    }
-    if (filter.sortDirection) {
-      urlParams['sortDirection'] = filter.sortDirection;
-    }
-
-    if (filter.page !== undefined && filter.page > 0) {
-      urlParams['page'] = filter.page.toString();
-    }
+    // Optional params
     if (filter.size !== undefined && filter.size !== 10) {
       urlParams['size'] = filter.size.toString();
-    }
-    if (filter.sortBy && filter.sortBy !== 'createdAt') {
-      urlParams['sortBy'] = filter.sortBy;
-    }
-    if (filter.sortDirection && filter.sortDirection !== 'DESC') {
-      urlParams['sortDirection'] = filter.sortDirection;
     }
     if (filter.searchTerm) {
       urlParams['searchTerm'] = filter.searchTerm;
