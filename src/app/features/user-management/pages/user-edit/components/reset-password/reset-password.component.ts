@@ -16,7 +16,7 @@ import { UserResponse } from '../../../../models/user.interface';
 import { UserActions } from '../../../../store/user.actions';
 import * as UserSelectors from '../../../../store/user.selectors';
 import { Subject } from 'rxjs';
-import { takeUntil, filter } from 'rxjs/operators';
+import { takeUntil, filter, take } from 'rxjs/operators';
 import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
 
 @Component({
@@ -72,12 +72,43 @@ export class ResetPasswordComponent implements OnDestroy {
       },
       { validators: this.passwordMatchValidator }
     );
+
+    // Add subscription to handle form reset after successful update
+    this.store
+      .select(UserSelectors.selectUserUpdating)
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((updating) => updating === false)
+      )
+      .subscribe(() => {
+        const errors = this.store.select(UserSelectors.selectUserErrors);
+        errors.pipe(take(1)).subscribe((err) => {
+          if (!err) {
+            this.passwordForm.reset();
+            this.passwordForm.markAsPristine();
+          }
+        });
+      });
   }
 
   private passwordMatchValidator(g: FormGroup) {
     const newPassword = g.get('newPassword')?.value;
     const confirmPassword = g.get('confirmPassword')?.value;
     return newPassword === confirmPassword ? null : { passwordMismatch: true };
+  }
+
+  getNewPasswordError(): string | null {
+    const control = this.passwordForm.get('newPassword');
+    if (control?.hasError('required')) {
+      return 'user.form.errors.passwordRequired';
+    }
+    if (control?.hasError('minlength')) {
+      return 'user.form.errors.passwordLength';
+    }
+    if (control?.hasError('pattern')) {
+      return 'user.form.errors.passwordPattern';
+    }
+    return null;
   }
 
   onSubmit(): void {
@@ -91,17 +122,6 @@ export class ResetPasswordComponent implements OnDestroy {
           },
         })
       );
-
-      // Navigate back on success
-      this.store
-        .select(UserSelectors.selectUserErrors)
-        .pipe(
-          takeUntil(this.destroy$),
-          filter((errors) => !errors)
-        )
-        .subscribe(() => {
-          this.location.back();
-        });
     }
   }
 

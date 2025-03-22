@@ -35,8 +35,6 @@
   .form-actions {
     display: flex;
     justify-content: flex-end;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(0, 0, 0, 0.12);
 
     button {
       min-width: 120px;
@@ -46,14 +44,6 @@
       }
     }
   }
-}
-
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 @media (max-width: 768px) {
@@ -70,7 +60,7 @@
     }
 
     .form-actions {
-      padding-top: 0.5rem;
+      padding-top: 1rem;
 
       button {
         width: 100%;

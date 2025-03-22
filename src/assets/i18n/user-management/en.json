@@ -132,6 +132,7 @@
       "emailRequired": "Email is required",
       "emailInvalid": "Please provide a valid email address",
       "passwordRequired": "Password is required",
+      "passwordMismatch": "Passwords do not match",
       "passwordLength": "Password must be at least 8 characters long",
       "passwordPattern": "Password must contain at least one digit, lowercase, uppercase letter and special character",
       "fullNameRequired": "Full name is required",

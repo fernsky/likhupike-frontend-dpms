@@ -57,8 +57,6 @@
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(0, 0, 0, 0.12);
   }
 }
 
@@ -80,7 +78,7 @@
     .form-actions {
       flex-direction: column-reverse;
       gap: 0.75rem;
-      padding-top: 0.5rem;
+      padding-top: 1rem;
 
       app-base-button {
         width: 100%;
