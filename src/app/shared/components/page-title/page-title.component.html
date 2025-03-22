@@ -8,12 +8,16 @@
       </div>
       <div class="text-content">
         <h1 class="title">
-          {{ titleTranslationKey ? (titleTranslationKey | transloco) : title }}
+          {{
+            titleTranslationKey
+              ? (titleTranslationKey | transloco: titleParams)
+              : title
+          }}
         </h1>
         <p class="description" *ngIf="description || descriptionTranslationKey">
           {{
             descriptionTranslationKey
-              ? (descriptionTranslationKey | transloco)
+              ? (descriptionTranslationKey | transloco: descriptionParams)
               : description
           }}
         </p>

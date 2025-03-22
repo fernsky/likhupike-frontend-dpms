@@ -407,7 +407,12 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   onEditUser(id: string): void {
-    this.router.navigate(['/dashboard/users/edit', id]);
+    // Navigate to edit page with query param to select the first tab (details)
+    this.router.navigate(['/dashboard/users/edit', id], {
+      queryParams: { tab: 0 },
+      // Preserve query params from the list page to return to the same state
+      queryParamsHandling: 'merge',
+    });
   }
 
   onDeleteUser(user: UserResponse): void {

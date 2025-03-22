@@ -4,6 +4,9 @@ import {
   UpdateUserRequest,
   UserFilter,
   UserResponse,
+  ResetUserPasswordRequest,
+  UserPermissionsRequest,
+  ApiError,
 } from '../models/user.interface';
 import { ApiPaginationMeta } from '../models/api.interface';
 
@@ -100,6 +103,22 @@ export const UserActions = createActionGroup({
         status: number;
       };
     }>(),
+
+    // Reset Password
+    'Reset User Password': props<{
+      id: string;
+      request: ResetUserPasswordRequest;
+    }>(),
+    'Reset User Password Success': props<{ user: UserResponse }>(),
+    'Reset User Password Failure': props<{ error: ApiError }>(),
+
+    // Update Permissions
+    'Update Permissions': props<{
+      id: string;
+      request: UserPermissionsRequest;
+    }>(),
+    'Update Permissions Success': props<{ user: UserResponse }>(),
+    'Update Permissions Failure': props<{ error: ApiError }>(),
 
     // Clear Errors
     'Clear Errors': emptyProps(),

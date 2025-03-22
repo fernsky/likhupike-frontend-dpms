@@ -17,6 +17,8 @@ import {
   UpdateUserRequest,
   UserFilter,
   UserResponse,
+  ResetUserPasswordRequest,
+  UserPermissionsRequest,
 } from '../models/user.interface';
 
 @Injectable({
@@ -86,8 +88,16 @@ export class UserService {
 
   updateUser(id: string, request: UpdateUserRequest): Observable<UserResponse> {
     return this.http
-      .patch<UserResponse>(`${this.apiUrl}/${id}`, request)
-      .pipe(catchError(this.handleError));
+      .put<ApiResponse<UserResponse>>(`${this.apiUrl}/${id}`, request)
+      .pipe(
+        map((response) => {
+          if (!response.success) {
+            throw response.error;
+          }
+          return response.data;
+        }),
+        catchError(this.handleError)
+      );
   }
 
   deleteUser(id: string): Observable<void> {
@@ -114,6 +124,44 @@ export class UserService {
             user: response.data,
             message: response.message, // Include the success message
           };
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  resetPassword(
+    id: string,
+    request: ResetUserPasswordRequest
+  ): Observable<UserResponse> {
+    return this.http
+      .post<
+        ApiResponse<UserResponse>
+      >(`${this.apiUrl}/${id}/reset-password`, request)
+      .pipe(
+        map((response) => {
+          if (!response.success) {
+            throw response.error;
+          }
+          return response.data;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  updatePermissions(
+    id: string,
+    request: UserPermissionsRequest
+  ): Observable<UserResponse> {
+    return this.http
+      .put<
+        ApiResponse<UserResponse>
+      >(`${this.apiUrl}/${id}/permissions`, request)
+      .pipe(
+        map((response) => {
+          if (!response.success) {
+            throw response.error;
+          }
+          return response.data;
         }),
         catchError(this.handleError)
       );

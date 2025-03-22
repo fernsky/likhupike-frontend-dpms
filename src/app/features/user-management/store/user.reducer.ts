@@ -56,6 +56,27 @@ export const userReducer = createReducer(
     errors: error as UserValidationError,
   })),
 
+  // Load Single User
+  on(UserActions.loadUser, (state) => ({
+    ...state,
+    loading: true,
+    selectedUser: null, // Clear selected user
+    errors: null,
+  })),
+  on(UserActions.loadUserSuccess, (state, { user }) => ({
+    ...state,
+    selectedUser: user,
+    loading: false,
+    errors: null,
+    lastUpdated: new Date(),
+  })),
+  on(UserActions.loadUserFailure, (state, { error }) => ({
+    ...state,
+    selectedUser: null,
+    loading: false,
+    errors: error,
+  })),
+
   // Update User
   on(UserActions.updateUser, (state) => ({
     ...state,
@@ -136,6 +157,44 @@ export const userReducer = createReducer(
     ...state,
     deleting: false,
     errors: error as UserValidationError,
+  })),
+
+  // Reset Password
+  on(UserActions.resetUserPassword, (state) => ({
+    ...state,
+    updating: true,
+    errors: null,
+  })),
+  on(UserActions.resetUserPasswordSuccess, (state, { user }) => ({
+    ...state,
+    users: state.users.map((u) => (u.id === user.id ? user : u)),
+    updating: false,
+    errors: null,
+    lastUpdated: new Date(),
+  })),
+  on(UserActions.resetUserPasswordFailure, (state, { error }) => ({
+    ...state,
+    updating: false,
+    errors: error,
+  })),
+
+  // Update Permissions
+  on(UserActions.updatePermissions, (state) => ({
+    ...state,
+    updating: true,
+    errors: null,
+  })),
+  on(UserActions.updatePermissionsSuccess, (state, { user }) => ({
+    ...state,
+    users: state.users.map((u) => (u.id === user.id ? user : u)),
+    updating: false,
+    errors: null,
+    lastUpdated: new Date(),
+  })),
+  on(UserActions.updatePermissionsFailure, (state, { error }) => ({
+    ...state,
+    updating: false,
+    errors: error,
   })),
 
   // Clear Errors

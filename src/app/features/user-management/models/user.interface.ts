@@ -14,6 +14,15 @@ export interface UpdateUserRequest {
   wardNumber?: number | null;
 }
 
+export interface ResetUserPasswordRequest {
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface UserPermissionsRequest {
+  permissions: { [key in PermissionType]: boolean };
+}
+
 export interface UserResponse {
   id: string;
   email: string;

@@ -77,9 +77,13 @@ export class UserEffects {
       ofType(UserActions.loadUser),
       exhaustMap(({ id }) =>
         this.userService.getUserById(id).pipe(
-          map((user) => UserActions.loadUserSuccess({ user })),
+          map((user) => {
+            console.log('User loaded successfully:', user);
+            return UserActions.loadUserSuccess({ user });
+          }),
           catchError((error) => {
-            this.showError('user.messages.loadError');
+            console.error('Error loading user:', error);
+            this.showError(error.message || 'user.messages.loadError');
             return of(UserActions.loadUserFailure({ error }));
           })
         )
@@ -161,6 +165,42 @@ export class UserEffects {
           catchError((error) => {
             this.showError(error.message); // Use API error message
             return of(UserActions.approveUserFailure({ error }));
+          })
+        )
+      )
+    )
+  );
+
+  resetPassword$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.resetUserPassword),
+      exhaustMap(({ id, request }) =>
+        this.userService.resetPassword(id, request).pipe(
+          map((user) => {
+            this.showSuccess('user.messages.passwordResetSuccess');
+            return UserActions.resetUserPasswordSuccess({ user });
+          }),
+          catchError((error) => {
+            this.showError(error.message);
+            return of(UserActions.resetUserPasswordFailure({ error }));
+          })
+        )
+      )
+    )
+  );
+
+  updatePermissions$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.updatePermissions),
+      exhaustMap(({ id, request }) =>
+        this.userService.updatePermissions(id, request).pipe(
+          map((user) => {
+            this.showSuccess('user.messages.permissionsUpdateSuccess');
+            return UserActions.updatePermissionsSuccess({ user });
+          }),
+          catchError((error) => {
+            this.showError(error.message);
+            return of(UserActions.updatePermissionsFailure({ error }));
           })
         )
       )

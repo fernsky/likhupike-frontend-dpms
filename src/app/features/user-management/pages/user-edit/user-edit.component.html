@@ -1,8 +1,5 @@
-<div class="edit-user-container">
+<div class="user-edit-container">
   <app-breadcrumb></app-breadcrumb>
-  <div class="page-header">
-    <h1>{{ "user.edit.title" | transloco }}</h1>
-  </div>
 
   <mat-progress-bar
     *ngIf="loading$ | async"
@@ -10,10 +7,65 @@
     class="page-loading-bar"
   ></mat-progress-bar>
 
-  <app-user-form
-    [isEdit]="true"
-    [user]="user$ | async"
-    (submitUpdateForm)="onSubmit($event)"
-    (cancelForm)="onCancel()"
-  ></app-user-form>
+  <ng-container *ngIf="(loading$ | async) === false">
+    <ng-container *ngIf="user$ | async as user; else noUser">
+      <!-- Debug info -->
+      <div style="display: none">User loaded: {{ user | json }}</div>
+
+      <app-page-title
+        [titleTranslationKey]="'user.edit.title'"
+        [titleParams]="{ email: user.email }"
+        [descriptionTranslationKey]="'user.edit.description'"
+        icon="manage_accounts"
+      >
+        <ng-template #actions>
+          <button mat-stroked-button (click)="onBack()">
+            <mat-icon>arrow_back</mat-icon>
+            {{ "common.actions.back" | transloco }}
+          </button>
+        </ng-template>
+      </app-page-title>
+
+      <mat-tab-group
+        [selectedIndex]="activeTabIndex"
+        class="user-edit-tabs"
+        animationDuration="0ms"
+      >
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">person</mat-icon>
+            <span>{{ "user.edit.tabs.details" | transloco }}</span>
+          </ng-template>
+          <app-update-user-details [user]="user"></app-update-user-details>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">key</mat-icon>
+            <span>{{ "user.edit.tabs.password" | transloco }}</span>
+          </ng-template>
+          <app-reset-password [user]="user"></app-reset-password>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">security</mat-icon>
+            <span>{{ "user.edit.tabs.permissions" | transloco }}</span>
+          </ng-template>
+          <app-user-permissions [user]="user"></app-user-permissions>
+        </mat-tab>
+      </mat-tab-group>
+    </ng-container>
+
+    <ng-template #noUser>
+      <div class="error-message">
+        <mat-icon color="warn">error</mat-icon>
+        <p>{{ (error$ | async)?.message | transloco }}</p>
+        <button mat-stroked-button (click)="onBack()">
+          <mat-icon>arrow_back</mat-icon>
+          {{ "common.actions.back" | transloco }}
+        </button>
+      </div>
+    </ng-template>
+  </ng-container>
 </div>

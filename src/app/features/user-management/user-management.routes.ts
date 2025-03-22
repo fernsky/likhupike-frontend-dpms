@@ -5,6 +5,7 @@ import { provideState } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { USER_FEATURE_KEY, userReducer } from './store/user.reducer';
 import { UserEffects } from './store/user.effects';
+import { UserResponse } from '@app/core/models/user.interface';
 
 export const USER_MANAGEMENT_ROUTES: Routes = [
   {
@@ -53,9 +54,9 @@ export const USER_MANAGEMENT_ROUTES: Routes = [
       },
       {
         path: 'edit/:id',
-        loadChildren: () =>
-          import('./pages/user-edit/user-edit.module').then(
-            (m) => m.UserEditModule
+        loadComponent: () =>
+          import('./pages/user-edit/user-edit.component').then(
+            (m) => m.UserEditComponent
           ),
         canActivate: [PermissionGuard],
         data: {
@@ -63,6 +64,10 @@ export const USER_MANAGEMENT_ROUTES: Routes = [
           breadcrumb: {
             translationKey: 'editUser',
             icon: 'edit',
+            dynamic: true, // Add this to indicate dynamic title
+            resolve: {
+              title: (user: UserResponse) => `Edit ${user.email}`, // Optional: add user email to breadcrumb
+            },
           },
         },
       },

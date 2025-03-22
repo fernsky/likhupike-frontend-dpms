@@ -1,0 +1,36 @@
+<form
+  [formGroup]="permissionsForm"
+  (ngSubmit)="onSubmit()"
+  class="permissions-form"
+>
+  <div class="form-content" formGroupName="permissions">
+    <div class="permissions-grid">
+      <div *ngFor="let permission of permissionTypes" class="permission-item">
+        <mat-checkbox [formControlName]="permission">
+          <div class="permission-label">
+            <span class="permission-name">
+              {{ "user.permissions." + permission + ".title" | transloco }}
+            </span>
+            <span class="permission-description">
+              {{
+                "user.permissions." + permission + ".description" | transloco
+              }}
+            </span>
+          </div>
+        </mat-checkbox>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="!permissionsForm.valid || (loading$ | async)"
+    >
+      <mat-icon>security</mat-icon>
+      {{ "user.form.updatePermissions" | transloco }}
+    </button>
+  </div>
+</form>

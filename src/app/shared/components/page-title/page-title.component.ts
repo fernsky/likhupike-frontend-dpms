@@ -19,8 +19,10 @@ import { MatIconModule } from '@angular/material/icon';
 export class PageTitleComponent implements AfterContentInit {
   @Input() title = '';
   @Input() titleTranslationKey?: string;
+  @Input() titleParams?: Record<string, string | number>; // Add titleParams input
   @Input() description = '';
   @Input() descriptionTranslationKey?: string;
+  @Input() descriptionParams?: Record<string, string | number>; // Add descriptionParams input
   @Input() icon?: string;
 
   hasContent = false;

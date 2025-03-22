@@ -1,0 +1,66 @@
+<form [formGroup]="updateForm" (ngSubmit)="onSubmit()" class="update-form">
+  <div class="form-content">
+    <!-- Email Field -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ "user.form.email" | transloco }}</mat-label>
+      <input matInput formControlName="email" type="email" />
+      <mat-error *ngIf="updateForm.get('email')?.errors?.['required']">
+        {{ "user.form.errors.emailRequired" | transloco }}
+      </mat-error>
+      <mat-error *ngIf="updateForm.get('email')?.errors?.['email']">
+        {{ "user.form.errors.emailInvalid" | transloco }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Ward Level Assignment -->
+    <div class="ward-section">
+      <mat-checkbox formControlName="isWardLevelUser" class="ward-checkbox">
+        {{ "user.form.isWardLevelUser" | transloco }}
+      </mat-checkbox>
+
+      <mat-form-field
+        appearance="outline"
+        *ngIf="updateForm.get('isWardLevelUser')?.value"
+      >
+        <mat-label>{{ "user.form.wardNumber" | transloco }}</mat-label>
+        <mat-select formControlName="wardNumber">
+          <mat-option [value]="null">{{
+            "user.form.selectWard" | transloco
+          }}</mat-option>
+          <mat-option
+            *ngFor="
+              let ward of [
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+                19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
+              ]
+            "
+            [value]="ward"
+          >
+            {{ "user.ward" | transloco }} {{ ward }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="
+            updateForm.get('wardNumber')?.errors?.['min'] ||
+            updateForm.get('wardNumber')?.errors?.['max']
+          "
+        >
+          {{ "user.form.errors.wardNumberRange" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Form Actions -->
+  <div class="form-actions">
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="updateForm.invalid || (loading$ | async)"
+    >
+      <mat-icon>save</mat-icon>
+      {{ "common.actions.save" | transloco }}
+    </button>
+  </div>
+</form>

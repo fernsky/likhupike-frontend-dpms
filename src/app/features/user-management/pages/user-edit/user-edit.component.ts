@@ -1,15 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { Subject, filter, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { ActivatedRoute, Router } from '@angular/router'; // Add Router
+import { Store } from '@ngrx/store';
+import { filter, Subject, takeUntil, combineLatest } from 'rxjs';
+import { MatTabsModule } from '@angular/material/tabs';
 import { TranslocoModule } from '@jsverse/transloco';
-import { UserFormComponent } from '../../components/user-form/user-form.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { UserActions } from '../../store/user.actions';
-import { UpdateUserRequest } from '../../models/user.interface';
 import * as UserSelectors from '../../store/user.selectors';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
+import { PageTitleComponent } from '@app/shared/components/page-title/page-title.component';
+import { UpdateUserDetailsComponent } from './components/update-user-details/update-user-details.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { UserPermissionsComponent } from './components/user-permissions/user-permissions.component';
+import { MatIconModule } from '@angular/material/icon';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-user-edit',
@@ -18,89 +23,67 @@ import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrum
   standalone: true,
   imports: [
     CommonModule,
-    MatProgressBarModule,
+    MatTabsModule,
     TranslocoModule,
-    UserFormComponent,
+    MatProgressBarModule,
     BreadcrumbComponent,
+    MatIconModule,
+    PageTitleComponent,
+    UpdateUserDetailsComponent,
+    ResetPasswordComponent,
+    UserPermissionsComponent,
   ],
 })
 export class UserEditComponent implements OnInit, OnDestroy {
-  loading$ = this.store.select(UserSelectors.selectUserUpdating);
-  errors$ = this.store.select(UserSelectors.selectUserErrors);
+  loading$ = this.store.select(UserSelectors.selectUserLoading);
   user$ = this.store.select(UserSelectors.selectSelectedUser);
+  error$ = this.store.select(UserSelectors.selectUserErrors);
   private destroy$ = new Subject<void>();
-  private userId: string = '';
+  activeTabIndex = 0;
 
   constructor(
     private store: Store,
+    private route: ActivatedRoute,
     private router: Router,
-    private route: ActivatedRoute
+    private location: Location
   ) {}
 
   ngOnInit(): void {
     this.store.dispatch(UserActions.clearErrors());
 
+    // Load user data and handle navigation
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-      this.userId = params['id'];
-      if (this.userId) {
-        this.store.dispatch(UserActions.loadUser({ id: this.userId }));
-      } else {
-        this.navigateBack();
+      if (params['id']) {
+        // Clear selected user before loading new one
+        this.store.dispatch(UserActions.loadUser({ id: params['id'] }));
+
+        // Monitor the user data and error states
+        combineLatest([this.user$, this.loading$])
+          .pipe(
+            takeUntil(this.destroy$),
+            // Wait until loading is complete and we have data or error
+            filter(([_, loading]) => !loading)
+          )
+          .subscribe(([user, _]) => {
+            console.log('User data in component:', user);
+            if (!user) {
+              console.error('No user data available');
+              this.router.navigate(['/dashboard/users/list']);
+            }
+          });
       }
     });
 
-    this.store
-      .select(UserSelectors.selectUserUpdating)
-      .pipe(
-        takeUntil(this.destroy$),
-        filter((updating) => !updating)
-      )
-      .subscribe(() => {
-        this.store
-          .select(UserSelectors.selectUserErrors)
-          .pipe(
-            takeUntil(this.destroy$),
-            filter((errors) => !errors || Object.keys(errors).length === 0)
-          )
-          .subscribe(() => {
-            this.navigateBack();
-          });
+    // Handle query param for active tab
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params) => {
+        this.activeTabIndex = parseInt(params['tab'] || '0', 10);
       });
   }
 
-  onSubmit(request: UpdateUserRequest): void {
-    // Convert any undefined values to null to match Kotlin nullable types
-    const nullableRequest: UpdateUserRequest = {
-      email: request.email ?? null,
-      isWardLevelUser: request.isWardLevelUser ?? null,
-      wardNumber: request.wardNumber ?? null,
-    };
-
-    this.store.dispatch(
-      UserActions.updateUser({
-        id: this.userId,
-        request: nullableRequest,
-      })
-    );
-
-    // Subscribe to update completion
-    this.store
-      .select(UserSelectors.selectUserErrors)
-      .pipe(
-        takeUntil(this.destroy$),
-        filter((errors) => !errors)
-      )
-      .subscribe(() => {
-        this.navigateBack();
-      });
-  }
-
-  onCancel(): void {
-    this.navigateBack();
-  }
-
-  private navigateBack(): void {
-    this.router.navigate(['/dashboard/users/list']);
+  onBack(): void {
+    this.location.back();
   }
 
   ngOnDestroy(): void {
