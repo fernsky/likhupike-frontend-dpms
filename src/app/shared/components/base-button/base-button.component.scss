@@ -65,6 +65,20 @@ button {
     box-shadow: none !important;
     transform: none;
     border-color: transparent !important;
+
+    mat-icon {
+      color: rgba(158, 158, 158, 0.8) !important;
+    }
+  }
+
+  &.secondary:disabled {
+    background: transparent !important;
+    border-color: rgba(158, 158, 158, 0.3) !important;
+    color: rgba(158, 158, 158, 0.8) !important;
+
+    mat-icon {
+      color: rgba(158, 158, 158, 0.8) !important;
+    }
   }
 
   // Size variants

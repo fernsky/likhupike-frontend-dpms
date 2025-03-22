@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -20,10 +26,9 @@ import {
 } from '../../../../models/user.interface';
 import { UserActions } from '../../../../store/user.actions';
 import * as UserSelectors from '../../../../store/user.selectors';
-import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { takeUntil, filter } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Subject, combineLatest } from 'rxjs';
 import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
 
 @Component({
@@ -45,7 +50,26 @@ import { BaseButtonComponent } from '@app/shared/components/base-button/base-but
   ],
 })
 export class UpdateUserDetailsComponent implements OnInit, OnDestroy {
-  @Input() user!: UserResponse;
+  @Input() set user(value: UserResponse) {
+    if (value && (!this._user || this._user.id === value.id)) {
+      this._user = value;
+      if (this.updateForm) {
+        this.updateForm.patchValue(
+          {
+            email: value.email,
+            isWardLevelUser: value.isWardLevelUser,
+            wardNumber: value.wardNumber,
+          },
+          { emitEvent: false }
+        );
+        this.updateForm.markAsPristine();
+      }
+    }
+  }
+  get user(): UserResponse {
+    return this._user!;
+  }
+  private _user!: UserResponse;
 
   updateForm!: FormGroup;
   loading$ = this.store.select(UserSelectors.selectUserUpdating);
@@ -55,47 +79,84 @@ export class UpdateUserDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private store: Store,
-    private router: Router,
-    private location: Location
+    private location: Location,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.initForm();
-  }
 
-  private initForm(): void {
-    this.updateForm = this.fb.group({
-      email: [this.user.email, [Validators.required, Validators.email]],
-      isWardLevelUser: [this.user.isWardLevelUser],
-      wardNumber: [
-        {
-          value: this.user.wardNumber,
-          disabled: !this.user.isWardLevelUser,
-        },
-        [Validators.min(1), Validators.max(33)],
-      ],
-    });
+    // Subscribe to store selectors for updates
+    combineLatest([
+      this.store.select(UserSelectors.selectUserUpdating),
+      this.store.select(UserSelectors.selectSelectedUser),
+      this.store.select(UserSelectors.selectUserErrors),
+    ])
+      .pipe(
+        takeUntil(this.destroy$),
+        filter(([updating]) => updating === false) // Only proceed when not updating
+      )
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .subscribe(([_, updatedUser, errors]) => {
+        if (!errors && updatedUser) {
+          // Update form with new values and mark as pristine
+          this.updateForm.patchValue(
+            {
+              email: updatedUser.email,
+              isWardLevelUser: updatedUser.isWardLevelUser,
+              wardNumber: updatedUser.wardNumber,
+            },
+            { emitEvent: false }
+          );
 
-    // Handle ward level user changes
-    this.updateForm
-      .get('isWardLevelUser')
-      ?.valueChanges.subscribe((isWardLevel) => {
-        const wardControl = this.updateForm.get('wardNumber');
-        if (isWardLevel) {
-          wardControl?.enable();
-        } else {
-          wardControl?.disable();
-          wardControl?.setValue(null);
+          // Reset form state
+          this.updateForm.markAsPristine();
+          this.updateForm.markAsUntouched();
+
+          // Force change detection
+          this.cd.detectChanges();
         }
+      });
+
+    // Monitor form changes for dirty state
+    this.updateForm.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.cd.detectChanges();
       });
   }
 
-  onCancel(): void {
-    this.location.back();
+  private initForm(): void {
+    if (this.user) {
+      this.updateForm = this.fb.group({
+        email: [this.user.email, [Validators.required, Validators.email]],
+        isWardLevelUser: [this.user.isWardLevelUser],
+        wardNumber: [
+          {
+            value: this.user.wardNumber,
+            disabled: !this.user.isWardLevelUser,
+          },
+          [Validators.min(1), Validators.max(33)],
+        ],
+      });
+
+      // Handle ward level user changes
+      this.updateForm
+        .get('isWardLevelUser')
+        ?.valueChanges.subscribe((isWardLevel) => {
+          const wardControl = this.updateForm.get('wardNumber');
+          if (isWardLevel) {
+            wardControl?.enable();
+          } else {
+            wardControl?.disable();
+            wardControl?.setValue(null);
+          }
+        });
+    }
   }
 
   onSubmit(): void {
-    if (this.updateForm.valid) {
+    if (this.updateForm.valid && this.updateForm.dirty) {
       const formValue = this.updateForm.getRawValue();
       const request: UpdateUserRequest = {
         email: formValue.email,
@@ -109,18 +170,12 @@ export class UpdateUserDetailsComponent implements OnInit, OnDestroy {
           request,
         })
       );
-
-      // Subscribe to the success action to navigate back
-      this.store
-        .select(UserSelectors.selectUserErrors)
-        .pipe(
-          takeUntil(this.destroy$),
-          filter((errors) => !errors)
-        )
-        .subscribe(() => {
-          this.location.back();
-        });
     }
+  }
+
+  onCancel(): void {
+    // Reset form to initial values
+    this.initForm();
   }
 
   ngOnDestroy(): void {

@@ -25,9 +25,8 @@ export class UserEffects {
       ofType(UserActions.createUser),
       exhaustMap(({ request }) =>
         this.userService.createUser(request).pipe(
-          map((user) => {
-            this.showSuccess('user.messages.createSuccess');
-            // Don't navigate away, just return success action
+          map(({ user, message }) => {
+            this.showSuccess(message); // Use API's success message
             return UserActions.createUserSuccess({ user });
           }),
           catchError((error) => {
@@ -96,12 +95,12 @@ export class UserEffects {
       ofType(UserActions.updateUser),
       exhaustMap(({ id, request }) =>
         this.userService.updateUser(id, request).pipe(
-          map((user) => {
-            this.showSuccess('user.messages.updateSuccess');
+          map(({ user, message }) => {
+            this.showSuccess(message); // Use API's message
             return UserActions.updateUserSuccess({ user });
           }),
           catchError((error) => {
-            this.showError('user.messages.updateError');
+            this.showError(error.message); // Use API's error message
             return of(UserActions.updateUserFailure({ error }));
           })
         )
@@ -114,39 +113,14 @@ export class UserEffects {
       ofType(UserActions.deleteUser),
       exhaustMap(({ id }) =>
         this.userService.deleteUser(id).pipe(
-          map(() => {
-            this.showSuccess('user.messages.deleteSuccess');
+          map(({ message }) => {
+            this.showSuccess(message); // Use API success message
+            this.router.navigate(['/dashboard/users/list']);
             return UserActions.deleteUserSuccess({ id });
           }),
           catchError((error) => {
-            this.showError('user.messages.deleteError');
+            this.showError(error.message); // Use API error message
             return of(UserActions.deleteUserFailure({ error }));
-          })
-        )
-      )
-    )
-  );
-
-  setActiveStatus$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(UserActions.setActiveStatus),
-      exhaustMap(({ id, active }) =>
-        this.userService.setUserActiveStatus(id, active).pipe(
-          map((user) => {
-            this.showSuccess(
-              active
-                ? 'user.messages.activateSuccess'
-                : 'user.messages.deactivateSuccess'
-            );
-            return UserActions.setActiveStatusSuccess({ user });
-          }),
-          catchError((error) => {
-            this.showError(
-              active
-                ? 'user.messages.activateError'
-                : 'user.messages.deactivateError'
-            );
-            return of(UserActions.setActiveStatusFailure({ error }));
           })
         )
       )
@@ -195,11 +169,11 @@ export class UserEffects {
       exhaustMap(({ id, request }) =>
         this.userService.updatePermissions(id, request).pipe(
           map(({ user, message }) => {
-            this.showSuccess(message); // Use API's success message
+            this.showSuccess(message);
             return UserActions.updatePermissionsSuccess({ user });
           }),
           catchError((error) => {
-            this.showError(error.message); // Use API's error message
+            this.showError(error.message);
             return of(UserActions.updatePermissionsFailure({ error }));
           })
         )
@@ -208,9 +182,9 @@ export class UserEffects {
   );
 
   // Helper method to show success messages
-  private showSuccess(key: string): void {
+  private showSuccess(message: string): void {
     this.snackBar.open(
-      this.transloco.translate(key),
+      message, // Use API message directly
       this.transloco.translate('common.actions.close'),
       { duration: 3000, panelClass: ['success-snackbar'] }
     );

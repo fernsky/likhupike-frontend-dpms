@@ -19,6 +19,7 @@ import {
   UserResponse,
   ResetUserPasswordRequest,
   UserPermissionsRequest,
+  UserWithDetailedPermissions,
 } from '../models/user.interface';
 
 @Injectable({
@@ -29,13 +30,18 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  createUser(request: CreateUserRequest): Observable<UserResponse> {
+  createUser(
+    request: CreateUserRequest
+  ): Observable<{ user: UserResponse; message: string }> {
     return this.http.post<ApiResponse<UserResponse>>(this.apiUrl, request).pipe(
       map((response) => {
         if (!response.success) {
           throw response.error;
         }
-        return response.data;
+        return {
+          user: response.data,
+          message: response.message,
+        };
       }),
       catchError(this.handleError)
     );
@@ -86,7 +92,10 @@ export class UserService {
       );
   }
 
-  updateUser(id: string, request: UpdateUserRequest): Observable<UserResponse> {
+  updateUser(
+    id: string,
+    request: UpdateUserRequest
+  ): Observable<{ user: UserResponse; message: string }> {
     return this.http
       .put<ApiResponse<UserResponse>>(`${this.apiUrl}/${id}`, request)
       .pipe(
@@ -94,22 +103,27 @@ export class UserService {
           if (!response.success) {
             throw response.error;
           }
-          return response.data;
+          return {
+            user: response.data,
+            message: response.message, // Include API's message
+          };
         }),
         catchError(this.handleError)
       );
   }
 
-  deleteUser(id: string): Observable<void> {
-    return this.http
-      .delete<void>(`${this.apiUrl}/${id}`)
-      .pipe(catchError(this.handleError));
-  }
-
-  setUserActiveStatus(id: string, active: boolean): Observable<UserResponse> {
-    return this.http
-      .patch<UserResponse>(`${this.apiUrl}/${id}/status`, { active })
-      .pipe(catchError(this.handleError));
+  deleteUser(id: string): Observable<{ message: string }> {
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`).pipe(
+      map((response) => {
+        if (!response.success) {
+          throw response.error;
+        }
+        return {
+          message: response.message,
+        };
+      }),
+      catchError(this.handleError)
+    );
   }
 
   approveUser(id: string): Observable<{ user: UserResponse; message: string }> {
@@ -154,16 +168,21 @@ export class UserService {
   ): Observable<{ user: UserResponse; message: string }> {
     return this.http
       .put<
-        ApiResponse<UserResponse>
+        ApiResponse<UserWithDetailedPermissions>
       >(`${this.apiUrl}/${id}/permissions`, request)
       .pipe(
         map((response) => {
           if (!response.success) {
             throw response.error;
           }
+          // Convert detailed permissions back to simple format for store
+          const simplifiedUser: UserResponse = {
+            ...response.data,
+            permissions: response.data.permissions.map((p) => p.type),
+          };
           return {
-            user: response.data,
-            message: response.message, // Include API's message in the response
+            user: simplifiedUser,
+            message: response.message,
           };
         }),
         catchError(this.handleError)

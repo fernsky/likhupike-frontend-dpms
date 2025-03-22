@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -45,7 +51,8 @@ export class UserCreateComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store,
-    private router: Router
+    private router: Router,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -61,7 +68,11 @@ export class UserCreateComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         if (this.userForm) {
-          this.userForm.resetForm(); // Now accessible since it's public
+          // Reset form in the next tick
+          setTimeout(() => {
+            this.userForm.resetForm();
+            this.cd.detectChanges();
+          });
         }
       });
   }

@@ -24,12 +24,26 @@
 
   <div class="form-actions">
     <app-base-button
+      *ngIf="permissionsForm.dirty"
+      variant="secondary"
+      icon="close"
+      size="large"
+      (click)="onCancel()"
+    >
+      {{ "common.actions.cancel" | transloco }}
+    </app-base-button>
+
+    <app-base-button
       variant="primary"
       icon="security"
       type="submit"
       size="large"
       [loading]="(loading$ | async) ?? false"
-      [disabled]="!permissionsForm.valid || (loading$ | async) ?? false"
+      [disabled]="
+        !permissionsForm.valid ||
+        !permissionsForm.dirty ||
+        ((loading$ | async) ?? false)
+      "
     >
       {{ "user.form.updatePermissions" | transloco }}
     </app-base-button>

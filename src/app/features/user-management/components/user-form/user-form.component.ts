@@ -119,12 +119,63 @@ export class UserFormComponent implements OnInit, OnDestroy {
         validators: [this.wardNumberValidator()],
       }
     );
+
+    // Reset all validation states
+    this.userForm.markAsUntouched();
+    this.userForm.markAsPristine();
+
+    // Reset all child controls
+    Object.keys(this.userForm.controls).forEach((key) => {
+      const control = this.userForm.get(key);
+      control?.markAsUntouched();
+      control?.markAsPristine();
+      if (control instanceof FormGroup) {
+        Object.keys(control.controls).forEach((childKey) => {
+          control.get(childKey)?.markAsUntouched();
+          control.get(childKey)?.markAsPristine();
+        });
+      }
+    });
   }
 
   resetForm(): void {
-    this.initializeForm();
-    this.userForm.markAsPristine();
-    this.userForm.markAsUntouched();
+    // Create form with empty values but without triggering validation
+    const emptyForm = {
+      email: '',
+      password: '',
+      isWardLevelUser: false,
+      wardNumber: null,
+      permissions: Object.values(PermissionType).reduce(
+        (acc, permission) => ({
+          ...acc,
+          [permission]: false,
+        }),
+        {}
+      ),
+    };
+
+    // Reset with empty values and prevent validation
+    this.userForm.reset(emptyForm, { emitEvent: false });
+
+    // Clear all states
+    Object.keys(this.userForm.controls).forEach((key) => {
+      const control = this.userForm.get(key);
+      control?.setErrors(null);
+      control?.markAsUntouched();
+      control?.markAsPristine();
+
+      if (control instanceof FormGroup) {
+        Object.keys(control.controls).forEach((childKey) => {
+          const childControl = control.get(childKey);
+          childControl?.setErrors(null);
+          childControl?.markAsUntouched();
+          childControl?.markAsPristine();
+        });
+      }
+    });
+
+    // Clear form-level validation
+    this.userForm.setErrors(null);
   }
 
   ngOnInit(): void {

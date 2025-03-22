@@ -106,6 +106,10 @@ export class ResetPasswordComponent implements OnDestroy {
   }
 
   onCancel(): void {
+    this.passwordForm.reset({
+      newPassword: '',
+      confirmPassword: '',
+    });
     this.location.back();
   }
 

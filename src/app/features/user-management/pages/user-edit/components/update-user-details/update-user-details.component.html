@@ -54,12 +54,24 @@
   <!-- Form Actions -->
   <div class="form-actions">
     <app-base-button
+      *ngIf="updateForm.dirty"
+      variant="secondary"
+      icon="close"
+      size="large"
+      (click)="onCancel()"
+    >
+      {{ "common.actions.cancel" | transloco }}
+    </app-base-button>
+
+    <app-base-button
       variant="primary"
       icon="save"
       type="submit"
       size="large"
       [loading]="(loading$ | async) ?? false"
-      [disabled]="updateForm.invalid || ((loading$ | async) ?? false)"
+      [disabled]="
+        !updateForm.valid || !updateForm.dirty || ((loading$ | async) ?? false)
+      "
     >
       {{ "common.actions.save" | transloco }}
     </app-base-button>

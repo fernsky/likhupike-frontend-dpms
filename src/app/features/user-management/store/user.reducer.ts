@@ -86,6 +86,7 @@ export const userReducer = createReducer(
   on(UserActions.updateUserSuccess, (state, { user }) => ({
     ...state,
     users: state.users.map((u) => (u.id === user.id ? user : u)),
+    selectedUser: user,
     updating: false,
     errors: null,
     lastUpdated: new Date(),
@@ -186,7 +187,18 @@ export const userReducer = createReducer(
   })),
   on(UserActions.updatePermissionsSuccess, (state, { user }) => ({
     ...state,
-    users: state.users.map((u) => (u.id === user.id ? user : u)),
+    users: state.users.map((u) =>
+      u.id === user.id
+        ? {
+            ...u,
+            permissions: user.permissions, // Keep the full Permission objects
+          }
+        : u
+    ),
+    selectedUser: {
+      ...state.selectedUser!,
+      permissions: user.permissions, // Keep full permission objects for selected user
+    },
     updating: false,
     errors: null,
     lastUpdated: new Date(),

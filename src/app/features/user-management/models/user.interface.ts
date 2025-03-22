@@ -99,3 +99,19 @@ export interface UserValidationError {
   details: unknown | null;
   status: number;
 }
+
+export interface DetailedPermission {
+  type: PermissionType;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string | null;
+  updatedBy: string | null;
+  version: number | null;
+  authority: string;
+  label: string;
+}
+
+export interface UserWithDetailedPermissions
+  extends Omit<UserResponse, 'permissions'> {
+  permissions: DetailedPermission[];
+}
