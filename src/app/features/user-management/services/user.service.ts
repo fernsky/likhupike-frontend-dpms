@@ -151,7 +151,7 @@ export class UserService {
   updatePermissions(
     id: string,
     request: UserPermissionsRequest
-  ): Observable<UserResponse> {
+  ): Observable<{ user: UserResponse; message: string }> {
     return this.http
       .put<
         ApiResponse<UserResponse>
@@ -161,7 +161,10 @@ export class UserService {
           if (!response.success) {
             throw response.error;
           }
-          return response.data;
+          return {
+            user: response.data,
+            message: response.message, // Include API's message in the response
+          };
         }),
         catchError(this.handleError)
       );

@@ -27,7 +27,7 @@ export class UserEffects {
         this.userService.createUser(request).pipe(
           map((user) => {
             this.showSuccess('user.messages.createSuccess');
-            this.router.navigate(['/dashboard/users/list']);
+            // Don't navigate away, just return success action
             return UserActions.createUserSuccess({ user });
           }),
           catchError((error) => {
@@ -194,12 +194,12 @@ export class UserEffects {
       ofType(UserActions.updatePermissions),
       exhaustMap(({ id, request }) =>
         this.userService.updatePermissions(id, request).pipe(
-          map((user) => {
-            this.showSuccess('user.messages.permissionsUpdateSuccess');
+          map(({ user, message }) => {
+            this.showSuccess(message); // Use API's success message
             return UserActions.updatePermissionsSuccess({ user });
           }),
           catchError((error) => {
-            this.showError(error.message);
+            this.showError(error.message); // Use API's error message
             return of(UserActions.updatePermissionsFailure({ error }));
           })
         )

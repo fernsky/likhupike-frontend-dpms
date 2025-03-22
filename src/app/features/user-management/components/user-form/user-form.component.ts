@@ -35,11 +35,7 @@ import {
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { Location } from '@angular/common';
 
-import {
-  CreateUserRequest,
-  UpdateUserRequest,
-  UserResponse,
-} from '../../models/user.interface';
+import { CreateUserRequest } from '../../models/user.interface';
 import { PermissionType } from '@app/core/models/permission.enum';
 import { NumberFormatService } from '@app/shared/services/number-format.service';
 import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
@@ -77,10 +73,7 @@ import { FormSectionComponent } from '@app/shared/components/form-section/form-s
 export class UserFormComponent implements OnInit, OnDestroy {
   @Input() loading = false;
   @Input() errors: Record<string, string[]> | null = null;
-  @Input() user: UserResponse | null = null;
-  @Input() isEdit = false;
   @Output() submitForm = new EventEmitter<CreateUserRequest>();
-  @Output() submitUpdateForm = new EventEmitter<UpdateUserRequest>();
   @Output() cancelForm = new EventEmitter<void>();
 
   userForm!: FormGroup;
@@ -91,40 +84,51 @@ export class UserFormComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private numberFormat: NumberFormatService,
     private translocoService: TranslocoService,
-    private location: Location // Add Location service
+    private location: Location
   ) {
-    this.initForm();
+    this.initializeForm();
   }
 
-  private initForm(): void {
-    const baseControls = {
-      email: ['', [Validators.required, Validators.email]],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(8),
-          Validators.pattern(
-            /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/
-          ),
+  initializeForm(): void {
+    this.userForm = this.fb.group(
+      {
+        email: ['', [Validators.required, Validators.email]],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(8),
+            Validators.pattern(
+              /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/
+            ),
+          ],
         ],
-      ],
-      isWardLevelUser: [false],
-      wardNumber: [{ value: null, disabled: true }],
-      permissions: this.fb.group(
-        Object.values(PermissionType).reduce(
-          (acc, permission) => ({
-            ...acc,
-            [permission]: [false],
-          }),
-          {}
-        )
-      ),
-    };
+        isWardLevelUser: [false],
+        wardNumber: [{ value: null, disabled: true }],
+        permissions: this.fb.group(
+          Object.values(PermissionType).reduce(
+            (acc, permission) => ({
+              ...acc,
+              [permission]: [false],
+            }),
+            {}
+          )
+        ),
+      },
+      {
+        validators: [this.wardNumberValidator()],
+      }
+    );
+  }
 
-    this.userForm = this.fb.group(baseControls, {
-      validators: [this.wardNumberValidator()],
-    });
+  resetForm(): void {
+    this.initializeForm();
+    this.userForm.markAsPristine();
+    this.userForm.markAsUntouched();
+  }
+
+  ngOnInit(): void {
+    this.setupWardLevelSubscription();
   }
 
   private wardNumberValidator(): ValidatorFn {
@@ -142,33 +146,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
       return null;
     };
-  }
-
-  ngOnInit(): void {
-    if (this.user) {
-      const formValue = this.isEdit
-        ? {
-            email: this.user.email,
-            isWardLevelUser: this.user.isWardLevelUser,
-            wardNumber: this.user.wardNumber,
-          }
-        : {
-            email: this.user.email,
-            isWardLevelUser: this.user.isWardLevelUser,
-            wardNumber: this.user.wardNumber,
-            permissions: Object.entries(this.user.permissions).reduce(
-              (acc, [key, value]) => ({
-                ...acc,
-                [key]: value,
-              }),
-              {}
-            ),
-          };
-
-      this.userForm.patchValue(formValue);
-    }
-
-    this.setupWardLevelSubscription();
   }
 
   private setupWardLevelSubscription(): void {
@@ -189,8 +166,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
   onSubmit(): void {
     if (this.userForm.valid) {
       const formValue = this.userForm.getRawValue();
-      console.log('Raw form value:', formValue);
-
       const createRequest: CreateUserRequest = {
         email: formValue.email,
         password: formValue.password,
@@ -199,10 +174,8 @@ export class UserFormComponent implements OnInit, OnDestroy {
         permissions: formValue.permissions,
       };
 
-      console.log('Emitting create request:', createRequest);
       this.submitForm.emit(createRequest);
     } else {
-      console.log('Form validation errors:', this.userForm.errors);
       this.markFormGroupTouched(this.userForm);
     }
   }

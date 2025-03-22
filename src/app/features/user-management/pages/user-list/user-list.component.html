@@ -8,15 +8,14 @@
     class="responsive-title"
   >
     <ng-template #actions>
-      <button mat-raised-button class="create-button" (click)="onCreateUser()">
-        <mat-icon class="add-icon">add</mat-icon>
-        <span class="full-text">{{
-          "user.list.createButton" | transloco
-        }}</span>
-        <span class="medium-text">{{
-          "user.list.createShort" | transloco
-        }}</span>
-      </button>
+      <app-page-title-button
+        variant="primary"
+        size="medium"
+        icon="add"
+        [fullText]="'user.list.createButton' | transloco"
+        [mediumText]="'user.list.createShort' | transloco"
+        (clicked)="onCreateUser()"
+      ></app-page-title-button>
     </ng-template>
   </app-page-title>
 

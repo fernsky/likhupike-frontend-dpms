@@ -2,26 +2,15 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 1rem; // Reduced from 1.25rem
+  gap: 1rem;
   width: 100%;
   height: 100%;
-
-  // Header section
-  .header-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-
-    app-page-title {
-      flex: 1;
-    }
-  }
 
   .search-and-filter-bar {
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
-    // Actions bar
+
     .actions-bar {
       display: flex;
       align-items: center;
@@ -29,43 +18,7 @@
 
       app-user-search {
         flex: 1;
-        min-width: 0; // Allow flex item to shrink below its minimum content size
-      }
-
-      .filter-button {
-        flex-shrink: 0; // Prevent filter button from shrinking
-        min-width: auto; // Set minimum width for filter button
-        height: 32px;
-        border-radius: 16px;
-        padding: 0 12px;
-        background: transparent;
-        border: 1px solid #e2e8f0;
-        color: #64748b;
-        font-size: 0.75rem;
-        transition: all 0.2s ease;
-
-        &:hover {
-          background: #f8fafb;
-          border-color: #cbd5e1;
-        }
-
-        &.active {
-          background: #f1f5f9;
-          color: #1e293b;
-          border-color: #cbd5e1;
-
-          mat-icon {
-            color: inherit;
-          }
-        }
-
-        mat-icon {
-          font-size: 16px;
-          width: 16px;
-          height: 16px;
-          margin-right: 4px;
-          color: inherit;
-        }
+        min-width: 0;
       }
 
       .list-controls {
@@ -81,63 +34,45 @@
     }
   }
 
-  app-users-table {
-    border-radius: 0;
-    box-shadow: none;
-    overflow: visible;
+  .filter-button {
+    flex-shrink: 0;
+    min-width: auto;
+    height: 32px;
+    border-radius: 16px;
+    padding: 0 12px;
     background: transparent;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+    font-size: 0.75rem;
+    transition: all 0.2s ease;
 
-    ::ng-deep {
-      .table-container {
-        background: transparent;
-        box-shadow: none;
+    &:hover {
+      background: #f8fafb;
+      border-color: #cbd5e1;
+    }
 
-        .table-wrapper {
-          border-radius: 12px;
-          box-shadow: 0 1px 3px rgba(18, 55, 114, 0.08);
-          overflow: hidden;
-        }
+    &.active {
+      background: #f1f5f9;
+      color: #1e293b;
+      border-color: #cbd5e1;
 
-        app-paginator {
-          margin-top: 0.75rem;
-          background: transparent;
-          border: none;
-          box-shadow: none;
-        }
+      mat-icon {
+        color: inherit;
       }
     }
-  }
-}
 
-// Responsive Design
-@media (max-width: 1024px) {
-  .user-list-container {
-    .filters-section {
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      margin-right: 4px;
+      color: inherit;
     }
   }
 }
 
 @media (max-width: 768px) {
   .user-list-container {
-    gap: 1rem;
-
-    .header-section {
-      flex-direction: row; // Changed from column to row
-      align-items: flex-start;
-      gap: 1rem;
-    }
-
-    .actions-bar {
-      flex-direction: column;
-      gap: 1rem;
-
-      .filter-button {
-        width: 100%;
-      }
-    }
-
     .search-and-filter-bar {
       gap: 0.75rem;
 
@@ -151,349 +86,7 @@
 
         .list-controls {
           width: 100%;
-          display: flex;
           justify-content: space-between;
-          align-items: center;
-          gap: 0.5rem;
-
-          app-sort-controls {
-            border: none;
-            padding: 0;
-          }
-
-          .filter-button {
-            width: auto;
-            min-width: 36px;
-            height: 36px;
-            padding: 0;
-            border-radius: 50%;
-
-            mat-icon {
-              margin: 0;
-            }
-
-            span {
-              display: none;
-            }
-          }
-        }
-      }
-    }
-
-    app-users-table {
-      ::ng-deep {
-        .table-container {
-          .mobile-wrapper {
-            padding: 0 1rem; // Add padding back to maintain content alignment
-          }
-        }
-      }
-    }
-  }
-}
-
-// Print Styles
-@media print {
-  .user-list-container {
-    background: none;
-    padding: 0;
-
-    .header-section .create-button,
-    .actions-bar {
-      display: none;
-    }
-  }
-}
-
-// High Contrast Mode
-@media (prefers-contrast: more) {
-  .user-list-container {
-    .table-container {
-      border: 2px solid currentColor;
-
-      table {
-        th,
-        td {
-          border: 1px solid currentColor;
-        }
-      }
-    }
-  }
-}
-
-// Custom Material Overrides
-::ng-deep {
-  .mat-form-field-appearance-outline {
-    .mat-form-field-outline {
-      background: white;
-    }
-  }
-
-  .mat-chip.mat-standard-chip {
-    border-radius: 12px;
-    font-weight: 500;
-  }
-
-  .mat-menu-item {
-    .mat-icon {
-      margin-right: 8px;
-    }
-
-    &.warn-action {
-      color: #e74c3c;
-
-      .mat-icon {
-        color: #e74c3c;
-      }
-    }
-  }
-}
-
-// Responsive button text
-@media (max-width: 768px) {
-  .create-button {
-    padding: 0 16px;
-
-    .full-text {
-      display: none !important;
-    }
-    .medium-text {
-      display: inline-block !important;
-    }
-    .icon-only {
-      display: none !important;
-    }
-
-    mat-icon {
-      margin-right: 8px;
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .create-button {
-    min-width: 40px;
-    padding: 0 8px;
-
-    .full-text,
-    .medium-text {
-      display: none !important;
-    }
-    .icon-only {
-      display: inline-block !important;
-    }
-
-    mat-icon {
-      margin: 0;
-      display: none;
-    }
-  }
-}
-
-// Make title and description more compact on mobile
-::ng-deep .responsive-title {
-  .page-title-content {
-    @media (max-width: 768px) {
-      gap: 0.25rem;
-
-      .title-text {
-        font-size: 1.25rem;
-        line-height: 1.5;
-      }
-
-      .description {
-        font-size: 0.875rem;
-        line-height: 1.25;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .title-text {
-        font-size: 1.125rem;
-      }
-
-      .description {
-        font-size: 0.75rem;
-      }
-    }
-  }
-}
-
-// Base create button styles
-.create-button {
-  .medium-text {
-    display: none;
-  }
-  .full-text {
-    display: inline-block;
-  }
-  .add-icon {
-    margin-right: 8px;
-  }
-}
-
-// Update responsive styles
-@media (max-width: 768px) {
-  .create-button {
-    padding: 0 16px;
-    height: 36px;
-
-    .full-text {
-      display: none;
-    }
-    .medium-text {
-      display: inline-block;
-    }
-  }
-
-  ::ng-deep .responsive-title {
-    .page-title-wrapper {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 1rem;
-
-      .page-title-content {
-        flex: 1;
-        min-width: 0;
-      }
-
-      .page-title-actions {
-        padding: 0;
-        margin: 0;
-      }
-    }
-  }
-
-  .create-button {
-    min-width: 36px !important;
-    width: 36px !important;
-    height: 36px !important;
-    padding: 0 !important;
-    border-radius: 50% !important;
-    margin: 0 !important;
-
-    .full-text,
-    .medium-text {
-      display: none !important;
-    }
-
-    mat-icon {
-      margin: 0 !important;
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-      line-height: 20px;
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .create-button {
-    min-width: 36px;
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    border-radius: 50%;
-
-    .full-text,
-    .medium-text {
-      display: none;
-    }
-
-    .add-icon {
-      margin: 0;
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-      line-height: 20px;
-    }
-  }
-
-  // Adjust page title layout for mobile
-  ::ng-deep .responsive-title {
-    .page-title-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-
-      .page-title-content {
-        flex: 1;
-        min-width: 0; // Allow text to wrap if needed
-      }
-
-      .page-title-actions {
-        padding: 0;
-        margin: 0;
-      }
-    }
-  }
-}
-
-// Remove duplicate media queries and consolidate styles
-@media (max-width: 768px) {
-  ::ng-deep .responsive-title {
-    .page-title-wrapper {
-      display: flex !important; // Force flex display
-      flex-direction: row !important; // Force row layout
-      align-items: center !important; // Center items vertically
-      justify-content: space-between !important;
-      gap: 1rem;
-      width: 100%;
-
-      .page-title-content {
-        flex: 1;
-        min-width: 0; // Allow text wrapping
-      }
-
-      .page-title-actions {
-        flex: 0 0 auto; // Prevent shrinking
-        padding: 0;
-        margin: 0;
-      }
-    }
-  }
-
-  .create-button {
-    min-width: 36px !important;
-    width: 36px !important;
-    height: 36px !important;
-    padding: 0 !important;
-    border-radius: 50% !important;
-    margin: 0 !important;
-
-    .full-text,
-    .medium-text {
-      display: none !important;
-    }
-
-    mat-icon {
-      margin: 0 !important;
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-      line-height: 20px;
-    }
-  }
-
-  // Override any flex-direction: column that might be affecting the layout
-  .user-list-container {
-    .header-section {
-      flex-direction: row !important;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .user-list-container {
-    .search-and-filter-bar {
-      .actions-bar {
-        .list-controls {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          margin-left: auto;
 
           app-sort-controls {
             border: none;
@@ -507,28 +100,13 @@
             padding: 0;
             border: none;
             background: transparent;
-            color: #64748b;
-            opacity: 0.8;
-
-            &.active {
-              color: #1e293b;
-              opacity: 1;
-            }
 
             mat-icon {
-              font-size: 18px;
-              width: 18px;
-              height: 18px;
               margin: 0;
             }
 
             span {
               display: none;
-            }
-
-            &:hover {
-              opacity: 1;
-              background: transparent;
             }
           }
         }
@@ -537,15 +115,11 @@
   }
 }
 
-.create-button {
-  .medium-text,
-  .icon-only {
-    display: none;
-  }
-  .full-text {
-    display: inline-block;
-  }
-  mat-icon {
-    margin-right: 8px;
+// Print Styles
+@media print {
+  .user-list-container {
+    .actions-bar {
+      display: none;
+    }
   }
 }

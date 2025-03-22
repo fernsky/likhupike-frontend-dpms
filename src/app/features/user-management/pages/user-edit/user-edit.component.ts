@@ -16,7 +16,7 @@ import { UserPermissionsComponent } from './components/user-permissions/user-per
 import { MatIconModule } from '@angular/material/icon';
 import { Location } from '@angular/common';
 import { FormSectionComponent } from '@app/shared/components/form-section/form-section.component';
-import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
+import { PageTitleButtonComponent } from '@app/shared/components/page-title-button/page-title-button.component';
 
 @Component({
   selector: 'app-user-edit',
@@ -35,7 +35,8 @@ import { BaseButtonComponent } from '@app/shared/components/base-button/base-but
     ResetPasswordComponent,
     UserPermissionsComponent,
     FormSectionComponent,
-    BaseButtonComponent,
+
+    PageTitleButtonComponent,
   ],
   providers: [
     provideTranslocoScope({

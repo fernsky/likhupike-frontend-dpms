@@ -237,12 +237,7 @@
       flex-direction: column-reverse;
       gap: 0.75rem;
       padding: 1rem;
-      position: fixed; // Fix to bottom
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
+
       margin: 0;
 
       ::ng-deep app-base-button {

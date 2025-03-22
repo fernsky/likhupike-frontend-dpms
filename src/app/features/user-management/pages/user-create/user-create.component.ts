@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Subject } from 'rxjs';
+import { Subject, combineLatest } from 'rxjs';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
 import { UserFormComponent } from '../../components/user-form/user-form.component';
@@ -13,6 +13,7 @@ import { PasswordValidatorService } from '@app/shared/validators/password-valida
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { PageTitleComponent } from '@app/shared/components/page-title/page-title.component';
 import { PermissionType } from '@app/core/models/permission.enum';
+import { filter, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-create',
@@ -40,6 +41,8 @@ export class UserCreateComponent implements OnInit, OnDestroy {
   errors$ = this.store.select(UserSelectors.selectUserErrors);
   private destroy$ = new Subject<void>();
 
+  @ViewChild(UserFormComponent) userForm!: UserFormComponent;
+
   constructor(
     private store: Store,
     private router: Router
@@ -47,6 +50,20 @@ export class UserCreateComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.dispatch(UserActions.clearErrors());
+
+    combineLatest([
+      this.store.select(UserSelectors.selectUserCreating),
+      this.store.select(UserSelectors.selectUserErrors),
+    ])
+      .pipe(
+        takeUntil(this.destroy$),
+        filter(([creating, errors]) => creating === false && !errors)
+      )
+      .subscribe(() => {
+        if (this.userForm) {
+          this.userForm.resetForm(); // Now accessible since it's public
+        }
+      });
   }
 
   onSubmit(request: CreateUserRequest): void {

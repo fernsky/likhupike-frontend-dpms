@@ -1,0 +1,12 @@
+<button
+  mat-raised-button
+  [class]="variant + ' ' + size"
+  [disabled]="disabled"
+  (click)="clicked.emit()"
+>
+  <span class="button-content">
+    <mat-icon>{{ icon }}</mat-icon>
+    <span class="full-text">{{ fullText }}</span>
+    <span class="medium-text" *ngIf="mediumText">{{ mediumText }}</span>
+  </span>
+</button>

@@ -155,9 +155,7 @@
   }
 
   &:hover:not(:disabled) {
-    background: rgba(18, 55, 114, 0.04);
     transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(18, 55, 114, 0.1);
   }
 
   &:active:not(:disabled) {
@@ -216,6 +214,31 @@
     font-size: 0.875rem;
     padding: 0 1rem;
   }
+
+  ::ng-deep .back-button {
+    button {
+      min-width: 36px !important;
+      width: 36px !important;
+      height: 36px !important;
+      padding: 0 !important;
+      border-radius: 50% !important;
+      margin: 0 !important;
+
+      .button-content {
+        .full-text {
+          display: none !important;
+        }
+
+        mat-icon {
+          margin: 0 !important;
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+          line-height: 20px;
+        }
+      }
+    }
+  }
 }
 
 @media (max-width: 480px) {
@@ -236,6 +259,19 @@
 
     .section-content {
       padding: 0.75rem;
+    }
+  }
+
+  ::ng-deep .back-button button {
+    min-width: 32px !important;
+    width: 32px !important;
+    height: 32px !important;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      line-height: 18px;
     }
   }
 }

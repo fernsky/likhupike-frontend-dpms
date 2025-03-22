@@ -12,14 +12,13 @@
     icon="manage_accounts"
   >
     <ng-template #actions>
-      <app-base-button
+      <app-page-title-button
         variant="secondary"
-        icon="arrow_back"
-        (click)="onBack()"
         size="medium"
-      >
-        {{ "common.actions.back" | transloco }}
-      </app-base-button>
+        icon="arrow_back"
+        [fullText]="'common.actions.back' | transloco"
+        (clicked)="onBack()"
+      ></app-page-title-button>
     </ng-template>
   </app-page-title>
 

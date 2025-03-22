@@ -53,6 +53,7 @@ import { UserFiltersComponent } from '../../components/user-filters/user-filters
 import { UsersTableComponent } from '../../components/users-table/users-table.component';
 import { SortControlsComponent } from '../../components/sort-controls/sort-controls.component';
 import { PageEvent } from '@shared/components/paginator/paginator.component';
+import { PageTitleButtonComponent } from '@app/shared/components/page-title-button/page-title-button.component';
 
 // Models & Actions
 import {
@@ -96,6 +97,7 @@ import { PermissionType } from '@app/core/models/permission.enum';
     UserFiltersComponent,
     UsersTableComponent,
     SortControlsComponent,
+    PageTitleButtonComponent,
   ],
   providers: [
     provideNativeDateAdapter(),

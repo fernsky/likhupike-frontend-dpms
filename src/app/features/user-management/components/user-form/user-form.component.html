@@ -17,7 +17,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field *ngIf="!isEdit" appearance="outline">
+        <mat-form-field appearance="outline">
           <mat-label>{{ "user.form.password" | transloco }}</mat-label>
           <input matInput formControlName="password" type="password" />
           <mat-icon
@@ -77,7 +77,6 @@
 
   <!-- Permissions Section -->
   <app-form-section
-    *ngIf="!isEdit"
     icon="security"
     [title]="'user.form.sections.permissions' | transloco"
   >
@@ -113,15 +112,13 @@
 
     <app-base-button
       variant="primary"
-      [icon]="isEdit ? 'save' : 'add_circle'"
+      [icon]="'add_circle'"
       type="submit"
       size="large"
       [loading]="loading"
       [disabled]="loading || !userForm.valid"
     >
-      {{
-        (isEdit ? "common.actions.update" : "common.actions.create") | transloco
-      }}
+      {{ "common.actions.create" | transloco }}
     </app-base-button>
   </div>
 </form>
