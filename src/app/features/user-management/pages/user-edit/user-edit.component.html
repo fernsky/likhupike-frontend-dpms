@@ -9,9 +9,6 @@
 
   <ng-container *ngIf="(loading$ | async) === false">
     <ng-container *ngIf="user$ | async as user; else noUser">
-      <!-- Debug info -->
-      <div style="display: none">User loaded: {{ user | json }}</div>
-
       <app-page-title
         [titleTranslationKey]="'user.edit.title'"
         [titleParams]="{ email: user.email }"
@@ -19,42 +16,47 @@
         icon="manage_accounts"
       >
         <ng-template #actions>
-          <button mat-stroked-button (click)="onBack()">
+          <button mat-stroked-button class="back-button" (click)="onBack()">
             <mat-icon>arrow_back</mat-icon>
             {{ "common.actions.back" | transloco }}
           </button>
         </ng-template>
       </app-page-title>
 
-      <mat-tab-group
-        [selectedIndex]="activeTabIndex"
-        class="user-edit-tabs"
-        animationDuration="0ms"
-      >
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <mat-icon class="tab-icon">person</mat-icon>
-            <span>{{ "user.edit.tabs.details" | transloco }}</span>
-          </ng-template>
-          <app-update-user-details [user]="user"></app-update-user-details>
-        </mat-tab>
+      <div class="sections-container">
+        <!-- User Details Section -->
+        <div class="edit-section">
+          <div class="section-header">
+            <mat-icon>person</mat-icon>
+            <h2>{{ "user.edit.tabs.details" | transloco }}</h2>
+          </div>
+          <div class="section-content">
+            <app-update-user-details [user]="user"></app-update-user-details>
+          </div>
+        </div>
 
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <mat-icon class="tab-icon">key</mat-icon>
-            <span>{{ "user.edit.tabs.password" | transloco }}</span>
-          </ng-template>
-          <app-reset-password [user]="user"></app-reset-password>
-        </mat-tab>
+        <!-- Password Section -->
+        <div class="edit-section">
+          <div class="section-header">
+            <mat-icon>key</mat-icon>
+            <h2>{{ "user.edit.tabs.password" | transloco }}</h2>
+          </div>
+          <div class="section-content">
+            <app-reset-password [user]="user"></app-reset-password>
+          </div>
+        </div>
 
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <mat-icon class="tab-icon">security</mat-icon>
-            <span>{{ "user.edit.tabs.permissions" | transloco }}</span>
-          </ng-template>
-          <app-user-permissions [user]="user"></app-user-permissions>
-        </mat-tab>
-      </mat-tab-group>
+        <!-- Permissions Section -->
+        <div class="edit-section">
+          <div class="section-header">
+            <mat-icon>security</mat-icon>
+            <h2>{{ "user.edit.tabs.permissions" | transloco }}</h2>
+          </div>
+          <div class="section-content">
+            <app-user-permissions [user]="user"></app-user-permissions>
+          </div>
+        </div>
+      </div>
     </ng-container>
 
     <ng-template #noUser>

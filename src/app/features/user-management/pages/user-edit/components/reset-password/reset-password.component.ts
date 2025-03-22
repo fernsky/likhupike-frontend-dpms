@@ -11,7 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslocoModule } from '@jsverse/transloco';
+import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 import { UserResponse } from '../../../../models/user.interface';
 import { UserActions } from '../../../../store/user.actions';
 import * as UserSelectors from '../../../../store/user.selectors';
@@ -31,6 +31,12 @@ import { takeUntil, filter } from 'rxjs/operators';
     MatButtonModule,
     MatIconModule,
     TranslocoModule,
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'user-management',
+      alias: 'user',
+    }),
   ],
 })
 export class ResetPasswordComponent implements OnDestroy {

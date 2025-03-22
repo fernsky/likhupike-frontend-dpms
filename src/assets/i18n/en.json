@@ -8,7 +8,8 @@
       "create": "Create",
       "edit": "Edit",
       "delete": "Delete",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+      "back": "Back"
     },
     "pagination": {
       "itemsPerPage": "Items per page",

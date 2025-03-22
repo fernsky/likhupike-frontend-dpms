@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router'; // Add Router
 import { Store } from '@ngrx/store';
 import { filter, Subject, takeUntil, combineLatest } from 'rxjs';
 import { MatTabsModule } from '@angular/material/tabs';
-import { TranslocoModule } from '@jsverse/transloco';
+import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { UserActions } from '../../store/user.actions';
 import * as UserSelectors from '../../store/user.selectors';
@@ -32,6 +32,12 @@ import { Location } from '@angular/common';
     UpdateUserDetailsComponent,
     ResetPasswordComponent,
     UserPermissionsComponent,
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'user-management',
+      alias: 'user',
+    }),
   ],
 })
 export class UserEditComponent implements OnInit, OnDestroy {
@@ -62,8 +68,10 @@ export class UserEditComponent implements OnInit, OnDestroy {
           .pipe(
             takeUntil(this.destroy$),
             // Wait until loading is complete and we have data or error
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             filter(([_, loading]) => !loading)
           )
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           .subscribe(([user, _]) => {
             console.log('User data in component:', user);
             if (!user) {
