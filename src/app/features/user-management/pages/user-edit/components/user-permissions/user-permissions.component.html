@@ -23,14 +23,15 @@
   </div>
 
   <div class="form-actions">
-    <button
-      mat-raised-button
-      color="primary"
+    <app-base-button
+      variant="primary"
+      icon="security"
       type="submit"
-      [disabled]="!permissionsForm.valid || (loading$ | async)"
+      size="large"
+      [loading]="(loading$ | async) ?? false"
+      [disabled]="!permissionsForm.valid || (loading$ | async) ?? false"
     >
-      <mat-icon>security</mat-icon>
       {{ "user.form.updatePermissions" | transloco }}
-    </button>
+    </app-base-button>
   </div>
 </form>

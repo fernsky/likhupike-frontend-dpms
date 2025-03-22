@@ -17,6 +17,7 @@ import { UserActions } from '../../../../store/user.actions';
 import * as UserSelectors from '../../../../store/user.selectors';
 import { Subject } from 'rxjs';
 import { takeUntil, filter } from 'rxjs/operators';
+import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
 
 @Component({
   selector: 'app-reset-password',
@@ -31,6 +32,7 @@ import { takeUntil, filter } from 'rxjs/operators';
     MatButtonModule,
     MatIconModule,
     TranslocoModule,
+    BaseButtonComponent,
   ],
   providers: [
     provideTranslocoScope({

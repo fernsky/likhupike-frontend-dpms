@@ -24,6 +24,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { takeUntil, filter } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
 
 @Component({
   selector: 'app-update-user-details',
@@ -40,6 +41,7 @@ import { Subject } from 'rxjs';
     MatButtonModule,
     MatIconModule,
     TranslocoModule,
+    BaseButtonComponent,
   ],
 })
 export class UpdateUserDetailsComponent implements OnInit, OnDestroy {

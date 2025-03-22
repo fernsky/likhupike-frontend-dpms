@@ -10,6 +10,7 @@ import { UserResponse } from '../../../../models/user.interface';
 import { UserActions } from '../../../../store/user.actions';
 import * as UserSelectors from '../../../../store/user.selectors';
 import { PermissionType } from '@app/core/models/permission.enum';
+import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
 
 @Component({
   selector: 'app-user-permissions',
@@ -23,6 +24,7 @@ import { PermissionType } from '@app/core/models/permission.enum';
     MatButtonModule,
     MatIconModule,
     TranslocoModule,
+    BaseButtonComponent,
   ],
 })
 export class UserPermissionsComponent implements OnInit {

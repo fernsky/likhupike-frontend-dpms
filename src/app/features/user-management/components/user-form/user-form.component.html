@@ -1,12 +1,10 @@
 <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="user-form">
   <!-- Basic Information Section -->
-  <div class="form-section">
-    <div class="section-header">
-      <mat-icon>person</mat-icon>
-      <h2>{{ "user.form.sections.basic" | transloco }}</h2>
-    </div>
-
-    <div class="section-content basic-info">
+  <app-form-section
+    icon="person"
+    [title]="'user.form.sections.basic' | transloco"
+  >
+    <div class="basic-info">
       <div class="credentials-group">
         <mat-form-field appearance="outline">
           <mat-label>{{ "user.form.email" | transloco }}</mat-label>
@@ -75,16 +73,15 @@
         </mat-form-field>
       </div>
     </div>
-  </div>
+  </app-form-section>
 
   <!-- Permissions Section -->
-  <div class="form-section" *ngIf="!isEdit">
-    <div class="section-header">
-      <mat-icon>security</mat-icon>
-      <h2>{{ "user.form.sections.permissions" | transloco }}</h2>
-    </div>
-
-    <div class="section-content permissions">
+  <app-form-section
+    *ngIf="!isEdit"
+    icon="security"
+    [title]="'user.form.sections.permissions' | transloco"
+  >
+    <div class="permissions">
       <div formGroupName="permissions" class="permissions-grid">
         <div *ngFor="let permission of permissionTypes" class="permission-item">
           <mat-checkbox [formControlName]="permission">
@@ -100,34 +97,31 @@
         </div>
       </div>
     </div>
-  </div>
+  </app-form-section>
 
   <!-- Form Actions -->
   <div class="form-actions">
-    <button
-      type="button"
-      mat-stroked-button
-      (click)="onCancel()"
+    <app-base-button
+      variant="secondary"
+      icon="arrow_back"
+      size="large"
       [disabled]="loading"
+      (click)="onCancel()"
     >
-      <mat-icon>arrow_back</mat-icon>
       {{ "common.actions.cancel" | transloco }}
-    </button>
-    <button
-      class="submit-button"
+    </app-base-button>
+
+    <app-base-button
+      variant="primary"
+      [icon]="isEdit ? 'save' : 'add_circle'"
       type="submit"
-      mat-raised-button
-      color="primary"
+      size="large"
+      [loading]="loading"
       [disabled]="loading || !userForm.valid"
     >
-      <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
-      <span class="button-content" *ngIf="!loading">
-        <mat-icon>{{ isEdit ? "save" : "add_circle" }}</mat-icon>
-        {{
-          (isEdit ? "common.actions.update" : "common.actions.create")
-            | transloco
-        }}
-      </span>
-    </button>
+      {{
+        (isEdit ? "common.actions.update" : "common.actions.create") | transloco
+      }}
+    </app-base-button>
   </div>
 </form>

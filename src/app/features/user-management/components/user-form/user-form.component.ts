@@ -42,6 +42,8 @@ import {
 } from '../../models/user.interface';
 import { PermissionType } from '@app/core/models/permission.enum';
 import { NumberFormatService } from '@app/shared/services/number-format.service';
+import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
+import { FormSectionComponent } from '@app/shared/components/form-section/form-section.component';
 
 @Component({
   selector: 'app-user-form',
@@ -61,6 +63,8 @@ import { NumberFormatService } from '@app/shared/services/number-format.service'
     MatIconModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
+    BaseButtonComponent,
+    FormSectionComponent,
   ],
   providers: [
     provideNativeDateAdapter(),

@@ -1,0 +1,18 @@
+<button
+  [type]="type"
+  [disabled]="disabled || loading"
+  [ngClass]="[variant, size]"
+  [attr.aria-busy]="loading"
+  mat-button
+>
+  <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+  <span class="button-content" *ngIf="!loading">
+    <p *ngIf="icon && iconPosition === 'left'">
+      <mat-icon>{{ icon }}</mat-icon>
+    </p>
+    <ng-content></ng-content>
+    <p *ngIf="icon && iconPosition === 'right'">
+      <mat-icon>{{ icon }}</mat-icon>
+    </p>
+  </span>
+</button>

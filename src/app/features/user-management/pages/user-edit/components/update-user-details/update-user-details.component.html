@@ -53,14 +53,15 @@
 
   <!-- Form Actions -->
   <div class="form-actions">
-    <button
-      mat-raised-button
-      color="primary"
+    <app-base-button
+      variant="primary"
+      icon="save"
       type="submit"
-      [disabled]="updateForm.invalid || (loading$ | async)"
+      size="large"
+      [loading]="(loading$ | async) ?? false"
+      [disabled]="updateForm.invalid || ((loading$ | async) ?? false)"
     >
-      <mat-icon>save</mat-icon>
       {{ "common.actions.save" | transloco }}
-    </button>
+    </app-base-button>
   </div>
 </form>

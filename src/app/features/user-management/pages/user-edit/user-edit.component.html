@@ -1,73 +1,58 @@
 <div class="user-edit-container">
-  <app-breadcrumb></app-breadcrumb>
-
   <mat-progress-bar
-    *ngIf="loading$ | async"
-    mode="indeterminate"
     class="page-loading-bar"
+    mode="indeterminate"
+    *ngIf="loading$ | async"
   ></mat-progress-bar>
 
-  <ng-container *ngIf="(loading$ | async) === false">
-    <ng-container *ngIf="user$ | async as user; else noUser">
-      <app-page-title
-        [titleTranslationKey]="'user.edit.title'"
-        [titleParams]="{ email: user.email }"
-        [descriptionTranslationKey]="'user.edit.description'"
-        icon="manage_accounts"
+  <app-breadcrumb></app-breadcrumb>
+  <app-page-title
+    [titleTranslationKey]="'user.edit.title'"
+    [descriptionTranslationKey]="'user.edit.description'"
+    icon="manage_accounts"
+  >
+    <ng-template #actions>
+      <app-base-button
+        variant="secondary"
+        icon="arrow_back"
+        (click)="onBack()"
+        size="medium"
       >
-        <ng-template #actions>
-          <button mat-stroked-button class="back-button" (click)="onBack()">
-            <mat-icon>arrow_back</mat-icon>
-            {{ "common.actions.back" | transloco }}
-          </button>
-        </ng-template>
-      </app-page-title>
-
-      <div class="sections-container">
-        <!-- User Details Section -->
-        <div class="edit-section">
-          <div class="section-header">
-            <mat-icon>person</mat-icon>
-            <h2>{{ "user.edit.tabs.details" | transloco }}</h2>
-          </div>
-          <div class="section-content">
-            <app-update-user-details [user]="user"></app-update-user-details>
-          </div>
-        </div>
-
-        <!-- Password Section -->
-        <div class="edit-section">
-          <div class="section-header">
-            <mat-icon>key</mat-icon>
-            <h2>{{ "user.edit.tabs.password" | transloco }}</h2>
-          </div>
-          <div class="section-content">
-            <app-reset-password [user]="user"></app-reset-password>
-          </div>
-        </div>
-
-        <!-- Permissions Section -->
-        <div class="edit-section">
-          <div class="section-header">
-            <mat-icon>security</mat-icon>
-            <h2>{{ "user.edit.tabs.permissions" | transloco }}</h2>
-          </div>
-          <div class="section-content">
-            <app-user-permissions [user]="user"></app-user-permissions>
-          </div>
-        </div>
-      </div>
-    </ng-container>
-
-    <ng-template #noUser>
-      <div class="error-message">
-        <mat-icon color="warn">error</mat-icon>
-        <p>{{ (error$ | async)?.message | transloco }}</p>
-        <button mat-stroked-button (click)="onBack()">
-          <mat-icon>arrow_back</mat-icon>
-          {{ "common.actions.back" | transloco }}
-        </button>
-      </div>
+        {{ "common.actions.back" | transloco }}
+      </app-base-button>
     </ng-template>
-  </ng-container>
+  </app-page-title>
+
+  <div class="sections-container" *ngIf="user$ | async as user">
+    <app-form-section
+      icon="person"
+      [title]="'user.edit.tabs.details' | transloco"
+    >
+      <app-update-user-details [user]="user"></app-update-user-details>
+    </app-form-section>
+
+    <app-form-section
+      icon="password"
+      [title]="'user.edit.tabs.password' | transloco"
+    >
+      <app-reset-password [user]="user"></app-reset-password>
+    </app-form-section>
+
+    <app-form-section
+      icon="security"
+      [title]="'user.edit.tabs.permissions' | transloco"
+    >
+      <app-user-permissions [user]="user"></app-user-permissions>
+    </app-form-section>
+  </div>
+
+  <div
+    class="no-user-message"
+    *ngIf="
+      ((user$ | async) === null || (user$ | async) === undefined) &&
+      (loading$ | async) === false
+    "
+  >
+    {{ "user.edit.userNotFound" | transloco }}
+  </div>
 </div>

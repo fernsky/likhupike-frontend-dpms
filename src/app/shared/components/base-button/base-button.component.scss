@@ -1,0 +1,126 @@
+:host {
+  display: block; // Change from inline-block to block
+  width: auto; // Add this
+}
+
+button {
+  min-width: 120px;
+  border-radius: 24px;
+  font-weight: 500;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  &.primary {
+    background: rgba(18, 55, 114, 0.98) !important;
+    color: white !important;
+    box-shadow: 0 2px 6px rgba(11, 31, 66, 0.12) !important;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        160deg,
+        rgba(11, 31, 66, 0.1) 0%,
+        rgba(18, 55, 114, 0.1) 50%,
+        rgba(26, 72, 148, 0.1) 100%
+      );
+      opacity: 0;
+      transition: opacity 0.05s ease;
+    }
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px) scale(1.01);
+      background: rgba(18, 55, 114, 1) !important;
+      box-shadow: 0 4px 12px rgba(11, 31, 66, 0.15) !important;
+
+      &::before {
+        opacity: 1;
+      }
+    }
+  }
+
+  &.secondary {
+    border: 2px solid #123772 !important;
+    color: #123772 !important;
+
+    mat-icon {
+      color: #123772;
+    }
+
+    &:hover:not(:disabled) {
+      background: rgba(18, 55, 114, 0.04);
+    }
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0) scale(0.99);
+    transition-duration: 0.05s;
+  }
+
+  &:disabled {
+    background: rgba(224, 224, 224, 0.95) !important;
+    color: rgba(158, 158, 158, 0.8) !important;
+    box-shadow: none !important;
+    transform: none;
+    border-color: transparent !important;
+  }
+
+  // Size variants
+  &.small {
+    height: 36px;
+    font-size: 0.875rem;
+    padding: 0 1rem;
+  }
+
+  &.medium {
+    height: 42px;
+    font-size: 0.9375rem;
+    padding: 0 1.25rem;
+  }
+
+  &.large {
+    height: 48px;
+    font-size: 1rem;
+    padding: 0 1.5rem;
+  }
+
+  .button-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  mat-spinner {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  :host {
+    width: 100%; // Make host full width on mobile
+  }
+
+  button {
+    width: 100%; // Make button full width on mobile
+
+    &.small {
+      height: 32px;
+      font-size: 0.813rem;
+    }
+
+    &.medium {
+      height: 38px;
+      font-size: 0.875rem;
+    }
+
+    &.large {
+      height: 42px;
+      font-size: 0.938rem;
+    }
+  }
+}

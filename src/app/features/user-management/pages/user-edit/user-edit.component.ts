@@ -15,6 +15,8 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
 import { UserPermissionsComponent } from './components/user-permissions/user-permissions.component';
 import { MatIconModule } from '@angular/material/icon';
 import { Location } from '@angular/common';
+import { FormSectionComponent } from '@app/shared/components/form-section/form-section.component';
+import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
 
 @Component({
   selector: 'app-user-edit',
@@ -32,6 +34,8 @@ import { Location } from '@angular/common';
     UpdateUserDetailsComponent,
     ResetPasswordComponent,
     UserPermissionsComponent,
+    FormSectionComponent,
+    BaseButtonComponent,
   ],
   providers: [
     provideTranslocoScope({
