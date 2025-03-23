@@ -30,10 +30,7 @@ import {
   PaginatorComponent,
   PageEvent,
 } from '@shared/components/paginator/paginator.component';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MobileUserListComponent } from '../mobile-user-list/mobile-user-list.component';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-users-table',
@@ -55,7 +52,6 @@ import { takeUntil } from 'rxjs/operators';
     EmptyStateComponent,
     MatTooltipModule,
     PaginatorComponent,
-    MobileUserListComponent,
   ],
   animations: [
     trigger('fadeInOut', [
@@ -106,21 +102,12 @@ export class UsersTableComponent implements AfterViewInit, OnInit, OnDestroy {
     'actions',
   ];
 
-  isMobile = false;
   private destroy$ = new Subject<void>();
 
   constructor(
     private numberFormat: NumberFormatService,
-    private transloco: TranslocoService,
-    private breakpointObserver: BreakpointObserver
-  ) {
-    this.breakpointObserver
-      .observe([Breakpoints.HandsetPortrait, Breakpoints.TabletPortrait])
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((result) => {
-        this.isMobile = result.matches;
-      });
-  }
+    private transloco: TranslocoService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -160,5 +147,9 @@ export class UsersTableComponent implements AfterViewInit, OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  trackByFn(index: number, item: UserResponse): string {
+    return item.id;
   }
 }
