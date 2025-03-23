@@ -76,21 +76,18 @@ button {
   .medium-text {
     display: none;
   }
-}
 
-@media (max-width: 768px) {
-  button {
+  @media (max-width: 768px) {
     .full-text {
       display: none;
+      width: min-content;
     }
     .medium-text {
       display: inline-block;
     }
   }
-}
 
-@media (max-width: 480px) {
-  button {
+  @media (max-width: 768px) {
     min-width: 36px !important;
     width: 36px !important;
     height: 36px !important;
@@ -102,10 +99,15 @@ button {
       display: none;
     }
 
-    mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
+    .button-content {
+      gap: 0;
+
+      mat-icon {
+        margin: 0;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
     }
   }
 }

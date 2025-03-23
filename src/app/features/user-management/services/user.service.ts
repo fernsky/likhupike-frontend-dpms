@@ -146,7 +146,7 @@ export class UserService {
   resetPassword(
     id: string,
     request: ResetUserPasswordRequest
-  ): Observable<UserResponse> {
+  ): Observable<{ user: UserResponse; message: string }> {
     return this.http
       .post<
         ApiResponse<UserResponse>
@@ -156,7 +156,10 @@ export class UserService {
           if (!response.success) {
             throw response.error;
           }
-          return response.data;
+          return {
+            user: response.data,
+            message: response.message,
+          };
         }),
         catchError(this.handleError)
       );

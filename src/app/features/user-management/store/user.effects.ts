@@ -150,9 +150,11 @@ export class UserEffects {
       ofType(UserActions.resetUserPassword),
       exhaustMap(({ id, request }) =>
         this.userService.resetPassword(id, request).pipe(
-          map((user) => {
-            this.showSuccess('user.messages.passwordResetSuccess');
-            return UserActions.resetUserPasswordSuccess({ user });
+          map((response) => {
+            this.showSuccess(response.message);
+            return UserActions.resetUserPasswordSuccess({
+              user: response.user,
+            });
           }),
           catchError((error) => {
             this.showError(error.message);

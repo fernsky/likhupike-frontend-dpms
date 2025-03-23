@@ -1,5 +1,5 @@
-import { Component, Input, OnDestroy } from '@angular/core';
-import { CommonModule, Location } from '@angular/common';
+import { Component, Input, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
   FormGroup,
@@ -44,7 +44,23 @@ import { BaseButtonComponent } from '@app/shared/components/base-button/base-but
 export class ResetPasswordComponent implements OnDestroy {
   @Input() user!: UserResponse;
 
-  passwordForm: FormGroup;
+  passwordForm = this.fb.group(
+    {
+      newPassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(
+            /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/
+          ),
+        ],
+      ],
+      confirmPassword: ['', [Validators.required]],
+    },
+    { validators: this.passwordMatchValidator }
+  );
+
   loading$ = this.store.select(UserSelectors.selectUserUpdating);
   errors$ = this.store.select(UserSelectors.selectUserErrors);
   hidePassword = true;
@@ -54,26 +70,9 @@ export class ResetPasswordComponent implements OnDestroy {
   constructor(
     private fb: FormBuilder,
     private store: Store,
-    private location: Location
+    private cd: ChangeDetectorRef
   ) {
-    this.passwordForm = this.fb.group(
-      {
-        newPassword: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(8),
-            Validators.pattern(
-              /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/
-            ),
-          ],
-        ],
-        confirmPassword: ['', [Validators.required]],
-      },
-      { validators: this.passwordMatchValidator }
-    );
-
-    // Add subscription to handle form reset after successful update
+    // Setup form reset subscription with error clearing
     this.store
       .select(UserSelectors.selectUserUpdating)
       .pipe(
@@ -81,13 +80,15 @@ export class ResetPasswordComponent implements OnDestroy {
         filter((updating) => updating === false)
       )
       .subscribe(() => {
-        const errors = this.store.select(UserSelectors.selectUserErrors);
-        errors.pipe(take(1)).subscribe((err) => {
-          if (!err) {
-            this.passwordForm.reset();
-            this.passwordForm.markAsPristine();
-          }
-        });
+        this.store
+          .select(UserSelectors.selectUserErrors)
+          .pipe(take(1))
+          .subscribe((errors) => {
+            if (!errors) {
+              this.store.dispatch(UserActions.clearErrors());
+              this.resetForm();
+            }
+          });
       });
   }
 
@@ -126,11 +127,37 @@ export class ResetPasswordComponent implements OnDestroy {
   }
 
   onCancel(): void {
-    this.passwordForm.reset({
-      newPassword: '',
-      confirmPassword: '',
+    this.store.dispatch(UserActions.clearErrors());
+    this.resetForm();
+  }
+
+  // New method to reset form
+  private resetForm(): void {
+    // Clear all form values without triggering validation
+    this.passwordForm.reset(
+      {
+        newPassword: '',
+        confirmPassword: '',
+      },
+      { emitEvent: false }
+    );
+
+    // Clear all validation states
+    Object.keys(this.passwordForm.controls).forEach((key) => {
+      const control = this.passwordForm.get(key);
+      control?.setErrors(null);
+      control?.markAsUntouched();
+      control?.markAsPristine();
     });
-    this.location.back();
+
+    // Clear form level errors
+    this.passwordForm.setErrors(null);
+
+    // Reset visibility states
+    this.hidePassword = true;
+    this.hideConfirmPassword = true;
+
+    this.cd.detectChanges();
   }
 
   ngOnDestroy(): void {
