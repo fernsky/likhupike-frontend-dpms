@@ -44,18 +44,17 @@ export class UserEffects {
       ofType(UserActions.loadUsers),
       exhaustMap(({ filter }) =>
         this.userService.getUsers(filter).pipe(
-          map(({ users, total, meta }) => {
-            // Convert 0-based page back to 1-based
+          map(({ users, total }) => {
             const validMeta = {
-              page: meta.page ?? 1,
-              size: meta.size ?? filter.size ?? 10,
+              page: filter.page ?? 1, // Use the filter's page number
+              size: filter.size ?? 10,
               totalElements: total,
-              totalPages: Math.ceil(total / (meta.size ?? filter.size ?? 10)),
-              isFirst: meta.page === 0,
+              totalPages: Math.ceil(total / (filter.size ?? 10)),
+              isFirst: (filter.page ?? 1) === 1,
               isLast:
-                meta.page >=
-                Math.ceil(total / (meta.size ?? filter.size ?? 10)) - 1,
+                (filter.page ?? 1) >= Math.ceil(total / (filter.size ?? 10)),
             };
+            console.log(validMeta);
             return UserActions.loadUsersSuccess({
               users,
               total,

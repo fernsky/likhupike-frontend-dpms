@@ -195,8 +195,8 @@ export class UserService {
   private convertFilterToParams(filter: UserFilter): HttpParams {
     let params = new HttpParams();
 
-    const page = Math.max(1, filter.page ?? 1);
-    params = params.set('page', page.toString());
+    // Handle pagination - Always maintain 1-based pagination
+    params = params.set('page', Math.max(1, filter.page ?? 1).toString());
     params = params.set('size', (filter.size ?? 10).toString());
     params = params.set('sortBy', filter.sortBy ?? 'createdAt');
     params = params.set('sortDirection', filter.sortDirection ?? 'DESC');

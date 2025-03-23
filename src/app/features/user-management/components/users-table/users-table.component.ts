@@ -149,7 +149,7 @@ export class UsersTableComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   onPageChange(event: PageEvent) {
-    // Pass through the event as-is since we're using 1-based pagination
+    // Emit the event directly without modification since we're using 1-based pagination
     this.pageChange.emit(event);
   }
 

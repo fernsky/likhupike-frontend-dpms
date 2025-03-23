@@ -199,103 +199,105 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Single initialization from URL params
+    // Handle initial load
     this.route.queryParams
       .pipe(
         take(1),
-        map((params) => this.urlParamsService.parseQueryParams(params)),
-        map((validParams) =>
-          this.urlParamsService.convertToUserFilter(validParams)
-        )
+        map((params) => {
+          const userFilter = this.urlParamsService.convertToUserFilter(
+            this.urlParamsService.parseQueryParams(params)
+          );
+          return {
+            page: userFilter.page ?? 1,
+            size: userFilter.size ?? 10,
+            sortBy: userFilter.sortBy ?? 'createdAt',
+            sortDirection: userFilter.sortDirection ?? 'DESC',
+            ...userFilter,
+          };
+        })
       )
-      .subscribe((userFilter) => {
-        const initialFilter = {
-          page: userFilter.page ?? 1,
-          size: userFilter.size ?? 10,
-          sortBy: userFilter.sortBy ?? 'createdAt',
-          sortDirection: userFilter.sortDirection ?? 'DESC',
-          ...userFilter,
-        };
-
-        // Set initial values without triggering change events
+      .subscribe((initialFilter) => {
+        // Set initial values silently
         this.filterForm.patchValue(initialFilter, { emitEvent: false });
-        if (userFilter.searchTerm) {
-          this.searchControl.setValue(userFilter.searchTerm, {
+        if (initialFilter.searchTerm) {
+          this.searchControl.setValue(initialFilter.searchTerm, {
             emitEvent: false,
           });
         }
 
-        // Single initial data load
-        this.loadUsers(initialFilter);
+        // Initial data load
+        this.store.dispatch(UserActions.loadUsers({ filter: initialFilter }));
         this.setupSubscriptions();
       });
   }
 
   private setupSubscriptions(): void {
-    // Separate subscriptions for users and pagination
+    // Data updates subscription
     this.store
       .select(UserSelectors.selectUsers)
-      .pipe(takeUntil(this.destroy$), distinctUntilChanged())
+      .pipe(takeUntil(this.destroy$))
       .subscribe((users) => {
         this.dataSource.data = users;
       });
 
+    // Pagination updates subscription
     this.store
       .select(UserSelectors.selectPagination)
-      .pipe(takeUntil(this.destroy$), distinctUntilChanged())
+      .pipe(takeUntil(this.destroy$))
       .subscribe((pagination) => {
-        const { currentPage, pageSize } = pagination;
+        // Only update form if pagination actually changed
         if (
-          this.filterForm.get('page')?.value !== currentPage ||
-          this.filterForm.get('size')?.value !== pageSize
+          this.filterForm.get('page')?.value !== pagination.currentPage ||
+          this.filterForm.get('size')?.value !== pagination.pageSize
         ) {
           this.filterForm.patchValue(
-            { page: currentPage, size: pageSize },
+            {
+              page: pagination.currentPage,
+              size: pagination.pageSize,
+            },
             { emitEvent: false }
-          );
+          ); // Don't trigger another API call
         }
       });
 
-    // Filter changes handling remains the same
-    const searchChanges$ = this.searchControl.valueChanges.pipe(
-      map((value) => ({ searchTerm: value?.trim() || '', page: 1 }))
-    );
-
-    const filterChanges$ = this.filterForm.valueChanges.pipe(
-      map((formValue) => this.sanitizeFilterValues(formValue))
-    );
-
-    merge(searchChanges$, filterChanges$)
-      .pipe(
-        takeUntil(this.destroy$),
-        debounceTime(300),
-        distinctUntilChanged(
-          (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
-        )
+    // Create a single stream for filter changes
+    const filterChanges$ = merge(
+      // Form value changes excluding page changes
+      this.filterForm.valueChanges.pipe(
+        map((formValue) => {
+          const newFilter = this.sanitizeFilterValues(formValue);
+          // Don't reset page when only page/size changes
+          if (
+            Object.keys(newFilter).length === 2 &&
+            ('page' in newFilter || 'size' in newFilter)
+          ) {
+            return newFilter;
+          }
+          // Reset to page 1 for other filter changes
+          return { ...newFilter, page: 1 };
+        })
+      ),
+      // Search changes (always reset page to 1)
+      this.searchControl.valueChanges.pipe(
+        map((searchTerm) => ({
+          ...this.filterForm.value,
+          searchTerm: searchTerm?.trim() || '',
+          page: 1,
+        }))
       )
-      .subscribe((filter) => {
-        this.loadUsers(filter);
-      });
-  }
+    ).pipe(
+      takeUntil(this.destroy$),
+      debounceTime(300),
+      distinctUntilChanged(
+        (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
+      )
+    );
 
-  private initializeData(initialFilter?: UserFilter): void {
-    // Apply defaults only if values are not provided in filter
-    const defaultFilter: UserFilter = {
-      page: 1,
-      size: 10,
-      sortBy: 'createdAt',
-      sortDirection: 'DESC',
-    };
-
-    const finalFilter = {
-      ...defaultFilter,
-      ...initialFilter, // Let URL params override defaults
-    };
-
-    this.searchControl.setValue('');
-    this.dataSource = new MatTableDataSource<UserResponse>([]);
-    this.filterForm.patchValue(finalFilter, { emitEvent: false });
-    this.loadUsers(finalFilter);
+    // Handle all filter changes in a single subscription
+    filterChanges$.subscribe((filter) => {
+      this.urlParamsService.updateQueryParams(filter);
+      this.store.dispatch(UserActions.loadUsers({ filter }));
+    });
   }
 
   private sanitizeFilterValues(formValue: UserFilterFormValue): UserFilter {
@@ -328,12 +330,6 @@ export class UserListComponent implements OnInit, OnDestroy {
     }
 
     return filter;
-  }
-
-  private loadUsers(filter: UserFilter): void {
-    // Update URL and dispatch action only once
-    this.urlParamsService.updateQueryParams(filter);
-    this.store.dispatch(UserActions.loadUsers({ filter }));
   }
 
   onCreateUser(): void {
@@ -427,13 +423,8 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   onFiltersChange(filters: UserFilter) {
-    this.filterForm.patchValue(
-      {
-        ...filters,
-        page: 1,
-      },
-      { emitEvent: true }
-    );
+    const newFilters = { ...filters, page: 1 };
+    this.filterForm.patchValue(newFilters, { emitEvent: true });
   }
 
   onSortChange(event: { sortBy: string; direction: 'ASC' | 'DESC' }): void {
@@ -447,12 +438,31 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   onPageEvent(event: PageEvent): void {
-    this.filterForm.patchValue(
-      {
-        page: event.pageIndex,
-        size: event.pageSize,
-      },
-      { emitEvent: true }
+    // Update form with new page values and trigger API call
+    const newFilter = {
+      ...this.filterForm.value,
+      page: event.pageIndex,
+      size: event.pageSize,
+    };
+
+    // Update URL and trigger API call directly instead of going through form changes
+    this.urlParamsService.updateQueryParams(newFilter);
+    this.store.dispatch(UserActions.loadUsers({ filter: newFilter }));
+
+    // Update form without emitting event to avoid duplicate calls
+    this.filterForm.patchValue(newFilter, { emitEvent: false });
+  }
+
+  private isPaginationOnlyChange(filter: UserFilter): boolean {
+    const currentValues = this.filterForm.value;
+    const changedKeys = Object.keys(filter).filter(
+      (key) =>
+        filter[key as keyof UserFilter] !==
+        currentValues[key as keyof UserFilter]
+    );
+    return (
+      changedKeys.length === 1 &&
+      (changedKeys[0] === 'page' || changedKeys[0] === 'size')
     );
   }
 }

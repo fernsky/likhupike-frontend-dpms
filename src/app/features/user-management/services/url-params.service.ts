@@ -135,7 +135,7 @@ export class UrlParamsService {
   updateQueryParams(filter: UserFilter): void {
     const urlParams: Partial<Record<UrlParamKey, string>> = {};
 
-    // Always include pagination and sort params
+    // Always preserve the exact page number from the filter
     urlParams['page'] = (filter.page ?? 1).toString();
     urlParams['size'] = (filter.size ?? 10).toString();
     urlParams['sortBy'] = filter.sortBy ?? 'createdAt';
