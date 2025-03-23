@@ -4,6 +4,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
+  NgZone,
 } from '@angular/core';
 
 @Component({
@@ -35,21 +36,32 @@ export class BackgroundParticlesComponent implements OnInit, OnDestroy {
   private particles: Particle[] = [];
   private bounds = { width: 0, height: 0 };
   private resizeObserver: ResizeObserver | null = null;
+  private isDestroyed = false;
+
+  constructor(private ngZone: NgZone) {}
 
   ngOnInit() {
     this.ctx = this.canvas.nativeElement.getContext('2d', { alpha: true });
     if (!this.ctx) return;
 
-    this.initParticles();
-    this.setupResizeObserver();
-    this.animate();
+    // Run animation outside Angular zone for better performance
+    this.ngZone.runOutsideAngular(() => {
+      this.initParticles();
+      this.setupResizeObserver();
+      this.animate();
+    });
   }
 
   ngOnDestroy() {
+    this.isDestroyed = true;
     if (this.animationFrame) {
       cancelAnimationFrame(this.animationFrame);
     }
-    this.resizeObserver?.disconnect();
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+    this.particles = [];
+    this.ctx = null;
   }
 
   private initParticles() {
@@ -105,7 +117,12 @@ export class BackgroundParticlesComponent implements OnInit, OnDestroy {
   }
 
   private animate = () => {
-    if (!this.ctx || !this.bounds.width || !this.bounds.height) return;
+    if (this.isDestroyed) return;
+
+    if (!this.ctx || !this.bounds.width || !this.bounds.height) {
+      this.animationFrame = requestAnimationFrame(this.animate);
+      return;
+    }
 
     this.ctx.clearRect(0, 0, this.bounds.width, this.bounds.height);
 

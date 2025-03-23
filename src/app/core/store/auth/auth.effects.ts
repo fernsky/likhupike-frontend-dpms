@@ -51,7 +51,7 @@ export class AuthEffects {
               throw new Error(response.error?.message || 'Login failed');
             }
 
-            const { data } = response;
+            const { data, message } = response;
             const authUser: AuthUser = {
               id: data.userId,
               email: data.email,
@@ -64,14 +64,8 @@ export class AuthEffects {
             this.storageService.setRefreshToken(data.refreshToken);
             this.storageService.setUser(authUser);
 
-            const successMessage = this.translocoService.translate(
-              'auth.notifications.loginSuccess',
-              {},
-              this.translocoService.getActiveLang()
-            );
-
             this.snackBar.open(
-              successMessage,
+              message || 'Login successful', // Use API message
               this.translocoService.translate('common.actions.close'),
               {
                 duration: 4000,
@@ -85,17 +79,8 @@ export class AuthEffects {
             });
           }),
           catchError((error) => {
-            const isNotApproved = error.error?.code === 'AUTH_011';
-            const messageKey = isNotApproved
-              ? 'auth.notifications.userNotApproved'
-              : 'auth.errors.loginFailed';
-
-            const errorMessage = this.translocoService.translate(
-              messageKey,
-              {},
-              this.translocoService.getActiveLang()
-            );
-
+            // Use API error message directly
+            const errorMessage = error.error?.message || error.message;
             this.snackBar.open(
               errorMessage,
               this.translocoService.translate('common.actions.close'),
@@ -122,14 +107,8 @@ export class AuthEffects {
               throw new Error(response.error?.message || 'Registration failed');
             }
 
-            const translatedMessage = this.translocoService.translate(
-              'auth.notifications.registerPending',
-              {},
-              this.translocoService.getActiveLang()
-            );
-
             this.snackBar.open(
-              translatedMessage,
+              response.message || 'Registration successful', // Use API message
               this.translocoService.translate('common.actions.close'),
               {
                 duration: 8000,
@@ -140,12 +119,7 @@ export class AuthEffects {
             return AuthActions.registerSuccess({ response: response.data });
           }),
           catchError((error) => {
-            const errorMessage = this.translocoService.translate(
-              'auth.errors.registrationFailed',
-              {},
-              this.translocoService.getActiveLang()
-            );
-
+            const errorMessage = error.error?.message || error.message;
             this.snackBar.open(
               errorMessage,
               this.translocoService.translate('common.actions.close'),

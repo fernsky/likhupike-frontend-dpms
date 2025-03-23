@@ -14,10 +14,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { Store } from '@ngrx/store';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import * as AuthActions from '@app/core/store/auth/auth.actions';
-import { selectAuthState } from '@app/core/store/auth/auth.selectors';
+import {
+  selectAuthState,
+  selectIsLoading,
+  selectAuthError,
+} from '@app/core/store/auth/auth.selectors';
+import { AppState } from '@app/core/store';
 import { BaseAuthComponent } from '../../components/base-auth/base-auth.component';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { PasswordValidatorService } from '@app/shared/validators/password-validator.service';
@@ -53,14 +58,21 @@ export class RegisterComponent
   wardNumbers = Array.from({ length: 5 }, (_, i) => i + 1);
   private destroy$ = new Subject<void>();
 
+  // Initialize observables properly
+  loading$: Observable<boolean>;
+  apiError$: Observable<string | null>;
+
   constructor(
     private fb: FormBuilder,
-    private store: Store,
+    private store: Store<AppState>, // Add proper store typing
     private passwordValidator: PasswordValidatorService,
     private numberFormat: NumberFormatService,
     private translocoService: TranslocoService
   ) {
     super();
+    // Initialize observables in constructor
+    this.loading$ = this.store.select(selectIsLoading);
+    this.apiError$ = this.store.select(selectAuthError);
     this.initForm();
   }
 
@@ -111,11 +123,11 @@ export class RegisterComponent
   }
 
   ngOnInit(): void {
+    // Subscribe to auth state changes
     this.store
       .select(selectAuthState)
       .pipe(takeUntil(this.destroy$))
       .subscribe((authState) => {
-        this.loading = authState.isLoading;
         if (authState.error) {
           this.registerForm.setErrors({ serverError: authState.error });
         }
