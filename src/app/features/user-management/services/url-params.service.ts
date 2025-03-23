@@ -64,7 +64,6 @@ export class UrlParamsService {
     if ('page' in params) {
       const page = parseNumber(params['page']);
       if (page !== undefined) {
-        // Convert 0-based to 1-based if needed
         validParams.page = page === 0 ? 1 : page;
       }
     }

@@ -45,15 +45,15 @@ export class UserEffects {
       exhaustMap(({ filter }) =>
         this.userService.getUsers(filter).pipe(
           map(({ users, total, meta }) => {
-            // Calculate pagination values with all required properties
+            // Convert 0-based page back to 1-based
             const validMeta = {
-              page: meta.page ?? filter.page ?? 0,
+              page: meta.page ?? 1,
               size: meta.size ?? filter.size ?? 10,
               totalElements: total,
               totalPages: Math.ceil(total / (meta.size ?? filter.size ?? 10)),
-              isFirst: (meta.page ?? filter.page ?? 0) === 0,
+              isFirst: meta.page === 0,
               isLast:
-                (meta.page ?? filter.page ?? 0) >=
+                meta.page >=
                 Math.ceil(total / (meta.size ?? filter.size ?? 10)) - 1,
             };
             return UserActions.loadUsersSuccess({
