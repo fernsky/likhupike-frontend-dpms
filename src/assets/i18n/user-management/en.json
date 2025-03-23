@@ -95,7 +95,7 @@
     "success": "User created successfully"
   },
   "edit": {
-    "title": "Edit User - {{email}}",
+    "title": "{{email}}",
     "description": "Update user information, permissions, and password settings",
     "errors": {
       "userNotFound": "User not found or you don't have permission to view this user"

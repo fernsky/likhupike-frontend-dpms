@@ -7,7 +7,7 @@
 
   <app-breadcrumb></app-breadcrumb>
   <app-page-title
-    [titleTranslationKey]="'user.edit.title'"
+    [titleTranslationKey]="getPageTitle(user$ | async)"
     [descriptionTranslationKey]="'user.edit.description'"
     icon="manage_accounts"
   >

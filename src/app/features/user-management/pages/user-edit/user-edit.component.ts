@@ -4,7 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router'; // Add Router
 import { Store } from '@ngrx/store';
 import { filter, Subject, takeUntil, combineLatest } from 'rxjs';
 import { MatTabsModule } from '@angular/material/tabs';
-import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
+import {
+  provideTranslocoScope,
+  TranslocoModule,
+  TranslocoService,
+} from '@jsverse/transloco';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { UserActions } from '../../store/user.actions';
 import * as UserSelectors from '../../store/user.selectors';
@@ -17,6 +21,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Location } from '@angular/common';
 import { FormSectionComponent } from '@app/shared/components/form-section/form-section.component';
 import { PageTitleButtonComponent } from '@app/shared/components/page-title-button/page-title-button.component';
+import { UserResponse } from '../../models/user.interface';
 
 @Component({
   selector: 'app-user-edit',
@@ -56,7 +61,8 @@ export class UserEditComponent implements OnInit, OnDestroy {
     private store: Store,
     private route: ActivatedRoute,
     private router: Router,
-    private location: Location
+    private location: Location,
+    private transloco: TranslocoService
   ) {}
 
   ngOnInit(): void {
@@ -102,5 +108,11 @@ export class UserEditComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  getPageTitle(user: UserResponse | null): string {
+    return this.transloco.translate('user.edit.title', {
+      email: user!.email,
+    });
   }
 }
