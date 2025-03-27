@@ -69,6 +69,10 @@
       "description": "Try adjusting your search or filter criteria",
       "createFirst": "Create your first user"
     },
+    "error": {
+      "title": "Error Loading Users",
+      "description": "There was a problem loading the user list. Please try again."
+    },
     "actions": {
       "edit": "Edit User",
       "delete": "Delete User",

@@ -61,8 +61,15 @@ export class UserEffects {
             });
           }),
           catchError((error) => {
-            this.showError(error.message);
-            return of(UserActions.loadUsersFailure({ error }));
+            // Clear users array on error
+            return of(
+              UserActions.loadUsersFailure({
+                error: {
+                  ...error,
+                  status: error.status || 500,
+                },
+              })
+            );
           })
         )
       )

@@ -171,6 +171,10 @@ export class UserListComponent implements OnInit, OnDestroy {
   // Add users$ stream
   users$ = this.store.select(UserSelectors.selectUsers);
 
+  hasError$ = this.store
+    .select(UserSelectors.selectUserErrors)
+    .pipe(map((errors) => errors?.status === 400));
+
   constructor(
     private store: Store,
     private fb: FormBuilder,

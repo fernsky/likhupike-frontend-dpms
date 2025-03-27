@@ -73,6 +73,7 @@
     [totalUsers]="(totalUsers$ | async) ?? 0"
     [pageIndex]="(currentPage$ | async) ?? 1"
     [pageSize]="(pageSize$ | async) ?? 10"
+    [hasError]="(hasError$ | async) ?? false"
     (pageChange)="onPageEvent($event)"
     (edit)="onEditUser($event)"
     (delete)="onDeleteUser($event)"

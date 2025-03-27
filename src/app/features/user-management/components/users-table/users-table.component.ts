@@ -114,9 +114,13 @@ export class UsersTableComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  @Input() set users(value: UserResponse[]) {
+  @Input() hasError = false;
+
+  @Input() set users(value: UserResponse[] | null) {
     if (value) {
       this._dataSource.data = value;
+    } else {
+      this._dataSource.data = [];
     }
   }
 

@@ -54,6 +54,8 @@ export const userReducer = createReducer(
     ...state,
     loading: false,
     errors: error as UserValidationError,
+    users: [], // Clear users on error
+    totalUsers: 0,
   })),
 
   // Load Single User
