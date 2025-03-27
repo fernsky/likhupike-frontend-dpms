@@ -88,17 +88,32 @@ export class UserFiltersComponent implements OnInit, OnDestroy {
   }
 
   clearFilters(): void {
-    this.filterForm.patchValue({
-      wardNumber: null,
-      permissions: [],
-      isApproved: null,
-      isWardLevelUser: null,
-      createdAfter: null,
-      createdBefore: null,
-    });
+    // Reset form to initial state except for sort/pagination
+    const currentSort = {
+      sortBy: this.filterForm.get('sortBy')?.value,
+      sortDirection: this.filterForm.get('sortDirection')?.value,
+      page: 1,
+      size: this.filterForm.get('size')?.value,
+    };
 
-    // Emit empty filter to trigger reset
-    this.filtersChange.emit({});
+    this.filterForm.patchValue(
+      {
+        wardNumber: null,
+        permissions: [],
+        isApproved: null,
+        isWardLevelUser: null,
+        createdAfter: null,
+        createdBefore: null,
+        searchTerm: null,
+        email: null,
+        // Preserve sort and pagination
+        ...currentSort,
+      },
+      { emitEvent: false }
+    );
+
+    // Emit the filter with only default values
+    this.filtersChange.emit(currentSort);
   }
 
   formatWardNumber(number: number): string {

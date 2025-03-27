@@ -191,12 +191,15 @@ export class UserEffects {
   filterChange$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.filterChange),
-      map(({ filter }) => {
-        // Reset to page 1 when filters change (except for pagination changes)
+      withLatestFrom(this.store.select(UserSelectors.selectCurrentFilter)),
+      map(([{ filter }, currentFilter]) => {
+        // Merge with current filter while preserving defaults
         const newFilter = {
+          page: 1, // Reset to page 1 on filter change
+          size: currentFilter.size || 10,
+          sortBy: currentFilter.sortBy || 'createdAt',
+          sortDirection: currentFilter.sortDirection || 'DESC',
           ...filter,
-          page: filter.page || 1,
-          size: filter.size || 10,
         };
         return UserActions.loadUsers({ filter: newFilter });
       })
@@ -214,6 +217,21 @@ export class UserEffects {
           size: pageSize,
         };
         return UserActions.loadUsers({ filter: newFilter });
+      })
+    )
+  );
+
+  resetFilters$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.resetFilters),
+      map(() => {
+        const defaultFilter = {
+          page: 1,
+          size: 10,
+          sortBy: 'createdAt',
+          sortDirection: 'DESC' as 'ASC' | 'DESC',
+        };
+        return UserActions.loadUsers({ filter: defaultFilter });
       })
     )
   );

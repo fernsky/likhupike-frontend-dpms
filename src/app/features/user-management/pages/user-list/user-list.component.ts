@@ -13,7 +13,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { Subject, BehaviorSubject } from 'rxjs';
-import { takeUntil, distinctUntilChanged, map } from 'rxjs/operators';
+import { takeUntil, distinctUntilChanged, map, take } from 'rxjs/operators';
 import {
   provideTranslocoScope,
   TranslocoModule,
@@ -328,21 +328,33 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   onFiltersChange(filters: UserFilter) {
-    if (Object.keys(filters).length === 0) {
-      // If filters are empty, reset to default state
-      this.store.dispatch(UserActions.resetFilters());
-      this.urlParamsService.clearUrlParams();
-    } else {
-      this.store.dispatch(UserActions.filterChange({ filter: filters }));
-    }
+    // Merge with current filter state to maintain pagination/sorting
+    const currentFilter = this.store
+      .select(UserSelectors.selectCurrentFilter)
+      .pipe(take(1));
+
+    currentFilter.subscribe((current) => {
+      if (Object.keys(filters).length === 0) {
+        // If filters are empty, reset to default state
+        this.store.dispatch(UserActions.resetFilters());
+      } else {
+        // Merge new filters with current state
+        const mergedFilter = {
+          ...current,
+          ...filters,
+          page: filters.page || current.page || 1,
+        };
+        this.store.dispatch(UserActions.filterChange({ filter: mergedFilter }));
+      }
+    });
   }
 
   onSortChange(event: { sortBy: string; direction: 'ASC' | 'DESC' }): void {
-    this.store.dispatch(
-      UserActions.filterChange({
-        filter: { sortBy: event.sortBy, sortDirection: event.direction },
-      })
-    );
+    const sortFilter = {
+      sortBy: event.sortBy,
+      sortDirection: event.direction,
+    };
+    this.store.dispatch(UserActions.filterChange({ filter: sortFilter }));
   }
 
   onPageEvent(event: PageEvent): void {

@@ -41,6 +41,13 @@ export interface UrlParams {
   providedIn: 'root',
 })
 export class UrlParamsService {
+  private defaultParams = {
+    page: '1',
+    size: '10',
+    sortBy: 'createdAt',
+    sortDirection: 'DESC',
+  };
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -144,41 +151,42 @@ export class UrlParamsService {
   }
 
   updateQueryParams(filter: UserFilter): void {
-    const urlParams: Partial<Record<UrlParamKey, string>> = {};
+    const urlParams: Partial<Record<UrlParamKey, string>> = {
+      // Always include default params
+      page: (filter.page || 1).toString(),
+      size: (filter.size || 10).toString(),
+      sortBy: filter.sortBy || 'createdAt',
+      sortDirection: filter.sortDirection || 'DESC',
+    };
 
-    // Only add defined values to URL params
-    if (filter.page) urlParams['page'] = filter.page.toString();
-    if (filter.size) urlParams['size'] = filter.size.toString();
-    if (filter.sortBy) urlParams['sortBy'] = filter.sortBy;
-    if (filter.sortDirection) urlParams['sortDirection'] = filter.sortDirection;
+    // Add optional params only if they have values
     if (filter.searchTerm?.trim())
       urlParams['searchTerm'] = filter.searchTerm.trim();
     if (filter.permissions?.length)
       urlParams['permissions'] = filter.permissions.join(',');
-    if (filter.isApproved !== undefined)
+    if (filter.isApproved !== undefined && filter.isApproved !== null)
       urlParams['isApproved'] = filter.isApproved.toString();
-    if (filter.isWardLevelUser !== undefined)
+    if (filter.isWardLevelUser !== undefined && filter.isWardLevelUser !== null)
       urlParams['isWardLevelUser'] = filter.isWardLevelUser.toString();
-    if (filter.wardNumber !== undefined)
+    if (filter.wardNumber !== undefined && filter.wardNumber !== null)
       urlParams['wardNumber'] = filter.wardNumber.toString();
     if (filter.email?.trim()) urlParams['email'] = filter.email.trim();
     if (filter.createdAfter) urlParams['createdAfter'] = filter.createdAfter;
     if (filter.createdBefore) urlParams['createdBefore'] = filter.createdBefore;
 
-    // Update URL without triggering navigation
+    // Replace all query params (don't merge)
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: urlParams,
-      queryParamsHandling: 'merge',
       replaceUrl: true,
     });
   }
 
   clearUrlParams(): void {
-    // Clear all query parameters completely
+    // Reset to default params instead of clearing everything
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: {},
+      queryParams: this.defaultParams,
       replaceUrl: true,
     });
   }
