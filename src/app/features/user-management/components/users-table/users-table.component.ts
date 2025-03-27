@@ -114,6 +114,12 @@ export class UsersTableComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  @Input() set users(value: UserResponse[]) {
+    if (value) {
+      this._dataSource.data = value;
+    }
+  }
+
   displayedColumns = [
     'email',
     'ward',
@@ -129,7 +135,11 @@ export class UsersTableComponent implements AfterViewInit, OnInit, OnDestroy {
     private transloco: TranslocoService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this._dataSource) {
+      this._dataSource.sort = this.sort;
+    }
+  }
 
   ngAfterViewInit() {
     if (this._dataSource) {

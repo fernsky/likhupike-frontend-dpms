@@ -46,20 +46,18 @@ export class UserEffects {
       exhaustMap(({ filter }) =>
         this.userService.getUsers(filter).pipe(
           map(({ users, total }) => {
-            const validMeta = {
-              page: filter.page ?? 1, // Use the filter's page number
-              size: filter.size ?? 10,
-              totalElements: total,
-              totalPages: Math.ceil(total / (filter.size ?? 10)),
-              isFirst: (filter.page ?? 1) === 1,
-              isLast:
-                (filter.page ?? 1) >= Math.ceil(total / (filter.size ?? 10)),
-            };
-            console.log(validMeta);
             return UserActions.loadUsersSuccess({
               users,
               total,
-              meta: validMeta,
+              meta: {
+                page: filter.page ?? 1,
+                size: filter.size ?? 10,
+                totalElements: total,
+                totalPages: Math.ceil(total / (filter.size ?? 10)),
+                isFirst: (filter.page ?? 1) === 1,
+                isLast:
+                  (filter.page ?? 1) >= Math.ceil(total / (filter.size ?? 10)),
+              },
             });
           }),
           catchError((error) => {
@@ -187,8 +185,12 @@ export class UserEffects {
     this.actions$.pipe(
       ofType(UserActions.filterChange),
       map(({ filter }) => {
-        // Reset to page 1 when filters change
-        const newFilter = { ...filter, page: 1 };
+        // Reset to page 1 when filters change (except for pagination changes)
+        const newFilter = {
+          ...filter,
+          page: filter.page || 1,
+          size: filter.size || 10,
+        };
         return UserActions.loadUsers({ filter: newFilter });
       })
     )

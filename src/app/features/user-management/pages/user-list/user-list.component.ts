@@ -13,7 +13,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { Subject, BehaviorSubject } from 'rxjs';
-import { takeUntil, distinctUntilChanged, map, take } from 'rxjs/operators';
+import { takeUntil, distinctUntilChanged, map } from 'rxjs/operators';
 import {
   provideTranslocoScope,
   TranslocoModule,
@@ -168,6 +168,9 @@ export class UserListComponent implements OnInit, OnDestroy {
   currentFilter$ = this.store.select(UserSelectors.selectCurrentFilter);
   sortState$ = this.store.select(UserSelectors.selectSortState);
 
+  // Add users$ stream
+  users$ = this.store.select(UserSelectors.selectUsers);
+
   constructor(
     private store: Store,
     private fb: FormBuilder,
@@ -195,24 +198,23 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Handle initial load from URL params
-    this.route.queryParams
+    // Subscribe to URL params and sync with state
+    this.urlParamsService
+      .syncUrlToState()
       .pipe(
-        take(1),
-        map((params) =>
-          this.urlParamsService.convertToUserFilter(
-            this.urlParamsService.parseQueryParams(params)
-          )
+        takeUntil(this.destroy$),
+        distinctUntilChanged(
+          (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
         )
       )
-      .subscribe((initialFilter) => {
-        this.store.dispatch(
-          UserActions.filterChange({ filter: initialFilter })
-        );
+      .subscribe((urlFilter) => {
+        // Update store with URL params
+        this.store.dispatch(UserActions.filterChange({ filter: urlFilter }));
       });
 
-    // Subscribe to filter changes to update URL
-    this.currentFilter$
+    // Subscribe to store filter changes and update URL
+    this.store
+      .select(UserSelectors.selectCurrentFilter)
       .pipe(
         takeUntil(this.destroy$),
         distinctUntilChanged(
@@ -221,33 +223,20 @@ export class UserListComponent implements OnInit, OnDestroy {
       )
       .subscribe((filter) => {
         this.urlParamsService.updateQueryParams(filter);
-        this.store.dispatch(UserActions.loadUsers({ filter }));
-      });
-  }
 
-  private setupSubscriptions(): void {
-    // Remove manual filter handling and use store selectors
-    this.store
-      .select(UserSelectors.selectCurrentFilter)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((filter) => {
-        this.urlParamsService.updateQueryParams(filter);
+        // Update form controls
         this.filterForm.patchValue(filter, { emitEvent: false });
+        if (filter.searchTerm) {
+          this.searchControl.setValue(filter.searchTerm, { emitEvent: false });
+        }
       });
 
-    // Handle URL params once on init
-    this.route.queryParams
-      .pipe(
-        take(1),
-        map((params) =>
-          this.urlParamsService.convertToUserFilter(
-            this.urlParamsService.parseQueryParams(params)
-          )
-        )
-      )
-      .subscribe((filter) => {
-        this.store.dispatch(UserActions.loadUsers({ filter }));
-      });
+    // Subscribe to users data for the table
+    this.users$.pipe(takeUntil(this.destroy$)).subscribe((users) => {
+      if (users) {
+        this.dataSource.data = users;
+      }
+    });
   }
 
   onCreateUser(): void {

@@ -3,6 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { UserFilter } from '../models/user.interface';
 import { PermissionType } from '@app/core/models/permission.enum';
+import { Observable } from 'rxjs';
+import { map, distinctUntilChanged } from 'rxjs/operators';
 
 // Define valid URL parameter keys
 export type UrlParamKey =
@@ -132,40 +134,42 @@ export class UrlParamsService {
     return validParams;
   }
 
+  syncUrlToState(): Observable<UserFilter> {
+    return this.route.queryParams.pipe(
+      map((params) => this.convertToUserFilter(this.parseQueryParams(params))),
+      distinctUntilChanged(
+        (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
+      )
+    );
+  }
+
   updateQueryParams(filter: UserFilter): void {
     const urlParams: Partial<Record<UrlParamKey, string>> = {};
 
-    // Always preserve the exact page number from the filter
-    urlParams['page'] = (filter.page ?? 1).toString();
-    urlParams['size'] = (filter.size ?? 10).toString();
-    urlParams['sortBy'] = filter.sortBy ?? 'createdAt';
-    urlParams['sortDirection'] = filter.sortDirection ?? 'DESC';
-
-    // Include all other defined params without any filtering
-    if (filter.searchTerm) urlParams['searchTerm'] = filter.searchTerm;
+    // Only add defined values to URL params
+    if (filter.page) urlParams['page'] = filter.page.toString();
+    if (filter.size) urlParams['size'] = filter.size.toString();
+    if (filter.sortBy) urlParams['sortBy'] = filter.sortBy;
+    if (filter.sortDirection) urlParams['sortDirection'] = filter.sortDirection;
+    if (filter.searchTerm?.trim())
+      urlParams['searchTerm'] = filter.searchTerm.trim();
     if (filter.permissions?.length)
       urlParams['permissions'] = filter.permissions.join(',');
-    if (filter.isApproved !== undefined && filter.isApproved !== null) {
+    if (filter.isApproved !== undefined)
       urlParams['isApproved'] = filter.isApproved.toString();
-    }
-    if (
-      filter.isWardLevelUser !== undefined &&
-      filter.isWardLevelUser !== null
-    ) {
+    if (filter.isWardLevelUser !== undefined)
       urlParams['isWardLevelUser'] = filter.isWardLevelUser.toString();
-    }
-    if (filter.wardNumber !== undefined && filter.wardNumber !== null) {
+    if (filter.wardNumber !== undefined)
       urlParams['wardNumber'] = filter.wardNumber.toString();
-    }
-    if (filter.email) urlParams['email'] = filter.email;
+    if (filter.email?.trim()) urlParams['email'] = filter.email.trim();
     if (filter.createdAfter) urlParams['createdAfter'] = filter.createdAfter;
     if (filter.createdBefore) urlParams['createdBefore'] = filter.createdBefore;
 
-    // Update URL preserving query parameters that are not being updated
+    // Update URL without triggering navigation
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: urlParams,
-      queryParamsHandling: null, // Don't merge
+      queryParamsHandling: 'merge',
       replaceUrl: true,
     });
   }

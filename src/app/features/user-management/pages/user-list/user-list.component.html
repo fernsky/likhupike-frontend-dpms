@@ -68,14 +68,15 @@
   </div>
 
   <app-users-table
-    [dataSource]="dataSource"
+    [users]="(users$ | async) ?? []"
     [loading]="(loading$ | async) ?? false"
     [totalUsers]="(totalUsers$ | async) ?? 0"
-    [pageSize]="filterForm.get('size')?.value ?? 10"
-    [pageIndex]="filterForm.get('page')?.value ?? 1"
+    [pageIndex]="(currentPage$ | async) ?? 1"
+    [pageSize]="(pageSize$ | async) ?? 10"
+    (pageChange)="onPageEvent($event)"
     (edit)="onEditUser($event)"
     (delete)="onDeleteUser($event)"
     (toggleStatus)="onToggleStatus($event)"
-    (pageChange)="onPageEvent($event)"
-  ></app-users-table>
+  >
+  </app-users-table>
 </div>
