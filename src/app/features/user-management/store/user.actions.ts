@@ -126,6 +126,8 @@ export const UserActions = createActionGroup({
     'Update Filter': props<{ filter: UserFilter }>(),
     'Filter Change': props<{ filter: UserFilter }>(),
 
+    'Reset Filters': emptyProps(),
+
     // Clear Errors
     'Clear Errors': emptyProps(),
   },

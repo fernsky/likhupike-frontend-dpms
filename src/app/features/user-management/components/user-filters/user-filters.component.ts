@@ -88,15 +88,6 @@ export class UserFiltersComponent implements OnInit, OnDestroy {
   }
 
   clearFilters(): void {
-    const defaultValues: UserFilter = {
-      wardNumber: undefined,
-      permissions: [],
-      isApproved: undefined,
-      isWardLevelUser: undefined,
-      createdAfter: undefined,
-      createdBefore: undefined,
-    };
-
     this.filterForm.patchValue({
       wardNumber: null,
       permissions: [],
@@ -106,7 +97,8 @@ export class UserFiltersComponent implements OnInit, OnDestroy {
       createdBefore: null,
     });
 
-    this.filtersChange.emit(defaultValues);
+    // Emit empty filter to trigger reset
+    this.filtersChange.emit({});
   }
 
   formatWardNumber(number: number): string {

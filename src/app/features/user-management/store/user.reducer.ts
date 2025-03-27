@@ -230,6 +230,16 @@ export const userReducer = createReducer(
     },
   })),
 
+  on(UserActions.resetFilters, (state) => ({
+    ...state,
+    filter: {
+      page: 1,
+      size: 10,
+      sortBy: 'createdAt',
+      sortDirection: 'DESC' as 'ASC' | 'DESC',
+    },
+  })),
+
   // Clear Errors
   on(UserActions.clearErrors, (state) => ({
     ...state,

@@ -174,6 +174,15 @@ export class UrlParamsService {
     });
   }
 
+  clearUrlParams(): void {
+    // Clear all query parameters completely
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {},
+      replaceUrl: true,
+    });
+  }
+
   convertToUserFilter(params: UrlParams): UserFilter {
     const filter: UserFilter = {};
 

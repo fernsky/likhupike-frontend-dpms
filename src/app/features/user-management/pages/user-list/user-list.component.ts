@@ -243,16 +243,23 @@ export class UserListComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngOnDestroy(): void {
+    // Don't clear URL params on component destroy
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   onCreateUser(): void {
+    // Clear URL params before navigating to create page
+    this.urlParamsService.clearUrlParams();
     this.router.navigate(['/dashboard/users/create']);
   }
 
   onEditUser(id: string): void {
-    // Navigate to edit page with query param to select the first tab (details)
+    // Clear URL params before navigating to edit page
+    this.urlParamsService.clearUrlParams();
     this.router.navigate(['/dashboard/users/edit', id], {
       queryParams: { tab: 0 },
-      // Preserve query params from the list page to return to the same state
-      queryParamsHandling: 'merge',
     });
   }
 
@@ -316,17 +323,18 @@ export class UserListComponent implements OnInit, OnDestroy {
     this.showFilters = !this.showFilters;
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   onSearch(searchTerm: string) {
     this.store.dispatch(UserActions.filterChange({ filter: { searchTerm } }));
   }
 
   onFiltersChange(filters: UserFilter) {
-    this.store.dispatch(UserActions.filterChange({ filter: filters }));
+    if (Object.keys(filters).length === 0) {
+      // If filters are empty, reset to default state
+      this.store.dispatch(UserActions.resetFilters());
+      this.urlParamsService.clearUrlParams();
+    } else {
+      this.store.dispatch(UserActions.filterChange({ filter: filters }));
+    }
   }
 
   onSortChange(event: { sortBy: string; direction: 'ASC' | 'DESC' }): void {
