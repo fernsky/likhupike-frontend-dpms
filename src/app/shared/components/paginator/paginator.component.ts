@@ -118,7 +118,6 @@ export class PaginatorComponent implements OnChanges {
   }
 
   private emitPageEvent(pageIndex: number, pageSize: number): void {
-    // Always emit 1-based page numbers
     this.pageChange.emit({ pageIndex, pageSize });
   }
 
@@ -142,7 +141,6 @@ export class PaginatorComponent implements OnChanges {
   }
 
   private updatePaginationState(): void {
-    // Ensure pageIndex is within bounds
     const maxPage = Math.max(0, Math.ceil(this.totalElements / this.pageSize));
     if (this._pageIndex > maxPage) {
       this._pageIndex = maxPage;

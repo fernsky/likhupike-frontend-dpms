@@ -271,32 +271,46 @@ export class UserListComponent implements OnInit, OnDestroy {
             Object.keys(newFilter).length === 2 &&
             ('page' in newFilter || 'size' in newFilter)
           ) {
-            return newFilter;
+            return { type: 'pagination', filter: newFilter };
           }
           // Reset to page 1 for other filter changes
-          return { ...newFilter, page: 1 };
+          return { type: 'filter', filter: { ...newFilter, page: 1 } };
         })
       ),
       // Search changes (always reset page to 1)
       this.searchControl.valueChanges.pipe(
         map((searchTerm) => ({
-          ...this.filterForm.value,
-          searchTerm: searchTerm?.trim() || '',
-          page: 1,
+          type: 'filter',
+          filter: {
+            ...this.filterForm.value,
+            searchTerm: searchTerm?.trim() || '',
+            page: 1,
+          },
         }))
       )
     ).pipe(
       takeUntil(this.destroy$),
       debounceTime(300),
       distinctUntilChanged(
-        (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
+        (prev, curr) =>
+          JSON.stringify(prev.filter) === JSON.stringify(curr.filter)
       )
     );
 
     // Handle all filter changes in a single subscription
-    filterChanges$.subscribe((filter) => {
+    filterChanges$.subscribe(({ type, filter }) => {
       this.urlParamsService.updateQueryParams(filter);
       this.store.dispatch(UserActions.loadUsers({ filter }));
+
+      // Update form silently to avoid triggering another API call
+      this.filterForm.patchValue(filter, { emitEvent: false });
+
+      // For filter changes, ensure we reset pagination in the table component
+      if (type === 'filter' && this.usersTable) {
+        this.usersTable.pageIndex = 1;
+      } else if (type === 'pagination' && this.usersTable) {
+        this.usersTable.pageIndex = filter.page || 1;
+      }
     });
   }
 
@@ -410,20 +424,12 @@ export class UserListComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // Update filter handling
-  private updateFilters(newFilters: Partial<UserFilter>) {
-    this.filtersSubject.next({
-      ...this.filtersSubject.value,
-      ...newFilters,
-    });
-  }
-
   onSearch(searchTerm: string) {
     this.searchControl.setValue(searchTerm, { emitEvent: true });
   }
 
   onFiltersChange(filters: UserFilter) {
-    const newFilters = { ...filters, page: 1 };
+    const newFilters = { ...filters };
     this.filterForm.patchValue(newFilters, { emitEvent: true });
   }
 
@@ -438,31 +444,23 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   onPageEvent(event: PageEvent): void {
-    // Update form with new page values and trigger API call
+    const currentFilters = this.filterForm.value;
     const newFilter = {
-      ...this.filterForm.value,
-      page: event.pageIndex,
+      ...currentFilters,
+      page: event.pageIndex, // Already 1-based from UsersTableComponent
       size: event.pageSize,
     };
 
-    // Update URL and trigger API call directly instead of going through form changes
+    // Update form without emitting to avoid duplicate calls
+    this.filterForm.patchValue(newFilter, { emitEvent: false });
+
+    // Update URL and dispatch action directly
     this.urlParamsService.updateQueryParams(newFilter);
     this.store.dispatch(UserActions.loadUsers({ filter: newFilter }));
 
-    // Update form without emitting event to avoid duplicate calls
-    this.filterForm.patchValue(newFilter, { emitEvent: false });
-  }
-
-  private isPaginationOnlyChange(filter: UserFilter): boolean {
-    const currentValues = this.filterForm.value;
-    const changedKeys = Object.keys(filter).filter(
-      (key) =>
-        filter[key as keyof UserFilter] !==
-        currentValues[key as keyof UserFilter]
-    );
-    return (
-      changedKeys.length === 1 &&
-      (changedKeys[0] === 'page' || changedKeys[0] === 'size')
-    );
+    // Update the table component's page index
+    if (this.usersTable) {
+      this.usersTable.pageIndex = event.pageIndex;
+    }
   }
 }

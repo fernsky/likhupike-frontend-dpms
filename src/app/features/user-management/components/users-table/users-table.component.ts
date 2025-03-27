@@ -85,11 +85,25 @@ export class UsersTableComponent implements AfterViewInit, OnInit, OnDestroy {
   @Input() loading = false;
   @Input() totalUsers = 0;
   @Input() pageSize = 10;
-  @Input() pageIndex = 1;
   @Output() edit = new EventEmitter<string>();
   @Output() delete = new EventEmitter<UserResponse>();
   @Output() toggleStatus = new EventEmitter<UserResponse>();
   @Output() pageChange = new EventEmitter<PageEvent>();
+
+  @Input() set pageIndex(value: number) {
+    if (value !== undefined && this._currentPageIndex !== value) {
+      this._currentPageIndex = value;
+      // Update paginator if it exists
+      if (this.paginator) {
+        this.paginator.pageIndex = value; // Don't convert, keep as is
+      }
+    }
+  }
+  get pageIndex(): number {
+    return this._currentPageIndex;
+  }
+
+  private _currentPageIndex = 1;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -136,8 +150,12 @@ export class UsersTableComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   onPageChange(event: PageEvent) {
-    // Emit the event directly without modification since we're using 1-based pagination
-    this.pageChange.emit(event);
+    // Pass through the page index as is, without any conversion
+    this._currentPageIndex = event.pageIndex;
+    this.pageChange.emit({
+      pageIndex: event.pageIndex,
+      pageSize: event.pageSize,
+    });
   }
 
   getData(): UserResponse[] {
