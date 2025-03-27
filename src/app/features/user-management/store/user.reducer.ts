@@ -217,7 +217,8 @@ export const userReducer = createReducer(
     filter: {
       ...state.filter,
       ...filter,
-      page: 1, // Reset page when filter changes
+      // Only reset page if it's not explicitly set in the filter
+      page: filter.page ?? state.filter.page ?? 1,
     },
   })),
 
@@ -227,6 +228,11 @@ export const userReducer = createReducer(
       ...state.filter,
       page: pageIndex,
       size: pageSize,
+    },
+    pagination: {
+      ...state.pagination,
+      currentPage: pageIndex,
+      pageSize: pageSize,
     },
   })),
 

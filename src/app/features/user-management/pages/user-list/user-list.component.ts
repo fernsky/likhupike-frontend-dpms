@@ -241,6 +241,11 @@ export class UserListComponent implements OnInit, OnDestroy {
         this.dataSource.data = users;
       }
     });
+
+    // Add subscription to page changes
+    this.currentPage$.pipe(takeUntil(this.destroy$)).subscribe((page) => {
+      this.currentPage = page;
+    });
   }
 
   ngOnDestroy(): void {
@@ -358,6 +363,9 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   onPageEvent(event: PageEvent): void {
+    // First update the URL through the store
     this.store.dispatch(UserActions.setPage(event));
+    // Update the component's current page
+    this.currentPage = event.pageIndex;
   }
 }

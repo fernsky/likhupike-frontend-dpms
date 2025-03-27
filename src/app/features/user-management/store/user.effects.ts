@@ -9,6 +9,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { UserActions } from './user.actions';
 import { UserService } from '../services/user.service';
 import * as UserSelectors from './user.selectors';
+import { UrlParamsService } from '../services/url-params.service'; // Add this import at the top
 
 @Injectable()
 export class UserEffects {
@@ -18,7 +19,8 @@ export class UserEffects {
     private snackBar: MatSnackBar,
     private transloco: TranslocoService,
     private router: Router,
-    private store: Store // Add Store injection
+    private store: Store,
+    private urlParamsService: UrlParamsService // Add this injection
   ) {}
 
   createUser$ = createEffect(() =>
@@ -193,13 +195,18 @@ export class UserEffects {
       ofType(UserActions.filterChange),
       withLatestFrom(this.store.select(UserSelectors.selectCurrentFilter)),
       map(([{ filter }, currentFilter]) => {
-        // Merge with current filter while preserving defaults
+        // Don't reset page to 1 on every filter change
         const newFilter = {
-          page: 1, // Reset to page 1 on filter change
-          size: currentFilter.size || 10,
-          sortBy: currentFilter.sortBy || 'createdAt',
-          sortDirection: currentFilter.sortDirection || 'DESC',
+          ...currentFilter,
           ...filter,
+          // Only reset page if other filters change
+          page:
+            filter.page ??
+            (Object.keys(filter).length > 0 ? 1 : (currentFilter.page ?? 1)),
+          size: filter.size ?? currentFilter.size ?? 10,
+          sortBy: filter.sortBy ?? currentFilter.sortBy ?? 'createdAt',
+          sortDirection:
+            filter.sortDirection ?? currentFilter.sortDirection ?? 'DESC',
         };
         return UserActions.loadUsers({ filter: newFilter });
       })
@@ -209,14 +216,10 @@ export class UserEffects {
   setPage$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.setPage),
-      withLatestFrom(this.store.select(UserSelectors.selectCurrentFilter)),
-      map(([{ pageIndex, pageSize }, currentFilter]) => {
-        const newFilter = {
-          ...currentFilter,
-          page: pageIndex,
-          size: pageSize,
-        };
-        return UserActions.loadUsers({ filter: newFilter });
+      map(({ pageIndex, pageSize }) => {
+        const filter = { page: pageIndex, size: pageSize };
+        // Directly trigger filter change with the new page
+        return UserActions.filterChange({ filter });
       })
     )
   );

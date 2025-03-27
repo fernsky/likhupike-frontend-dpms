@@ -151,35 +151,39 @@ export class UrlParamsService {
   }
 
   updateQueryParams(filter: UserFilter): void {
-    const urlParams: Partial<Record<UrlParamKey, string>> = {
-      // Always include default params
-      page: (filter.page || 1).toString(),
-      size: (filter.size || 10).toString(),
-      sortBy: filter.sortBy || 'createdAt',
-      sortDirection: filter.sortDirection || 'DESC',
-    };
+    const urlParams: Partial<Record<UrlParamKey, string>> = {};
+
+    // Always include page and size params
+    urlParams['page'] = String(filter.page ?? 1);
+    urlParams['size'] = String(filter.size ?? 10);
+
+    // Include sort params if they exist
+    if (filter.sortBy) urlParams['sortBy'] = filter.sortBy;
+    if (filter.sortDirection) urlParams['sortDirection'] = filter.sortDirection;
 
     // Add optional params only if they have values
     if (filter.searchTerm?.trim())
       urlParams['searchTerm'] = filter.searchTerm.trim();
     if (filter.permissions?.length)
       urlParams['permissions'] = filter.permissions.join(',');
-    if (filter.isApproved !== undefined && filter.isApproved !== null)
-      urlParams['isApproved'] = filter.isApproved.toString();
-    if (filter.isWardLevelUser !== undefined && filter.isWardLevelUser !== null)
-      urlParams['isWardLevelUser'] = filter.isWardLevelUser.toString();
-    if (filter.wardNumber !== undefined && filter.wardNumber !== null)
-      urlParams['wardNumber'] = filter.wardNumber.toString();
+    if (filter.isApproved !== undefined)
+      urlParams['isApproved'] = String(filter.isApproved);
+    if (filter.isWardLevelUser !== undefined)
+      urlParams['isWardLevelUser'] = String(filter.isWardLevelUser);
+    if (filter.wardNumber) urlParams['wardNumber'] = String(filter.wardNumber);
     if (filter.email?.trim()) urlParams['email'] = filter.email.trim();
     if (filter.createdAfter) urlParams['createdAfter'] = filter.createdAfter;
     if (filter.createdBefore) urlParams['createdBefore'] = filter.createdBefore;
 
-    // Replace all query params (don't merge)
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: urlParams,
-      replaceUrl: true,
-    });
+    // Use replaceState to update URL without triggering navigation
+    this.location.replaceState(
+      this.router
+        .createUrlTree([], {
+          relativeTo: this.route,
+          queryParams: urlParams,
+        })
+        .toString()
+    );
   }
 
   clearUrlParams(): void {
