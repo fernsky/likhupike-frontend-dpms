@@ -12,14 +12,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { Router } from '@angular/router';
-import { Subject, BehaviorSubject, merge } from 'rxjs';
-import {
-  takeUntil,
-  debounceTime,
-  distinctUntilChanged,
-  map,
-  take,
-} from 'rxjs/operators';
+import { Subject, BehaviorSubject } from 'rxjs';
+import { takeUntil, distinctUntilChanged, map, take } from 'rxjs/operators';
 import {
   provideTranslocoScope,
   TranslocoModule,
@@ -59,7 +53,6 @@ import { PageTitleButtonComponent } from '@app/shared/components/page-title-butt
 import {
   ALLOWED_COLUMNS,
   UserFilter,
-  UserFilterFormValue,
   UserResponse,
 } from '../../models/user.interface';
 import { UserActions } from '../../store/user.actions';
@@ -172,6 +165,9 @@ export class UserListComponent implements OnInit, OnDestroy {
   currentPage$ = this.store.select(UserSelectors.selectCurrentPage);
   pageSize$ = this.store.select(UserSelectors.selectPageSize);
 
+  currentFilter$ = this.store.select(UserSelectors.selectCurrentFilter);
+  sortState$ = this.store.select(UserSelectors.selectSortState);
+
   constructor(
     private store: Store,
     private fb: FormBuilder,
@@ -199,151 +195,59 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Handle initial load
+    // Handle initial load from URL params
     this.route.queryParams
       .pipe(
         take(1),
-        map((params) => {
-          const userFilter = this.urlParamsService.convertToUserFilter(
+        map((params) =>
+          this.urlParamsService.convertToUserFilter(
             this.urlParamsService.parseQueryParams(params)
-          );
-          return {
-            page: userFilter.page ?? 1,
-            size: userFilter.size ?? 10,
-            sortBy: userFilter.sortBy ?? 'createdAt',
-            sortDirection: userFilter.sortDirection ?? 'DESC',
-            ...userFilter,
-          };
-        })
+          )
+        )
       )
       .subscribe((initialFilter) => {
-        // Set initial values silently
-        this.filterForm.patchValue(initialFilter, { emitEvent: false });
-        if (initialFilter.searchTerm) {
-          this.searchControl.setValue(initialFilter.searchTerm, {
-            emitEvent: false,
-          });
-        }
+        this.store.dispatch(
+          UserActions.filterChange({ filter: initialFilter })
+        );
+      });
 
-        // Initial data load
-        this.store.dispatch(UserActions.loadUsers({ filter: initialFilter }));
-        this.setupSubscriptions();
+    // Subscribe to filter changes to update URL
+    this.currentFilter$
+      .pipe(
+        takeUntil(this.destroy$),
+        distinctUntilChanged(
+          (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
+        )
+      )
+      .subscribe((filter) => {
+        this.urlParamsService.updateQueryParams(filter);
+        this.store.dispatch(UserActions.loadUsers({ filter }));
       });
   }
 
   private setupSubscriptions(): void {
-    // Data updates subscription
+    // Remove manual filter handling and use store selectors
     this.store
-      .select(UserSelectors.selectUsers)
+      .select(UserSelectors.selectCurrentFilter)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((users) => {
-        this.dataSource.data = users;
+      .subscribe((filter) => {
+        this.urlParamsService.updateQueryParams(filter);
+        this.filterForm.patchValue(filter, { emitEvent: false });
       });
 
-    // Pagination updates subscription
-    this.store
-      .select(UserSelectors.selectPagination)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((pagination) => {
-        // Only update form if pagination actually changed
-        if (
-          this.filterForm.get('page')?.value !== pagination.currentPage ||
-          this.filterForm.get('size')?.value !== pagination.pageSize
-        ) {
-          this.filterForm.patchValue(
-            {
-              page: pagination.currentPage,
-              size: pagination.pageSize,
-            },
-            { emitEvent: false }
-          ); // Don't trigger another API call
-        }
+    // Handle URL params once on init
+    this.route.queryParams
+      .pipe(
+        take(1),
+        map((params) =>
+          this.urlParamsService.convertToUserFilter(
+            this.urlParamsService.parseQueryParams(params)
+          )
+        )
+      )
+      .subscribe((filter) => {
+        this.store.dispatch(UserActions.loadUsers({ filter }));
       });
-
-    // Create a single stream for filter changes
-    const filterChanges$ = merge(
-      // Form value changes excluding page changes
-      this.filterForm.valueChanges.pipe(
-        map((formValue) => {
-          const newFilter = this.sanitizeFilterValues(formValue);
-          // Don't reset page when only page/size changes
-          if (
-            Object.keys(newFilter).length === 2 &&
-            ('page' in newFilter || 'size' in newFilter)
-          ) {
-            return { type: 'pagination', filter: newFilter };
-          }
-          // Reset to page 1 for other filter changes
-          return { type: 'filter', filter: { ...newFilter, page: 1 } };
-        })
-      ),
-      // Search changes (always reset page to 1)
-      this.searchControl.valueChanges.pipe(
-        map((searchTerm) => ({
-          type: 'filter',
-          filter: {
-            ...this.filterForm.value,
-            searchTerm: searchTerm?.trim() || '',
-            page: 1,
-          },
-        }))
-      )
-    ).pipe(
-      takeUntil(this.destroy$),
-      debounceTime(300),
-      distinctUntilChanged(
-        (prev, curr) =>
-          JSON.stringify(prev.filter) === JSON.stringify(curr.filter)
-      )
-    );
-
-    // Handle all filter changes in a single subscription
-    filterChanges$.subscribe(({ type, filter }) => {
-      this.urlParamsService.updateQueryParams(filter);
-      this.store.dispatch(UserActions.loadUsers({ filter }));
-
-      // Update form silently to avoid triggering another API call
-      this.filterForm.patchValue(filter, { emitEvent: false });
-
-      // For filter changes, ensure we reset pagination in the table component
-      if (type === 'filter' && this.usersTable) {
-        this.usersTable.pageIndex = 1;
-      } else if (type === 'pagination' && this.usersTable) {
-        this.usersTable.pageIndex = filter.page || 1;
-      }
-    });
-  }
-
-  private sanitizeFilterValues(formValue: UserFilterFormValue): UserFilter {
-    const filter: UserFilter = {
-      page: formValue.page,
-      size: formValue.size,
-      sortBy: formValue.sortBy,
-      sortDirection: formValue.sortDirection,
-    };
-
-    // Only add other filters if they have values
-    if (formValue.searchTerm?.trim())
-      filter.searchTerm = formValue.searchTerm.trim();
-    if (formValue.permissions?.length)
-      filter.permissions = formValue.permissions;
-    if (formValue.email?.trim()) filter.email = formValue.email.trim();
-    if (formValue.isApproved !== null) filter.isApproved = formValue.isApproved;
-    if (formValue.isWardLevelUser !== null)
-      filter.isWardLevelUser = formValue.isWardLevelUser;
-    if (formValue.wardNumber !== null) filter.wardNumber = formValue.wardNumber;
-    if (formValue.createdAfter) {
-      filter.createdAfter = new Date(formValue.createdAfter)
-        .toISOString()
-        .split('T')[0];
-    }
-    if (formValue.createdBefore) {
-      filter.createdBefore = new Date(formValue.createdBefore)
-        .toISOString()
-        .split('T')[0];
-    }
-
-    return filter;
   }
 
   onCreateUser(): void {
@@ -425,42 +329,22 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   onSearch(searchTerm: string) {
-    this.searchControl.setValue(searchTerm, { emitEvent: true });
+    this.store.dispatch(UserActions.filterChange({ filter: { searchTerm } }));
   }
 
   onFiltersChange(filters: UserFilter) {
-    const newFilters = { ...filters };
-    this.filterForm.patchValue(newFilters, { emitEvent: true });
+    this.store.dispatch(UserActions.filterChange({ filter: filters }));
   }
 
   onSortChange(event: { sortBy: string; direction: 'ASC' | 'DESC' }): void {
-    this.filterForm.patchValue(
-      {
-        sortBy: event.sortBy,
-        sortDirection: event.direction,
-      },
-      { emitEvent: true }
+    this.store.dispatch(
+      UserActions.filterChange({
+        filter: { sortBy: event.sortBy, sortDirection: event.direction },
+      })
     );
   }
 
   onPageEvent(event: PageEvent): void {
-    const currentFilters = this.filterForm.value;
-    const newFilter = {
-      ...currentFilters,
-      page: event.pageIndex, // Already 1-based from UsersTableComponent
-      size: event.pageSize,
-    };
-
-    // Update form without emitting to avoid duplicate calls
-    this.filterForm.patchValue(newFilter, { emitEvent: false });
-
-    // Update URL and dispatch action directly
-    this.urlParamsService.updateQueryParams(newFilter);
-    this.store.dispatch(UserActions.loadUsers({ filter: newFilter }));
-
-    // Update the table component's page index
-    if (this.usersTable) {
-      this.usersTable.pageIndex = event.pageIndex;
-    }
+    this.store.dispatch(UserActions.setPage(event));
   }
 }

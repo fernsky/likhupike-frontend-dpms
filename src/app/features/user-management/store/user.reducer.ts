@@ -209,6 +209,25 @@ export const userReducer = createReducer(
     errors: error,
   })),
 
+  // Add new filter actions
+  on(UserActions.filterChange, (state, { filter }) => ({
+    ...state,
+    filter: {
+      ...state.filter,
+      ...filter,
+      page: 1, // Reset page when filter changes
+    },
+  })),
+
+  on(UserActions.setPage, (state, { pageIndex, pageSize }) => ({
+    ...state,
+    filter: {
+      ...state.filter,
+      page: pageIndex,
+      size: pageSize,
+    },
+  })),
+
   // Clear Errors
   on(UserActions.clearErrors, (state) => ({
     ...state,

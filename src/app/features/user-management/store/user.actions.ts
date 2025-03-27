@@ -120,6 +120,12 @@ export const UserActions = createActionGroup({
     'Update Permissions Success': props<{ user: UserResponse }>(),
     'Update Permissions Failure': props<{ error: ApiError }>(),
 
+    // Add new pagination actions
+    'Set Page': props<{ pageIndex: number; pageSize: number }>(),
+    'Reset Pagination': emptyProps(),
+    'Update Filter': props<{ filter: UserFilter }>(),
+    'Filter Change': props<{ filter: UserFilter }>(),
+
     // Clear Errors
     'Clear Errors': emptyProps(),
   },

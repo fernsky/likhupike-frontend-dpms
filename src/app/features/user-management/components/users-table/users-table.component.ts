@@ -8,6 +8,7 @@ import {
   AfterViewInit,
   OnInit,
   OnDestroy,
+  SimpleChange,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -93,9 +94,12 @@ export class UsersTableComponent implements AfterViewInit, OnInit, OnDestroy {
   @Input() set pageIndex(value: number) {
     if (value !== undefined && this._currentPageIndex !== value) {
       this._currentPageIndex = value;
-      // Update paginator if it exists
-      if (this.paginator) {
-        this.paginator.pageIndex = value; // Don't convert, keep as is
+      if (this.customPaginator) {
+        this.customPaginator.pageIndex = value;
+        // Force update of paginator
+        this.customPaginator.ngOnChanges({
+          pageIndex: new SimpleChange(null, value, false),
+        });
       }
     }
   }
@@ -105,6 +109,8 @@ export class UsersTableComponent implements AfterViewInit, OnInit, OnDestroy {
 
   private _currentPageIndex = 1;
 
+  // Add direct reference to our custom paginator component
+  @ViewChild(PaginatorComponent) customPaginator!: PaginatorComponent;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -150,12 +156,7 @@ export class UsersTableComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   onPageChange(event: PageEvent) {
-    // Pass through the page index as is, without any conversion
-    this._currentPageIndex = event.pageIndex;
-    this.pageChange.emit({
-      pageIndex: event.pageIndex,
-      pageSize: event.pageSize,
-    });
+    this.pageChange.emit(event);
   }
 
   getData(): UserResponse[] {

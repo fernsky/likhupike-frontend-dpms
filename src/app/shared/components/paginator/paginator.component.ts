@@ -58,8 +58,10 @@ export class PaginatorComponent implements OnChanges {
   }
 
   @Input() set pageIndex(value: number) {
-    this._pageIndex = value || 1;
-    this._visiblePages = this.calculateVisiblePages();
+    if (this._pageIndex !== value) {
+      this._pageIndex = value || 1;
+      this._visiblePages = this.calculateVisiblePages();
+    }
   }
   get pageIndex(): number {
     return this._pageIndex;
@@ -141,9 +143,18 @@ export class PaginatorComponent implements OnChanges {
   }
 
   private updatePaginationState(): void {
-    const maxPage = Math.max(0, Math.ceil(this.totalElements / this.pageSize));
-    if (this._pageIndex > maxPage) {
+    const maxPage = Math.max(1, Math.ceil(this.totalElements / this.pageSize));
+    if (this._pageIndex > maxPage && maxPage > 0) {
       this._pageIndex = maxPage;
+      this._visiblePages = this.calculateVisiblePages();
+      this.pageChange.emit({
+        pageIndex: this._pageIndex,
+        pageSize: this._pageSize,
+      });
+    } else if (this.totalElements === 0 && this._pageIndex > 1) {
+      // Reset to page 1 if there are no elements but we're not on page 1
+      this._pageIndex = 1;
+      this._visiblePages = this.calculateVisiblePages();
       this.pageChange.emit({
         pageIndex: this._pageIndex,
         pageSize: this._pageSize,

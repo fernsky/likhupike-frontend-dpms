@@ -1,4 +1,8 @@
-import { UserResponse, UserValidationError } from '../models/user.interface';
+import {
+  UserFilter,
+  UserResponse,
+  UserValidationError,
+} from '../models/user.interface';
 
 export interface UserState {
   users: UserResponse[];
@@ -10,6 +14,7 @@ export interface UserState {
   errors: UserValidationError | null;
   totalUsers: number;
   lastUpdated: Date | null;
+  filter: UserFilter; // Add this to store current filter state
   pagination: {
     currentPage: number;
     pageSize: number;
@@ -28,6 +33,12 @@ export const initialUserState: UserState = {
   errors: null,
   totalUsers: 0,
   lastUpdated: null,
+  filter: {
+    page: 1,
+    size: 10,
+    sortBy: 'createdAt',
+    sortDirection: 'DESC',
+  },
   pagination: {
     currentPage: 1,
     pageSize: 10,

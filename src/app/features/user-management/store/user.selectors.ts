@@ -157,8 +157,24 @@ export const selectPageSize = createSelector(
   (pagination) => pagination.pageSize
 );
 
-export const selectCurrentFilter = createSelector(selectUserState, (state) => ({
-  page: state.pagination.currentPage,
-  size: state.pagination.pageSize,
-  // Add other filter properties as needed
-}));
+export const selectCurrentFilter = createSelector(
+  selectUserState,
+  (state) => state.filter
+);
+
+export const selectSortState = createSelector(
+  selectCurrentFilter,
+  (filter) => ({
+    sortBy: filter.sortBy || 'createdAt',
+    direction: filter.sortDirection || 'DESC',
+  })
+);
+
+export const selectFilterWithoutPagination = createSelector(
+  selectCurrentFilter,
+  (filter) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { page, size, ...filterWithoutPagination } = filter;
+    return filterWithoutPagination;
+  }
+);

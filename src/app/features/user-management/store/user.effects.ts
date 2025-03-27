@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { map, catchError, exhaustMap } from 'rxjs/operators';
+import { map, catchError, exhaustMap, withLatestFrom } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslocoService } from '@jsverse/transloco';
 import { UserActions } from './user.actions';
 import { UserService } from '../services/user.service';
+import * as UserSelectors from './user.selectors';
 
 @Injectable()
 export class UserEffects {
@@ -179,6 +180,32 @@ export class UserEffects {
           })
         )
       )
+    )
+  );
+
+  filterChange$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.filterChange),
+      map(({ filter }) => {
+        // Reset to page 1 when filters change
+        const newFilter = { ...filter, page: 1 };
+        return UserActions.loadUsers({ filter: newFilter });
+      })
+    )
+  );
+
+  setPage$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.setPage),
+      withLatestFrom(this.store.select(UserSelectors.selectCurrentFilter)),
+      map(([{ pageIndex, pageSize }, currentFilter]) => {
+        const newFilter = {
+          ...currentFilter,
+          page: pageIndex,
+          size: pageSize,
+        };
+        return UserActions.loadUsers({ filter: newFilter });
+      })
     )
   );
 
