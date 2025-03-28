@@ -9,6 +9,12 @@ export interface AuthUser {
   wardNumber?: number;
 }
 
+export interface ForgotPasswordState {
+  email: string | null;
+  otpSent: boolean;
+  otpVerified: boolean;
+}
+
 export interface AuthState {
   user: AuthUser | null;
   token: string | null;
@@ -18,6 +24,7 @@ export interface AuthState {
   error: string | null;
   expiresIn: number | null;
   municipality?: Municipality;
+  forgotPassword: ForgotPasswordState;
 }
 
 export const initialAuthState: AuthState = {
@@ -28,4 +35,9 @@ export const initialAuthState: AuthState = {
   isLoading: false,
   error: null,
   expiresIn: null,
+  forgotPassword: {
+    email: null,
+    otpSent: false,
+    otpVerified: false,
+  },
 };

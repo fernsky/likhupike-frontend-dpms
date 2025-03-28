@@ -9,6 +9,8 @@ import {
 } from '@app/core/api/config/api.config';
 import { publicGuard } from '@app/core/guards/public.guard';
 import { provideTranslocoScope } from '@jsverse/transloco';
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import * as AuthActions from '@app/core/store/auth/auth.actions';
 
 export const AUTH_ROUTES: Routes = [
   {
@@ -46,6 +48,13 @@ export const AUTH_ROUTES: Routes = [
   {
     path: 'forgot-password',
     canActivate: [publicGuard],
+    canDeactivate: [
+      (component: ForgotPasswordComponent) => {
+        // Clear state when navigating away
+        component.store.dispatch(AuthActions.clearForgotPasswordState());
+        return true;
+      },
+    ],
     loadComponent: () =>
       import('./pages/forgot-password/forgot-password.component').then(
         (m) => m.ForgotPasswordComponent

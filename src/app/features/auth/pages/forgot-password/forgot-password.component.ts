@@ -13,12 +13,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 import * as AuthActions from '@app/core/store/auth/auth.actions';
 import {
   selectAuthError,
   selectIsLoading,
   selectAuthState,
+  selectForgotPasswordEmail,
 } from '@app/core/store/auth/auth.selectors';
 import { BaseAuthComponent } from '../../components/base-auth/base-auth.component';
 import { TranslocoModule } from '@jsverse/transloco';
@@ -51,6 +52,7 @@ export class ForgotPasswordComponent
   forgotPasswordForm!: FormGroup;
   loading$: Observable<boolean>;
   apiError$: Observable<string | null>;
+  savedEmail$: Observable<string | null>;
   currentStep: 'email' | 'otp' | 'reset' = 'email';
   hidePassword = true;
   hideConfirmPassword = true;
@@ -58,23 +60,14 @@ export class ForgotPasswordComponent
 
   constructor(
     private fb: FormBuilder,
-    private store: Store,
+    public store: Store,
     private passwordValidator: PasswordValidatorService
   ) {
     super();
     this.initForm();
     this.loading$ = this.store.select(selectIsLoading);
     this.apiError$ = this.store.select(selectAuthError);
-
-    // Subscribe to auth state changes to handle success/failure
-    this.store
-      .select(selectAuthState)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((authState) => {
-        if (authState.error) {
-          this.forgotPasswordForm.setErrors({ serverError: authState.error });
-        }
-      });
+    this.savedEmail$ = this.store.select(selectForgotPasswordEmail);
   }
 
   private initForm(): void {
@@ -86,8 +79,9 @@ export class ForgotPasswordComponent
           '',
           [
             Validators.required,
-            this.passwordValidator.validatePassword.bind(
-              this.passwordValidator
+            Validators.minLength(8),
+            Validators.pattern(
+              /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/
             ),
           ],
         ],
@@ -95,7 +89,7 @@ export class ForgotPasswordComponent
       },
       {
         validators: [
-          this.passwordValidator.passwordMatchValidator(
+          this.passwordValidator.createMatchValidator(
             'newPassword',
             'confirmPassword'
           ),
@@ -103,7 +97,7 @@ export class ForgotPasswordComponent
       }
     );
 
-    // Initially disable OTP and password fields
+    // Disable fields initially but preserve validators
     this.forgotPasswordForm.get('otp')?.disable();
     this.forgotPasswordForm.get('newPassword')?.disable();
     this.forgotPasswordForm.get('confirmPassword')?.disable();
@@ -117,7 +111,6 @@ export class ForgotPasswordComponent
           email: { email },
         })
       );
-      // Don't change step here - let the effect handle success
     }
   }
 
@@ -125,43 +118,132 @@ export class ForgotPasswordComponent
     const otpControl = this.forgotPasswordForm.get('otp');
     if (otpControl?.valid && otpControl.value.length === 6) {
       this.currentStep = 'reset';
-      this.forgotPasswordForm.get('newPassword')?.enable();
-      this.forgotPasswordForm.get('confirmPassword')?.enable();
+      const newPasswordControl = this.forgotPasswordForm.get('newPassword');
+      const confirmPasswordControl =
+        this.forgotPasswordForm.get('confirmPassword');
+
+      if (newPasswordControl?.disabled) {
+        newPasswordControl.enable();
+        newPasswordControl.updateValueAndValidity();
+      }
+      if (confirmPasswordControl?.disabled) {
+        confirmPasswordControl.enable();
+        confirmPasswordControl.updateValueAndValidity();
+      }
     }
   }
 
   onSubmit(): void {
     if (this.forgotPasswordForm.valid && this.currentStep === 'reset') {
-      const formValue = this.forgotPasswordForm.value;
-      this.store.dispatch(
-        AuthActions.resetPassword({
-          resetData: {
-            email: formValue.email,
-            otp: formValue.otp,
-            newPassword: formValue.newPassword,
-            confirmPassword: formValue.confirmPassword,
-          },
-        })
-      );
+      const formValue = this.forgotPasswordForm.getRawValue(); // Use getRawValue to get disabled control values
+      this.savedEmail$.pipe(take(1)).subscribe((email) => {
+        if (email) {
+          this.store.dispatch(
+            AuthActions.resetPassword({
+              resetData: {
+                email: email,
+                otp: formValue.otp,
+                newPassword: formValue.newPassword,
+                confirmPassword: formValue.confirmPassword,
+              },
+            })
+          );
+        }
+      });
+    } else {
+      this.forgotPasswordForm.markAllAsTouched();
     }
   }
 
+  resetForm(): void {
+    this.currentStep = 'email';
+    this.forgotPasswordForm.reset();
+    this.forgotPasswordForm.get('email')?.enable();
+    this.forgotPasswordForm.get('otp')?.disable();
+    this.forgotPasswordForm.get('newPassword')?.disable();
+    this.forgotPasswordForm.get('confirmPassword')?.disable();
+  }
+
+  getEmailError(): string | null {
+    const control = this.forgotPasswordForm.get('email');
+    if (control?.errors && control.touched) {
+      if (control.errors['required']) {
+        return 'forgotPassword.fields.email.errors.required';
+      }
+      if (control.errors['email']) {
+        return 'forgotPassword.fields.email.errors.invalid';
+      }
+    }
+    return null;
+  }
+
+  getOtpError(): string | null {
+    const control = this.forgotPasswordForm.get('otp');
+    if (control?.errors && control.touched) {
+      if (control.errors['required']) {
+        return 'forgotPassword.fields.otp.errors.required';
+      }
+      if (control.errors['pattern']) {
+        return 'forgotPassword.fields.otp.errors.pattern';
+      }
+    }
+    return null;
+  }
+
+  getNewPasswordError(): string | null {
+    const control = this.forgotPasswordForm.get('newPassword');
+    if (control?.errors && control.touched) {
+      if (control.errors['required']) {
+        return 'forgotPassword.fields.newPassword.errors.required';
+      }
+      if (control.errors['minlength']) {
+        return 'forgotPassword.fields.newPassword.errors.minlength';
+      }
+      if (control.errors['pattern']) {
+        return 'forgotPassword.fields.newPassword.errors.pattern';
+      }
+    }
+    return null;
+  }
+
+  getConfirmPasswordError(): string | null {
+    const control = this.forgotPasswordForm.get('confirmPassword');
+    if (
+      this.forgotPasswordForm.hasError('passwordMismatch') &&
+      control?.touched
+    ) {
+      return 'forgotPassword.fields.confirmPassword.errors.mismatch';
+    }
+    if (control?.errors && control.touched) {
+      if (control.errors['required']) {
+        return 'forgotPassword.fields.confirmPassword.errors.required';
+      }
+    }
+    return null;
+  }
+
   ngOnInit(): void {
-    // Listen for success actions to update steps
+    // Reset form state when component initializes
+    this.resetForm();
+
+    // Listen for auth state changes
     this.store
       .select(selectAuthState)
       .pipe(takeUntil(this.destroy$))
       .subscribe((state) => {
-        if (!state.isLoading && !state.error) {
-          if (this.currentStep === 'email') {
-            this.currentStep = 'otp';
-            this.forgotPasswordForm.get('otp')?.enable();
-          }
+        if (state.error) {
+          this.forgotPasswordForm.setErrors({ serverError: state.error });
         }
       });
+
+    // Clear any previous forgot password state
+    this.store.dispatch(AuthActions.clearForgotPasswordState());
   }
 
   ngOnDestroy(): void {
+    // Reset form and clear state when component is destroyed
+    this.resetForm();
+    this.store.dispatch(AuthActions.clearForgotPasswordState());
     this.destroy$.next();
     this.destroy$.complete();
   }

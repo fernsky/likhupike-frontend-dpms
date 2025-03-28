@@ -101,3 +101,24 @@ export const selectMunicipalityLocation = createSelector(
     area: municipality?.area,
   })
 );
+
+// Forgot Password selectors
+export const selectForgotPasswordState = createSelector(
+  selectAuthState,
+  (state: AuthState) => state.forgotPassword
+);
+
+export const selectForgotPasswordEmail = createSelector(
+  selectForgotPasswordState,
+  (state) => state.email
+);
+
+export const selectOtpSent = createSelector(
+  selectForgotPasswordState,
+  (state) => state.otpSent
+);
+
+export const selectOtpVerified = createSelector(
+  selectForgotPasswordState,
+  (state) => state.otpVerified
+);

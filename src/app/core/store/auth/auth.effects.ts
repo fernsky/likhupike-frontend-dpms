@@ -321,9 +321,14 @@ export class AuthEffects {
       this.actions$.pipe(
         ofType(AuthActions.resetPasswordSuccess),
         tap(() => {
-          this.snackBar.open('Password successfully reset', 'Close', {
-            duration: 5000,
-          });
+          this.snackBar.open(
+            'Password reset successful',
+            this.translocoService.translate('common.actions.close'),
+            {
+              duration: 5000,
+              panelClass: ['success-snackbar'],
+            }
+          );
           this.router.navigate(['/auth/login']);
         })
       ),

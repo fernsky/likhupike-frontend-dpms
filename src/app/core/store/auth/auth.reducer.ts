@@ -84,22 +84,37 @@ export const authReducer = createReducer(
     ...initialAuthState,
   })),
 
-  on(AuthActions.requestPasswordReset, (state) => ({
+  on(AuthActions.clearForgotPasswordState, (state) => ({
+    ...state,
+    forgotPassword: initialAuthState.forgotPassword,
+  })),
+
+  on(AuthActions.requestPasswordReset, (state, { email }) => ({
     ...state,
     isLoading: true,
     error: null,
+    forgotPassword: {
+      ...initialAuthState.forgotPassword,
+      email: email.email,
+    },
   })),
 
   on(AuthActions.requestPasswordResetSuccess, (state) => ({
     ...state,
     isLoading: false,
     error: null,
+    forgotPassword: {
+      ...state.forgotPassword,
+      otpSent: true,
+    },
   })),
 
-  on(AuthActions.requestPasswordResetFailure, (state, { error }) => ({
+  on(AuthActions.verifyOtpSuccess, (state) => ({
     ...state,
-    isLoading: false,
-    error,
+    forgotPassword: {
+      ...state.forgotPassword,
+      otpVerified: true,
+    },
   })),
 
   on(AuthActions.resetPassword, (state) => ({
@@ -112,6 +127,7 @@ export const authReducer = createReducer(
     ...state,
     isLoading: false,
     error: null,
+    forgotPassword: initialAuthState.forgotPassword,
   })),
 
   on(AuthActions.resetPasswordFailure, (state, { error }) => ({

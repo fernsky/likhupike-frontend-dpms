@@ -22,8 +22,9 @@
       "label": "New Password",
       "placeholder": "Enter new password",
       "errors": {
-        "required": "New password is required",
-        "pattern": "Password must meet the requirements"
+        "required": "Password is required",
+        "pattern": "Must contain uppercase, lowercase, number and special character",
+        "minlength": "Password must be at least 8 characters"
       }
     },
     "confirmPassword": {

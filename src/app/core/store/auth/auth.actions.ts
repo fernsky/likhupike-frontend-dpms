@@ -104,3 +104,19 @@ export const resetPasswordFailure = createAction(
   '[Auth] Reset Password Failure',
   props<{ error: string }>()
 );
+
+export const storeForgotPasswordEmail = createAction(
+  '[Auth] Store Forgot Password Email',
+  props<{ email: string }>()
+);
+
+export const verifyOtp = createAction(
+  '[Auth] Verify OTP',
+  props<{ email: string; otp: string }>()
+);
+
+export const verifyOtpSuccess = createAction('[Auth] Verify OTP Success');
+
+export const clearForgotPasswordState = createAction(
+  '[Auth] Clear Forgot Password State'
+);
