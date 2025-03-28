@@ -1,5 +1,9 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { provideRouter, withComponentInputBinding } from '@angular/router';
+import {
+  provideRouter,
+  withComponentInputBinding,
+  withDebugTracing,
+} from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -24,7 +28,7 @@ const FONT_FAMILY =
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes, withComponentInputBinding()),
+    provideRouter(routes, withComponentInputBinding(), withDebugTracing()),
     provideAnimations(),
     provideHttpClient(withInterceptors([apiInterceptor, authInterceptor])),
     provideStore({ auth: authReducer }),

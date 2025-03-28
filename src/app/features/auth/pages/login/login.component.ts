@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, RouterLink } from '@angular/router';
 import {
   ReactiveFormsModule,
   FormBuilder,
@@ -33,6 +33,7 @@ import { TranslocoModule } from '@jsverse/transloco';
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
+    RouterLink,
     MatCardModule,
     MatInputModule,
     MatButtonModule,

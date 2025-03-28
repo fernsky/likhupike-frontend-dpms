@@ -5,11 +5,17 @@ import {
   OnInit,
   ViewChild,
   NgZone,
+  PLATFORM_ID,
+  Inject,
 } from '@angular/core';
+import { isPlatformBrowser, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-background-particles',
-  template: `<canvas #canvas></canvas>`,
+  template: `
+    <canvas #canvas *ngIf="isBrowser"></canvas>
+    <div *ngIf="!isBrowser" class="ssr-fallback"></div>
+  `,
   styles: [
     `
       :host {
@@ -25,23 +31,42 @@ import {
         left: 0;
         top: 0;
       }
+      .ssr-fallback {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0.05),
+          transparent
+        );
+      }
     `,
   ],
   standalone: true,
+  imports: [NgIf],
 })
 export class BackgroundParticlesComponent implements OnInit, OnDestroy {
-  @ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('canvas', { static: true }) canvas?: ElementRef<HTMLCanvasElement>;
   private animationFrame: number = 0;
   private ctx: CanvasRenderingContext2D | null = null;
   private particles: Particle[] = [];
   private bounds = { width: 0, height: 0 };
   private resizeObserver: ResizeObserver | null = null;
   private isDestroyed = false;
+  isBrowser: boolean;
 
-  constructor(private ngZone: NgZone) {}
+  constructor(
+    private ngZone: NgZone,
+    @Inject(PLATFORM_ID) private platformId: object
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   ngOnInit() {
-    this.ctx = this.canvas.nativeElement.getContext('2d', { alpha: true });
+    if (!this.isBrowser) return;
+
+    this.ctx =
+      this.canvas?.nativeElement.getContext('2d', { alpha: true }) || null;
     if (!this.ctx) return;
 
     // Run animation outside Angular zone for better performance
@@ -54,11 +79,13 @@ export class BackgroundParticlesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.isDestroyed = true;
-    if (this.animationFrame) {
-      cancelAnimationFrame(this.animationFrame);
-    }
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect();
+    if (this.isBrowser) {
+      if (this.animationFrame) {
+        cancelAnimationFrame(this.animationFrame);
+      }
+      if (this.resizeObserver) {
+        this.resizeObserver.disconnect();
+      }
     }
     this.particles = [];
     this.ctx = null;
@@ -85,26 +112,34 @@ export class BackgroundParticlesComponent implements OnInit, OnDestroy {
   }
 
   private setupResizeObserver() {
-    this.resizeObserver = new ResizeObserver(() => {
+    if (!this.isBrowser || !this.canvas) return;
+
+    try {
+      this.resizeObserver = new ResizeObserver(() => {
+        this.updateCanvasSize();
+      });
+      this.resizeObserver.observe(this.canvas.nativeElement);
       this.updateCanvasSize();
-    });
-    this.resizeObserver.observe(this.canvas.nativeElement);
-    this.updateCanvasSize();
+    } catch (e) {
+      console.warn('ResizeObserver not available:', e);
+    }
   }
 
   private updateCanvasSize() {
     if (!this.ctx) return;
 
     const dpr = window.devicePixelRatio || 1;
-    const rect = this.canvas.nativeElement.getBoundingClientRect();
+    const rect = this.canvas?.nativeElement.getBoundingClientRect();
 
     this.bounds = {
-      width: rect.width,
-      height: rect.height,
+      width: rect?.width || 0,
+      height: rect?.height || 0,
     };
 
-    this.canvas.nativeElement.width = rect.width * dpr;
-    this.canvas.nativeElement.height = rect.height * dpr;
+    if (this.canvas) {
+      this.canvas.nativeElement.width = (rect?.width || 0) * dpr;
+      this.canvas.nativeElement.height = (rect?.height || 0) * dpr;
+    }
     this.ctx.scale(dpr, dpr);
 
     // Reset particles within bounds

@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { TranslocoService } from '@jsverse/transloco';
 import { BehaviorSubject } from 'rxjs';
 
@@ -29,6 +30,7 @@ export const AVAILABLE_LANGUAGES: Language[] = [
 })
 export class LanguageService {
   private readonly LANGUAGE_KEY = 'selected_language';
+  private isBrowser: boolean;
 
   readonly availableLanguages: Language[] = AVAILABLE_LANGUAGES;
 
@@ -37,22 +39,46 @@ export class LanguageService {
   );
   currentLanguage$ = this.currentLanguageSubject.asObservable();
 
-  constructor(private translocoService: TranslocoService) {
+  constructor(
+    private translocoService: TranslocoService,
+    @Inject(PLATFORM_ID) private platformId: object
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
     this.initializeLanguage();
   }
 
   private initializeLanguage(): void {
-    const savedLang = localStorage.getItem(this.LANGUAGE_KEY);
-    const defaultLang = savedLang
-      ? this.availableLanguages.find((l) => l.code === savedLang)
-      : this.availableLanguages[0];
-    if (defaultLang) {
-      this.setLanguage(defaultLang);
+    // Default to first language
+    let selectedLang = this.availableLanguages[0];
+
+    if (this.isBrowser) {
+      try {
+        const savedLang = localStorage.getItem(this.LANGUAGE_KEY);
+        if (savedLang) {
+          const found = this.availableLanguages.find(
+            (l) => l.code === savedLang
+          );
+          if (found) {
+            selectedLang = found;
+          }
+        }
+      } catch (e) {
+        console.warn('LocalStorage not available:', e);
+      }
     }
+
+    this.setLanguage(selectedLang);
   }
 
   setLanguage(language: Language): void {
-    localStorage.setItem(this.LANGUAGE_KEY, language.code);
+    if (this.isBrowser) {
+      try {
+        localStorage.setItem(this.LANGUAGE_KEY, language.code);
+      } catch (e) {
+        console.warn('LocalStorage not available:', e);
+      }
+    }
+
     this.currentLanguageSubject.next(language);
     this.translocoService.setActiveLang(language.code);
   }

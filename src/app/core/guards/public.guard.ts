@@ -11,13 +11,12 @@ export const publicGuard = (): Observable<boolean | UrlTree> => {
   return store.select(selectIsAuthenticated).pipe(
     take(1),
     map((isAuthenticated) => {
-      // Only redirect authenticated users to dashboard and allow all
-      // non-authenticated users to access any auth routes
+      // If authenticated, redirect to dashboard
       if (isAuthenticated) {
         return router.createUrlTree(['/dashboard']);
       }
-      console.log('Hit the public guard!!');
-      // Return true for all auth routes if user is not authenticated
+
+      // Allow all non-authenticated access
       return true;
     })
   );
