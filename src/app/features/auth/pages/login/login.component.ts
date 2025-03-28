@@ -25,7 +25,10 @@ import { TranslocoModule } from '@jsverse/transloco';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  styleUrls: [
+    './login.component.scss',
+    '../../components/base-auth/base-auth.component.scss',
+  ],
   standalone: true,
   imports: [
     CommonModule,

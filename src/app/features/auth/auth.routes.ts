@@ -50,6 +50,12 @@ export const AUTH_ROUTES: Routes = [
       import('./pages/forgot-password/forgot-password.component').then(
         (m) => m.ForgotPasswordComponent
       ),
+    providers: [
+      provideTranslocoScope({
+        scope: 'forgot-password',
+        alias: 'forgotPassword',
+      }),
+    ],
   },
   {
     path: '',

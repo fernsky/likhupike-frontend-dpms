@@ -236,7 +236,86 @@ export class AuthEffects {
     { dispatch: false }
   );
 
-  // Password reset success notification
+  requestPasswordReset$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.requestPasswordReset),
+      switchMap(({ email }) =>
+        this.authService.requestPasswordReset(email).pipe(
+          map((response) => {
+            if (!response.success) {
+              throw new Error(response.error?.message || 'Request failed');
+            }
+
+            this.snackBar.open(
+              response.message || 'OTP has been sent to your email',
+              this.translocoService.translate('common.actions.close'),
+              {
+                duration: 5000,
+                panelClass: ['success-snackbar'],
+              }
+            );
+
+            return AuthActions.requestPasswordResetSuccess();
+          }),
+          catchError((error) => {
+            const errorMessage = error.error?.message || error.message;
+            this.snackBar.open(
+              errorMessage,
+              this.translocoService.translate('common.actions.close'),
+              {
+                duration: 5000,
+                panelClass: ['error-snackbar'],
+              }
+            );
+            return of(
+              AuthActions.requestPasswordResetFailure({ error: errorMessage })
+            );
+          })
+        )
+      )
+    )
+  );
+
+  resetPassword$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.resetPassword),
+      switchMap(({ resetData }) =>
+        this.authService.resetPassword(resetData).pipe(
+          map((response) => {
+            if (!response.success) {
+              throw new Error(response.error?.message || 'Reset failed');
+            }
+
+            this.snackBar.open(
+              response.message || 'Password reset successful',
+              this.translocoService.translate('common.actions.close'),
+              {
+                duration: 5000,
+                panelClass: ['success-snackbar'],
+              }
+            );
+
+            return AuthActions.resetPasswordSuccess();
+          }),
+          catchError((error) => {
+            const errorMessage = error.error?.message || error.message;
+            this.snackBar.open(
+              errorMessage,
+              this.translocoService.translate('common.actions.close'),
+              {
+                duration: 5000,
+                panelClass: ['error-snackbar'],
+              }
+            );
+            return of(
+              AuthActions.resetPasswordFailure({ error: errorMessage })
+            );
+          })
+        )
+      )
+    )
+  );
+
   resetPasswordSuccess$ = createEffect(
     () =>
       this.actions$.pipe(

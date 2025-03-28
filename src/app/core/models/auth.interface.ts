@@ -48,6 +48,8 @@ export interface RequestPasswordResetRequest {
 }
 
 export interface ResetPasswordRequest {
-  token: string;
+  email: string;
+  otp: string;
   newPassword: string;
+  confirmPassword: string;
 }

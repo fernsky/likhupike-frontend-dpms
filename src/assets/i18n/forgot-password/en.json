@@ -1,0 +1,49 @@
+{
+  "title": "Reset Password",
+  "subtitle": "Enter your email to reset your password",
+  "fields": {
+    "email": {
+      "label": "Email",
+      "placeholder": "Enter your email",
+      "errors": {
+        "required": "Email is required",
+        "invalid": "Please enter a valid email address"
+      }
+    },
+    "otp": {
+      "label": "OTP Code",
+      "placeholder": "Enter 6-digit OTP",
+      "errors": {
+        "required": "OTP is required",
+        "pattern": "Please enter a valid 6-digit OTP"
+      }
+    },
+    "newPassword": {
+      "label": "New Password",
+      "placeholder": "Enter new password",
+      "errors": {
+        "required": "New password is required",
+        "pattern": "Password must meet the requirements"
+      }
+    },
+    "confirmPassword": {
+      "label": "Confirm Password",
+      "placeholder": "Confirm your password",
+      "errors": {
+        "required": "Password confirmation is required",
+        "mismatch": "Passwords do not match"
+      }
+    }
+  },
+  "actions": {
+    "sendOtp": "Send OTP",
+    "sending": "Sending...",
+    "resetPassword": "Reset Password",
+    "resetting": "Resetting...",
+    "backToLogin": "Back to Login"
+  },
+  "messages": {
+    "otpSent": "OTP has been sent to your email",
+    "passwordReset": "Password reset successful"
+  }
+}

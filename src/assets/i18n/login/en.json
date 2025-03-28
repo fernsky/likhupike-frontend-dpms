@@ -23,6 +23,7 @@
     "submit": "Sign In",
     "submitting": "Signing in...",
     "register": "Create Account",
-    "noAccount": "Don't have an account?"
+    "noAccount": "Don't have an account?",
+    "forgotPassword": "Forgot Password?"
   }
 }

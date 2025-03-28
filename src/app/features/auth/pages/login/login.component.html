@@ -71,10 +71,18 @@
     </div>
 
     <div class="form-footer">
-      <span>{{ "login.actions.noAccount" | transloco }}</span>
-      <a mat-button color="primary" routerLink="/auth/register">
-        {{ "login.actions.register" | transloco }}
-      </a>
+      <div class="no-account-link">
+        <span>{{ "login.actions.noAccount" | transloco }}</span>
+        <a mat-button color="primary" routerLink="/auth/register">
+          {{ "login.actions.register" | transloco }}
+        </a>
+      </div>
+
+      <div class="forgot-password-link">
+        <a mat-button routerLink="/auth/forgot-password">
+          {{ "login.actions.forgotPassword" | transloco }}
+        </a>
+      </div>
     </div>
   </form>
 </app-base-auth>

@@ -31,7 +31,10 @@ import { NumberFormatService } from '@app/shared/services/number-format.service'
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss'],
+  styleUrls: [
+    './register.component.scss',
+    '../../components/base-auth/base-auth.component.scss',
+  ],
   standalone: true,
   imports: [
     CommonModule,

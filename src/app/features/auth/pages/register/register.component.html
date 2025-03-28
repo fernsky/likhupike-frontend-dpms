@@ -133,10 +133,12 @@
     </div>
 
     <div class="form-footer">
-      <span>{{ "register.actions.haveAccount" | transloco }}</span>
-      <a mat-button color="primary" routerLink="/auth/login">
-        {{ "register.actions.login" | transloco }}
-      </a>
+      <div class="have-account-link">
+        <span>{{ "register.actions.haveAccount" | transloco }}</span>
+        <a mat-button color="primary" routerLink="/auth/login">
+          {{ "register.actions.login" | transloco }}
+        </a>
+      </div>
     </div>
   </form>
 </app-base-auth>

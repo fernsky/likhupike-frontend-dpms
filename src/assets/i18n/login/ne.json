@@ -23,6 +23,7 @@
     "submit": "साइन इन",
     "submitting": "साइन इन गर्दै...",
     "register": "खाता बनाउनुहोस्",
-    "noAccount": "खाता छैन?"
+    "noAccount": "खाता छैन?",
+    "forgotPassword": "पासवर्ड बिर्सनुभयो?"
   }
 }

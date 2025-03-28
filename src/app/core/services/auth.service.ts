@@ -61,7 +61,7 @@ export class AuthService {
     return this.http
       .post<
         ApiResponse<void>
-      >(`${environment.apiUrl}${environment.auth.passwordResetRequestEndpoint}`, email)
+      >(`${environment.apiUrl}/auth/password-reset/request`, email)
       .pipe(catchError(this.handleError));
   }
 
@@ -71,7 +71,7 @@ export class AuthService {
     return this.http
       .post<
         ApiResponse<void>
-      >(`${environment.apiUrl}${environment.auth.passwordResetEndpoint}`, resetData)
+      >(`${environment.apiUrl}/auth/password-reset/reset`, resetData)
       .pipe(catchError(this.handleError));
   }
 
