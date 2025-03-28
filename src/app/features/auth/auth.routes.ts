@@ -10,13 +10,11 @@ import { provideTranslocoScope } from '@jsverse/transloco';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import * as AuthActions from '@app/core/store/auth/auth.actions';
 import { BaseAuthComponent } from './components/base-auth/base-auth.component';
-import { publicGuard } from '@app/core/guards/public.guard';
 
 export const AUTH_ROUTES: Routes = [
   {
     path: '',
     component: BaseAuthComponent,
-    canActivate: [publicGuard],
     children: [
       {
         path: '',

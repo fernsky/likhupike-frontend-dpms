@@ -9,6 +9,8 @@ import * as AuthActions from '../store/auth/auth.actions';
 const PUBLIC_ENDPOINTS = [
   '/auth/login',
   '/auth/register',
+  '/auth/password-reset/request',
+  '/auth/password-reset/reset',
   '/provinces',
   '/districts',
   '/municipalities',

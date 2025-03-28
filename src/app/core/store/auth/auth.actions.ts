@@ -11,7 +11,12 @@ import {
 export const initializeAuth = createAction('[Auth] Initialize');
 export const authInitialized = createAction(
   '[Auth] Initialized',
-  props<{ token: string | null; user: AuthUser | null }>()
+  props<{
+    token: string | null;
+    user: AuthUser | null;
+    isInitialized: boolean;
+    isLoading: boolean;
+  }>()
 );
 
 export const login = createAction(

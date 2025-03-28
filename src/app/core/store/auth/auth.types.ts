@@ -21,10 +21,12 @@ export interface AuthState {
   refreshToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  isInitialized: boolean;
   error: string | null;
   expiresIn: number | null;
   municipality?: Municipality;
   forgotPassword: ForgotPasswordState;
+  initialized: boolean;
 }
 
 export const initialAuthState: AuthState = {
@@ -32,7 +34,8 @@ export const initialAuthState: AuthState = {
   token: null,
   refreshToken: null,
   isAuthenticated: false,
-  isLoading: false,
+  isLoading: true,
+  isInitialized: false,
   error: null,
   expiresIn: null,
   forgotPassword: {
@@ -40,4 +43,5 @@ export const initialAuthState: AuthState = {
     otpSent: false,
     otpVerified: false,
   },
+  initialized: false,
 };

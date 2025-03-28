@@ -33,9 +33,14 @@ export const selectIsLoading = createSelector(
 );
 
 // Derived selectors
+export const selectIsInitialized = createSelector(
+  selectAuthState,
+  (state: AuthState) => state.isInitialized
+);
+
 export const selectIsAuthenticated = createSelector(
   selectAuthState,
-  (state: AuthState) => state.isAuthenticated
+  (state: AuthState) => state.isInitialized && state.isAuthenticated
 );
 
 export const selectUserRoles = createSelector(

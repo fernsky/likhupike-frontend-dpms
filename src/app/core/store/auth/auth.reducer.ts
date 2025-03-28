@@ -8,15 +8,20 @@ export const authReducer = createReducer(
   on(AuthActions.initializeAuth, (state) => ({
     ...state,
     isLoading: true,
+    isInitialized: false,
   })),
 
-  on(AuthActions.authInitialized, (state, { token, user }) => ({
-    ...state,
-    token,
-    user,
-    isAuthenticated: !!token && !!user,
-    isLoading: false,
-  })),
+  on(
+    AuthActions.authInitialized,
+    (state, { token, user, isInitialized, isLoading }) => ({
+      ...state,
+      token,
+      user,
+      isAuthenticated: !!token && !!user,
+      isInitialized,
+      isLoading,
+    })
+  ),
 
   on(AuthActions.login, (state) => ({
     ...state,
@@ -42,6 +47,8 @@ export const authReducer = createReducer(
 
   on(AuthActions.logout, () => ({
     ...initialAuthState,
+    isInitialized: true,
+    isLoading: false,
   })),
 
   on(AuthActions.register, (state) => ({
@@ -94,7 +101,7 @@ export const authReducer = createReducer(
     isLoading: true,
     error: null,
     forgotPassword: {
-      ...initialAuthState.forgotPassword,
+      ...state.forgotPassword,
       email: email.email,
     },
   })),
@@ -106,6 +113,16 @@ export const authReducer = createReducer(
     forgotPassword: {
       ...state.forgotPassword,
       otpSent: true,
+    },
+  })),
+
+  on(AuthActions.requestPasswordResetFailure, (state, { error }) => ({
+    ...state,
+    isLoading: false,
+    error,
+    forgotPassword: {
+      ...state.forgotPassword,
+      otpSent: false,
     },
   })),
 

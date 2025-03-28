@@ -100,6 +100,8 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
   onEmailSubmit(): void {
     if (this.forgotPasswordForm.get('email')?.valid) {
       const email = this.forgotPasswordForm.get('email')?.value;
+      // Store the email for later use
+      this.store.dispatch(AuthActions.storeForgotPasswordEmail({ email }));
       this.store.dispatch(
         AuthActions.requestPasswordReset({
           email: { email },
@@ -227,6 +229,15 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
       .subscribe((state) => {
         if (state.error) {
           this.forgotPasswordForm.setErrors({ serverError: state.error });
+        }
+        // Handle OTP sent success
+        if (state.forgotPassword.otpSent && this.currentStep === 'email') {
+          this.currentStep = 'otp';
+          const otpControl = this.forgotPasswordForm.get('otp');
+          if (otpControl?.disabled) {
+            otpControl.enable();
+            otpControl.updateValueAndValidity();
+          }
         }
       });
 

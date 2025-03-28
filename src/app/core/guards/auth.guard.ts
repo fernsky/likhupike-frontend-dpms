@@ -1,29 +1,40 @@
 import { inject } from '@angular/core';
 import { Router, UrlTree } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, map, take } from 'rxjs';
-import { selectIsAuthenticated } from '../store/auth/auth.selectors';
+import { Observable } from 'rxjs';
+import { filter, map, take, switchMap } from 'rxjs/operators';
+import {
+  selectIsAuthenticated,
+  selectIsInitialized,
+} from '../store/auth/auth.selectors';
+import { AuthFacade } from '../facades/auth.facade';
 
 export const authGuard = (): Observable<boolean | UrlTree> => {
   const router = inject(Router);
   const store = inject(Store);
+  const authFacade = inject(AuthFacade);
 
-  return store.select(selectIsAuthenticated).pipe(
+  // Ensure auth is initialized
+  authFacade.initializeAuth();
+
+  return store.select(selectIsInitialized).pipe(
+    filter((isInitialized) => isInitialized),
     take(1),
-    map((isAuthenticated) => {
-      if (!isAuthenticated) {
-        const currentUrl = router.url;
+    switchMap(() =>
+      store.select(selectIsAuthenticated).pipe(
+        take(1),
+        map((isAuthenticated) => {
+          if (!isAuthenticated) {
+            const navigation = router.getCurrentNavigation();
+            const currentUrl = navigation?.extractedUrl.toString();
 
-        // If already on an auth route, don't redirect
-        if (currentUrl.startsWith('/auth/')) {
-          // Allow access to auth routes even when not authenticated
+            return router.createUrlTree(['/auth/login'], {
+              queryParams: currentUrl ? { returnUrl: currentUrl } : {},
+            });
+          }
           return true;
-        }
-
-        // Otherwise redirect to login
-        return router.createUrlTree(['/auth/login']);
-      }
-      return true;
-    })
+        })
+      )
+    )
   );
 };

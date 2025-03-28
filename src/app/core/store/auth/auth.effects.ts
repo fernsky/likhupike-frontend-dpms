@@ -33,10 +33,20 @@ export class AuthEffects {
           const user = this.storageService.getUser();
 
           if (token && user) {
-            return AuthActions.authInitialized({ token, user });
+            return AuthActions.authInitialized({
+              token,
+              user,
+              isInitialized: true,
+              isLoading: false,
+            });
           }
         }
-        return AuthActions.authInitialized({ token: null, user: null });
+        return AuthActions.authInitialized({
+          token: null,
+          user: null,
+          isInitialized: true,
+          isLoading: false,
+        });
       })
     )
   );
