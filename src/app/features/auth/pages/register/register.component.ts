@@ -23,7 +23,6 @@ import {
   selectAuthError,
 } from '@app/core/store/auth/auth.selectors';
 import { AppState } from '@app/core/store';
-import { BaseAuthComponent } from '../../components/base-auth/base-auth.component';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { PasswordValidatorService } from '@app/shared/validators/password-validator.service';
 import { NumberFormatService } from '@app/shared/services/number-format.service';
@@ -47,13 +46,9 @@ import { NumberFormatService } from '@app/shared/services/number-format.service'
     MatCheckboxModule,
     MatSelectModule,
     TranslocoModule,
-    BaseAuthComponent,
   ],
 })
-export class RegisterComponent
-  extends BaseAuthComponent
-  implements OnInit, OnDestroy
-{
+export class RegisterComponent implements OnInit, OnDestroy {
   registerForm!: FormGroup;
   hidePassword = true;
   hideConfirmPassword = true;
@@ -72,7 +67,6 @@ export class RegisterComponent
     private numberFormat: NumberFormatService,
     private translocoService: TranslocoService
   ) {
-    super();
     // Initialize observables in constructor
     this.loading$ = this.store.select(selectIsLoading);
     this.apiError$ = this.store.select(selectAuthError);

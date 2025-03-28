@@ -19,7 +19,6 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import * as AuthActions from '@app/core/store/auth/auth.actions';
 import { selectAuthState } from '@app/core/store/auth/auth.selectors';
-import { BaseAuthComponent } from '../../components/base-auth/base-auth.component';
 import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
@@ -41,14 +40,10 @@ import { TranslocoModule } from '@jsverse/transloco';
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatDividerModule,
-    BaseAuthComponent,
     TranslocoModule,
   ],
 })
-export class LoginComponent
-  extends BaseAuthComponent
-  implements OnInit, OnDestroy
-{
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   hidePassword = true;
   loading = false;
@@ -58,7 +53,6 @@ export class LoginComponent
     private fb: FormBuilder,
     private store: Store
   ) {
-    super();
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],

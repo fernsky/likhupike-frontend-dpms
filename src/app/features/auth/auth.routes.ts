@@ -9,55 +9,67 @@ import {
 import { provideTranslocoScope } from '@jsverse/transloco';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import * as AuthActions from '@app/core/store/auth/auth.actions';
+import { BaseAuthComponent } from './components/base-auth/base-auth.component';
 
 export const AUTH_ROUTES: Routes = [
   {
-    path: 'login',
-    loadComponent: () =>
-      import('./pages/login/login.component').then((m) => m.LoginComponent),
-    providers: [
-      provideTranslocoScope({
-        scope: 'login',
-        alias: 'login',
-      }),
-    ],
-  },
-  {
-    path: 'register',
-    loadComponent: () =>
-      import('./pages/register/register.component').then(
-        (m) => m.RegisterComponent
-      ),
-    providers: [
-      provideState({ name: 'auth', reducer: authReducer }),
+    path: '',
+    component: BaseAuthComponent,
+    children: [
       {
-        provide: API_CONFIG,
-        useValue: DEFAULT_API_CONFIG,
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full',
       },
-      provideNativeDateAdapter(),
-      provideTranslocoScope({
-        scope: 'registration',
-        alias: 'register',
-      }),
-    ],
-  },
-  {
-    path: 'forgot-password',
-    canDeactivate: [
-      (component: ForgotPasswordComponent) => {
-        component.store.dispatch(AuthActions.clearForgotPasswordState());
-        return true;
+      {
+        path: 'login',
+        loadComponent: () =>
+          import('./pages/login/login.component').then((m) => m.LoginComponent),
+        providers: [
+          provideTranslocoScope({
+            scope: 'login',
+            alias: 'login',
+          }),
+        ],
       },
-    ],
-    loadComponent: () =>
-      import('./pages/forgot-password/forgot-password.component').then(
-        (m) => m.ForgotPasswordComponent
-      ),
-    providers: [
-      provideTranslocoScope({
-        scope: 'forgot-password',
-        alias: 'forgotPassword',
-      }),
+      {
+        path: 'register',
+        loadComponent: () =>
+          import('./pages/register/register.component').then(
+            (m) => m.RegisterComponent
+          ),
+        providers: [
+          provideState({ name: 'auth', reducer: authReducer }),
+          {
+            provide: API_CONFIG,
+            useValue: DEFAULT_API_CONFIG,
+          },
+          provideNativeDateAdapter(),
+          provideTranslocoScope({
+            scope: 'registration',
+            alias: 'register',
+          }),
+        ],
+      },
+      {
+        path: 'forgot-password',
+        canDeactivate: [
+          (component: ForgotPasswordComponent) => {
+            component.store.dispatch(AuthActions.clearForgotPasswordState());
+            return true;
+          },
+        ],
+        loadComponent: () =>
+          import('./pages/forgot-password/forgot-password.component').then(
+            (m) => m.ForgotPasswordComponent
+          ),
+        providers: [
+          provideTranslocoScope({
+            scope: 'forgot-password',
+            alias: 'forgotPassword',
+          }),
+        ],
+      },
     ],
   },
 ];

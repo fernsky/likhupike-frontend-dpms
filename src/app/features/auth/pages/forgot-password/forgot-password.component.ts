@@ -21,7 +21,6 @@ import {
   selectAuthState,
   selectForgotPasswordEmail,
 } from '@app/core/store/auth/auth.selectors';
-import { BaseAuthComponent } from '../../components/base-auth/base-auth.component';
 import { TranslocoModule } from '@jsverse/transloco';
 import { PasswordValidatorService } from '@app/shared/validators/password-validator.service';
 
@@ -42,13 +41,9 @@ import { PasswordValidatorService } from '@app/shared/validators/password-valida
     MatButtonModule,
     MatIconModule,
     TranslocoModule,
-    BaseAuthComponent,
   ],
 })
-export class ForgotPasswordComponent
-  extends BaseAuthComponent
-  implements OnInit, OnDestroy
-{
+export class ForgotPasswordComponent implements OnInit, OnDestroy {
   forgotPasswordForm!: FormGroup;
   loading$: Observable<boolean>;
   apiError$: Observable<string | null>;
@@ -63,7 +58,6 @@ export class ForgotPasswordComponent
     public store: Store,
     private passwordValidator: PasswordValidatorService
   ) {
-    super();
     this.initForm();
     this.loading$ = this.store.select(selectIsLoading);
     this.apiError$ = this.store.select(selectAuthError);

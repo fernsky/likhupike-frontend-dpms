@@ -4,6 +4,7 @@ import { BackgroundParticlesComponent } from '@app/shared/components/background-
 import { GovBrandingComponent } from '@app/shared/components/gov-branding/gov-branding.component';
 import { SystemFeaturesComponent } from '@app/shared/components/system-features/system-features.component';
 import { MatCardModule } from '@angular/material/card';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-base-auth',
@@ -21,7 +22,7 @@ import { MatCardModule } from '@angular/material/card';
       <div class="auth-content">
         <app-system-features></app-system-features>
         <mat-card>
-          <ng-content></ng-content>
+          <router-outlet></router-outlet>
         </mat-card>
       </div>
     </div>
@@ -34,6 +35,7 @@ import { MatCardModule } from '@angular/material/card';
     GovBrandingComponent,
     SystemFeaturesComponent,
     MatCardModule,
+    RouterOutlet,
   ],
 })
 export class BaseAuthComponent {}
