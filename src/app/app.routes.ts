@@ -6,7 +6,7 @@ import { publicGuard } from './core/guards/public.guard';
 export const routes: Routes = [
   {
     path: 'auth',
-    canActivate: [publicGuard],
+    canActivate: [publicGuard], // Only apply guard at module level, not individual routes
     loadChildren: () =>
       import('./features/auth/auth.routes').then((m) => m.AUTH_ROUTES),
   },

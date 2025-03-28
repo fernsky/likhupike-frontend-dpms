@@ -10,7 +10,7 @@ import { AuthFacade } from './core/facades/auth.facade';
   standalone: true,
 })
 export class AppComponent implements OnInit {
-  title = 'Integrated Municipal Information System';
+  title = 'Digital Profile Information System';
 
   constructor(private authFacade: AuthFacade) {}
 

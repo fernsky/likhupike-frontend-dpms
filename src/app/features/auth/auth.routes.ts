@@ -1,13 +1,11 @@
 import { Routes } from '@angular/router';
 import { provideState } from '@ngrx/store';
-
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { authReducer } from '@app/core/store/auth/auth.reducer';
 import {
   API_CONFIG,
   DEFAULT_API_CONFIG,
 } from '@app/core/api/config/api.config';
-import { publicGuard } from '@app/core/guards/public.guard';
 import { provideTranslocoScope } from '@jsverse/transloco';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import * as AuthActions from '@app/core/store/auth/auth.actions';
@@ -15,7 +13,6 @@ import * as AuthActions from '@app/core/store/auth/auth.actions';
 export const AUTH_ROUTES: Routes = [
   {
     path: 'login',
-    canActivate: [publicGuard],
     loadComponent: () =>
       import('./pages/login/login.component').then((m) => m.LoginComponent),
     providers: [
@@ -27,7 +24,6 @@ export const AUTH_ROUTES: Routes = [
   },
   {
     path: 'register',
-    canActivate: [publicGuard],
     loadComponent: () =>
       import('./pages/register/register.component').then(
         (m) => m.RegisterComponent
@@ -47,10 +43,8 @@ export const AUTH_ROUTES: Routes = [
   },
   {
     path: 'forgot-password',
-    canActivate: [publicGuard],
     canDeactivate: [
       (component: ForgotPasswordComponent) => {
-        // Clear state when navigating away
         component.store.dispatch(AuthActions.clearForgotPasswordState());
         return true;
       },
@@ -65,10 +59,5 @@ export const AUTH_ROUTES: Routes = [
         alias: 'forgotPassword',
       }),
     ],
-  },
-  {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full',
   },
 ];
