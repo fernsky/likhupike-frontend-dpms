@@ -1,15 +1,12 @@
 import { Routes } from '@angular/router';
 import { RoleType } from './core/models/role.enum';
 import { authGuard } from './core/guards/auth.guard';
+import { publicGuard } from './core/guards/public.guard';
 
 export const routes: Routes = [
   {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'dashboard',
-  },
-  {
     path: 'auth',
+    canActivate: [publicGuard],
     loadChildren: () =>
       import('./features/auth/auth.routes').then((m) => m.AUTH_ROUTES),
   },
@@ -29,6 +26,11 @@ export const routes: Routes = [
     },
     loadComponent: () =>
       import('./features/admin/admin.component').then((m) => m.AdminComponent),
+  },
+  {
+    path: '',
+    redirectTo: 'auth/login',
+    pathMatch: 'full',
   },
   {
     path: '**',
