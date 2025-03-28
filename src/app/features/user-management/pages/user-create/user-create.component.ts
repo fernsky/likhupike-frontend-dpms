@@ -58,21 +58,22 @@ export class UserCreateComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.dispatch(UserActions.clearErrors());
 
+    // Only reset form on successful creation (no errors and not creating)
     combineLatest([
       this.store.select(UserSelectors.selectUserCreating),
       this.store.select(UserSelectors.selectUserErrors),
+      this.store.select(UserSelectors.selectCreateSuccess),
     ])
       .pipe(
         takeUntil(this.destroy$),
-        filter(([creating, errors]) => creating === false && !errors)
+        filter(([creating, errors, success]) => !creating && !errors && success)
       )
       .subscribe(() => {
         if (this.userForm) {
-          // Reset form in the next tick
-          setTimeout(() => {
-            this.userForm.resetForm();
-            this.cd.detectChanges();
-          });
+          this.userForm.resetForm();
+          this.cd.detectChanges();
+          // Reset success state after form reset
+          this.store.dispatch(UserActions.resetCreateSuccess());
         }
       });
   }

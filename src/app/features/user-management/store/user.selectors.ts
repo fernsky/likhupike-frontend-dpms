@@ -54,6 +54,11 @@ export const selectLastUpdated = createSelector(
   (state) => state.lastUpdated
 );
 
+export const selectCreateSuccess = createSelector(
+  selectUserState,
+  (state) => state.createSuccess
+);
+
 // Derived selectors
 export const selectUsersByPermission = (permission: PermissionType) =>
   createSelector(selectUsers, (users) =>

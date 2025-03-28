@@ -16,6 +16,8 @@
 
   <div class="content-area">
     <app-user-form
+      [loading]="(loading$ | async) ?? false"
+      [errors]="errors$ | async"
       (submitForm)="onSubmit($event)"
       (cancel)="onCancel()"
     ></app-user-form>

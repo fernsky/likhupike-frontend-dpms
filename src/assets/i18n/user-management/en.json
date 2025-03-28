@@ -93,6 +93,8 @@
   },
   "create": {
     "title": "Create New User",
+    "create": "Create",
+    "creating": "Creating...",
     "description": "Add a new user with their roles and permissions.",
     "permissionRequired": "Admin privileges required",
     "helpText": "Need help? View documentation",

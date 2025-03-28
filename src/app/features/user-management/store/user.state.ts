@@ -21,6 +21,7 @@ export interface UserState {
     totalElements: number;
     totalPages: number;
   };
+  createSuccess: boolean;
 }
 
 export const initialUserState: UserState = {
@@ -45,4 +46,5 @@ export const initialUserState: UserState = {
     totalElements: 0,
     totalPages: 0,
   },
+  createSuccess: false,
 };

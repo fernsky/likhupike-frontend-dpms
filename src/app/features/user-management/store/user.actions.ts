@@ -25,6 +25,8 @@ export const UserActions = createActionGroup({
       };
     }>(),
 
+    'Reset Create Success': emptyProps(),
+
     // Load Users
     'Load Users': props<{ filter: UserFilter }>(),
     'Load Users Success': props<{

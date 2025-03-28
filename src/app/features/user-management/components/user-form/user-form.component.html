@@ -112,13 +112,15 @@
 
     <app-base-button
       variant="primary"
-      [icon]="'add_circle'"
+      [icon]="loading ? '' : 'add_circle'"
       type="submit"
       size="large"
       [loading]="loading"
       [disabled]="loading || !userForm.valid"
     >
-      {{ "common.actions.create" | transloco }}
+      {{
+        (loading ? "user.create.creating" : "user.create.create") | transloco
+      }}
     </app-base-button>
   </div>
 </form>

@@ -35,7 +35,10 @@ import {
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { Location } from '@angular/common';
 
-import { CreateUserRequest } from '../../models/user.interface';
+import {
+  CreateUserRequest,
+  UserValidationError,
+} from '../../models/user.interface';
 import { PermissionType } from '@app/core/models/permission.enum';
 import { NumberFormatService } from '@app/shared/services/number-format.service';
 import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
@@ -72,7 +75,7 @@ import { FormSectionComponent } from '@app/shared/components/form-section/form-s
 })
 export class UserFormComponent implements OnInit, OnDestroy {
   @Input() loading = false;
-  @Input() errors: Record<string, string[]> | null = null;
+  @Input() errors: UserValidationError | null = null;
   @Output() submitForm = new EventEmitter<CreateUserRequest>();
   @Output() cancelForm = new EventEmitter<void>();
 
@@ -154,10 +157,13 @@ export class UserFormComponent implements OnInit, OnDestroy {
       ),
     };
 
-    // Reset with empty values and prevent validation
-    this.userForm.reset(emptyForm, { emitEvent: false });
+    // Reset with empty values
+    this.userForm.reset(emptyForm);
 
-    // Clear all states
+    // Disable ward number field as it should be disabled initially
+    this.userForm.get('wardNumber')?.disable();
+
+    // Clear all states and errors
     Object.keys(this.userForm.controls).forEach((key) => {
       const control = this.userForm.get(key);
       control?.setErrors(null);
@@ -180,6 +186,13 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setupWardLevelSubscription();
+
+    // Reset form validity when user makes changes after an error
+    this.userForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      if (this.userForm.dirty) {
+        this.userForm.updateValueAndValidity();
+      }
+    });
   }
 
   private wardNumberValidator(): ValidatorFn {
@@ -226,6 +239,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
       };
 
       this.submitForm.emit(createRequest);
+      // Don't reset form - it will only be reset on successful creation
     } else {
       this.markFormGroupTouched(this.userForm);
     }
