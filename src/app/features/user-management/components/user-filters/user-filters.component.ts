@@ -6,6 +6,7 @@ import {
   OnInit,
   OnDestroy,
 } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,6 +21,7 @@ import { PermissionType } from '@app/core/models/permission.enum';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
 import { NumberFormatService } from '@app/shared/services/number-format.service';
 import { MatButtonModule } from '@angular/material/button';
+import { UserActions } from '../../store/user.actions';
 
 @Component({
   selector: 'app-user-filters',
@@ -60,7 +62,8 @@ export class UserFiltersComponent implements OnInit, OnDestroy {
 
   constructor(
     private numberFormat: NumberFormatService,
-    private transloco: TranslocoService
+    private transloco: TranslocoService,
+    private store: Store
   ) {}
 
   ngOnInit() {
@@ -88,32 +91,21 @@ export class UserFiltersComponent implements OnInit, OnDestroy {
   }
 
   clearFilters(): void {
-    // Reset form to initial state except for sort/pagination
-    const currentSort = {
-      sortBy: this.filterForm.get('sortBy')?.value,
-      sortDirection: this.filterForm.get('sortDirection')?.value,
+    // Keep only essential sorting and pagination parameters
+    const defaultFilter = {
+      sortBy: this.filterForm.get('sortBy')?.value || 'createdAt',
+      sortDirection: this.filterForm.get('sortDirection')?.value || 'DESC',
       page: 1,
-      size: this.filterForm.get('size')?.value,
+      size: this.filterForm.get('size')?.value || 10,
     };
 
-    this.filterForm.patchValue(
-      {
-        wardNumber: null,
-        permissions: [],
-        isApproved: null,
-        isWardLevelUser: null,
-        createdAfter: null,
-        createdBefore: null,
-        searchTerm: null,
-        email: null,
-        // Preserve sort and pagination
-        ...currentSort,
-      },
-      { emitEvent: false }
-    );
+    // Reset form with only default values
+    this.filterForm.reset(defaultFilter, { emitEvent: false });
 
-    // Emit the filter with only default values
-    this.filtersChange.emit(currentSort);
+    // Emit the clean filter object
+    this.filtersChange.emit(defaultFilter);
+
+    this.store.dispatch(UserActions.resetFilters());
   }
 
   formatWardNumber(number: number): string {

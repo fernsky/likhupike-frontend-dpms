@@ -1,10 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { Store } from '@ngrx/store';
 import { UserFilter } from '../models/user.interface';
 import { PermissionType } from '@app/core/models/permission.enum';
-import { Observable } from 'rxjs';
-import { map, distinctUntilChanged } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
+import { UserActions } from '../store/user.actions';
 
 // Define valid URL parameter keys
 export type UrlParamKey =
@@ -40,7 +43,8 @@ export interface UrlParams {
 @Injectable({
   providedIn: 'root',
 })
-export class UrlParamsService {
+export class UrlParamsService implements OnDestroy {
+  private destroy$ = new Subject<void>();
   private defaultParams = {
     page: '1',
     size: '10',
@@ -51,8 +55,22 @@ export class UrlParamsService {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private location: Location
-  ) {}
+    private location: Location,
+    private actions$: Actions,
+    private store: Store
+  ) {
+    // Subscribe to reset filters action
+    this.actions$
+      .pipe(ofType(UserActions.resetFilters), takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.clearUrlParams();
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   parseQueryParams(params: Record<string, string>): UrlParams {
     const validParams: UrlParams = {};
@@ -151,48 +169,60 @@ export class UrlParamsService {
   }
 
   updateQueryParams(filter: UserFilter): void {
+    if (!filter) return;
+
     const urlParams: Partial<Record<UrlParamKey, string>> = {};
 
-    // Always include page and size params
-    urlParams['page'] = String(filter.page ?? 1);
-    urlParams['size'] = String(filter.size ?? 10);
+    // Only add non-null, defined values
+    Object.entries(filter).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        if (Array.isArray(value)) {
+          if (value.length > 0) urlParams[key as UrlParamKey] = value.join(',');
+        } else if (typeof value === 'boolean') {
+          urlParams[key as UrlParamKey] = String(value);
+        } else if (value !== '') {
+          urlParams[key as UrlParamKey] = String(value);
+        }
+      }
+    });
 
-    // Include sort params if they exist
-    if (filter.sortBy) urlParams['sortBy'] = filter.sortBy;
-    if (filter.sortDirection) urlParams['sortDirection'] = filter.sortDirection;
+    // Always include default params
+    const finalParams = {
+      ...this.defaultParams,
+      ...urlParams,
+    };
 
-    // Add optional params only if they have values
-    if (filter.searchTerm?.trim())
-      urlParams['searchTerm'] = filter.searchTerm.trim();
-    if (filter.permissions?.length)
-      urlParams['permissions'] = filter.permissions.join(',');
-    if (filter.isApproved !== undefined)
-      urlParams['isApproved'] = String(filter.isApproved);
-    if (filter.isWardLevelUser !== undefined)
-      urlParams['isWardLevelUser'] = String(filter.isWardLevelUser);
-    if (filter.wardNumber) urlParams['wardNumber'] = String(filter.wardNumber);
-    if (filter.email?.trim()) urlParams['email'] = filter.email.trim();
-    if (filter.createdAfter) urlParams['createdAfter'] = filter.createdAfter;
-    if (filter.createdBefore) urlParams['createdBefore'] = filter.createdBefore;
+    // Remove null/undefined/empty values
+    Object.keys(finalParams).forEach(
+      (key: string) =>
+        (finalParams[key as UrlParamKey] === null ||
+          finalParams[key as UrlParamKey] === undefined ||
+          finalParams[key as UrlParamKey] === '') &&
+        delete finalParams[key as UrlParamKey]
+    );
 
-    // Use replaceState to update URL without triggering navigation
     this.location.replaceState(
       this.router
         .createUrlTree([], {
           relativeTo: this.route,
-          queryParams: urlParams,
+          queryParams: finalParams,
         })
         .toString()
     );
   }
 
   clearUrlParams(): void {
-    // Reset to default params instead of clearing everything
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: this.defaultParams,
-      replaceUrl: true,
-    });
+    // Replace all parameters with default parameters
+    const cleanUrl = this.router
+      .createUrlTree([], {
+        relativeTo: this.route,
+        queryParams: this.defaultParams,
+        // Remove queryParamsHandling to prevent merging
+      })
+      .toString();
+    console.log('Clean URL:', cleanUrl); // Debugging line
+    // Use replaceState to update URL without navigation
+    this.location.replaceState(cleanUrl);
   }
 
   convertToUserFilter(params: UrlParams): UserFilter {
