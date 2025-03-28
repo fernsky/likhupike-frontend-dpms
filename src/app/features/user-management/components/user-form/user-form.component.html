@@ -119,7 +119,9 @@
       [disabled]="loading || !userForm.valid"
     >
       {{
-        (loading ? "user.create.creating" : "user.create.create") | transloco
+        loading
+          ? ("user.create.creating" | transloco)
+          : ("user.create.create" | transloco)
       }}
     </app-base-button>
   </div>
