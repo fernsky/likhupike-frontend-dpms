@@ -228,24 +228,6 @@ export class AuthEffects {
     { dispatch: false }
   );
 
-  // Password reset request notifications
-  requestPasswordResetSuccess$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(AuthActions.requestPasswordResetSuccess),
-        tap(() => {
-          this.snackBar.open(
-            'Password reset instructions sent to your email',
-            'Close',
-            {
-              duration: 5000,
-            }
-          );
-        })
-      ),
-    { dispatch: false }
-  );
-
   requestPasswordReset$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.requestPasswordReset),
@@ -331,14 +313,6 @@ export class AuthEffects {
       this.actions$.pipe(
         ofType(AuthActions.resetPasswordSuccess),
         tap(() => {
-          this.snackBar.open(
-            'Password reset successful',
-            this.translocoService.translate('common.actions.close'),
-            {
-              duration: 5000,
-              panelClass: ['success-snackbar'],
-            }
-          );
           this.router.navigate(['/auth/login']);
         })
       ),

@@ -1,13 +1,9 @@
 <div class="users-table-container">
   <!-- Loading state -->
-  <div class="loading-overlay" *ngIf="loading">
-    <div class="loading-shade" *ngIf="loading === true" @fadeInOut>
-      <div class="loading-content" @scaleIn>
-        <div class="spinner-wrapper">
-          <mat-spinner diameter="56" strokeWidth="3"></mat-spinner>
-        </div>
-        <p class="loading-text">{{ "user.list.loading" | transloco }}</p>
-      </div>
+  <div class="loading-container" *ngIf="loading">
+    <div class="loading-content">
+      <mat-spinner diameter="40" strokeWidth="4"></mat-spinner>
+      <span class="loading-text">{{ "user.list.loading" | transloco }}</span>
     </div>
   </div>
 
@@ -29,6 +25,7 @@
   <!-- Table (shown only when we have data and no error) -->
   <div
     class="table-container"
+    [class.loading]="loading"
     *ngIf="!loading && dataSource.data.length && !hasError"
   >
     <!-- Desktop Table View -->
