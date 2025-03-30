@@ -1,39 +1,90 @@
 @use "@carbon/styles/scss/spacing" as spacing;
 @use "@carbon/styles/scss/type" as type;
 @use "@carbon/styles/scss/breakpoint" as breakpoint;
+@use "@carbon/styles/scss/motion" as motion;
+@use "@carbon/styles/scss/grid" as grid;
+@use "@carbon/styles/scss/theme" as theme;
 
 .cds--gov-branding {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: spacing.$spacing-05;
-  padding: spacing.$spacing-03 spacing.$spacing-07;
   width: 100%;
+  background-color: var(--cds-interactive-01);
+
+  &__row {
+    align-items: center;
+    padding: spacing.$spacing-03 0;
+
+    @include breakpoint.breakpoint(md) {
+      padding: spacing.$spacing-03;
+    }
+  }
 
   &__content {
     display: flex;
     align-items: center;
     gap: spacing.$spacing-05;
     flex: 1;
+    flex-wrap: nowrap;
+
+    @include breakpoint.breakpoint(sm) {
+      gap: spacing.$spacing-03;
+    }
   }
 
   &__logo {
     width: 60px;
     height: auto;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    transition: transform motion.$duration-moderate-01 motion.$standard-easing;
 
     &:hover {
       transform: scale(1.05);
+    }
+
+    @include breakpoint.breakpoint(sm) {
+      width: 36px;
+    }
+
+    @media (max-width: 480px) {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
     }
   }
 
   &__titles {
     flex: 1;
+    min-width: 0;
 
     h2 {
       @include type.type-style("productive-heading-03");
-      color: white;
+      color: var(--cds-text-inverse);
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin: 0;
+
+      @include breakpoint.breakpoint(sm) {
+        @include type.type-style("productive-heading-01");
+        line-height: 1.3;
+        white-space: normal;
+        word-wrap: break-word;
+      }
+
+      @media (max-width: 480px) {
+        @include type.type-style("heading-compact-01");
+        line-height: 1.4;
+        white-space: normal;
+        word-wrap: break-word;
+        max-width: 100%;
+      }
+    }
+  }
+
+  &__controls-col {
+    display: flex;
+    justify-content: flex-end;
+
+    @include breakpoint.breakpoint(sm) {
+      margin-left: auto;
+      padding-right: spacing.$spacing-03;
     }
   }
 
@@ -41,131 +92,79 @@
     display: flex;
     align-items: center;
     gap: spacing.$spacing-04;
-    margin-left: auto;
+
+    @include breakpoint.breakpoint(sm) {
+      gap: spacing.$spacing-02;
+    }
+
+    @media (max-width: 480px) {
+      margin-left: spacing.$spacing-02;
+    }
   }
 
   &--horizontal {
-    flex-direction: column;
-    gap: spacing.$spacing-05;
-    text-align: center;
+    .cds--row {
+      flex-direction: column;
+      gap: spacing.$spacing-05;
+      text-align: center;
+    }
 
     .cds--gov-branding__content {
       flex-direction: column;
       text-align: center;
+      width: 100%;
+      justify-content: center;
     }
 
     .cds--gov-branding__titles {
       text-align: center;
     }
 
+    .cds--gov-branding__controls-col {
+      width: 100%;
+      justify-content: center;
+    }
+
     .cds--gov-branding__controls {
       width: 100%;
       justify-content: center;
     }
-  }
-}
 
-// Responsive styles
-@include breakpoint.breakpoint(md) {
-  .cds--gov-branding {
-    padding: spacing.$spacing-03;
-
-    &__titles h2 {
-      @include type.type-style("productive-heading-03");
-    }
-  }
-}
-
-@include breakpoint.breakpoint(sm) {
-  .cds--gov-branding {
-    flex-direction: row;
-    padding: spacing.$spacing-03;
-    gap: spacing.$spacing-03;
-
-    &__content {
-      flex-direction: row;
-      gap: spacing.$spacing-03;
-    }
-
-    &__logo {
-      width: 36px;
-      height: auto;
-    }
-
-    &__titles {
-      text-align: left;
-
-      h2 {
-        @include type.type-style("productive-heading-01");
-        line-height: 1.3;
-        white-space: normal;
-        word-wrap: break-word;
+    @include breakpoint.breakpoint(sm) {
+      .cds--row {
+        flex-direction: row;
       }
-    }
-
-    &__controls {
-      width: auto;
-      margin-left: auto;
-      gap: spacing.$spacing-02;
-    }
-
-    &--horizontal {
-      flex-direction: column;
 
       .cds--gov-branding__content {
-        flex-direction: column;
-        text-align: center;
+        flex-direction: row;
+        text-align: left;
       }
 
       .cds--gov-branding__titles {
-        text-align: center;
+        text-align: left;
       }
 
-      .cds--gov-branding__controls {
-        width: 100%;
-        margin-left: 0;
+      .cds--gov-branding__controls-col {
+        width: auto;
       }
     }
   }
-}
 
-@media (max-width: 480px) {
-  .cds--gov-branding {
-    flex-direction: row !important;
-    padding: spacing.$spacing-03;
-    gap: spacing.$spacing-02;
-    align-items: center;
-    height: auto;
-    min-height: 48px;
+  // Special case for mobile to ensure consistent layout
+  @media (max-width: 480px) {
+    .cds--row {
+      flex-direction: row !important;
+      gap: spacing.$spacing-02;
+      padding: spacing.$spacing-03;
+      align-items: center;
+      height: auto;
+      min-height: 48px;
+    }
 
-    &__content {
+    .cds--gov-branding__content {
       flex: 1;
       min-width: 0;
       gap: spacing.$spacing-02;
-
-      .cds--gov-branding__logo {
-        width: 32px;
-        height: 32px;
-        flex-shrink: 0;
-      }
-
-      .cds--gov-branding__titles {
-        min-width: 0;
-
-        h2 {
-          @include type.type-style("heading-compact-01");
-          line-height: 1.4;
-          white-space: normal;
-          word-wrap: break-word;
-          max-width: 100%;
-        }
-      }
-    }
-
-    &__controls {
-      flex-shrink: 0;
-      margin-left: spacing.$spacing-02;
-      width: auto;
     }
   }
 }

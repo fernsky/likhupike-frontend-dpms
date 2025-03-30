@@ -2,19 +2,23 @@
   class="cds--gov-branding"
   [class.cds--gov-branding--horizontal]="mode === 'horizontal'"
 >
-  <div class="cds--gov-branding__content">
-    <img
-      src="assets/images/nepal-government-logo.png"
-      [alt]="'govBranding.logoAlt' | transloco"
-      class="cds--gov-branding__logo"
-    />
-    <div class="cds--gov-branding__titles">
-      <h2 class="cds--type-productive-heading-03">
-        {{ "govBranding.systemTitle" | transloco }}
-      </h2>
+  <div class="cds--grid">
+    <div class="cds--row cds--gov-branding__row">
+      <div class="cds--col cds--gov-branding__content">
+        <img
+          src="assets/images/nepal-government-logo.png"
+          [alt]="'govBranding.logoAlt' | transloco"
+          class="cds--gov-branding__logo"
+        />
+        <div class="cds--gov-branding__titles">
+          <h2>{{ "govBranding.systemTitle" | transloco }}</h2>
+        </div>
+      </div>
+      <div class="cds--col cds--gov-branding__controls-col">
+        <div class="cds--gov-branding__controls">
+          <app-slide-toggle-language-switcher></app-slide-toggle-language-switcher>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="cds--gov-branding__controls">
-    <app-slide-toggle-language-switcher></app-slide-toggle-language-switcher>
   </div>
 </div>
