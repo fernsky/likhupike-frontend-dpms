@@ -1449,6 +1449,13 @@
   resolved "https://registry.yarnpkg.com/@carbon/icon-helpers/-/icon-helpers-10.6.0.tgz#72a5bbd1edbee3728e47fa6d17c2aca67dbb101c"
   integrity sha512-4Nh6l+B8SRNyw1RpgNT4Z83Aa5UwRFmKJ2mx5m7mE5TqxPkfIZjyyLHyv5gl3gPtaVwq78ZGz80wG0NRQzRM7g==
 
+"@carbon/icon-helpers@^10.56.0":
+  version "10.56.0"
+  resolved "https://registry.yarnpkg.com/@carbon/icon-helpers/-/icon-helpers-10.56.0.tgz#a4fceaf33c48f3246273bf0be75ff29adda794e0"
+  integrity sha512-D7xiWI0V5yUPrmycBaP/M7W/TTKbLl0lFvdC8GftcUS/QB+WTpwJCQxARIGW0b+X7hpgins1urDDHYAUDqWHXQ==
+  dependencies:
+    "@ibm/telemetry-js" "^1.5.0"
+
 "@carbon/icons-angular@^11.2.2":
   version "11.2.2"
   resolved "https://registry.yarnpkg.com/@carbon/icons-angular/-/icons-angular-11.2.2.tgz#66c643f090324ae888efb931349b4e1c5a8a4542"

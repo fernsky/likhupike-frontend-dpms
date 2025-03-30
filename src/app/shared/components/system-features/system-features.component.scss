@@ -1,66 +1,109 @@
-.features-container {
-  color: white;
-  padding: 2rem;
+@use "@carbon/styles/scss/spacing" as spacing;
+@use "@carbon/styles/scss/type" as type;
+@use "@carbon/styles/scss/breakpoint" as breakpoint;
+@use "@carbon/styles/scss/grid" as grid;
+@use "@carbon/styles/scss/motion" as motion;
 
-  h2 {
-    font-size: 2rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.cds--features-container {
+  color: var(--cds-text-inverse);
+  padding: spacing.$spacing-07;
+
+  @include breakpoint.breakpoint(md) {
+    padding: spacing.$spacing-06;
   }
 
-  .subtitle {
-    font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 2rem;
+  @include breakpoint.breakpoint(sm) {
+    padding: spacing.$spacing-05;
+  }
+}
+
+.cds--features-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: spacing.$spacing-07;
+
+  @include breakpoint.breakpoint(md) {
+    margin-bottom: spacing.$spacing-06;
+  }
+}
+
+.cds--features-grid {
+  gap: spacing.$spacing-05;
+  margin-top: spacing.$spacing-07;
+
+  @include breakpoint.breakpoint(md) {
+    gap: spacing.$spacing-04;
+  }
+}
+
+.cds--feature-card {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  backdrop-filter: blur(10px);
+  padding: spacing.$spacing-06;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+  height: 100%;
+  transition: all motion.$duration-moderate-01 motion.$standard-easing;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-4px);
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.1) 100%
+    );
+    border-color: rgba(255, 255, 255, 0.25);
   }
 
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.5rem;
+  .cds--feature-icon {
+    width: spacing.$spacing-07;
+    height: spacing.$spacing-07;
+    margin-bottom: spacing.$spacing-05;
+    fill: var(--cds-text-inverse);
+    flex-shrink: 0;
+  }
 
-    .feature-card {
-      background: linear-gradient(
-        145deg,
-        rgba(255, 255, 255, 0.12) 0%,
-        rgba(255, 255, 255, 0.08) 100%
-      );
-      backdrop-filter: blur(10px);
-      padding: 1.5rem;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
-      transition: transform 0.3s ease;
+  h3 {
+    @include type.type-style("productive-heading-02");
+    margin-bottom: spacing.$spacing-03;
+    color: var(--cds-text-inverse);
+  }
 
-      &:hover {
-        transform: translateY(-4px) scale(1.02);
-        background: linear-gradient(
-          145deg,
-          rgba(255, 255, 255, 0.15) 0%,
-          rgba(255, 255, 255, 0.1) 100%
-        );
-      }
+  p {
+    @include type.type-style("body-short-01");
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    flex-grow: 1;
+  }
 
-      mat-icon {
-        font-size: 2rem;
-        width: 2rem;
-        height: 2rem;
-        margin-bottom: 1rem;
-        color: rgba(255, 255, 255, 1);
-      }
+  @include breakpoint.breakpoint(md) {
+    padding: spacing.$spacing-05;
 
-      h3 {
-        font-size: 1.25rem;
-        margin-bottom: 0.5rem;
-        font-weight: 500;
-      }
+    .cds--feature-icon {
+      width: spacing.$spacing-06;
+      height: spacing.$spacing-06;
+      margin-bottom: spacing.$spacing-04;
+    }
+  }
 
-      p {
-        color: rgba(255, 255, 255, 0.8);
-        font-size: 0.9rem;
-        line-height: 1.4;
-      }
+  @include breakpoint.breakpoint(sm) {
+    padding: spacing.$spacing-04;
+
+    .cds--feature-icon {
+      width: spacing.$spacing-05;
+      height: spacing.$spacing-05;
+      margin-bottom: spacing.$spacing-03;
+    }
+
+    h3 {
+      @include type.type-style("productive-heading-01");
+      margin-bottom: spacing.$spacing-02;
     }
   }
 }
