@@ -1,62 +1,64 @@
-.gov-branding {
+@use "@carbon/styles/scss/spacing" as spacing;
+@use "@carbon/styles/scss/type" as type;
+@use "@carbon/styles/scss/breakpoint" as breakpoint;
+
+.cds--gov-branding {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.5rem;
-  padding: 0.75rem 2rem;
+  gap: spacing.$spacing-05;
+  padding: spacing.$spacing-03 spacing.$spacing-07;
   width: 100%;
 
-  .branding-content {
+  &__content {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: spacing.$spacing-05;
     flex: 1;
   }
 
-  .gov-logo {
+  &__logo {
     width: 60px;
     height: auto;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
-    transition: transform 0.3s ease;
 
     &:hover {
       transform: scale(1.05);
     }
   }
 
-  .titles {
+  &__titles {
     flex: 1;
 
-    .system-title {
-      font-size: 1.5rem;
-      font-weight: 600;
+    h2 {
+      @include type.type-style("productive-heading-03");
       color: white;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
   }
 
-  .controls {
+  &__controls {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: spacing.$spacing-04;
     margin-left: auto;
   }
 
-  &.horizontal {
+  &--horizontal {
     flex-direction: column;
-    gap: 1.5rem;
+    gap: spacing.$spacing-05;
     text-align: center;
 
-    .branding-content {
+    .cds--gov-branding__content {
       flex-direction: column;
       text-align: center;
     }
 
-    .titles {
+    .cds--gov-branding__titles {
       text-align: center;
     }
 
-    .controls {
+    .cds--gov-branding__controls {
       width: 100%;
       justify-content: center;
     }
@@ -64,62 +66,62 @@
 }
 
 // Responsive styles
-@media (max-width: 1024px) {
-  .gov-branding {
-    padding: 0.75rem;
+@include breakpoint.breakpoint(md) {
+  .cds--gov-branding {
+    padding: spacing.$spacing-03;
 
-    .titles .system-title {
-      font-size: 1.5rem;
+    &__titles h2 {
+      @include type.type-style("productive-heading-03");
     }
   }
 }
 
-@media (max-width: 768px) {
-  .gov-branding {
+@include breakpoint.breakpoint(sm) {
+  .cds--gov-branding {
     flex-direction: row;
-    padding: 0.75rem;
-    gap: 0.75rem;
+    padding: spacing.$spacing-03;
+    gap: spacing.$spacing-03;
 
-    .branding-content {
+    &__content {
       flex-direction: row;
-      gap: 0.75rem;
+      gap: spacing.$spacing-03;
     }
 
-    .gov-logo {
+    &__logo {
       width: 36px;
       height: auto;
     }
 
-    .titles {
+    &__titles {
       text-align: left;
 
-      .system-title {
-        font-size: 1.1rem;
+      h2 {
+        @include type.type-style("productive-heading-01");
         line-height: 1.3;
         white-space: normal;
         word-wrap: break-word;
       }
     }
 
-    .controls {
+    &__controls {
       width: auto;
       margin-left: auto;
-      gap: 0.5rem;
+      gap: spacing.$spacing-02;
     }
 
-    &.horizontal {
+    &--horizontal {
       flex-direction: column;
 
-      .branding-content {
+      .cds--gov-branding__content {
         flex-direction: column;
         text-align: center;
       }
 
-      .titles {
+      .cds--gov-branding__titles {
         text-align: center;
       }
 
-      .controls {
+      .cds--gov-branding__controls {
         width: 100%;
         margin-left: 0;
       }
@@ -128,30 +130,30 @@
 }
 
 @media (max-width: 480px) {
-  .gov-branding {
+  .cds--gov-branding {
     flex-direction: row !important;
-    padding: 0.75rem;
-    gap: 0.5rem;
+    padding: spacing.$spacing-03;
+    gap: spacing.$spacing-02;
     align-items: center;
     height: auto;
     min-height: 48px;
 
-    .branding-content {
+    &__content {
       flex: 1;
       min-width: 0;
-      gap: 0.5rem;
+      gap: spacing.$spacing-02;
 
-      .gov-logo {
+      .cds--gov-branding__logo {
         width: 32px;
         height: 32px;
         flex-shrink: 0;
       }
 
-      .titles {
+      .cds--gov-branding__titles {
         min-width: 0;
 
-        .system-title {
-          font-size: 1rem;
+        h2 {
+          @include type.type-style("heading-compact-01");
           line-height: 1.4;
           white-space: normal;
           word-wrap: break-word;
@@ -160,9 +162,9 @@
       }
     }
 
-    .controls {
+    &__controls {
       flex-shrink: 0;
-      margin-left: 0.5rem;
+      margin-left: spacing.$spacing-02;
       width: auto;
     }
   }
