@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslocoService } from '@jsverse/transloco';
 import { LanguageService } from '../../../core/services/language.service';
@@ -16,7 +16,7 @@ import { BaseLanguageSwitcherComponent } from '../base-language-switcher/base-la
       scope: 'languages',
       alias: 'languages',
     }),
-    LanguageService, // Make sure LanguageService is provided here
+    LanguageService,
   ],
 })
 export class SlideToggleLanguageSwitcherComponent extends BaseLanguageSwitcherComponent {
@@ -25,5 +25,16 @@ export class SlideToggleLanguageSwitcherComponent extends BaseLanguageSwitcherCo
     translocoService: TranslocoService
   ) {
     super(languageService, translocoService);
+  }
+
+  // Add keyboard support for accessibility
+  @HostListener('keydown.enter', ['$event'])
+  @HostListener('keydown.space', ['$event'])
+  onKeyPress(event: KeyboardEvent): void {
+    event.preventDefault();
+    const currentLang = this.languageService.getCurrentLanguage();
+    this.switchLanguage(
+      currentLang.code === 'en' ? this.languages[1] : this.languages[0]
+    );
   }
 }
