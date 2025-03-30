@@ -1,33 +1,33 @@
+@use "@carbon/styles/scss/spacing" as spacing;
+@use "@carbon/styles/scss/type" as type;
+@use "@carbon/styles/scss/breakpoint" as breakpoint;
+@use "@carbon/styles/scss/motion" as motion;
+@use "@carbon/styles/scss/colors";
+@use "@carbon/styles/scss/theme";
+
 :host {
-  --primary-color: #123772;
-  --hover-bg: rgba(255, 255, 255, 0.15);
-  --active-bg: rgba(255, 255, 255, 0.2);
-  --primary-dark: #0b1f42;
-  --primary-main: #123772;
-  --primary-light: #1a4894;
   display: block;
 }
 
-.language-switcher {
+.cds--language-switcher {
   display: inline-block;
-}
 
-.toggle-container {
-  cursor: pointer;
-  padding: 4px;
+  &__toggle-container {
+    cursor: pointer;
+    padding: spacing.$spacing-01;
+  }
 
-  .toggle-track {
+  &__toggle-track {
     position: relative;
     width: 200px;
     height: 44px;
-
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 22px;
+    border-radius: spacing.$spacing-06;
     display: flex;
     align-items: center;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all motion.$duration-moderate-01 motion.$standard-easing;
 
     &:hover {
       background: rgba(255, 255, 255, 0.15);
@@ -36,115 +36,109 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
-    &.nepali {
+    &--nepali {
       background: rgba(255, 255, 255, 0.15);
     }
+  }
 
-    .language-option {
-      position: relative;
-      z-index: 2;
-      width: 50%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      color: rgba(255, 255, 255, 0.7);
-      transition: all 0.3s ease;
+  &__language-option {
+    position: relative;
+    z-index: 2;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: spacing.$spacing-03;
+    color: rgba(255, 255, 255, 0.7);
+    transition: all motion.$duration-moderate-01 motion.$standard-easing;
 
-      mat-icon {
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
-      }
+    svg.cds--icon {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
 
-      span {
-        font-size: 14px;
-        font-weight: 500;
-        letter-spacing: 0.3px;
+    &__lang-text {
+      @include type.type-style("body-compact-01");
+      font-weight: 500;
 
-        &.lang-text::after {
-          content: attr(data-full-name);
-        }
-      }
-
-      &.active {
-        color: white;
-      }
-
-      span.lang-text {
-        padding: 0 2px; // Add padding to prevent text touching borders
+      &::after {
+        content: attr(data-full-name);
       }
     }
 
-    .slider {
-      position: absolute;
-      z-index: 1;
-      width: calc(50% - 4px); // Reduce width slightly
-      height: calc(100% - 4px);
-      background: var(--primary-main);
-      border-radius: 20px;
-      left: 2px;
-      top: 2px;
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    &--active {
+      color: theme.$text-on-color;
+    }
+  }
 
-      &.nepali {
-        transform: translateX(calc(100% + 2px)); // Adjust translation
+  &__lang-text {
+    @include type.type-style("label-01");
+    letter-spacing: 0.3px;
+    padding: 0 spacing.$spacing-01;
+  }
+
+  &__slider {
+    position: absolute;
+    z-index: 1;
+    width: calc(50% - 4px);
+    height: calc(100% - 4px);
+    background: var(--cds-interactive-01);
+    border-radius: spacing.$spacing-05;
+    left: 2px;
+    top: 2px;
+    transition: transform motion.$duration-moderate-01 motion.$standard-easing;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+    &--nepali {
+      transform: translateX(calc(100% + 2px));
+    }
+  }
+}
+
+@include breakpoint.breakpoint(md) {
+  .cds--language-switcher {
+    &__toggle-track {
+      width: 180px;
+      height: 40px;
+    }
+
+    &__language-option {
+      svg.cds--icon {
+        width: 18px;
+        height: 18px;
+      }
+
+      .cds--language-switcher__lang-text {
+        @include type.type-style("label-01");
       }
     }
   }
 }
 
-@media (max-width: 768px) {
-  .toggle-track {
-    width: 180px !important;
-    height: 40px !important;
-
-    .language-option {
-      mat-icon {
-        font-size: 18px !important;
-      }
-      span {
-        font-size: 13px !important;
-      }
+@include breakpoint.breakpoint(sm) {
+  .cds--language-switcher {
+    &__toggle-track {
+      width: 90px;
+      height: 32px;
     }
 
-    .slider.nepali {
-      transform: translateX(88px) !important;
-    }
-  }
-}
+    &__language-option {
+      gap: spacing.$spacing-01;
 
-@media (max-width: 480px) {
-  .toggle-track {
-    width: 90px !important; // Slightly wider to accommodate text
-    height: 32px !important;
-
-    .language-option {
-      gap: 2px !important;
-
-      mat-icon {
-        display: none !important;
+      svg.cds--icon {
+        display: none;
       }
 
-      span.lang-text {
-        font-size: 12px !important;
-        font-weight: 600 !important;
-        padding: 0 4px; // More padding on mobile
+      .cds--language-switcher__lang-text {
+        @include type.type-style("label-01");
+        font-weight: 600;
+        padding: 0 spacing.$spacing-02;
 
         &::after {
-          content: attr(data-short-name) !important;
+          content: attr(data-short-name);
         }
-      }
-    }
-
-    .slider {
-      width: calc(50% - 4px);
-      height: calc(100% - 4px);
-
-      &.nepali {
-        transform: translateX(calc(100% + 2px)) !important;
       }
     }
   }

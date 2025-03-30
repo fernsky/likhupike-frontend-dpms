@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { TranslocoService } from '@jsverse/transloco';
 import { LanguageService } from '../../../core/services/language.service';
 import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
@@ -12,12 +10,13 @@ import { BaseLanguageSwitcherComponent } from '../base-language-switcher/base-la
   templateUrl: './slide-toggle-language-switcher.component.html',
   styleUrls: ['./slide-toggle-language-switcher.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatSlideToggleModule, TranslocoModule],
+  imports: [CommonModule, TranslocoModule],
   providers: [
     provideTranslocoScope({
       scope: 'languages',
       alias: 'languages',
     }),
+    LanguageService, // Make sure LanguageService is provided here
   ],
 })
 export class SlideToggleLanguageSwitcherComponent extends BaseLanguageSwitcherComponent {

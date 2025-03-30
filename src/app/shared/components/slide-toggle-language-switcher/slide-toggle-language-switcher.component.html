@@ -1,39 +1,85 @@
 <div
-  class="language-switcher"
+  class="cds--language-switcher"
   *ngIf="currentLanguage$ | async as currentLanguage"
 >
   <div
-    class="toggle-container"
+    class="cds--language-switcher__toggle-container"
     (click)="
       switchLanguage(
         currentLanguage.code === 'en' ? languages[1] : languages[0]
       )
     "
   >
-    <div class="toggle-track" [class.nepali]="currentLanguage.code === 'ne'">
+    <div
+      class="cds--language-switcher__toggle-track"
+      [class.cds--language-switcher__toggle-track--nepali]="
+        currentLanguage.code === 'ne'
+      "
+    >
       <div
-        class="language-option english"
-        [class.active]="currentLanguage.code === 'en'"
+        class="cds--language-switcher__language-option cds--language-switcher__language-option--english"
+        [class.cds--language-switcher__language-option--active]="
+          currentLanguage.code === 'en'
+        "
       >
-        <mat-icon>language</mat-icon>
+        <!-- Replace with inline SVG for the language icon -->
+        <svg
+          class="cds--icon"
+          focusable="false"
+          preserveAspectRatio="xMidYMid meet"
+          aria-hidden="true"
+          width="20"
+          height="20"
+          viewBox="0 0 32 32"
+        >
+          <path
+            d="M16,24l-6.09-6.3L16,11.37l1.37,1.32L12.71,17H22V7h2V19H12.71l4.66,4.3L16,24z"
+            fill="currentColor"
+          ></path>
+        </svg>
         <span
-          class="lang-text"
+          class="cds--language-switcher__lang-text"
           data-full-name="English"
           data-short-name="EN"
         ></span>
       </div>
       <div
-        class="language-option nepali"
-        [class.active]="currentLanguage.code === 'ne'"
+        class="cds--language-switcher__language-option cds--language-switcher__language-option--nepali"
+        [class.cds--language-switcher__language-option--active]="
+          currentLanguage.code === 'ne'
+        "
       >
-        <mat-icon>translate</mat-icon>
+        <!-- Replace with inline SVG for the translate icon -->
+        <svg
+          class="cds--icon"
+          focusable="false"
+          preserveAspectRatio="xMidYMid meet"
+          aria-hidden="true"
+          width="20"
+          height="20"
+          viewBox="0 0 32 32"
+        >
+          <path
+            d="M27.85,29H30l-6-15h-2.35l-6,15h2.15l1.6-4h6.85ZM20.2,23l2.62-6.56L25.45,23Z"
+            fill="currentColor"
+          ></path>
+          <path
+            d="M18,7V5H12V2H10V5H4V7h7.7a14.57,14.57,0,0,1-4.2,6.5A14.4,14.4,0,0,1,5,11H3a16.42,16.42,0,0,0,3,3.28A16.28,16.28,0,0,1,2,18l1,1.6a17.58,17.58,0,0,0,5-4.44A18.1,18.1,0,0,0,13,18.94V16.83a16.51,16.51,0,0,1-4-3.61A12.25,12.25,0,0,0,13,7Z"
+            fill="currentColor"
+          ></path>
+        </svg>
         <span
-          class="lang-text"
+          class="cds--language-switcher__lang-text"
           data-full-name="नेपाली"
           data-short-name="ने"
         ></span>
       </div>
-      <div class="slider" [class.nepali]="currentLanguage.code === 'ne'"></div>
+      <div
+        class="cds--language-switcher__slider"
+        [class.cds--language-switcher__slider--nepali]="
+          currentLanguage.code === 'ne'
+        "
+      ></div>
     </div>
   </div>
 </div>
