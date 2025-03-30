@@ -10,35 +10,52 @@
 
 // Carbon component and grid imports
 @use "@carbon/styles";
+@use "@carbon/styles/scss/colors";
 
-// Custom theme variables
+// Custom theme variables - Now using official Carbon color tokens
 :root {
-  // Primary blue colors
-  --cds-interactive-01: #123772; // Primary color
-  --cds-interactive-02: #1a4894; // Secondary color
-  --cds-interactive-03: #0b1f42; // Dark variant
+  // Interactive elements
+  --cds-interactive-01: #{colors.$blue-60}; // Primary buttons
+  --cds-interactive-02: #{colors.$blue-40}; // Secondary buttons
+  --cds-interactive-03: #{colors.$blue-70}; // Tertiary buttons and icons
+  --cds-interactive-04: #{colors.$blue-50}; // Selected elements
 
-  // UI elements
-  --cds-ui-background: #ffffff;
-  --cds-ui-01: #f4f4f4;
-  --cds-ui-02: #ffffff;
+  // UI background colors
+  --cds-ui-background: #{colors.$white-0};
+  --cds-ui-01: #{colors.$gray-10};
+  --cds-ui-02: #{colors.$white-0};
+  --cds-ui-03: #{colors.$gray-20}; // Borders, dividers
+  --cds-ui-04: #{colors.$gray-50}; // Emphasis borders
+  --cds-ui-05: #{colors.$gray-70}; // High contrast borders
 
   // Text colors
-  --cds-text-01: #1a2942;
-  --cds-text-02: #546e7a;
-  --cds-text-03: #8d9ba7;
+  --cds-text-01: #{colors.$gray-100}; // Primary text
+  --cds-text-02: #{colors.$gray-70}; // Secondary text
+  --cds-text-03: #{colors.$gray-40}; // Helper text
+  --cds-text-04: #{colors.$white-0}; // Text on interactive colors
+  --cds-text-05: #{colors.$gray-60}; // Subtle text
+  --cds-text-error: #{colors.$red-60}; // Error messages
+  --cds-text-inverse: #{colors.$white-0}; // Text on dark background
+
+  // Link colors
+  --cds-link-01: #{colors.$blue-60}; // Primary links
+  --cds-link-02: #{colors.$blue-40}; // Secondary links
 
   // Support colors
-  --cds-support-01: #ef4444; // Error
-  --cds-support-02: #24a148; // Success
+  --cds-support-01: #{colors.$red-60}; // Error
+  --cds-support-02: #{colors.$green-50}; // Success
+  --cds-support-03: #{colors.$yellow-30}; // Warning
+  --cds-support-04: #{colors.$blue-50}; // Information
 
   // Focus colors
-  --cds-focus: #1a4894;
+  --cds-focus: #{colors.$blue-60};
 
-  // Button colors
-  --cds-button-primary: #123772;
-  --cds-button-primary-hover: #1a4894;
-  --cds-button-secondary: #546e7a;
+  // Overlay colors
+  --cds-overlay-01: rgba(22, 22, 22, 0.5); // Background overlay
+
+  // Field colors
+  --cds-field-01: #{colors.$white-0}; // Input fields
+  --cds-field-02: #{colors.$gray-10}; // Secondary input fields
 
   // Legacy variables for compatibility during transition
   --primary-dark: var(--cds-interactive-03);
