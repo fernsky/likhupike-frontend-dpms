@@ -7,10 +7,6 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
@@ -23,6 +19,18 @@ import {
 } from '@app/core/store/auth/auth.selectors';
 import { TranslocoModule } from '@jsverse/transloco';
 import { PasswordValidatorService } from '@app/shared/validators/password-validator.service';
+import { MatIconModule } from '@angular/material/icon';
+
+// Carbon imports
+import {
+  ButtonModule,
+  NFormsModule,
+  InputModule,
+  LinkModule,
+  NotificationModule,
+  UIShellModule,
+  ProgressIndicatorModule,
+} from 'carbon-components-angular';
 
 @Component({
   selector: 'app-forgot-password',
@@ -36,11 +44,16 @@ import { PasswordValidatorService } from '@app/shared/validators/password-valida
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
-    MatCardModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
     TranslocoModule,
+    MatIconModule,
+    // Carbon modules
+    ButtonModule,
+    NFormsModule,
+    InputModule,
+    LinkModule,
+    UIShellModule,
+    NotificationModule,
+    ProgressIndicatorModule,
   ],
 })
 export class ForgotPasswordComponent implements OnInit, OnDestroy {
@@ -52,6 +65,15 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
   hidePassword = true;
   hideConfirmPassword = true;
   private destroy$ = new Subject<void>();
+
+  // Carbon progress indicator step indices
+  get currentStepIndex(): number {
+    return this.currentStep === 'email'
+      ? 0
+      : this.currentStep === 'otp'
+        ? 1
+        : 2;
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -216,6 +238,14 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
       }
     }
     return null;
+  }
+
+  togglePasswordVisibility(field: 'password' | 'confirm'): void {
+    if (field === 'password') {
+      this.hidePassword = !this.hidePassword;
+    } else {
+      this.hideConfirmPassword = !this.hideConfirmPassword;
+    }
   }
 
   ngOnInit(): void {
