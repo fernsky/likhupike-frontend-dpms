@@ -40,6 +40,20 @@
   padding: 0;
   background-color: var(--cds-layer-01);
   margin-top: 3rem; // Add this to account for fixed header
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.5;
+    z-index: 0;
+  }
 
   .cds--grid {
     height: 100%;
@@ -53,8 +67,14 @@
 .cds--auth-features {
   height: 100%;
   display: none;
-  background-color: var(--cds-layer-01);
-  border-right: 1px solid var(--cds-border-subtle);
+  backdrop-filter: blur(8px);
+  background: linear-gradient(
+    45deg,
+    var(--cds-background) 0%,
+    var(--cds-layer-01) 100%
+  );
+  border-right: none;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.1);
   padding: spacing.$spacing-07;
   position: relative;
   max-width: 100%;
@@ -75,7 +95,7 @@
     background: linear-gradient(
       to bottom,
       transparent,
-      var(--cds-border-subtle),
+      rgba(0, 0, 0, 0.1),
       transparent
     );
   }
@@ -87,12 +107,13 @@
   align-items: center;
   min-height: calc(100vh - 128px);
   padding: spacing.$spacing-07;
-  background-color: var(--cds-layer-01);
-  background-image: linear-gradient(
-    to bottom right,
-    var(--cds-layer-01),
-    var(--cds-background)
+  background: linear-gradient(
+    135deg,
+    var(--cds-layer-01) 0%,
+    var(--cds-background) 100%
   );
+  position: relative;
+  z-index: 1;
   box-sizing: border-box;
   max-width: 100%;
   margin: 0 auto;
