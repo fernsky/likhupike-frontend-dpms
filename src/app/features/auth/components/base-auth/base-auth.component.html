@@ -3,17 +3,17 @@
     <app-gov-branding [elevated]="true"></app-gov-branding>
   </header>
 
-  <main class="cds--auth-content">
-    <div class="cds--grid">
-      <div class="cds--row cds--auth-row">
+  <main class="cds--auth-main">
+    <div class="cds--grid cds--auth-container">
+      <div class="cds--row">
         <!-- Features column -->
-        <div class="cds--col-lg-8 cds--auth-features">
+        <div class="cds--col-lg-7 cds--auth-features">
           <app-system-features></app-system-features>
         </div>
 
         <!-- Auth form column -->
-        <div class="cds--col-sm-4 cds--col-md-8 cds--col-lg-8 cds--auth-form">
-          <div class="cds--auth-form-container cds--elevation-2">
+        <div class="cds--col-sm-4 cds--col-md-8 cds--col-lg-5 cds--auth-form">
+          <div class="cds--auth-form-container">
             <router-outlet></router-outlet>
           </div>
         </div>
@@ -25,19 +25,21 @@
     <div class="cds--grid">
       <div class="cds--row">
         <div class="cds--col">
-          <p class="cds--footer-copyright">
-            {{ "system.footer.copyright" | transloco }}
-          </p>
-          <div class="cds--footer-links">
-            <a class="cds--link" href="#" tabindex="0">{{
-              "system.footer.privacy" | transloco
-            }}</a>
-            <a class="cds--link" href="#" tabindex="0">{{
-              "system.footer.terms" | transloco
-            }}</a>
-            <a class="cds--link" href="#" tabindex="0">{{
-              "system.footer.help" | transloco
-            }}</a>
+          <div class="cds--footer-content">
+            <p class="cds--footer-copyright">
+              {{ "system.footer.copyright" | transloco }}
+            </p>
+            <nav class="cds--footer-links" aria-label="Footer links">
+              <a class="cds--footer-link" href="#" tabindex="0">
+                {{ "system.footer.privacy" | transloco }}
+              </a>
+              <a class="cds--footer-link" href="#" tabindex="0">
+                {{ "system.footer.terms" | transloco }}
+              </a>
+              <a class="cds--footer-link" href="#" tabindex="0">
+                {{ "system.footer.help" | transloco }}
+              </a>
+            </nav>
           </div>
         </div>
       </div>

@@ -5,43 +5,50 @@
 @use "@carbon/styles/scss/utilities" as *;
 @use "@carbon/styles/scss/motion" as *;
 
-// Use CSS custom properties instead of SCSS variables
 .cds--feature-section {
   padding: $spacing-07;
-  background-color: var(--brand-background-light);
-  border-radius: 0;
+  background-color: #ffffff;
+  border: 1px solid var(--brand-shadow-light);
+  border-radius: 4px;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
+.cds--feature-header {
+  margin-bottom: $spacing-07;
+}
+
 .cds--feature-title {
   @include type-style("heading-04");
   color: var(--brand-text-dark);
-  margin-bottom: $spacing-03;
-}
-
-.cds--feature-underline {
-  width: 48px;
-  height: 4px;
-  background: var(--brand-primary);
   margin-bottom: $spacing-05;
+  position: relative;
+  padding-bottom: $spacing-04;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 48px;
+    height: 4px;
+    background-color: var(--brand-primary);
+    border-radius: 2px;
+  }
 }
 
 .cds--feature-description {
-  @include type-style("body-01");
-  color: var(--brand-text-dark);
-  opacity: 0.7;
-  margin-bottom: $spacing-07;
-  max-width: 85%;
-  line-height: 1.5;
+  @include type-style("body-long-01");
+  color: var(--brand-text-secondary);
+  max-width: 90%;
+  margin: 0;
 }
 
 .cds--feature-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: $spacing-06;
-  flex-grow: 1;
 
   @include breakpoint(md) {
     grid-template-columns: repeat(2, 1fr);
@@ -49,41 +56,43 @@
 }
 
 .cds--feature-card {
-  padding: $spacing-05;
-  background-color: white;
-  transition: transform 0.3s ease;
   display: flex;
-  flex-direction: column;
-  position: relative;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: var(--brand-background-subtle);
+  padding: $spacing-05;
+  border-radius: 4px;
+  border-left: 4px solid transparent;
+  transition: all 0.2s ease;
 
-  &:hover {
-    transform: translateY(-4px);
+  &:hover,
+  &:focus-within {
+    transform: translateX(2px);
+    border-left-color: var(--brand-primary);
   }
 
-  .cds--feature-card-title {
-    @include type-style("heading-03");
-    color: var(--brand-text-dark);
-    margin-bottom: $spacing-03;
+  &[data-index="0"] .cds--feature-icon-wrapper {
+    color: var(--brand-primary);
   }
 
-  .cds--feature-card-description {
-    @include type-style("body-01");
-    color: var(--brand-text-dark);
-    opacity: 0.8;
-    line-height: 1.5;
+  &[data-index="1"] .cds--feature-icon-wrapper {
+    color: var(--brand-success);
+  }
+
+  &[data-index="2"] .cds--feature-icon-wrapper {
+    color: var(--brand-info);
+  }
+
+  &[data-index="3"] .cds--feature-icon-wrapper {
+    color: var(--brand-secondary);
   }
 }
 
-.cds--feature-icon {
+.cds--feature-icon-wrapper {
   display: flex;
-  align-items: center;
+  flex-shrink: 0;
+  align-items: flex-start;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  margin-bottom: $spacing-05;
-  background-color: #f4f4f4;
+  margin-right: $spacing-05;
+  padding-top: 2px;
 
   i.material-icons {
     font-size: 24px;
@@ -91,34 +100,18 @@
 }
 
 .cds--feature-content {
-  flex-grow: 1;
+  flex: 1;
 }
 
-// Feature color variants using CSS custom properties
-.feature-primary {
-  .cds--feature-icon {
-    background-color: rgba(0, 94, 184, 0.1);
-    color: var(--brand-primary);
-  }
+.cds--feature-card-title {
+  @include type-style("heading-02");
+  color: var(--brand-text-dark);
+  margin: 0 0 $spacing-03;
 }
 
-.feature-success {
-  .cds--feature-icon {
-    background-color: rgba(36, 161, 72, 0.1);
-    color: var(--brand-success);
-  }
-}
-
-.feature-info {
-  .cds--feature-icon {
-    background-color: rgba(15, 98, 254, 0.1);
-    color: var(--brand-secondary);
-  }
-}
-
-.feature-warning {
-  .cds--feature-icon {
-    background-color: rgba(105, 41, 196, 0.1);
-    color: var(--brand-accent);
-  }
+.cds--feature-card-description {
+  @include type-style("body-01");
+  color: var(--brand-text-secondary);
+  margin: 0;
+  line-height: 1.5;
 }

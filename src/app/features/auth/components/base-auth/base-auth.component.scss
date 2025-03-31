@@ -19,139 +19,122 @@
 
 .cds--auth-header {
   width: 100%;
-  z-index: 10;
 }
 
-.cds--auth-content {
+.cds--auth-main {
   flex: 1;
   display: flex;
-  align-items: center;
-  padding: $spacing-05;
+  padding: $spacing-06 0;
+  overflow-y: auto;
 
   @include breakpoint(md) {
-    padding: $spacing-07;
-  }
-
-  .cds--grid {
-    width: 100%;
+    padding: $spacing-08 0;
   }
 }
 
-.cds--auth-row {
-  align-items: center;
+.cds--auth-container {
+  margin: auto;
+  width: 100%;
+  max-width: 1600px;
 }
 
 .cds--auth-features {
   display: none;
-  animation: fade-in 0.5s ease-out;
+  padding: 0 $spacing-05;
 
   @include breakpoint(lg) {
     display: block;
-  }
-
-  @keyframes fade-in {
-    0% {
-      opacity: 0;
-      transform: translateY($spacing-05);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    animation: fadeIn 0.4s ease-out forwards;
   }
 }
 
 .cds--auth-form {
+  padding: 0 $spacing-05;
   display: flex;
   justify-content: center;
-  animation: slide-in 0.5s ease-out;
 
-  @keyframes slide-in {
-    0% {
-      opacity: 0;
-      transform: translateX($spacing-05);
-    }
-    100% {
-      opacity: 1;
-      transform: translateX(0);
-    }
+  @include breakpoint(lg) {
+    animation: fadeIn 0.4s ease-out forwards;
   }
 }
 
 .cds--auth-form-container {
   width: 100%;
-  max-width: 450px;
+  max-width: 480px;
   padding: $spacing-07;
-  background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  position: relative;
+  background-color: #ffffff;
+  border-radius: 4px;
+  border: 1px solid var(--brand-shadow-light);
+  box-shadow: 0 4px 16px var(--brand-shadow-light);
+}
 
-  &::before {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 100%;
-    background: var(--brand-primary);
-  }
+.cds--auth-form-header {
+  margin-bottom: $spacing-07;
 }
 
 .cds--auth-form-title {
   @include type-style("heading-04");
   color: var(--brand-text-dark);
-  margin-bottom: $spacing-03;
+  margin: 0 0 $spacing-04;
 }
 
 .cds--auth-form-instructions {
   @include type-style("body-01");
-  color: var(--brand-text-dark);
-  opacity: 0.7;
-  margin-bottom: $spacing-06;
+  color: var(--brand-text-secondary);
+  margin: 0;
+  line-height: 1.5;
 }
 
 .cds--auth-footer {
-  padding: $spacing-05 $spacing-05;
-  background-color: #f4f4f4;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding: $spacing-05;
+  border-top: 1px solid var(--brand-shadow-light);
+  background-color: #ffffff;
+}
 
-  .cds--footer-copyright {
-    @include type-style("helper-text-01");
-    color: var(--brand-text-dark);
-    opacity: 0.7;
-    margin-bottom: $spacing-03;
-  }
+.cds--footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  .cds--footer-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: $spacing-05;
-
-    .cds--link {
-      @include type-style("body-short-01");
-      color: var(--brand-primary);
-      text-decoration: none;
-      transition: color 0.2s ease;
-
-      &:hover {
-        color: var(--brand-highlight);
-        text-decoration: underline;
-      }
-    }
+  @include breakpoint(md) {
+    flex-direction: row;
+    justify-content: space-between;
   }
 }
 
-@include breakpoint(md) {
-  .cds--auth-footer {
-    .cds--footer-copyright {
-      display: inline-block;
-      margin-right: $spacing-07;
-      margin-bottom: 0;
-    }
+.cds--footer-copyright {
+  @include type-style("caption-01");
+  color: var(--brand-text-secondary);
+  margin: 0 0 $spacing-03;
 
-    .cds--footer-links {
-      display: inline-flex;
-    }
+  @include breakpoint(md) {
+    margin-bottom: 0;
   }
+}
+
+.cds--footer-links {
+  display: flex;
+}
+
+.cds--footer-link {
+  @include type-style("caption-01");
+  color: var(--brand-primary);
+  text-decoration: none;
+  margin-left: $spacing-05;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Create improved Asset for Pattern BG
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap");
+
+// Add beautiful scrolling
+html {
+  scroll-behavior: smooth;
 }

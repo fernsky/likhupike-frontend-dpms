@@ -1,27 +1,43 @@
+<!-- filepath: c:\Users\trilo\Documents\remote\digital-profile\likhupike\development\frontend\src\assets\images\pattern-bg.svg -->
 <svg width="1440" height="900" viewBox="0 0 1440 900" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <pattern id="smallGrid" width="10" height="10" patternUnits="userSpaceOnUse">
-      <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#000000" stroke-width="0.5" opacity="0.1"/>
+    <pattern id="dots-pattern" width="30" height="30" patternUnits="userSpaceOnUse">
+      <circle cx="5" cy="5" r="1" fill="#0f62fe" opacity="0.15"/>
     </pattern>
-    <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
-      <rect width="100" height="100" fill="url(#smallGrid)"/>
-      <path d="M 100 0 L 0 0 0 100" fill="none" stroke="#000000" stroke-width="1" opacity="0.2"/>
-    </pattern>
-    <pattern id="dots" width="30" height="30" patternUnits="userSpaceOnUse">
-      <circle cx="5" cy="5" r="1" fill="#000000" opacity="0.15"/>
-    </pattern>
-    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#005eb8" stop-opacity="0.05"/>
-      <stop offset="100%" stop-color="#6929c4" stop-opacity="0.05"/>
+    
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f62fe" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#6929c4" stop-opacity="0.03"/>
+    </linearGradient>
+    
+    <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0f62fe" stop-opacity="0.1"/>
+      <stop offset="50%" stop-color="#6929c4" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#0f62fe" stop-opacity="0.1"/>
     </linearGradient>
   </defs>
-  <rect width="100%" height="100%" fill="url(#dots)"/>
-  <rect width="100%" height="100%" fill="url(#gradient1)"/>
+  
+  <!-- Background fill -->
+  <rect width="100%" height="100%" fill="white"/>
+  <rect width="100%" height="100%" fill="url(#dots-pattern)"/>
+  <rect width="100%" height="100%" fill="url(#bg-gradient)"/>
+  
+  <!-- Diagonal lines -->
   <g opacity="0.1">
-    <path d="M0,900 L1440,0" stroke="#005eb8" stroke-width="2"/>
-    <path d="M0,700 L1140,0" stroke="#005eb8" stroke-width="1"/>
-    <path d="M0,500 L840,0" stroke="#005eb8" stroke-width="1"/>
-    <path d="M0,300 L640,0" stroke="#005eb8" stroke-width="1"/>
-    <path d="M0,100 L340,0" stroke="#005eb8" stroke-width="1"/>
+    <path d="M0,900 L1440,0" stroke="url(#line-gradient)" stroke-width="1.5"/>
+    <path d="M0,700 L1140,0" stroke="#0f62fe" stroke-width="1"/>
+    <path d="M0,500 L840,0" stroke="#0f62fe" stroke-width="0.8"/>
+    <path d="M0,300 L540,0" stroke="#0f62fe" stroke-width="0.6"/>
+    <path d="M300,900 L1440,200" stroke="#6929c4" stroke-width="0.8"/>
+    <path d="M600,900 L1440,400" stroke="#6929c4" stroke-width="0.6"/>
   </g>
+  
+  <!-- Decorative elements -->
+  <circle cx="100" cy="100" r="60" fill="#0f62fe" opacity="0.05"/>
+  <circle cx="1340" cy="800" r="80" fill="#6929c4" opacity="0.03"/>
+  <circle cx="700" cy="400" r="120" fill="#0f62fe" opacity="0.02"/>
+  
+  <!-- Abstract shapes -->
+  <path d="M1200,150 L1300,50 L1400,150 L1300,250 z" fill="#0f62fe" opacity="0.03"/>
+  <path d="M100,750 L200,650 L300,750 L200,850 z" fill="#6929c4" opacity="0.03"/>
 </svg>

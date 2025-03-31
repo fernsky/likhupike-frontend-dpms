@@ -14,22 +14,59 @@
 @use "@carbon/styles/scss/colors";
 @use "@carbon/styles/scss/utilities";
 
-// Carbon color tokens for our custom variables
+// Enterprise-grade color palette - refined for professional applications
 :root {
-  --brand-primary: #{colors.$blue-60};
-  --brand-secondary: #{colors.$blue-70};
-  --brand-accent: #{colors.$purple-60};
-  --brand-background-light: #{colors.$gray-10};
-  --brand-background-dark: #{colors.$gray-90};
+  // Primary colors - professional blue tones
+  --brand-primary: #{colors.$blue-70};
+  --brand-primary-light: #{colors.$blue-50};
+  --brand-primary-dark: #{colors.$blue-90};
+
+  // Secondary colors - sophisticated tones
+  --brand-secondary: #{colors.$purple-70};
+  --brand-secondary-light: #{colors.$purple-40};
+  --brand-secondary-dark: #{colors.$purple-90};
+
+  // Accent colors - subtle but distinct
+  --brand-accent: #{colors.$teal-60};
+  --brand-accent-light: #{colors.$teal-30};
+
+  // Background colors - clean, professional
+  --brand-background-light: #fafafa;
+  --brand-background-subtle: #{colors.$gray-10};
+  --brand-background-dark: #{colors.$gray-100};
+
+  // UI colors - clear status indicators
   --brand-success: #{colors.$green-60};
-  --brand-warning: #{colors.$yellow-30};
-  --brand-error: #{colors.$red-60};
-  --brand-text-light: #{colors.$white-0};
+  --brand-warning: #{colors.$yellow-40};
+  --brand-error: #{colors.$red-70};
+  --brand-info: #{colors.$cyan-60};
+
+  // Text colors - optimal readability
+  --brand-text-light: #ffffff;
   --brand-text-dark: #{colors.$gray-100};
-  --brand-highlight: #{colors.$blue-70};
-  --brand-subtle-accent: #{colors.$blue-10};
-  --brand-overlay: rgba(22, 22, 22, 0.7);
-  --brand-shadow: rgba(0, 0, 0, 0.1);
+  --brand-text-secondary: #{colors.$gray-70};
+
+  // Interactive elements - purposeful feedback
+  --brand-highlight: #{colors.$blue-60};
+  --brand-subtle-accent: #{colors.$blue-20};
+
+  // Visual effects - refined and subtle
+  --brand-overlay: rgba(22, 22, 22, 0.6);
+  --brand-shadow-light: rgba(0, 0, 0, 0.06);
+  --brand-shadow: rgba(0, 0, 0, 0.12);
+  --brand-shadow-dark: rgba(0, 0, 0, 0.2);
+
+  // Gradients - subtle, professional
+  --brand-gradient-primary: linear-gradient(
+    to right,
+    var(--brand-primary) 0%,
+    var(--brand-primary-dark) 100%
+  );
+  --brand-gradient-secondary: linear-gradient(
+    to right,
+    var(--brand-secondary) 0%,
+    var(--brand-secondary-dark) 100%
+  );
 }
 
 // Global Carbon-based styles
@@ -37,17 +74,60 @@ body {
   margin: 0;
   padding: 0;
   font-family: "IBM Plex Sans", sans-serif;
+  background-color: var(--brand-background-light);
+  color: var(--brand-text-dark);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-// Carbon elevation classes
+// Enterprise-grade elevation classes with refined shadows
 .cds--elevation-1 {
-  box-shadow: 0 2px 6px var(--brand-shadow);
+  box-shadow: 0 1px 3px var(--brand-shadow-light);
 }
 
 .cds--elevation-2 {
-  box-shadow: 0 4px 8px var(--brand-shadow);
+  box-shadow:
+    0 3px 6px var(--brand-shadow-light),
+    0 1px 3px var(--brand-shadow);
 }
 
 .cds--elevation-3 {
-  box-shadow: 0 8px 16px var(--brand-shadow);
+  box-shadow:
+    0 6px 12px var(--brand-shadow-light),
+    0 3px 6px var(--brand-shadow);
+}
+
+// Professional, purposeful animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Utility class for visually hiding elements but keeping them accessible
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
