@@ -52,9 +52,46 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    opacity: 0.5;
-    z-index: 0;
+    background:
+      radial-gradient(
+        1200px circle at 90% 90%,
+        var(--cds-background-inverse) 0%,
+        transparent 70%
+      ),
+      radial-gradient(
+        1000px circle at -10% 100%,
+        var(--cds-layer-accent-01) 0%,
+        transparent 70%
+      ),
+      radial-gradient(
+        1100px circle at 90% -10%,
+        var(--cds-layer-accent-02) 0%,
+        transparent 70%
+      );
+    opacity: 0.25;
+    animation: slowFloat 20s ease-in-out infinite alternate;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background:
+      radial-gradient(
+        1400px circle at 0% 110%,
+        var(--cds-layer-accent-03) 0%,
+        transparent 70%
+      ),
+      radial-gradient(
+        800px circle at 100% 20%,
+        var(--cds-layer-selected) 0%,
+        transparent 60%
+      );
+    opacity: 0.2;
+    animation: slowFloat2 25s ease-in-out infinite alternate-reverse;
   }
 
   .cds--grid {
@@ -62,11 +99,59 @@
     max-width: calc(1584px - 4rem);
     margin: 0 auto;
     padding: 0; // Remove default padding on mobile
+    position: relative;
+    z-index: 1;
 
     @media screen and (min-width: 1055px) {
       padding: 0 2rem; // Add padding back on desktop
       padding-top: spacing.$spacing-12; // Add top padding for desktop
     }
+  }
+}
+
+@keyframes patternShift {
+  0% {
+    background-position:
+      0 0,
+      12px 12px,
+      24px 24px,
+      48px 48px;
+  }
+  100% {
+    background-position:
+      200px 0,
+      212px 12px,
+      224px 24px,
+      248px 48px;
+  }
+}
+
+@keyframes pulsePattern {
+  0% {
+    opacity: 0.1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.2;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes slowFloat {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(3%, 3%) scale(1.1);
+  }
+}
+
+@keyframes slowFloat2 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(-3%, -2%) scale(1.08);
   }
 }
 
