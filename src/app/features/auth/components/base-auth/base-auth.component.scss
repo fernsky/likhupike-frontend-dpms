@@ -63,6 +63,10 @@
     margin: 0 auto;
     max-width: 1584px;
     padding: 0 spacing.$spacing-05;
+
+    @include breakpoint.breakpoint(lg) {
+      padding: 0 spacing.$spacing-07;
+    }
   }
 }
 
@@ -76,12 +80,12 @@
     var(--cds-layer-01) 0%,
     var(--cds-background) 100%
   );
-  padding: spacing.$spacing-07 spacing.$spacing-05;
+  padding: spacing.$spacing-05;
   box-sizing: border-box;
 
   @include breakpoint.breakpoint(lg) {
     display: flex;
-    padding: spacing.$spacing-09 spacing.$spacing-05;
+    padding: spacing.$spacing-07 spacing.$spacing-05;
   }
 }
 
