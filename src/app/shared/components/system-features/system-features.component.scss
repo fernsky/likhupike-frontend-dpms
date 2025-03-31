@@ -37,33 +37,6 @@
 
 // Custom styling for Carbon tiles to match the desired design
 .cds--feature-card {
-  // Override Carbon tile styles
-  background: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.12) 0%,
-    rgba(255, 255, 255, 0.08) 100%
-  ) !important;
-  backdrop-filter: blur(10px);
-  border-radius: 0.75rem !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2) !important;
-  height: 100%;
-  transition: all motion.$duration-moderate-01 motion.$standard-easing !important;
-  display: flex;
-  flex-direction: column;
-  padding: spacing.$spacing-06 !important;
-
-  &:hover {
-    transform: translateY(-4px);
-    background: linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.15) 0%,
-      rgba(255, 255, 255, 0.1) 100%
-    ) !important;
-    border-color: rgba(255, 255, 255, 0.25) !important;
-  }
-
-  // Custom styling for the icon within the tile
   .cds--feature-icon {
     width: spacing.$spacing-07;
     height: spacing.$spacing-07;
