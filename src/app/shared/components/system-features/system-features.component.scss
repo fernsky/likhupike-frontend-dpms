@@ -1,49 +1,43 @@
 @use "@carbon/styles/scss/spacing" as *;
 @use "@carbon/styles/scss/type" as *;
 @use "@carbon/styles/scss/breakpoint" as *;
+@use "@carbon/styles/scss/theme" as *;
+@use "@carbon/styles/scss/utilities" as *;
+@use "@carbon/styles/scss/motion" as *;
 
-.cds--features-container {
+// Use CSS custom properties instead of SCSS variables
+.cds--feature-section {
   padding: $spacing-07;
-  background: linear-gradient(
-    180deg,
-    rgba(244, 244, 244, 1) 0%,
-    rgba(255, 255, 255, 1) 100%
-  );
-  border-radius: 8px;
+  background-color: var(--brand-background-light);
+  border-radius: 0;
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
-.cds--features-header {
-  position: relative;
+.cds--feature-title {
+  @include type-style("heading-04");
+  color: var(--brand-text-dark);
+  margin-bottom: $spacing-03;
+}
+
+.cds--feature-underline {
+  width: 48px;
+  height: 4px;
+  background: var(--brand-primary);
   margin-bottom: $spacing-05;
 }
 
-h2 {
-  @include type-style("heading-04");
-  margin-bottom: $spacing-03;
-  color: var(--brand-primary);
-  font-weight: 600;
-}
-
-.cds--features-decoration {
-  width: 60px;
-  height: 4px;
-  background: var(--brand-primary);
-  border-radius: 2px;
-}
-
-.cds--features-subtitle {
+.cds--feature-description {
   @include type-style("body-01");
-  margin-bottom: $spacing-07;
   color: var(--brand-text-dark);
-  max-width: 600px;
+  opacity: 0.7;
+  margin-bottom: $spacing-07;
+  max-width: 85%;
   line-height: 1.5;
 }
 
-.cds--features-grid {
+.cds--feature-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: $spacing-06;
@@ -54,136 +48,77 @@ h2 {
   }
 }
 
-.cds--feature-tile {
-  padding: $spacing-06;
-  border-radius: 8px;
-  background-color: #ffffff;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+.cds--feature-card {
+  padding: $spacing-05;
+  background-color: white;
+  transition: transform 0.3s ease;
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: hidden;
-  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px var(--brand-shadow);
+    transform: translateY(-4px);
   }
 
-  h4 {
-    @include type-style("productive-heading-03");
-    margin-bottom: $spacing-04;
+  .cds--feature-card-title {
+    @include type-style("heading-03");
     color: var(--brand-text-dark);
-    position: relative;
-    z-index: 1;
+    margin-bottom: $spacing-03;
   }
 
-  p {
-    @include type-style("body-long-01");
+  .cds--feature-card-description {
+    @include type-style("body-01");
     color: var(--brand-text-dark);
     opacity: 0.8;
     line-height: 1.5;
-    position: relative;
-    z-index: 1;
   }
 }
 
-.feature-icon-container {
+.cds--feature-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background-color: var(--brand-subtle-accent);
   margin-bottom: $spacing-05;
-
-  svg {
-    width: 24px;
-    height: 24px;
-    fill: currentColor;
-  }
+  background-color: #f4f4f4;
 
   i.material-icons {
     font-size: 24px;
-    color: currentColor;
   }
 }
 
-.feature-content {
+.cds--feature-content {
   flex-grow: 1;
 }
 
-// Feature color variants
+// Feature color variants using CSS custom properties
 .feature-primary {
-  .feature-icon-container {
+  .cds--feature-icon {
     background-color: rgba(0, 94, 184, 0.1);
     color: var(--brand-primary);
-  }
-
-  &::after {
-    background: linear-gradient(
-      135deg,
-      rgba(0, 94, 184, 0.05) 0%,
-      rgba(255, 255, 255, 0) 60%
-    );
   }
 }
 
 .feature-success {
-  .feature-icon-container {
+  .cds--feature-icon {
     background-color: rgba(36, 161, 72, 0.1);
     color: var(--brand-success);
-  }
-
-  &::after {
-    background: linear-gradient(
-      135deg,
-      rgba(36, 161, 72, 0.05) 0%,
-      rgba(255, 255, 255, 0) 60%
-    );
   }
 }
 
 .feature-info {
-  .feature-icon-container {
+  .cds--feature-icon {
     background-color: rgba(15, 98, 254, 0.1);
     color: var(--brand-secondary);
-  }
-
-  &::after {
-    background: linear-gradient(
-      135deg,
-      rgba(15, 98, 254, 0.05) 0%,
-      rgba(255, 255, 255, 0) 60%
-    );
   }
 }
 
 .feature-warning {
-  .feature-icon-container {
+  .cds--feature-icon {
     background-color: rgba(105, 41, 196, 0.1);
     color: var(--brand-accent);
   }
-
-  &::after {
-    background: linear-gradient(
-      135deg,
-      rgba(105, 41, 196, 0.05) 0%,
-      rgba(255, 255, 255, 0) 60%
-    );
-  }
-}
-
-// Common styling for all features
-.cds--feature-tile::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 0;
 }

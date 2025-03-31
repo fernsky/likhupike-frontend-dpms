@@ -5,53 +5,49 @@
   $prefix: "cds"
 );
 
-// Import g100 theme and set as default
+// Import themes and theme
 @use "@carbon/styles/scss/themes";
 @use "@carbon/styles/scss/theme";
 
 // Import all Carbon styles
 @use "@carbon/styles";
 @use "@carbon/styles/scss/colors";
+@use "@carbon/styles/scss/utilities";
 
-// Custom color palette for application
+// Carbon color tokens for our custom variables
 :root {
-  --brand-primary: #005eb8;
-  --brand-secondary: #0f62fe;
-  --brand-accent: #6929c4;
-  --brand-background-light: #f4f4f4;
-  --brand-background-dark: #161616;
-  --brand-success: #24a148;
-  --brand-warning: #f1c21b;
-  --brand-error: #da1e28;
-  --brand-text-light: #ffffff;
-  --brand-text-dark: #161616;
-  --brand-highlight: #0043ce;
-  --brand-subtle-accent: #edf5ff;
+  --brand-primary: #{colors.$blue-60};
+  --brand-secondary: #{colors.$blue-70};
+  --brand-accent: #{colors.$purple-60};
+  --brand-background-light: #{colors.$gray-10};
+  --brand-background-dark: #{colors.$gray-90};
+  --brand-success: #{colors.$green-60};
+  --brand-warning: #{colors.$yellow-30};
+  --brand-error: #{colors.$red-60};
+  --brand-text-light: #{colors.$white-0};
+  --brand-text-dark: #{colors.$gray-100};
+  --brand-highlight: #{colors.$blue-70};
+  --brand-subtle-accent: #{colors.$blue-10};
   --brand-overlay: rgba(22, 22, 22, 0.7);
   --brand-shadow: rgba(0, 0, 0, 0.1);
 }
 
-// Global styles
+// Global Carbon-based styles
 body {
   margin: 0;
   padding: 0;
   font-family: "IBM Plex Sans", sans-serif;
 }
 
-// Common transition for smooth hover effects
-.transition-all {
-  transition: all 0.3s ease;
-}
-
-// Card styles
-.elevation-1 {
+// Carbon elevation classes
+.cds--elevation-1 {
   box-shadow: 0 2px 6px var(--brand-shadow);
 }
 
-.elevation-2 {
+.cds--elevation-2 {
   box-shadow: 0 4px 8px var(--brand-shadow);
 }
 
-.elevation-3 {
+.cds--elevation-3 {
   box-shadow: 0 8px 16px var(--brand-shadow);
 }

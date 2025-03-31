@@ -1,6 +1,4 @@
-<div class="cds--auth-container">
-  <div class="cds--auth-background"></div>
-
+<div class="cds--auth-layout">
   <header class="cds--auth-header">
     <app-gov-branding [elevated]="true"></app-gov-branding>
   </header>
@@ -15,11 +13,7 @@
 
         <!-- Auth form column -->
         <div class="cds--col-sm-4 cds--col-md-8 cds--col-lg-8 cds--auth-form">
-          <div class="cds--auth-form-content elevation-3">
-            <div class="cds--auth-form-header">
-              <h2>{{ "system.auth.welcomeMessage" | transloco }}</h2>
-              <p>{{ "system.auth.instructionsMessage" | transloco }}</p>
-            </div>
+          <div class="cds--auth-form-container cds--elevation-2">
             <router-outlet></router-outlet>
           </div>
         </div>
@@ -28,12 +22,24 @@
   </main>
 
   <footer class="cds--auth-footer">
-    <div class="cds--auth-footer-content">
-      <p>{{ "system.footer.copyright" | transloco }}</p>
-      <div class="cds--auth-footer-links">
-        <a href="#">{{ "system.footer.privacy" | transloco }}</a>
-        <a href="#">{{ "system.footer.terms" | transloco }}</a>
-        <a href="#">{{ "system.footer.help" | transloco }}</a>
+    <div class="cds--grid">
+      <div class="cds--row">
+        <div class="cds--col">
+          <p class="cds--footer-copyright">
+            {{ "system.footer.copyright" | transloco }}
+          </p>
+          <div class="cds--footer-links">
+            <a class="cds--link" href="#" tabindex="0">{{
+              "system.footer.privacy" | transloco
+            }}</a>
+            <a class="cds--link" href="#" tabindex="0">{{
+              "system.footer.terms" | transloco
+            }}</a>
+            <a class="cds--link" href="#" tabindex="0">{{
+              "system.footer.help" | transloco
+            }}</a>
+          </div>
+        </div>
       </div>
     </div>
   </footer>

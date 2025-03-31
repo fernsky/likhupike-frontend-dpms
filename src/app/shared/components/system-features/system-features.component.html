@@ -1,30 +1,28 @@
-<div class="cds--features-container">
-  <div class="cds--features-header">
-    <h2>{{ "systemFeatures.title" | transloco }}</h2>
-    <div class="cds--features-decoration"></div>
-  </div>
+<div class="cds--feature-section">
+  <h2 class="cds--feature-title">{{ "systemFeatures.title" | transloco }}</h2>
+  <div class="cds--feature-underline"></div>
 
-  <p class="cds--features-subtitle">
+  <p class="cds--feature-description">
     {{ "systemFeatures.subtitle" | transloco }}
   </p>
 
-  <div class="cds--features-grid">
+  <div class="cds--feature-grid">
     <div
-      class="cds--feature-tile elevation-2"
+      class="cds--feature-card cds--elevation-2"
       *ngFor="let feature of features"
       [ngClass]="feature.colorClass"
     >
-      <div class="feature-icon-container">
+      <div class="cds--feature-icon">
         <i class="material-icons">{{ feature.icon }}</i>
       </div>
-      <div class="feature-content">
-        <h4>
+      <div class="cds--feature-content">
+        <h4 class="cds--feature-card-title">
           {{
             "systemFeatures.features." + feature.translationKey + ".title"
               | transloco
           }}
         </h4>
-        <p>
+        <p class="cds--feature-card-description">
           {{
             "systemFeatures.features." + feature.translationKey + ".description"
               | transloco

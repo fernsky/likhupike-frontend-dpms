@@ -3,43 +3,18 @@
 @use "@carbon/styles/scss/theme" as *;
 @use "@carbon/styles/scss/breakpoint" as *;
 @use "@carbon/styles/scss/grid" as *;
+@use "@carbon/styles/scss/motion" as *;
 
 :host {
   display: block;
   height: 100vh;
 }
 
-.cds--auth-container {
+.cds--auth-layout {
   display: flex;
   flex-direction: column;
   height: 100%;
-  position: relative;
-}
-
-.cds--auth-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    135deg,
-    var(--brand-background-light) 0%,
-    #ffffff 100%
-  );
-  z-index: -1;
-
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url("/images/pattern-bg.svg");
-    background-size: cover;
-    opacity: 0.05;
-  }
+  background-color: var(--brand-background-light);
 }
 
 .cds--auth-header {
@@ -52,8 +27,6 @@
   display: flex;
   align-items: center;
   padding: $spacing-05;
-  z-index: 5;
-  position: relative;
 
   @include breakpoint(md) {
     padding: $spacing-07;
@@ -70,18 +43,18 @@
 
 .cds--auth-features {
   display: none;
-  animation: fadeIn 0.8s ease-in-out;
+  animation: fade-in 0.5s ease-out;
 
   @include breakpoint(lg) {
     display: block;
   }
 
-  @keyframes fadeIn {
-    from {
+  @keyframes fade-in {
+    0% {
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY($spacing-05);
     }
-    to {
+    100% {
       opacity: 1;
       transform: translateY(0);
     }
@@ -91,94 +64,72 @@
 .cds--auth-form {
   display: flex;
   justify-content: center;
-  animation: slideIn 0.6s ease-out;
+  animation: slide-in 0.5s ease-out;
 
-  @keyframes slideIn {
-    from {
+  @keyframes slide-in {
+    0% {
       opacity: 0;
-      transform: translateX(30px);
+      transform: translateX($spacing-05);
     }
-    to {
+    100% {
       opacity: 1;
       transform: translateX(0);
     }
   }
 }
 
-.cds--auth-form-content {
+.cds--auth-form-container {
   width: 100%;
   max-width: 450px;
   padding: $spacing-07;
-  border-radius: 8px;
-  background-color: #ffffff;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   position: relative;
-  overflow: hidden;
 
   &::before {
     content: "";
+    display: block;
     position: absolute;
     top: 0;
     left: 0;
-    width: 8px;
+    width: 4px;
     height: 100%;
-    background: linear-gradient(
-      to bottom,
-      var(--brand-primary),
-      var(--brand-accent)
-    );
+    background: var(--brand-primary);
   }
 }
 
-.cds--auth-form-header {
+.cds--auth-form-title {
+  @include type-style("heading-04");
+  color: var(--brand-text-dark);
+  margin-bottom: $spacing-03;
+}
+
+.cds--auth-form-instructions {
+  @include type-style("body-01");
+  color: var(--brand-text-dark);
+  opacity: 0.7;
   margin-bottom: $spacing-06;
-
-  h2 {
-    @include type-style("heading-04");
-    color: var(--brand-text-dark);
-    font-weight: 600;
-    margin-bottom: $spacing-03;
-  }
-
-  p {
-    @include type-style("body-long-01");
-    color: var(--brand-text-dark);
-    opacity: 0.8;
-  }
 }
 
 .cds--auth-footer {
-  padding: $spacing-05;
-  background-color: var(--brand-background-light);
+  padding: $spacing-05 $spacing-05;
+  background-color: #f4f4f4;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
-  position: relative;
-  z-index: 10;
 
-  .cds--auth-footer-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: $spacing-03;
-
-    @include breakpoint(md) {
-      flex-direction: row;
-      justify-content: space-between;
-    }
-  }
-
-  p {
+  .cds--footer-copyright {
     @include type-style("helper-text-01");
-    text-align: center;
-    margin: 0;
     color: var(--brand-text-dark);
     opacity: 0.7;
+    margin-bottom: $spacing-03;
   }
 
-  .cds--auth-footer-links {
+  .cds--footer-links {
     display: flex;
+    flex-wrap: wrap;
     gap: $spacing-05;
 
-    a {
-      @include type-style("helper-text-01");
+    .cds--link {
+      @include type-style("body-short-01");
       color: var(--brand-primary);
       text-decoration: none;
       transition: color 0.2s ease;
@@ -187,6 +138,20 @@
         color: var(--brand-highlight);
         text-decoration: underline;
       }
+    }
+  }
+}
+
+@include breakpoint(md) {
+  .cds--auth-footer {
+    .cds--footer-copyright {
+      display: inline-block;
+      margin-right: $spacing-07;
+      margin-bottom: 0;
+    }
+
+    .cds--footer-links {
+      display: inline-flex;
     }
   }
 }
