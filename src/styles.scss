@@ -55,6 +55,12 @@
   --cds-support-success: #{colors.$green-50};
   --cds-support-warning: #{colors.$yellow-30};
   --cds-support-info: #{colors.$blue-50};
+
+  // Add inverse theme colors
+  --cds-background-inverse: #{colors.$gray-100};
+  --cds-background-inverse-hover: #{colors.$gray-90};
+  --cds-text-inverse: #{colors.$white-0};
+  --cds-border-inverse: #{colors.$gray-80};
 }
 
 // Add Carbon utility classes

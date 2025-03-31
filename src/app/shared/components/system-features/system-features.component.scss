@@ -17,7 +17,7 @@
   min-height: inherit;
 
   @include breakpoint.breakpoint(lg) {
-    padding-left: spacing.$spacing-05;
+    padding-left: 0;
   }
 }
 

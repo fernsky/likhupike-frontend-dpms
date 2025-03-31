@@ -58,15 +58,10 @@
   }
 
   .cds--grid {
-    height: auto;
-    max-width: none;
-    margin: 0 auto;
+    width: 100%;
     max-width: 1584px;
-    padding: 0 spacing.$spacing-05;
-
-    @include breakpoint.breakpoint(lg) {
-      padding: 0 spacing.$spacing-07;
-    }
+    margin: 0 auto;
+    padding: 0;
   }
 }
 
@@ -80,12 +75,14 @@
     var(--cds-layer-01) 0%,
     var(--cds-background) 100%
   );
-  padding: spacing.$spacing-05;
+  padding: 0;
+  width: 100%;
+  max-width: none;
   box-sizing: border-box;
 
   @include breakpoint.breakpoint(lg) {
     display: flex;
-    padding: spacing.$spacing-07 spacing.$spacing-05;
+    padding: 0;
   }
 }
 
@@ -95,7 +92,7 @@
   align-items: center;
   height: 100%;
   min-height: auto;
-  padding: spacing.$spacing-07;
+  padding: spacing.$spacing-07 spacing.$spacing-09;
   background: transparent;
   position: relative;
   z-index: 1;
@@ -104,7 +101,7 @@
   margin: 0 auto;
 
   @include breakpoint.breakpoint(md) {
-    padding: spacing.$spacing-09;
+    padding: spacing.$spacing-07 spacing.$spacing-09;
     align-items: center;
   }
 }
