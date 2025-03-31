@@ -72,25 +72,6 @@
   }
 }
 
-.cds--login-error {
-  margin-bottom: spacing.$spacing-05;
-
-  .cds--inline-notification {
-    max-width: 100%;
-    width: 100%;
-    background-color: var(--cds-notification-error-background);
-    border-left: 3px solid var(--cds-support-01);
-
-    .cds--inline-notification__icon {
-      fill: var(--cds-support-01);
-    }
-
-    .cds--inline-notification__text-wrapper {
-      color: var(--cds-text-01);
-    }
-  }
-}
-
 .cds--login-submit {
   margin-top: spacing.$spacing-07;
 
