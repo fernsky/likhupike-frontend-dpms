@@ -16,6 +16,9 @@
   flex-direction: column;
   background-color: var(--cds-background);
   position: relative;
+  margin: 0 auto;
+  max-width: 1584px;
+  width: 100%;
 }
 
 .cds--auth-header {
@@ -36,23 +39,30 @@
   flex: 1;
   padding: 0;
   background-color: var(--cds-layer-01);
+  margin-top: 3rem; // Add this to account for fixed header
 
   .cds--grid {
     height: 100%;
     max-width: none;
+    margin: 0 auto;
+    max-width: 1584px;
+    padding: 0 spacing.$spacing-05;
   }
 }
 
 .cds--auth-features {
   height: 100%;
   display: none;
-  background-color: var(--cds-background);
+  background-color: var(--cds-layer-01);
   border-right: 1px solid var(--cds-border-subtle);
   padding: spacing.$spacing-07;
   position: relative;
+  max-width: 100%;
+  box-sizing: border-box;
 
   @include breakpoint.breakpoint(lg) {
     display: block;
+    padding: spacing.$spacing-07 spacing.$spacing-05;
   }
 
   &::after {
@@ -83,6 +93,9 @@
     var(--cds-layer-01),
     var(--cds-background)
   );
+  box-sizing: border-box;
+  max-width: 100%;
+  margin: 0 auto;
 
   @include breakpoint.breakpoint(md) {
     padding: spacing.$spacing-09;

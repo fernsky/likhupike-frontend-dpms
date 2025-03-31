@@ -5,8 +5,10 @@
 @use "@carbon/styles/scss/motion" as motion;
 
 .cds--features-container {
-  padding: spacing.$spacing-09 0;
+  padding-top: spacing.$spacing-09;
   width: 100%;
+  max-width: 1584px;
+  margin: 0 auto;
   background-color: var(--cds-background);
   position: relative;
 }
