@@ -36,43 +36,36 @@
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: 1fr;
   gap: spacing.$spacing-05;
 
   li {
     display: flex;
     flex-direction: column;
-    padding: spacing.$spacing-06;
-    background-color: var(--cds-layer-02);
-    border-radius: 4px;
+    padding: spacing.$spacing-07;
+    background-color: var(--cds-gray-100);
     transition: all motion.$duration-moderate-01 motion.$standard-easing;
-    border: 1px solid var(--cds-border-subtle);
     height: 100%;
-    min-height: 200px;
+    min-height: 180px;
+    border: none;
 
     &:hover {
       transform: translateY(-4px);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-      background-color: var(--cds-layer-selected-01);
-      border-color: var(--cds-border-strong);
+      background-color: var(--cds-gray-90);
     }
   }
 
   .cds--feature-icon {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: spacing.$spacing-08;
-    height: spacing.$spacing-08;
-    background-color: var(--cds-interactive-01);
-    border-radius: 8px;
+    justify-content: flex-start;
     margin-bottom: spacing.$spacing-05;
 
     mat-icon {
-      color: var(--cds-text-04);
-      font-size: spacing.$spacing-06;
-      width: spacing.$spacing-06;
-      height: spacing.$spacing-06;
+      color: var(--cds-white-0);
+      font-size: spacing.$spacing-07;
+      width: spacing.$spacing-07;
+      height: spacing.$spacing-07;
     }
   }
 
@@ -80,19 +73,21 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: spacing.$spacing-03;
+    gap: spacing.$spacing-05;
 
     h4 {
-      @include type.type-style("heading-02");
-      color: var(--cds-text-primary);
+      @include type.type-style("heading-03");
+      color: var(--cds-white-0);
       margin: 0;
+      font-weight: 400;
     }
 
     p {
-      @include type.type-style("body-compact-01");
-      color: var(--cds-text-secondary);
+      @include type.type-style("body-long-01");
+      color: var(--cds-gray-20);
       margin: 0;
       flex: 1;
+      line-height: 1.5;
     }
   }
 }
@@ -111,12 +106,16 @@
   }
 
   .cds--features-list {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 }
 
 @include breakpoint.breakpoint(lg) {
   .cds--features-list {
     grid-template-columns: repeat(2, 1fr);
+
+    @media (max-width: 1400px) {
+      grid-template-columns: 1fr;
+    }
   }
 }
