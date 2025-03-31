@@ -17,12 +17,12 @@
           <li *ngFor="let feature of features">
             <mat-icon class="cds--feature-icon">{{ feature.icon }}</mat-icon>
             <div class="cds--feature-content">
-              <h3>
+              <h4>
                 {{
                   "systemFeatures.features." + feature.translationKey + ".title"
                     | transloco
                 }}
-              </h3>
+              </h4>
               <p>
                 {{
                   "systemFeatures.features." +

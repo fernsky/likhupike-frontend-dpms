@@ -17,7 +17,7 @@
   margin-bottom: spacing.$spacing-08;
 
   h2 {
-    @include type.type-style("heading-06");
+    @include type.type-style("heading-04");
     font-weight: 400;
     color: var(--cds-text-primary);
     letter-spacing: 0;
