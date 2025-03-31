@@ -63,5 +63,11 @@
     "chooseLanguage": "Choose Language",
     "selectLanguageAria": "Select language"
   },
-  "breadcrumbs": {}
+  "breadcrumbs": {},
+  "system": {
+    "footer": {
+      "copyright": "© {{year}} इन्टेन्सिभ स्टडी एण्ड रिसर्च सेन्टर। सर्वाधिकार सुरक्षित।",
+      "version": "संस्करण {{version}}"
+    }
+  }
 }

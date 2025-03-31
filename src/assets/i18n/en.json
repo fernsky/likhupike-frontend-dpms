@@ -60,5 +60,11 @@
     },
     "chooseLanguage": "Choose Language",
     "selectLanguageAria": "Select language"
+  },
+  "system": {
+    "footer": {
+      "copyright": "© {{year}} Intensive Study and Research Center. All Rights Reserved.",
+      "version": "Version {{version}}"
+    }
   }
 }
