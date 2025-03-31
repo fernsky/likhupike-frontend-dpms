@@ -3,12 +3,19 @@
 @use "@carbon/styles/scss/breakpoint" as breakpoint;
 
 .cds--header {
-  background-color: var(--cds-background-inverse);
-  border-bottom: 1px solid var(--cds-border-inverse);
-  height: 3rem;
+  background: linear-gradient(
+    135deg,
+    var(--cds-background) 0%,
+    var(--cds-layer-01) 100%
+  );
+  border-bottom: 1px solid var(--cds-border-subtle);
+  height: 3.5rem;
   width: 100%;
   position: fixed;
   z-index: 1000;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.2, 0, 0.38, 0.9);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 
   &__global {
     display: flex;
@@ -20,7 +27,6 @@
     width: 100%;
     box-sizing: border-box;
     position: relative;
-    background-color: var(--cds-background-inverse);
   }
 
   &__name {
@@ -30,17 +36,41 @@
     text-decoration: none;
     padding: 0 spacing.$spacing-05;
     gap: spacing.$spacing-05;
-    border-right: 1px solid var(--cds-border-inverse);
-    transition: all 0.2s ease;
+    border-right: 1px solid var(--cds-border-subtle);
+    transition: all 0.2s cubic-bezier(0.2, 0, 0.38, 0.9);
     background-color: transparent;
     position: relative;
     min-width: 320px;
 
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(
+        90deg,
+        var(--cds-interactive-01),
+        var(--cds-interactive-02)
+      );
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
     &:hover {
-      background-color: var(--cds-background-inverse-hover);
+      background-color: var(--cds-layer-selected);
+
+      &::after {
+        opacity: 1;
+      }
+
+      .cds--header__logo {
+        transform: scale(1.05);
+      }
 
       .cds--header__title {
-        color: var(--cds-text-inverse);
+        color: var(--cds-text-primary);
       }
     }
 
@@ -52,21 +82,21 @@
   }
 
   &__logo {
-    height: 2rem;
+    height: 2.25rem;
     width: auto;
-    filter: brightness(0) invert(1); // Make logo white
-    transition: transform 0.2s ease;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    transition: transform 0.2s cubic-bezier(0.2, 0, 0.38, 0.9);
 
     @include breakpoint.breakpoint(sm) {
-      height: 1.5rem;
+      height: 1.75rem;
     }
   }
 
   &__title {
     @include type.type-style("heading-compact-02");
-    color: var(--cds-text-inverse);
-    font-weight: 400;
-    letter-spacing: 0;
+    color: var(--cds-text-02);
+    font-weight: 500;
+    letter-spacing: -0.25px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -89,5 +119,17 @@
     align-items: center;
     padding: 0 spacing.$spacing-05;
     background-color: transparent;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 60%;
+      background: var(--cds-border-subtle);
+    }
   }
 }
