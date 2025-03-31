@@ -8,21 +8,26 @@
   padding: spacing.$spacing-09 0;
   width: 100%;
   background-color: var(--cds-background);
+  position: relative;
 }
 
 .cds--features-header {
   margin-bottom: spacing.$spacing-08;
 
   h2 {
-    @include type.type-style("heading-05");
+    @include type.type-style("heading-06");
+    font-weight: 400;
+    color: var(--cds-text-primary);
+    letter-spacing: 0;
     margin-bottom: spacing.$spacing-05;
   }
 }
 
 .cds--features-subtitle {
-  @include type.type-style("body-long-01");
-  color: var(--cds-text-02);
-  max-width: 960px;
+  @include type.type-style("body-long-02");
+  color: var(--cds-text-secondary);
+  max-width: 640px;
+  line-height: 1.5;
 }
 
 .cds--features-list {
@@ -35,30 +40,40 @@
     align-items: flex-start;
     margin-bottom: spacing.$spacing-06;
     padding-right: spacing.$spacing-08;
+    transition: transform 110ms;
 
     &:last-child {
       margin-bottom: 0;
+    }
+
+    &:hover {
+      transform: translateX(spacing.$spacing-02);
     }
   }
 
   .cds--feature-icon {
     color: var(--cds-interactive-01);
-    font-size: spacing.$spacing-06;
-    margin-right: spacing.$spacing-05;
+    font-size: spacing.$spacing-07;
+    margin-right: spacing.$spacing-06;
+    padding: spacing.$spacing-03;
+    background-color: var(--cds-layer-selected-01);
+    border-radius: 50%;
     flex-shrink: 0;
   }
 
   .cds--feature-content {
     h3 {
-      @include type.type-style("heading-03");
-      margin-bottom: spacing.$spacing-03;
+      @include type.type-style("heading-04");
+      font-weight: 400;
+      color: var(--cds-text-primary);
+      margin-bottom: spacing.$spacing-04;
     }
 
     p {
-      @include type.type-style("body-long-01");
-      color: var(--cds-text-02);
-      max-width: 100ch;
-      line-height: 1.5;
+      @include type.type-style("body-long-02");
+      color: var(--cds-text-secondary);
+      max-width: 85ch;
+      line-height: 1.625;
     }
   }
 }

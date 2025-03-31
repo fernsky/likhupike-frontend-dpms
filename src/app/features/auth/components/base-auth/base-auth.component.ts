@@ -1,11 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BackgroundParticlesComponent } from '@app/shared/components/background-particles/background-particles.component';
 import { GovBrandingComponent } from '@app/shared/components/gov-branding/gov-branding.component';
 import { SystemFeaturesComponent } from '@app/shared/components/system-features/system-features.component';
 import { RouterOutlet } from '@angular/router';
-
-// Import Carbon components
 import { GridModule } from 'carbon-components-angular';
 import { TranslocoModule } from '@jsverse/transloco';
 
@@ -16,7 +13,6 @@ import { TranslocoModule } from '@jsverse/transloco';
   standalone: true,
   imports: [
     CommonModule,
-    BackgroundParticlesComponent,
     GovBrandingComponent,
     SystemFeaturesComponent,
     RouterOutlet,
