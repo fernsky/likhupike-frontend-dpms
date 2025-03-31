@@ -36,7 +36,6 @@
 
 .cds--auth-content {
   flex: 1;
-  margin-top: spacing.$spacing-12; // Adjusted for header height
   padding: 0;
   background-color: var(--cds-layer-01);
   position: relative;
@@ -66,13 +65,13 @@
 
     @media screen and (min-width: 1055px) {
       padding: 0 2rem; // Add padding back on desktop
+      padding-top: spacing.$spacing-12; // Add top padding for desktop
     }
   }
 }
 
 .cds--auth-features {
   display: none; // Hide by default
-  height: 100%;
   align-items: flex-start;
   justify-content: flex-start;
   background: linear-gradient(

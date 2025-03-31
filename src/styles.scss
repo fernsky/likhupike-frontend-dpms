@@ -14,53 +14,63 @@
 
 // Custom theme variables - Now using official Carbon color tokens
 :root {
-  // Using Carbon's default token values
-  --cds-background: #{colors.$white-0};
-  --cds-background-hover: #{colors.$gray-10};
-  --cds-background-active: #{colors.$gray-20};
-  --cds-background-selected: #{colors.$gray-20};
+  // Background colors - using warmer grays for better visual hierarchy
+  --cds-background: #{colors.$gray-10};
+  --cds-background-hover: #{colors.$gray-20};
+  --cds-background-active: #{colors.$gray-30};
+  --cds-background-selected: #{colors.$blue-10};
 
+  // Text colors - improved contrast
   --cds-text-primary: #{colors.$gray-100};
   --cds-text-secondary: #{colors.$gray-70};
-  --cds-text-placeholder: #{colors.$gray-40};
+  --cds-text-placeholder: #{colors.$gray-50};
   --cds-text-helper: #{colors.$gray-60};
   --cds-text-error: #{colors.$red-60};
 
-  --cds-link-primary: #{colors.$blue-60};
-  --cds-link-primary-hover: #{colors.$blue-70};
+  // Interactive elements - more vibrant blues
+  --cds-interactive-01: #{colors.$blue-60};
+  --cds-interactive-02: #{colors.$blue-70};
+  --cds-interactive-03: #{colors.$blue-50};
+  --cds-interactive-04: #{colors.$blue-40};
 
+  // Layer colors - subtle depth
+  --cds-layer-01: #{colors.$white-0};
+  --cds-layer-02: #{colors.$gray-10};
+  --cds-layer-selected: #{colors.$blue-10};
+  --cds-layer-selected-hover: #{colors.$blue-20};
+  --cds-layer-hover: #{colors.$gray-20};
+
+  // Borders - more defined
   --cds-border-subtle: #{colors.$gray-20};
   --cds-border-strong: #{colors.$gray-50};
 
+  // Field colors
   --cds-field-01: #{colors.$white-0};
   --cds-field-02: #{colors.$gray-10};
+  --cds-field-hover: #{colors.$gray-20};
 
-  --cds-layer-01: #{colors.$white-0};
-  --cds-layer-02: #{colors.$gray-10};
-  --cds-layer-hover: #{colors.$gray-10};
-
-  --cds-interactive-01: #{colors.$blue-60};
-  --cds-interactive-02: #{colors.$gray-80};
-  --cds-interactive-03: #{colors.$blue-60};
-  --cds-interactive-04: #{colors.$blue-60};
-
-  --cds-focus: #{colors.$blue-60};
-
+  // Button colors - more emphasis
   --cds-button-primary: #{colors.$blue-60};
   --cds-button-primary-hover: #{colors.$blue-70};
   --cds-button-secondary: #{colors.$gray-80};
   --cds-button-secondary-hover: #{colors.$gray-90};
 
+  // Support colors - kept vibrant
   --cds-support-error: #{colors.$red-60};
   --cds-support-success: #{colors.$green-50};
   --cds-support-warning: #{colors.$yellow-30};
   --cds-support-info: #{colors.$blue-50};
 
-  // Add inverse theme colors
-  --cds-background-inverse: #{colors.$gray-100};
-  --cds-background-inverse-hover: #{colors.$gray-90};
-  --cds-text-inverse: #{colors.$white-0};
-  --cds-border-inverse: #{colors.$gray-80};
+  // Links - more noticeable
+  --cds-link-01: #{colors.$blue-60};
+  --cds-link-hover: #{colors.$blue-70};
+
+  // Focus states
+  --cds-focus: #{colors.$blue-60};
+
+  // RGB values for potential overlays
+  --cds-interactive-01-rgb: 0, 112, 242;
+  --cds-interactive-02-rgb: 0, 90, 214;
 }
 
 // Add Carbon utility classes
