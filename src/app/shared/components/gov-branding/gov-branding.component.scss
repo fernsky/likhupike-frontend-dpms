@@ -27,6 +27,10 @@
     width: 100%;
     box-sizing: border-box;
     position: relative;
+
+    @media screen and (max-width: 480px) {
+      padding: 0 spacing.$spacing-03; // Less padding
+    }
   }
 
   &__name {
@@ -40,7 +44,7 @@
     transition: all 0.2s cubic-bezier(0.2, 0, 0.38, 0.9);
     background-color: transparent;
     position: relative;
-    min-width: 320px;
+    min-width: auto; // Changed from 320px to auto for mobile
 
     &::after {
       content: "";
@@ -79,6 +83,11 @@
       padding: 0 spacing.$spacing-03;
       min-width: auto;
     }
+
+    @media screen and (max-width: 480px) {
+      padding: 0 spacing.$spacing-03;
+      gap: spacing.$spacing-03;
+    }
   }
 
   &__logo {
@@ -89,6 +98,10 @@
 
     @include breakpoint.breakpoint(sm) {
       height: 1.75rem;
+    }
+
+    @media screen and (max-width: 480px) {
+      height: 1.75rem; // Smaller logo on mobile
     }
   }
 
@@ -109,6 +122,15 @@
 
     @include breakpoint.breakpoint(sm) {
       max-width: 280px;
+    }
+
+    @media screen and (max-width: 768px) {
+      max-width: 280px;
+    }
+
+    @media screen and (max-width: 480px) {
+      max-width: 160px; // Even shorter on mobile
+      font-size: 0.875rem; // Smaller font on mobile
     }
   }
 
@@ -131,5 +153,13 @@
       height: 60%;
       background: var(--cds-border-subtle);
     }
+
+    @media screen and (max-width: 480px) {
+      padding: 0 spacing.$spacing-03; // Less padding on mobile
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    height: 3rem; // Slightly smaller header height
   }
 }

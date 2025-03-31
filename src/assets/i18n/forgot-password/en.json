@@ -5,6 +5,7 @@
     "email": {
       "label": "Email",
       "placeholder": "Enter your email",
+      "helper": "Enter your registered email address",
       "errors": {
         "required": "Email is required",
         "invalid": "Please enter a valid email address"
@@ -13,6 +14,7 @@
     "otp": {
       "label": "OTP Code",
       "placeholder": "Enter 6-digit OTP",
+      "helper": "Enter the 6-digit code sent to your email",
       "errors": {
         "required": "OTP is required",
         "pattern": "Please enter a valid 6-digit OTP"
@@ -21,6 +23,7 @@
     "newPassword": {
       "label": "New Password",
       "placeholder": "Enter new password",
+      "helper": "Enter a new password with at least 8 characters",
       "errors": {
         "required": "Password is required",
         "pattern": "Must contain uppercase, lowercase, number and special character",
@@ -30,6 +33,7 @@
     "confirmPassword": {
       "label": "Confirm Password",
       "placeholder": "Confirm your password",
+      "helper": "Re-enter the same password as above",
       "errors": {
         "required": "Password confirmation is required",
         "mismatch": "Passwords do not match"
@@ -46,5 +50,13 @@
   "messages": {
     "otpSent": "OTP has been sent to your email",
     "passwordReset": "Password reset successful"
+  },
+  "verification": {
+    "sentTo": "OTP sent to:"
+  },
+  "steps": {
+    "email": "Email",
+    "verification": "Verification",
+    "newPassword": "New Password"
   }
 }

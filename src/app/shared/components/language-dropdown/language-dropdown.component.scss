@@ -8,6 +8,28 @@
   align-items: center;
 }
 
+.cds--language-dropdown-container {
+  @media screen and (max-width: 480px) {
+    ::ng-deep {
+      .cds--dropdown__wrapper {
+        min-width: auto;
+      }
+
+      .cds--list-box__field {
+        max-width: 80px; // Compact dropdown on mobile
+        min-width: auto;
+      }
+
+      // Hide dropdown text on very small screens, show only the selected value
+      .cds--list-box__label {
+        max-width: 60px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
+
 // Responsive adjustments
 @include breakpoint.breakpoint(sm) {
   .cds--language-selector {

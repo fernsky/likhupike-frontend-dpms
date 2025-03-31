@@ -44,6 +44,7 @@
   min-height: calc(100vh - 48px); // Adjusted for header height
   display: flex;
   align-items: center;
+  padding-bottom: spacing.$spacing-12;
 
   &::before {
     content: "";
@@ -61,13 +62,17 @@
     width: 100%;
     max-width: calc(1584px - 4rem);
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0; // Remove default padding on mobile
+
+    @media screen and (min-width: 1055px) {
+      padding: 0 2rem; // Add padding back on desktop
+    }
   }
 }
 
 .cds--auth-features {
+  display: none; // Hide by default
   height: 100%;
-  display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   background: linear-gradient(
@@ -80,8 +85,8 @@
   max-width: none;
   box-sizing: border-box;
 
-  @include breakpoint.breakpoint(lg) {
-    display: flex;
+  @media screen and (min-width: 1055px) {
+    display: flex; // Show only above 1055px
     padding: 0;
   }
 }
@@ -92,27 +97,33 @@
   align-items: center;
   height: 100%;
   min-height: auto;
-  padding: spacing.$spacing-07 spacing.$spacing-09;
+  padding: spacing.$spacing-05; // Reduced padding on mobile
   background: transparent;
   position: relative;
   z-index: 1;
   box-sizing: border-box;
+  width: 100%;
   max-width: 100%;
   margin: 0 auto;
 
-  @include breakpoint.breakpoint(md) {
-    padding: spacing.$spacing-07 spacing.$spacing-09;
-    align-items: center;
+  @media screen and (min-width: 672px) {
+    padding: spacing.$spacing-07; // More padding on tablet
   }
 
-  @include breakpoint.breakpoint(lg) {
-    padding-left: spacing.$spacing-11;
+  @media screen and (min-width: 1055px) {
+    width: 50%; // Half width above 1055px
+    padding: spacing.$spacing-07 spacing.$spacing-09;
   }
 }
 
 .cds--auth-form-wrapper {
   width: 100%;
   max-width: 480px;
+  padding: 0 spacing.$spacing-05; // Add some padding to keep content from touching edges on mobile
+
+  @media screen and (min-width: 672px) {
+    padding: 0; // Remove padding on larger screens
+  }
 
   h1 {
     @include type.type-style("heading-05");

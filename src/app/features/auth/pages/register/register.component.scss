@@ -12,31 +12,67 @@
 // Register container with clean Carbon styling
 .cds--register-container {
   width: 100%;
-  max-width: 100%;
+  max-width: 480px;
+  margin: 2rem auto;
   padding: spacing.$spacing-07;
-  background-color: transparent; // Let parent container handle background
-  height: 100%;
+  background: linear-gradient(
+    135deg,
+    var(--cds-background) 0%,
+    var(--cds-layer-01) 100%
+  );
+  border: 1px solid var(--cds-border-subtle);
+  border-radius: 4px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
 
-  @include breakpoint.breakpoint(md) {
-    padding: spacing.$spacing-06;
-  }
-
-  @include breakpoint.breakpoint(sm) {
-    padding: spacing.$spacing-05;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      var(--cds-interactive-01),
+      var(--cds-interactive-02)
+    );
   }
 
   h1 {
-    color: var(--cds-text-01);
-    margin-bottom: spacing.$spacing-03;
+    @include type.type-style("heading-05");
+    color: var(--cds-text-primary);
+    margin-bottom: spacing.$spacing-05;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    position: relative;
+    display: inline-block;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 4px;
+      background: linear-gradient(
+        90deg,
+        var(--cds-interactive-01),
+        var(--cds-interactive-02)
+      );
+      border-radius: 2px;
+    }
   }
 
   .cds--register-subtitle {
-    color: var(--cds-text-02);
+    @include type.type-style("body-long-02");
+    color: var(--cds-text-secondary);
     margin-bottom: spacing.$spacing-07;
-
-    @include breakpoint.breakpoint(md) {
-      margin-bottom: spacing.$spacing-06;
-    }
+    opacity: 0.9;
+    max-width: 90%;
+    line-height: 1.5;
   }
 }
 
@@ -104,17 +140,36 @@
 .cds--ward-level-section {
   margin: spacing.$spacing-05 0;
   padding: spacing.$spacing-05;
-  background-color: var(--cds-layer-01);
+  background: linear-gradient(
+    135deg,
+    var(--cds-layer-01) 0%,
+    var(--cds-background) 100%
+  );
+  border: 1px solid var(--cds-border-subtle);
+  border-radius: 4px;
   position: relative;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
 
   &::before {
     content: "";
     position: absolute;
     top: 0;
-    bottom: 0;
-    left: -16px;
-    width: 4px;
-    background-color: var(--cds-interactive-04);
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(
+      180deg,
+      var(--cds-interactive-01),
+      var(--cds-interactive-02)
+    );
+    border-radius: 2px;
   }
 
   // Proper spacing of checkbox
@@ -160,7 +215,8 @@
 
 // Error notification styling
 .cds--register-error {
-  margin: spacing.$spacing-05 0 spacing.$spacing-06;
+  margin: spacing.$spacing-05 0;
+  animation: slideIn 0.3s cubic-bezier(0.2, 0, 0.38, 0.9);
 
   // Improve notification appearance
   .cds--inline-notification {
@@ -185,7 +241,33 @@
 
   button {
     width: 100%;
-    min-height: 48px; // Taller button for better UX
+    min-height: 48px;
+    border: none;
+    transition: all 0.3s cubic-bezier(0.2, 0, 0.38, 0.9);
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        circle at 50% 0%,
+        rgba(255, 255, 255, 0.2),
+        transparent 70%
+      );
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    &:hover:not([disabled]) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+
+      &::after {
+        opacity: 1;
+      }
+    }
 
     .cds--btn__icon {
       margin-right: spacing.$spacing-03;
@@ -204,8 +286,9 @@
 // Footer links styling
 .cds--register-footer {
   margin-top: spacing.$spacing-07;
+  padding-top: spacing.$spacing-05;
   border-top: 1px solid var(--cds-border-subtle);
-  padding-top: spacing.$spacing-06;
+  text-align: center;
 
   .cds--have-account-link {
     display: flex;
@@ -215,11 +298,36 @@
     color: var(--cds-text-02);
 
     a {
+      position: relative;
       color: var(--cds-link-01);
       text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          var(--cds-interactive-01),
+          var(--cds-interactive-02)
+        );
+        transform: scaleX(0);
+        transition: transform 0.2s ease;
+        transform-origin: right;
+      }
 
       &:hover {
-        text-decoration: underline;
+        color: var(--cds-link-hover);
+
+        &::after {
+          transform: scaleX(1);
+          transform-origin: left;
+        }
       }
     }
   }
@@ -274,4 +382,15 @@ button[cdsButton] {
 
 ::ng-deep .cds--form__helper-text {
   color: var(--cds-text-helper); // Use text-helper token for helper text
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
