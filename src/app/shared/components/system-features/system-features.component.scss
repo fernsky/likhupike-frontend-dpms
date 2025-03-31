@@ -49,6 +49,11 @@
     &:hover {
       transform: translateX(spacing.$spacing-02);
     }
+
+    .mat-icon {
+      width: 40px;
+      height: 100%;
+    }
   }
 
   .cds--feature-icon {
