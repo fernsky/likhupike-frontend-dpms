@@ -3,6 +3,7 @@
   "subtitle": "Join us to access municipal services",
   "fields": {
     "email": {
+      "helper": "We'll use this email for account verification",
       "label": "Email Address",
       "placeholder": "Enter your email address",
       "errors": {
@@ -11,6 +12,7 @@
       }
     },
     "password": {
+      "helper": "Use at least 8 characters with uppercase, lowercase, numbers and special characters",
       "label": "Password",
       "placeholder": "Create a secure password",
       "errors": {
@@ -20,6 +22,7 @@
       }
     },
     "confirmPassword": {
+      "helper": "Re-enter your password to confirm",
       "label": "Confirm Password",
       "placeholder": "Confirm your password",
       "errors": {
@@ -28,8 +31,10 @@
       }
     },
     "wardLevel": {
-      "label": "I am a ward level user.",
+      "label": "I am a ward level user",
+      "helper": "Select this if you are a ward level representative",
       "wardNumber": {
+        "helper": "Select the ward you represent",
         "label": "Ward Number",
         "placeholder": "Select your ward",
         "prefix": "Ward",

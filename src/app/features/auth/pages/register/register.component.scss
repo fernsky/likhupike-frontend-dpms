@@ -1,164 +1,277 @@
-:host {
-  --primary-dark: #0b1f42;
-  --primary-main: #123772;
-  --primary-light: #1a4894;
-}
+@use "@carbon/styles/scss/spacing" as spacing;
+@use "@carbon/styles/scss/type" as type;
+@use "@carbon/styles/scss/breakpoint" as breakpoint;
+@use "@carbon/styles/scss/theme" as theme;
+@use "@carbon/styles/scss/motion" as motion;
+@use "@carbon/styles/scss/components/form" as form;
+@use "@carbon/styles/scss/components/button" as button;
+@use "@carbon/styles/scss/components/notification" as notification;
+@use "@carbon/styles/scss/components/checkbox" as checkbox;
+@use "@carbon/styles/scss/components/dropdown" as dropdown;
 
-.register-form {
-  padding: 2.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-
-  mat-form-field {
-    width: 100%;
-
-    mat-icon {
-      color: #546e7a;
-    }
-  }
-}
-
-.ward-level-section {
-  margin: 0.75rem 0;
-  padding: 0.75rem;
-  background: rgba(18, 55, 114, 0.02);
-  border-radius: 8px;
-
-  mat-checkbox {
-    margin: 0;
-    color: var(--primary-dark);
-    font-weight: 500;
-    font-size: 0.95rem;
-  }
-
-  mat-form-field {
-    margin-top: 0.75rem;
-  }
-}
-
-.form-error {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #ef4444;
-  font-size: 0.875rem;
-  padding: 0.75rem;
-  border-radius: 8px;
-  background: rgba(239, 68, 68, 0.1);
-
-  mat-icon {
-    font-size: 20px;
-    height: 20px;
-    width: 20px;
-  }
-}
-
-.form-navigation {
-  margin-top: 1rem;
+// Register container with clean Carbon styling
+.cds--register-container {
   width: 100%;
+  max-width: 100%;
+  padding: spacing.$spacing-07;
+  background-color: transparent; // Let parent container handle background
+  height: 100%;
 
-  .submit-btn {
-    width: 100%;
-    height: 48px;
-    font-size: 1rem;
-    font-weight: 500;
-    border-radius: 24px;
-    background: rgba(18, 55, 114, 0.98) !important;
-    color: white !important;
-    box-shadow: 0 2px 6px rgba(11, 31, 66, 0.12) !important;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  @include breakpoint.breakpoint(md) {
+    padding: spacing.$spacing-06;
+  }
+
+  @include breakpoint.breakpoint(sm) {
+    padding: spacing.$spacing-05;
+  }
+
+  h1 {
+    color: var(--cds-text-01);
+    margin-bottom: spacing.$spacing-03;
+  }
+
+  .cds--register-subtitle {
+    color: var(--cds-text-02);
+    margin-bottom: spacing.$spacing-07;
+
+    @include breakpoint.breakpoint(md) {
+      margin-bottom: spacing.$spacing-06;
+    }
+  }
+}
+
+// Form styling with Carbon tokens
+.cds--form {
+  max-width: 100%;
+
+  // Adjust spacing between form items
+  .cds--form-item {
+    margin-bottom: spacing.$spacing-06;
+
+    @include breakpoint.breakpoint(md) {
+      margin-bottom: spacing.$spacing-05;
+    }
+
+    // Improve spacing for nested form items
+    .cds--form-item {
+      margin-bottom: spacing.$spacing-03;
+    }
+  }
+
+  // Input field wrapper styling - matched with other components
+  .cds--text-input__field-wrapper {
     position: relative;
-    overflow: hidden;
 
-    &::before {
-      content: "";
+    .cds--text-input__icon.mat-icon {
       position: absolute;
-      top: 0;
-      left: 0;
+      left: spacing.$spacing-04;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--cds-text-03); // Use text-03 for subtle icon color
+      font-size: 20px;
+      height: 20px;
+      width: 20px;
+    }
+
+    // Add padding for the icon and consistent height
+    input[cdsText] {
+      padding-left: spacing.$spacing-08;
+      height: spacing.$spacing-09;
+      color: var(--cds-text-01); // Ensure input text has proper color
+    }
+
+    // Password visibility toggle button
+    .cds--text-input__password-visibility-toggle {
+      position: absolute;
       right: 0;
-      bottom: 0;
-      background: linear-gradient(
-        160deg,
-        rgba(11, 31, 66, 0.1) 0%,
-        rgba(18, 55, 114, 0.1) 50%,
-        rgba(26, 72, 148, 0.1) 100%
-      );
-      opacity: 0;
-      transition: opacity 0.05s ease;
-    }
-
-    &:hover:not(:disabled) {
-      transform: translateY(-2px) scale(1.01);
-      background: rgba(18, 55, 114, 1) !important;
-      box-shadow: 0 4px 12px rgba(11, 31, 66, 0.15) !important;
-
-      &::before {
-        opacity: 1;
-      }
-    }
-
-    &:active:not(:disabled) {
-      transform: translateY(0) scale(0.99);
-      transition-duration: 0.05s;
-    }
-
-    &:disabled {
-      background: rgba(224, 224, 224, 0.95) !important;
-      color: rgba(158, 158, 158, 0.8) !important;
-      box-shadow: none !important;
-      transform: none;
-    }
-
-    .submit-content {
+      top: 0;
+      height: 100%;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      font-size: 1rem;
-      font-weight: 500;
-      position: relative;
-      z-index: 1;
+      padding: 0 spacing.$spacing-04;
+
+      .mat-icon {
+        color: var(--cds-text-03);
+        font-size: 20px;
+        height: 20px;
+        width: 20px;
+      }
     }
   }
 }
 
+// Ward level section styling - using Carbon layering
+.cds--ward-level-section {
+  margin: spacing.$spacing-05 0;
+  padding: spacing.$spacing-05;
+  background-color: var(--cds-layer-01);
+  position: relative;
 
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -16px;
+    width: 4px;
+    background-color: var(--cds-interactive-04);
+  }
 
-.have-account-link {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.3rem;
+  // Proper spacing of checkbox
+  cds-checkbox {
+    display: block;
+    margin-bottom: spacing.$spacing-05;
+
+    .cds--checkbox-label {
+      display: flex;
+      align-items: center;
+    }
+
+    .cds--checkbox-label-text {
+      padding-left: spacing.$spacing-03;
+      color: var(--cds-text-01); // Use text-01 for checkbox label
+    }
+  }
+
+  // Dropdown styling and spacing
+  cds-dropdown {
+    width: 100%;
+    display: block;
+    margin-top: spacing.$spacing-03;
+
+    // Reset the dropdown button width
+    ::ng-deep .cds--list-box__field {
+      width: 100%;
+    }
+  }
+
+  // Helper text styling
+  .cds--form__helper-text {
+    margin-top: spacing.$spacing-03;
+    font-size: 0.75rem;
+    line-height: 1.34;
+    color: var(--cds-text-helper);
+  }
+
+  @include breakpoint.breakpoint(md) {
+    padding: spacing.$spacing-04;
+  }
 }
 
-@media (max-width: 480px) {
-  .register-form {
-    padding: 1.5rem;
+// Error notification styling
+.cds--register-error {
+  margin: spacing.$spacing-05 0 spacing.$spacing-06;
+
+  // Improve notification appearance
+  .cds--inline-notification {
+    width: 100%;
+    max-width: 100%;
+    text-align: left;
   }
 
-  .form-navigation .submit-btn {
-    height: 44px;
+  .cds--inline-notification__details {
+    margin: spacing.$spacing-03;
+  }
 
-    .submit-content {
-      font-size: 0.875rem;
+  .cds--inline-notification__icon {
+    margin-right: spacing.$spacing-04;
+    color: var(--cds-support-01); // Carbon's error color
+  }
+}
+
+// Submit button container
+.cds--register-submit {
+  margin-top: spacing.$spacing-07;
+
+  button {
+    width: 100%;
+    min-height: 48px; // Taller button for better UX
+
+    .cds--btn__icon {
+      margin-right: spacing.$spacing-03;
+      display: flex;
+      align-items: center;
+
+      .mat-icon {
+        font-size: 20px;
+        height: 20px;
+        width: 20px;
+      }
     }
   }
+}
 
-  .form-footer {
-    margin-top: 1.5rem;
-    padding-top: 1rem;
+// Footer links styling
+.cds--register-footer {
+  margin-top: spacing.$spacing-07;
+  border-top: 1px solid var(--cds-border-subtle);
+  padding-top: spacing.$spacing-06;
+
+  .cds--have-account-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: spacing.$spacing-03;
+    color: var(--cds-text-02);
+
+    a {
+      color: var(--cds-link-01);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Button specific styles - fix for rgb(15, 98, 254) issue
+button[cdsButton] {
+  // Ensure the button uses Carbon token, not hard-coded colors
+  &:not([disabled]) {
+    background-color: var(
+      --cds-button-primary
+    ) !important; // Use button-primary token
+    color: var(--cds-text-on-color) !important; // Use text-on-color token
   }
 
-  mat-card-header {
-    padding: 2rem 1.5rem 1rem;
+  &:hover:not([disabled]) {
+    background-color: var(
+      --cds-button-primary-hover
+    ) !important; // Use hover token
+  }
 
-    mat-card-title {
-      font-size: 1.75rem;
-    }
+  // For ghost buttons used in password visibility
+  &[cdsButton="ghost"] {
+    background-color: transparent !important;
+    color: var(--cds-link-01) !important;
 
-    mat-card-subtitle {
-      font-size: 1rem;
+    &:hover {
+      background-color: var(--cds-hover-ui) !important;
     }
   }
+}
+
+// Checkbox styling
+::ng-deep cds-checkbox .cds--checkbox-label::before {
+  border-color: var(--cds-ui-04) !important; // More visible border
+}
+
+::ng-deep cds-checkbox input:checked ~ .cds--checkbox-label::before {
+  background-color: var(--cds-button-primary) !important;
+  border-color: var(--cds-button-primary) !important;
+}
+
+::ng-deep cds-checkbox .cds--checkbox-label-text {
+  color: var(--cds-text-01) !important; // More readable label text
+}
+
+// Override Carbon form label styling for better readability
+::ng-deep cds-label .cds--label {
+  color: var(--cds-label-01); // Use label-01 token for better contrast
+  font-weight: 500; // Medium weight for better readability
+}
+
+::ng-deep .cds--form__helper-text {
+  color: var(--cds-text-helper); // Use text-helper token for helper text
 }

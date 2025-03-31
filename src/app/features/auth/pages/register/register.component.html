@@ -1,132 +1,253 @@
-<mat-card-header>
-  <mat-card-title>{{ "register.title" | transloco }}</mat-card-title>
-  <mat-card-subtitle>{{ "register.subtitle" | transloco }}</mat-card-subtitle>
-</mat-card-header>
+<div class="cds--register-container">
+  <h1 class="cds--type-productive-heading-04">
+    {{ "register.title" | transloco }}
+  </h1>
+  <p class="cds--type-body-long-01 cds--register-subtitle">
+    {{ "register.subtitle" | transloco }}
+  </p>
 
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
-  <mat-form-field appearance="outline">
-    <mat-label>{{ "register.fields.email.label" | transloco }}</mat-label>
-    <input
-      matInput
-      formControlName="email"
-      type="email"
-      [placeholder]="'register.fields.email.placeholder' | transloco"
-    />
-    <mat-icon matPrefix>email</mat-icon>
-    <mat-error *ngIf="registerForm.get('email')?.hasError('required')">
-      {{ "register.fields.email.errors.required" | transloco }}
-    </mat-error>
-    <mat-error *ngIf="registerForm.get('email')?.hasError('email')">
-      {{ "register.fields.email.errors.invalid" | transloco }}
-    </mat-error>
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>{{ "register.fields.password.label" | transloco }}</mat-label>
-    <input
-      matInput
-      formControlName="password"
-      [type]="hidePassword ? 'password' : 'text'"
-      [placeholder]="'register.fields.password.placeholder' | transloco"
-    />
-    <mat-icon matPrefix>lock</mat-icon>
-    <button
-      mat-icon-button
-      matSuffix
-      type="button"
-      (click)="hidePassword = !hidePassword"
-    >
-      <mat-icon>{{ hidePassword ? "visibility_off" : "visibility" }}</mat-icon>
-    </button>
-    <mat-error *ngIf="registerForm.get('password')?.hasError('pattern')">
-      {{ "register.fields.password.errors.pattern" | transloco }}
-    </mat-error>
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>{{
-      "register.fields.confirmPassword.label" | transloco
-    }}</mat-label>
-    <input
-      matInput
-      formControlName="confirmPassword"
-      [type]="hideConfirmPassword ? 'password' : 'text'"
-      [placeholder]="'register.fields.confirmPassword.placeholder' | transloco"
-    />
-    <mat-icon matPrefix>lock_clock</mat-icon>
-    <button
-      mat-icon-button
-      matSuffix
-      type="button"
-      (click)="hideConfirmPassword = !hideConfirmPassword"
-    >
-      <mat-icon>{{
-        hideConfirmPassword ? "visibility_off" : "visibility"
-      }}</mat-icon>
-    </button>
-    <mat-error *ngIf="registerForm.hasError('passwordMismatch')">
-      {{ "register.fields.confirmPassword.errors.mismatch" | transloco }}
-    </mat-error>
-  </mat-form-field>
-
-  <div class="ward-level-section">
-    <mat-checkbox formControlName="isWardLevelUser" class="ward-level-label">
-      {{ "register.fields.wardLevel.label" | transloco }}
-    </mat-checkbox>
-
-    <mat-form-field
-      appearance="outline"
-      *ngIf="registerForm.get('isWardLevelUser')?.value"
-    >
-      <mat-label>{{
-        "register.fields.wardLevel.wardNumber.label" | transloco
-      }}</mat-label>
-      <mat-select formControlName="wardNumber">
-        <mat-option *ngFor="let number of wardNumbers" [value]="number">
-          {{ "register.fields.wardLevel.wardNumber.prefix" | transloco }}
-          {{ getFormattedWardNumber(number) }}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="registerForm.hasError('wardNumberRequired')">
-        {{ "register.fields.wardLevel.wardNumber.errors.required" | transloco }}
-      </mat-error>
-    </mat-form-field>
-  </div>
-
-  <div
-    class="form-error"
-    *ngIf="registerForm.errors?.['serverError'] || apiError$ | async as error"
-  >
-    <mat-icon>error_outline</mat-icon>
-    <span>{{ registerForm.errors?.["serverError"] || error }}</span>
-  </div>
-
-  <div class="form-navigation">
-    <button
-      mat-flat-button
-      color="primary"
-      type="submit"
-      class="submit-btn"
-      [disabled]="registerForm.invalid || (loading$ | async)"
-    >
-      <span class="submit-content">
-        <mat-icon>how_to_reg</mat-icon>
-        <ng-container *ngIf="loading$ | async; else submitText">
-          {{ "register.actions.submitting" | transloco }}
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="cds--form">
+    <!-- Email Input -->
+    <div class="cds--form-item">
+      <cds-label [helperText]="'register.fields.email.helper' | transloco">
+        {{ "register.fields.email.label" | transloco }}
+      </cds-label>
+      <div
+        class="cds--text-input__field-wrapper cds--text-input__field-wrapper--with-icons"
+      >
+        <mat-icon class="cds--text-input__icon mat-icon">email</mat-icon>
+        <input
+          cdsText
+          [placeholder]="'register.fields.email.placeholder' | transloco"
+          formControlName="email"
+          type="email"
+          [invalid]="
+            (registerForm.get('email')?.invalid &&
+              registerForm.get('email')?.touched) ??
+            false
+          "
+          [attr.data-invalid]="
+            registerForm.get('email')?.invalid &&
+            registerForm.get('email')?.touched
+          "
+          aria-controls="email-error-msg"
+        />
+      </div>
+      <div
+        *ngIf="
+          registerForm.get('email')?.invalid &&
+          registerForm.get('email')?.touched
+        "
+        class="cds--form-requirement"
+        id="email-error-msg"
+      >
+        <ng-container *ngIf="registerForm.get('email')?.hasError('required')">
+          {{ "register.fields.email.errors.required" | transloco }}
         </ng-container>
-        <ng-template #submitText>
-          {{ "register.actions.submit" | transloco }}
-        </ng-template>
-      </span>
-    </button>
-  </div>
-
-  <div class="form-footer">
-    <div class="have-account-link">
-      <span>{{ "register.actions.haveAccount" | transloco }}</span>
-      <a mat-button color="primary" routerLink="/auth/login">
-        {{ "register.actions.login" | transloco }}
-      </a>
+        <ng-container *ngIf="registerForm.get('email')?.hasError('email')">
+          {{ "register.fields.email.errors.invalid" | transloco }}
+        </ng-container>
+      </div>
     </div>
-  </div>
-</form>
+
+    <!-- Password Input -->
+    <div class="cds--form-item">
+      <cds-label [helperText]="'register.fields.password.helper' | transloco">
+        {{ "register.fields.password.label" | transloco }}
+      </cds-label>
+      <div
+        class="cds--text-input__field-wrapper cds--text-input__field-wrapper--with-icons"
+      >
+        <mat-icon class="cds--text-input__icon mat-icon">lock</mat-icon>
+        <input
+          cdsText
+          [placeholder]="'register.fields.password.placeholder' | transloco"
+          formControlName="password"
+          [type]="hidePassword ? 'password' : 'text'"
+          [invalid]="
+            (registerForm.get('password')?.invalid &&
+              registerForm.get('password')?.touched) ??
+            false
+          "
+          [attr.data-invalid]="
+            registerForm.get('password')?.invalid &&
+            registerForm.get('password')?.touched
+          "
+          aria-controls="password-error-msg"
+        />
+        <button
+          cdsButton="ghost"
+          size="sm"
+          class="cds--text-input__password-visibility-toggle"
+          type="button"
+          (click)="togglePasswordVisibility('password')"
+          [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+        >
+          <mat-icon>{{
+            hidePassword ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+      </div>
+      <div
+        *ngIf="
+          registerForm.get('password')?.invalid &&
+          registerForm.get('password')?.touched
+        "
+        class="cds--form-requirement"
+        id="password-error-msg"
+      >
+        <ng-container *ngIf="registerForm.get('password')?.hasError('pattern')">
+          {{ "register.fields.password.errors.pattern" | transloco }}
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- Confirm Password Input -->
+    <div class="cds--form-item">
+      <cds-label
+        [helperText]="'register.fields.confirmPassword.helper' | transloco"
+      >
+        {{ "register.fields.confirmPassword.label" | transloco }}
+      </cds-label>
+      <div
+        class="cds--text-input__field-wrapper cds--text-input__field-wrapper--with-icons"
+      >
+        <mat-icon class="cds--text-input__icon mat-icon">lock_clock</mat-icon>
+        <input
+          cdsText
+          [placeholder]="
+            'register.fields.confirmPassword.placeholder' | transloco
+          "
+          formControlName="confirmPassword"
+          [type]="hideConfirmPassword ? 'password' : 'text'"
+          [invalid]="
+            ((registerForm.get('confirmPassword')?.invalid &&
+              registerForm.get('confirmPassword')?.touched) ||
+              (registerForm.hasError('passwordMismatch') &&
+                registerForm.get('confirmPassword')?.touched)) ??
+            false
+          "
+          [attr.data-invalid]="
+            (registerForm.get('confirmPassword')?.invalid &&
+              registerForm.get('confirmPassword')?.touched) ||
+            (registerForm.hasError('passwordMismatch') &&
+              registerForm.get('confirmPassword')?.touched)
+          "
+          aria-controls="confirm-password-error-msg"
+        />
+        <button
+          cdsButton="ghost"
+          size="sm"
+          class="cds--text-input__password-visibility-toggle"
+          type="button"
+          (click)="togglePasswordVisibility('confirm')"
+          [attr.aria-label]="
+            hideConfirmPassword ? 'Show password' : 'Hide password'
+          "
+        >
+          <mat-icon>{{
+            hideConfirmPassword ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+      </div>
+      <div
+        *ngIf="
+          (registerForm.hasError('passwordMismatch') &&
+            registerForm.get('confirmPassword')?.touched) ||
+          (registerForm.get('confirmPassword')?.invalid &&
+            registerForm.get('confirmPassword')?.touched)
+        "
+        class="cds--form-requirement"
+        id="confirm-password-error-msg"
+      >
+        <ng-container *ngIf="registerForm.hasError('passwordMismatch')">
+          {{ "register.fields.confirmPassword.errors.mismatch" | transloco }}
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- Ward Level Section -->
+    <div class="cds--ward-level-section">
+      <cds-checkbox formControlName="isWardLevelUser" [hideLabel]="false">
+        {{ "register.fields.wardLevel.label" | transloco }}
+      </cds-checkbox>
+
+      <div *ngIf="registerForm.get('isWardLevelUser')?.value">
+        <cds-label
+          [helperText]="
+            'register.fields.wardLevel.wardNumber.helper' | transloco
+          "
+        >
+          {{ "register.fields.wardLevel.wardNumber.label" | transloco }}
+        </cds-label>
+        <cds-dropdown
+          formControlName="wardNumber"
+          [placeholder]="
+            'register.fields.wardLevel.wardNumber.placeholder' | transloco
+          "
+        >
+          <cds-dropdown-list [items]="wardNumbers"></cds-dropdown-list>
+        </cds-dropdown>
+        <div
+          *ngIf="
+            registerForm.hasError('wardNumberRequired') &&
+            registerForm.get('wardNumber')?.touched
+          "
+          class="cds--form-requirement"
+        >
+          {{
+            "register.fields.wardLevel.wardNumber.errors.required" | transloco
+          }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Error Display -->
+    <div
+      *ngIf="
+        registerForm.errors?.['serverError'] || (apiError$ | async) as error
+      "
+      class="cds--register-error"
+    >
+      <div class="cds--inline-notification cds--inline-notification--error">
+        <div class="cds--inline-notification__details">
+          <mat-icon class="cds--inline-notification__icon">error</mat-icon>
+          <div class="cds--inline-notification__text-wrapper">
+            <div class="cds--inline-notification__title">Error</div>
+            <div class="cds--inline-notification__subtitle">
+              {{ registerForm.errors?.["serverError"] || error }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="cds--form-item cds--register-submit">
+      <button
+        cdsButton
+        type="submit"
+        [disabled]="registerForm.invalid || (loading$ | async)"
+      >
+        <span class="cds--btn__icon">
+          <mat-icon>how_to_reg</mat-icon>
+        </span>
+        {{
+          (loading$ | async)
+            ? ("register.actions.submitting" | transloco)
+            : ("register.actions.submit" | transloco)
+        }}
+      </button>
+    </div>
+
+    <!-- Footer Links -->
+    <div class="cds--register-footer">
+      <div class="cds--have-account-link">
+        <span>{{ "register.actions.haveAccount" | transloco }}</span>
+        <a cdsLink routerLink="/auth/login">
+          {{ "register.actions.login" | transloco }}
+        </a>
+      </div>
+    </div>
+  </form>
+</div>
