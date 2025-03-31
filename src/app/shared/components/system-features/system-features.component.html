@@ -1,24 +1,38 @@
-<div class="features-container">
-  <h2>{{ "systemFeatures.title" | transloco }}</h2>
-  <p class="subtitle">
+<div class="cds--features-container">
+  <h2 class="cds--type-productive-heading-04">
+    {{ "systemFeatures.title" | transloco }}
+  </h2>
+  <p class="cds--type-body-long-01 cds--features-subtitle">
     {{ "systemFeatures.subtitle" | transloco }}
   </p>
 
-  <div class="features-grid">
-    <div class="feature-card" *ngFor="let feature of features">
-      <mat-icon [fontIcon]="feature.icon"></mat-icon>
-      <h3>
-        {{
-          "systemFeatures.features." + feature.translationKey + ".title"
-            | transloco
-        }}
-      </h3>
-      <p>
-        {{
-          "systemFeatures.features." + feature.translationKey + ".description"
-            | transloco
-        }}
-      </p>
+  <div class="cds--grid">
+    <div class="cds--row cds--features-grid">
+      <div
+        class="cds--col-sm-4 cds--col-md-4 cds--col-lg-4"
+        *ngFor="let feature of features"
+      >
+        <cds-clickable-tile class="cds--feature-card">
+          <!-- Simple Material icon -->
+          <mat-icon
+            class="cds--feature-icon"
+            [fontIcon]="feature.icon"
+          ></mat-icon>
+          <h3 class="cds--type-productive-heading-02">
+            {{
+              "systemFeatures.features." + feature.translationKey + ".title"
+                | transloco
+            }}
+          </h3>
+          <p class="cds--type-body-short-01">
+            {{
+              "systemFeatures.features." +
+                feature.translationKey +
+                ".description" | transloco
+            }}
+          </p>
+        </cds-clickable-tile>
+      </div>
     </div>
   </div>
 </div>

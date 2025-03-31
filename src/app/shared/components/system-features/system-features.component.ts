@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
+import { TilesModule, GridModule } from 'carbon-components-angular';
+import { MatIconModule } from '@angular/material/icon';
 
 interface Feature {
   icon: string;
@@ -14,7 +15,14 @@ interface Feature {
   templateUrl: './system-features.component.html',
   styleUrls: ['./system-features.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatIconModule, TranslocoPipe, TranslocoModule],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    TranslocoPipe,
+    TranslocoModule,
+    TilesModule,
+    GridModule,
+  ],
   providers: [
     provideTranslocoScope({
       scope: 'system-features',
