@@ -2,12 +2,14 @@
   "change": "भाषा परिवर्तन गर्नुहोस्",
   "selectLanguage": "भाषा चयन गर्नुहोस्",
   "en": {
-    "name": "English",
-    "localName": "English"
+    "name": "अंग्रेजी",
+    "localName": "English",
+    "flag": "🇺🇸"
   },
   "ne": {
-    "name": "Nepali",
-    "localName": "नेपाली"
+    "name": "नेपाली",
+    "localName": "नेपाली",
+    "flag": "🇳🇵"
   },
   "chooseLanguage": "Choose Language",
   "selectLanguageAria": "Select language"

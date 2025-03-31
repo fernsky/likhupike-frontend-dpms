@@ -1,0 +1,101 @@
+@use "@carbon/styles/scss/spacing" as spacing;
+@use "@carbon/styles/scss/type" as type;
+@use "@carbon/styles/scss/breakpoint" as breakpoint;
+@use "@carbon/styles/scss/motion" as motion;
+
+:host {
+  display: flex;
+  align-items: center;
+}
+
+.cds--language-dropdown-container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.cds--language-selector {
+  min-width: 100px;
+  max-height: 32px;
+
+  ::ng-deep {
+    // Field styling
+    .cds--list-box__field {
+      height: 32px;
+      color: var(--cds-text-04);
+      border-color: transparent;
+      background-color: rgba(255, 255, 255, 0.1); // Semi-transparent background
+      border-radius: 4px;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    // Dropdown icon
+    .cds--list-box__menu-icon {
+      padding-right: 0;
+      fill: var(--cds-text-04);
+
+      svg {
+        fill: var(--cds-text-04);
+      }
+    }
+
+    // Dropdown menu
+    .cds--list-box__menu {
+      background-color: var(--cds-field-01);
+      color: var(--cds-text-01);
+      border-radius: 0 0 4px 4px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    // Menu items
+    .cds--list-box__menu-item {
+      color: var(--cds-text-01);
+      height: 40px;
+
+      &:hover {
+        background-color: var(--cds-hover-ui);
+      }
+
+      &__selected-icon {
+        fill: var(--cds-interactive-01);
+      }
+    }
+
+    // Selection text
+    .cds--list-box__selection {
+      color: var(--cds-text-04);
+    }
+
+    // Label styling
+    .cds--list-box__label {
+      color: var(--cds-text-04);
+      font-weight: 400;
+      @include type.type-style("body-compact-01");
+    }
+  }
+}
+
+// Modify when used in a dark header
+:host(.header-language-dropdown) {
+  .cds--language-selector {
+    ::ng-deep {
+      .cds--list-box__field {
+        background-color: rgba(255, 255, 255, 0.1);
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@include breakpoint.breakpoint(sm) {
+  .cds--language-selector {
+    min-width: 70px;
+  }
+}

@@ -1,11 +1,13 @@
 {
   "en": {
     "name": "English",
-    "localName": "English"
+    "localName": "English",
+    "flag": "🇺🇸"
   },
   "ne": {
     "name": "Nepali",
-    "localName": "नेपाली"
+    "localName": "नेपाली",
+    "flag": "🇳🇵"
   },
   "chooseLanguage": "Choose Language",
   "selectLanguageAria": "Select language"

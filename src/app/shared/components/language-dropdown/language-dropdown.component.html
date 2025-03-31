@@ -1,0 +1,18 @@
+<div
+  class="cds--language-dropdown-container"
+  *ngIf="currentLanguage$ | async as currentLanguage"
+>
+  <cds-dropdown
+    [displayValue]="currentLanguage.localName"
+    class="cds--language-selector"
+    [attr.aria-label]="'languages.selectLanguageAria' | transloco"
+    size="sm"
+  >
+    <cds-dropdown-list
+      [items]="languageItems"
+      (selected)="onLanguageSelected($event)"
+      [type]="'single'"
+    >
+    </cds-dropdown-list>
+  </cds-dropdown>
+</div>
