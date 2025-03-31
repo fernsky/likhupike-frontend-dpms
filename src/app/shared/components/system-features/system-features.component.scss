@@ -5,25 +5,22 @@
 @use "@carbon/styles/scss/motion" as motion;
 
 .cds--features-container {
-  color: var(--cds-text-inverse);
-  padding: spacing.$spacing-07;
+  color: var(--cds-text-01);
+  padding: spacing.$spacing-09;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   @include breakpoint.breakpoint(md) {
-    padding: spacing.$spacing-06;
-  }
-
-  @include breakpoint.breakpoint(sm) {
-    padding: spacing.$spacing-05;
+    padding: spacing.$spacing-07;
   }
 }
 
 .cds--features-subtitle {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--cds-text-02);
   margin-bottom: spacing.$spacing-07;
-
-  @include breakpoint.breakpoint(md) {
-    margin-bottom: spacing.$spacing-06;
-  }
+  max-width: 40ch;
 }
 
 .cds--features-grid {
@@ -35,15 +32,19 @@
   }
 }
 
-// Custom styling for Carbon tiles to match the desired design
+// Carbon tile styling - cleaner without borders
 .cds--feature-card {
+  background-color: transparent !important;
+  border: none !important;
+  padding: spacing.$spacing-05 !important;
+  color: var(--cds-text-01) !important;
+
   .cds--feature-icon {
     width: spacing.$spacing-07;
     height: spacing.$spacing-07;
     margin-bottom: spacing.$spacing-05;
-    fill: var(--cds-text-inverse);
-    flex-shrink: 0;
-    font-size: spacing.$spacing-07; // For Material icons
+    color: var(--cds-interactive-01); // Highlight the icon with brand color
+    font-size: spacing.$spacing-07;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -53,41 +54,21 @@
   h3 {
     @include type.type-style("productive-heading-02");
     margin-bottom: spacing.$spacing-03;
-    color: var(--cds-text-inverse);
+    color: var(--cds-text-01);
   }
 
   p {
     @include type.type-style("body-short-01");
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--cds-text-02);
     margin: 0;
     flex-grow: 1;
   }
 
-  // Responsive adjustments
-  @include breakpoint.breakpoint(md) {
-    padding: spacing.$spacing-05 !important;
+  // Add subtle hover effect
+  transition: transform motion.$duration-moderate-01 motion.$standard-easing;
 
-    .cds--feature-icon {
-      width: spacing.$spacing-06;
-      height: spacing.$spacing-06;
-      margin-bottom: spacing.$spacing-04;
-      font-size: spacing.$spacing-06; // For Material icons
-    }
-  }
-
-  @include breakpoint.breakpoint(sm) {
-    padding: spacing.$spacing-04 !important;
-
-    .cds--feature-icon {
-      width: spacing.$spacing-05;
-      height: spacing.$spacing-05;
-      margin-bottom: spacing.$spacing-03;
-      font-size: spacing.$spacing-05; // For Material icons
-    }
-
-    h3 {
-      @include type.type-style("productive-heading-01");
-      margin-bottom: spacing.$spacing-02;
-    }
+  &:hover {
+    background-color: transparent !important;
+    transform: translateY(-4px);
   }
 }

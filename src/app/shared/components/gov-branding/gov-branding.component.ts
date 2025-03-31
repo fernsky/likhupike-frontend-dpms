@@ -1,8 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { SlideToggleLanguageSwitcherComponent } from '../slide-toggle-language-switcher/slide-toggle-language-switcher.component';
 import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
+import { LanguageDropdownComponent } from '../language-dropdown/language-dropdown.component';
 
 @Component({
   selector: 'app-gov-branding',
@@ -11,7 +12,8 @@ import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
   standalone: true,
   imports: [
     CommonModule,
-    SlideToggleLanguageSwitcherComponent,
+    RouterModule,
+    LanguageDropdownComponent,
     TranslocoPipe,
     TranslocoModule,
   ],
@@ -23,5 +25,5 @@ import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
   ],
 })
 export class GovBrandingComponent {
-  @Input() mode: 'vertical' | 'horizontal' = 'vertical';
+  @Input() elevated: boolean = false;
 }

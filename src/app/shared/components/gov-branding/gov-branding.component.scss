@@ -168,3 +168,73 @@
     }
   }
 }
+
+.cds--header {
+  // Header styling without the problematic import
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 8000; // Carbon's z-index for header
+  width: 100%;
+  background-color: var(--cds-interactive-01);
+  border-bottom: 1px solid var(--cds-border-subtle);
+  height: 48px;
+
+  &__global {
+    display: flex;
+    height: 100%;
+  }
+
+  &__logo {
+    height: 32px;
+    width: auto;
+    margin-right: spacing.$spacing-03;
+  }
+
+  &__name {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 spacing.$spacing-05;
+    text-decoration: none;
+    color: var(--cds-text-04);
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color motion.$duration-fast-01
+      motion.$standard-easing;
+
+    &:hover {
+      background-color: var(--cds-interactive-02);
+    }
+  }
+
+  &__title {
+    @include type.type-style("heading-01");
+    color: var(--cds-text-04);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @include breakpoint.breakpoint(md) {
+      max-width: 220px;
+    }
+
+    @include breakpoint.breakpoint(sm) {
+      max-width: 150px;
+    }
+  }
+
+  &__nav-container {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    margin-left: auto;
+    padding-right: spacing.$spacing-05;
+  }
+
+  &--elevated {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
