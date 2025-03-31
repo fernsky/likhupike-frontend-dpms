@@ -20,15 +20,24 @@
   --cds-interactive-03: #{colors.$blue-70}; // Tertiary buttons and icons
   --cds-interactive-04: #{colors.$blue-50}; // Selected elements
 
+  // Button colors (to fix the RGB issues)
+  --cds-button-primary: #{colors.$blue-60};
+  --cds-button-primary-hover: #{colors.$blue-70};
+  --cds-button-secondary: #{colors.$gray-80};
+  --cds-button-secondary-hover: #{colors.$gray-90};
+
+  // Text on color
+  --cds-text-on-color: #{colors.$white-0};
+
   // UI background colors
-  --cds-ui-background: #{colors.$white-0};
+  --cds-ui-background: #{colors.$gray-10};
   --cds-ui-01: #{colors.$gray-10};
   --cds-ui-02: #{colors.$white-0};
   --cds-ui-03: #{colors.$gray-20}; // Borders, dividers
   --cds-ui-04: #{colors.$gray-50}; // Emphasis borders
   --cds-ui-05: #{colors.$gray-70}; // High contrast borders
 
-  // Text colors
+  // Text colors - Adjusted for better readability
   --cds-text-01: #{colors.$gray-100}; // Primary text
   --cds-text-02: #{colors.$gray-70}; // Secondary text
   --cds-text-03: #{colors.$gray-40}; // Helper text
@@ -50,12 +59,13 @@
   // Focus colors
   --cds-focus: #{colors.$blue-60};
 
-  // Overlay colors
-  --cds-overlay-01: rgba(22, 22, 22, 0.5); // Background overlay
-
   // Field colors
   --cds-field-01: #{colors.$white-0}; // Input fields
   --cds-field-02: #{colors.$gray-10}; // Secondary input fields
+
+  // Label colors
+  --cds-label-01: #{colors.$gray-90}; // Labels
+  --cds-text-helper: #{colors.$gray-60}; // Helper text
 
   // Legacy variables for compatibility during transition
   --primary-dark: var(--cds-interactive-03);
