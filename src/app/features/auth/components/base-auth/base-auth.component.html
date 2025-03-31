@@ -1,21 +1,26 @@
 <div class="cds--auth-container">
+  <!-- Enhanced particles with more varied parameters -->
   <app-background-particles
-    [particleOpacity]="0.05"
-    [particleColor]="'--cds-text-05'"
+    [particleOpacity]="0.15"
+    [particleColor]="'#0f62fe'"
   ></app-background-particles>
 
-  <app-gov-branding [elevated]="true"></app-gov-branding>
+  <!-- Header with elevated effect -->
+  <header class="cds--auth-header">
+    <app-gov-branding [elevated]="true"></app-gov-branding>
+  </header>
 
+  <!-- Main content with improved layout -->
   <main class="cds--auth-content">
     <div class="cds--grid cds--no-gutter">
       <div class="cds--row cds--no-gutter">
-        <!-- Features section (left side) -->
-        <div class="cds--col-lg-7 cds--auth-features">
+        <!-- Features section (left side) - now with better styling -->
+        <div class="cds--col-lg-6 cds--auth-features">
           <app-system-features></app-system-features>
         </div>
 
-        <!-- Form container (right side) -->
-        <div class="cds--col-md-8 cds--col-lg-5 cds--auth-form-container">
+        <!-- Form container (right side) - now with better styling -->
+        <div class="cds--col-md-8 cds--col-lg-6 cds--auth-form-container">
           <div class="cds--auth-form-wrapper">
             <router-outlet></router-outlet>
           </div>
@@ -24,6 +29,7 @@
     </div>
   </main>
 
+  <!-- Improved footer -->
   <footer class="cds--auth-footer">
     <div class="cds--grid">
       <div class="cds--row">

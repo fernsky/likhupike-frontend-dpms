@@ -4,104 +4,70 @@
 @use "@carbon/styles/scss/grid" as grid;
 @use "@carbon/styles/scss/motion" as motion;
 @use "@carbon/styles/scss/theme" as theme;
-@use "@carbon/styles/scss/config" as config;
-@use "@carbon/styles/scss/components/ui-shell" as ui-shell;
 
 :host {
   display: block;
   height: 100%;
-  background-color: var(--cds-ui-background);
+  background-color: var(--cds-background);
 }
 
-// Main container with Carbon theme background
 .cds--auth-container {
-  position: relative;
-  min-height: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  color: var(--cds-text-01);
+  background-color: var(--cds-background);
 }
 
-// Header styling with Carbon tokens - FULL WIDTH
 .cds--auth-header {
   position: relative;
-  z-index: 3;
+  z-index: 4;
   width: 100%;
-  background-color: var(--cds-ui-02); // White background for header
+  background-color: var(--cds-layer-01);
   border-bottom: 1px solid var(--cds-border-subtle);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); // Subtle shadow for depth
 
   app-gov-branding {
     display: block;
     width: 100%;
-    max-width: 1584px; // Carbon max width
+    max-width: 1584px;
     margin: 0 auto;
-    padding: spacing.$spacing-05;
-
-    @include breakpoint.breakpoint(md) {
-      padding: spacing.$spacing-05 spacing.$spacing-06;
-    }
-
-    @include breakpoint.breakpoint(lg) {
-      padding: spacing.$spacing-05 spacing.$spacing-07;
-    }
   }
 }
 
-// Main content area with Carbon grid and spacing
 .cds--auth-content {
   flex: 1;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   padding: 0;
+  background-color: var(--cds-background);
 
   .cds--grid {
     height: 100%;
-    max-width: none; // Full width grid
-
-    .cds--row {
-      height: 100%;
-    }
+    max-width: none;
   }
 }
 
-// Features section styling (left side) - Follow Carbon's layering
 .cds--auth-features {
-  // No border radius for cleaner design
-  background-color: var(--cds-ui-02);
   height: 100%;
   position: relative;
-  overflow: hidden;
-  display: none; // Hidden by default on smaller screens
+  display: none;
+  background-color: var(--cds-layer-01);
+  border-right: 1px solid var(--cds-border-subtle);
 
   @include breakpoint.breakpoint(lg) {
-    display: block; // Show on large screens
-  }
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(0, 0, 0, 0.03) 0%,
-      rgba(0, 0, 0, 0) 100%
-    );
-    pointer-events: none;
+    display: block;
   }
 }
 
-// Form container (right side)
 .cds--auth-form-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  background-color: var(--cds-ui-01);
+  min-height: calc(100vh - 48px);
+  background-color: var(--cds-background);
   padding: spacing.$spacing-07;
 
   @include breakpoint.breakpoint(md) {
-    padding: spacing.$spacing-06;
+    padding: spacing.$spacing-09;
   }
 
   @include breakpoint.breakpoint(sm) {
@@ -111,20 +77,36 @@
 
 .cds--auth-form-wrapper {
   width: 100%;
-  max-width: 480px;
+  max-width: 400px;
+  background-color: var(--cds-layer-01);
+  padding: spacing.$spacing-07;
+  border: 1px solid var(--cds-border-subtle);
 
-  // No border, shadow or hover effect - cleaner Carbon design
-  // Use animation for transitions
-  transition: opacity motion.$duration-moderate-01 motion.$standard-easing;
+  @include breakpoint.breakpoint(sm) {
+    padding: spacing.$spacing-05;
+  }
+
+  h1 {
+    @include type.type-style("heading-04");
+    color: var(--cds-text-01);
+    margin-bottom: spacing.$spacing-05;
+  }
+
+  p {
+    @include type.type-style("body-long-01");
+    color: var(--cds-text-02);
+  }
 }
 
-// Footer
 .cds--auth-footer {
-  padding: spacing.$spacing-03 0;
-  background-color: var(--cds-ui-02);
+  position: relative;
+  z-index: 3;
+  padding: spacing.$spacing-05 0;
+  background-color: var(--cds-layer-01);
   border-top: 1px solid var(--cds-border-subtle);
 
   p {
+    @include type.type-style("caption-01");
     color: var(--cds-text-02);
     text-align: center;
     margin: 0;

@@ -5,70 +5,60 @@
 @use "@carbon/styles/scss/motion" as motion;
 
 .cds--features-container {
-  color: var(--cds-text-01);
-  padding: spacing.$spacing-09;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  padding: spacing.$spacing-09 0;
+  width: 100%;
+  background-color: var(--cds-background);
+}
 
-  @include breakpoint.breakpoint(md) {
-    padding: spacing.$spacing-07;
+.cds--features-header {
+  margin-bottom: spacing.$spacing-08;
+
+  h2 {
+    @include type.type-style("heading-05");
+    margin-bottom: spacing.$spacing-05;
   }
 }
 
 .cds--features-subtitle {
+  @include type.type-style("body-long-01");
   color: var(--cds-text-02);
-  margin-bottom: spacing.$spacing-07;
-  max-width: 40ch;
+  max-width: 960px;
 }
 
-.cds--features-grid {
-  gap: spacing.$spacing-05;
-  margin-top: spacing.$spacing-07;
+.cds--features-list {
+  list-style: none;
+  padding: 0;
+  margin: spacing.$spacing-06 0 0;
 
-  @include breakpoint.breakpoint(md) {
-    gap: spacing.$spacing-04;
+  li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: spacing.$spacing-06;
+    padding-right: spacing.$spacing-08;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
-}
-
-// Carbon tile styling - cleaner without borders
-.cds--feature-card {
-  background-color: transparent !important;
-  border: none !important;
-  padding: spacing.$spacing-05 !important;
-  color: var(--cds-text-01) !important;
 
   .cds--feature-icon {
-    width: spacing.$spacing-07;
-    height: spacing.$spacing-07;
-    margin-bottom: spacing.$spacing-05;
-    color: var(--cds-interactive-01); // Highlight the icon with brand color
-    font-size: spacing.$spacing-07;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    color: var(--cds-interactive-01);
+    font-size: spacing.$spacing-06;
+    margin-right: spacing.$spacing-05;
+    flex-shrink: 0;
   }
 
-  // Typography following Carbon type tokens
-  h3 {
-    @include type.type-style("productive-heading-02");
-    margin-bottom: spacing.$spacing-03;
-    color: var(--cds-text-01);
-  }
+  .cds--feature-content {
+    h3 {
+      @include type.type-style("heading-03");
+      margin-bottom: spacing.$spacing-03;
+    }
 
-  p {
-    @include type.type-style("body-short-01");
-    color: var(--cds-text-02);
-    margin: 0;
-    flex-grow: 1;
-  }
-
-  // Add subtle hover effect
-  transition: transform motion.$duration-moderate-01 motion.$standard-easing;
-
-  &:hover {
-    background-color: transparent !important;
-    transform: translateY(-4px);
+    p {
+      @include type.type-style("body-long-01");
+      color: var(--cds-text-02);
+      max-width: 100ch;
+      line-height: 1.5;
+    }
   }
 }

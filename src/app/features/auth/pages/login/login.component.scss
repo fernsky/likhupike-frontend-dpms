@@ -3,70 +3,58 @@
 @use "@carbon/styles/scss/breakpoint" as breakpoint;
 @use "@carbon/styles/scss/theme" as theme;
 @use "@carbon/styles/scss/motion" as motion;
-@use "@carbon/styles/scss/components/form" as form;
-@use "@carbon/styles/scss/components/button" as button;
-@use "@carbon/styles/scss/components/notification" as notification;
 
-// Login container with clean Carbon styling
 .cds--login-container {
   width: 100%;
   max-width: 100%;
 
   h1 {
+    @include type.type-style("heading-04");
     color: var(--cds-text-01);
-    margin-bottom: spacing.$spacing-03;
+    margin-bottom: spacing.$spacing-05;
   }
 
   .cds--login-subtitle {
+    @include type.type-style("body-long-01");
     color: var(--cds-text-02);
     margin-bottom: spacing.$spacing-07;
   }
 }
 
-// Form styling with Carbon tokens
 .cds--form {
-  max-width: 100%;
-
-  // Adjust spacing between form items
   .cds--form-item {
     margin-bottom: spacing.$spacing-06;
   }
 
-  // Override Carbon form label styling
-  ::ng-deep cds-label .cds--label {
-    color: var(--cds-text-01);
-    font-weight: 400;
-    @include type.type-style("body-short-01");
-  }
-
-  ::ng-deep .cds--form__helper-text {
-    color: var(--cds-text-02);
-    margin-top: spacing.$spacing-02;
-  }
-
-  // Input field wrapper styling
   .cds--text-input__field-wrapper {
     position: relative;
 
-    .cds--text-input__icon.mat-icon {
+    .cds--text-input__icon {
       position: absolute;
       left: spacing.$spacing-04;
       top: 50%;
       transform: translateY(-50%);
-      color: var(--cds-icon-01);
-      font-size: 20px;
-      height: 20px;
-      width: 20px;
+      color: var(--cds-icon-02);
     }
 
-    // Add padding for the icon
     input[cdsText] {
       padding-left: spacing.$spacing-08;
-      height: spacing.$spacing-07; // Standard Carbon field height
+      height: spacing.$spacing-09;
+      background-color: var(--cds-field-01);
+      border-color: var(--cds-border-strong);
       color: var(--cds-text-01);
+
+      &:focus {
+        border-color: var(--cds-focus);
+        outline: 2px solid var(--cds-focus);
+        outline-offset: -2px;
+      }
+
+      &::placeholder {
+        color: var(--cds-text-placeholder);
+      }
     }
 
-    // Password visibility toggle button
     .cds--text-input__password-visibility-toggle {
       position: absolute;
       right: 0;
@@ -75,33 +63,46 @@
       display: flex;
       align-items: center;
       padding: 0 spacing.$spacing-04;
+      color: var(--cds-icon-02);
 
-      .mat-icon {
+      &:hover {
         color: var(--cds-icon-01);
-        font-size: 16px;
-        height: 16px;
-        width: 16px;
       }
     }
   }
 }
 
-// Error notification styling - Carbon standard
 .cds--login-error {
   margin-bottom: spacing.$spacing-05;
 
   .cds--inline-notification {
     max-width: 100%;
     width: 100%;
+    background-color: var(--cds-notification-error-background);
+    border-left: 3px solid var(--cds-support-01);
+
+    .cds--inline-notification__icon {
+      fill: var(--cds-support-01);
+    }
+
+    .cds--inline-notification__text-wrapper {
+      color: var(--cds-text-01);
+    }
   }
 }
 
-// Submit button container
 .cds--login-submit {
   margin-top: spacing.$spacing-07;
 
   button {
     width: 100%;
+    min-height: 48px;
+    background-color: var(--cds-button-primary);
+    border: none;
+
+    &:hover {
+      background-color: var(--cds-button-primary-hover);
+    }
 
     .cds--btn__icon {
       margin-right: spacing.$spacing-03;
@@ -111,7 +112,6 @@
   }
 }
 
-// Footer links styling
 .cds--login-footer {
   margin-top: spacing.$spacing-07;
   padding-top: spacing.$spacing-05;
@@ -127,7 +127,12 @@
 
     a {
       color: var(--cds-link-01);
-      font-weight: 400;
+      text-decoration: none;
+
+      &:hover {
+        color: var(--cds-link-hover);
+        text-decoration: underline;
+      }
     }
   }
 
@@ -135,21 +140,29 @@
     text-align: center;
 
     a {
+      @include type.type-style("body-short-01");
       color: var(--cds-link-01);
-      font-size: 0.875rem;
+      text-decoration: none;
+
+      &:hover {
+        color: var(--cds-link-hover);
+        text-decoration: underline;
+      }
     }
   }
 }
 
-// Button specific styles
-button[cdsButton] {
-  // Ensure the button uses Carbon token, not hard-coded colors
-  &:not([disabled]) {
-    background-color: var(--cds-interactive-01);
-    color: var(--cds-text-04);
+::ng-deep {
+  .cds--label {
+    @include type.type-style("label-01");
+    color: var(--cds-text-02);
   }
 
-  &:hover:not([disabled]) {
-    background-color: var(--cds-hover-primary);
+  .cds--form__helper-text {
+    color: var(--cds-text-helper);
+  }
+
+  .cds--form-requirement {
+    color: var(--cds-text-error);
   }
 }
