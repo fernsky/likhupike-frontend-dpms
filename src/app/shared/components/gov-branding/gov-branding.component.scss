@@ -16,7 +16,6 @@
     height: 100%;
     max-width: 1584px;
     margin: 0 auto;
-    padding: 0 spacing.$spacing-05;
     align-items: center;
     width: 100%;
     box-sizing: border-box;
@@ -65,10 +64,14 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 300px;
+    max-width: 600px; // Increased from 300px
+
+    @include breakpoint.breakpoint(md) {
+      max-width: 400px;
+    }
 
     @include breakpoint.breakpoint(sm) {
-      max-width: 200px;
+      max-width: 280px;
     }
   }
 

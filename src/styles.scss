@@ -1,11 +1,11 @@
 // Import Carbon Design System
 @use "@carbon/styles/scss/config" with (
   $use-flexbox-grid: true,
-  $font-path: "@ibm/plex" // Since Angular doesn't support `~` imports anymore, we can rewrite the path by updating the config
+  $font-path: "@ibm/plex"
 );
 @use "@carbon/styles/scss/themes";
 @use "@carbon/styles/scss/theme" with (
-  $theme: themes.$g100
+  $theme: themes.$white // Using Carbon's white theme instead of g100
 );
 
 // Carbon component and grid imports
@@ -14,77 +14,47 @@
 
 // Custom theme variables - Now using official Carbon color tokens
 :root {
-  // Interactive elements
-  --cds-interactive-01: #{colors.$blue-60}; // Primary buttons
-  --cds-interactive-02: #{colors.$blue-70}; // Secondary buttons
-  --cds-interactive-03: #{colors.$blue-60}; // Tertiary buttons and icons
-  --cds-interactive-04: #{colors.$blue-50}; // Selected elements
+  // Using Carbon's default token values
+  --cds-background: #{colors.$white-0};
+  --cds-background-hover: #{colors.$gray-10};
+  --cds-background-active: #{colors.$gray-20};
+  --cds-background-selected: #{colors.$gray-20};
 
-  // Button colors (to fix the RGB issues)
+  --cds-text-primary: #{colors.$gray-100};
+  --cds-text-secondary: #{colors.$gray-70};
+  --cds-text-placeholder: #{colors.$gray-40};
+  --cds-text-helper: #{colors.$gray-60};
+  --cds-text-error: #{colors.$red-60};
+
+  --cds-link-primary: #{colors.$blue-60};
+  --cds-link-primary-hover: #{colors.$blue-70};
+
+  --cds-border-subtle: #{colors.$gray-20};
+  --cds-border-strong: #{colors.$gray-50};
+
+  --cds-field-01: #{colors.$white-0};
+  --cds-field-02: #{colors.$gray-10};
+
+  --cds-layer-01: #{colors.$white-0};
+  --cds-layer-02: #{colors.$gray-10};
+  --cds-layer-hover: #{colors.$gray-10};
+
+  --cds-interactive-01: #{colors.$blue-60};
+  --cds-interactive-02: #{colors.$gray-80};
+  --cds-interactive-03: #{colors.$blue-60};
+  --cds-interactive-04: #{colors.$blue-60};
+
+  --cds-focus: #{colors.$blue-60};
+
   --cds-button-primary: #{colors.$blue-60};
   --cds-button-primary-hover: #{colors.$blue-70};
   --cds-button-secondary: #{colors.$gray-80};
   --cds-button-secondary-hover: #{colors.$gray-90};
 
-  // Text on color
-  --cds-text-on-color: #{colors.$white-0};
-
-  // UI background colors
-  --cds-ui-background: #{colors.$white-0};
-  --cds-ui-01: #{colors.$white-0};
-  --cds-ui-02: #{colors.$gray-10};
-  --cds-ui-03: #{colors.$gray-20}; // Borders, dividers
-  --cds-ui-04: #{colors.$gray-50}; // Emphasis borders
-  --cds-ui-05: #{colors.$gray-70}; // High contrast borders
-
-  // Background colors
-  --cds-background: #{colors.$white-0};
-  --cds-layer-01: #{colors.$gray-10};
-  --cds-layer-02: #{colors.$gray-20};
-  --cds-layer-hover: #{colors.$gray-20};
-  --cds-layer-selected-01: #{colors.$gray-20};
-
-  // Text colors - Adjusted for better readability
-  --cds-text-01: #{colors.$gray-100}; // Primary text
-  --cds-text-02: #{colors.$gray-70}; // Secondary text
-  --cds-text-03: #{colors.$gray-40}; // Helper text
-  --cds-text-04: #{colors.$white-0}; // Text on interactive colors
-  --cds-text-05: #{colors.$gray-60}; // Subtle text
-  --cds-text-error: #{colors.$red-60}; // Error messages
-  --cds-text-inverse: #{colors.$white-0}; // Text on dark background
-  --cds-text-primary: #{colors.$gray-100};
-  --cds-text-secondary: #{colors.$gray-70};
-  --cds-text-helper: #{colors.$gray-50};
-
-  // Link colors
-  --cds-link-01: #{colors.$blue-60}; // Primary links
-  --cds-link-02: #{colors.$blue-40}; // Secondary links
-
-  // Support colors
-  --cds-support-01: #{colors.$red-60}; // Error
-  --cds-support-02: #{colors.$green-50}; // Success
-  --cds-support-03: #{colors.$yellow-30}; // Warning
-  --cds-support-04: #{colors.$blue-50}; // Information
-
-  // Focus colors
-  --cds-focus: #{colors.$blue-60};
-
-  // Field colors
-  --cds-field-01: #{colors.$white-0}; // Input fields
-  --cds-field-02: #{colors.$gray-10}; // Secondary input fields
-
-  // Label colors
-  --cds-label-01: #{colors.$gray-90}; // Labels
-  --cds-text-helper: #{colors.$gray-60}; // Helper text
-
-  // Border colors
-  --cds-border-subtle-01: #{colors.$gray-20};
-  --cds-border-subtle: #{colors.$gray-30};
-
-  // Legacy variables for compatibility during transition
-  --primary-dark: var(--cds-interactive-03);
-  --primary-main: var(--cds-interactive-01);
-  --primary-light: var(--cds-interactive-02);
+  --cds-support-error: #{colors.$red-60};
+  --cds-support-success: #{colors.$green-50};
+  --cds-support-warning: #{colors.$yellow-30};
+  --cds-support-info: #{colors.$blue-50};
 }
 
 // Add Carbon utility classes
