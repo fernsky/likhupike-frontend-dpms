@@ -12,10 +12,12 @@
     </div>
 
     <div class="cds--row">
-      <div class="cds--col-lg-14 cds--col-md-8 cds--col-sm-4">
+      <div class="cds--col-lg-12 cds--col-md-8 cds--col-sm-4">
         <ul class="cds--features-list">
           <li *ngFor="let feature of features">
-            <mat-icon class="cds--feature-icon">{{ feature.icon }}</mat-icon>
+            <span class="cds--feature-icon">
+              <mat-icon>{{ feature.icon }}</mat-icon>
+            </span>
             <div class="cds--feature-content">
               <h4>
                 {{

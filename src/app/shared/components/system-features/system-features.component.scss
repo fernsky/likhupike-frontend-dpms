@@ -5,82 +5,100 @@
 @use "@carbon/styles/scss/motion" as motion;
 
 .cds--features-container {
-  padding-top: spacing.$spacing-09;
+  padding: spacing.$spacing-07 0;
   width: 100%;
   max-width: 1584px;
   margin: 0 auto;
-
   position: relative;
 }
 
 .cds--features-header {
-  margin-bottom: spacing.$spacing-08;
+  margin-bottom: spacing.$spacing-07;
 
   h2 {
-    @include type.type-style("heading-04");
-    font-weight: 400;
+    @include type.type-style("heading-03");
     color: var(--cds-text-primary);
     letter-spacing: 0;
-    margin-bottom: spacing.$spacing-05;
+    margin-bottom: spacing.$spacing-04;
   }
 }
 
 .cds--features-subtitle {
-  @include type.type-style("body-long-02");
+  @include type.type-style("body-compact-02");
   color: var(--cds-text-secondary);
-  max-width: 640px;
-  line-height: 1.5;
+  max-width: 540px;
+  line-height: 1.4;
+  margin-bottom: spacing.$spacing-06;
 }
 
 .cds--features-list {
   list-style: none;
   padding: 0;
-  margin: spacing.$spacing-06 0 0;
+  margin: 0;
 
   li {
     display: flex;
     align-items: flex-start;
-    margin-bottom: spacing.$spacing-06;
-    padding-right: spacing.$spacing-08;
-    transition: transform 110ms;
+    margin-bottom: spacing.$spacing-05;
+    padding: spacing.$spacing-05;
+    transition: all motion.$duration-fast-01 motion.$standard-easing;
+    border-radius: 4px;
+    border: 1px solid transparent;
 
     &:last-child {
       margin-bottom: 0;
     }
 
     &:hover {
+      background-color: var(--cds-background-hover);
+      border-color: var(--cds-border-subtle);
       transform: translateX(spacing.$spacing-02);
-    }
-
-    .mat-icon {
-      width: 40px;
-      height: 100%;
     }
   }
 
   .cds--feature-icon {
     color: var(--cds-interactive-01);
-    font-size: spacing.$spacing-07;
-    margin-right: spacing.$spacing-06;
+    font-size: spacing.$spacing-06;
+    margin-right: spacing.$spacing-05;
     padding: spacing.$spacing-03;
-    background-color: var(--cds-layer-selected-01);
-    border-radius: 50%;
     flex-shrink: 0;
+    height: spacing.$spacing-07;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      width: 40px;
+    }
   }
 
   .cds--feature-content {
-    h3 {
-      @include type.type-style("heading-04");
-      font-weight: 400;
+    h4 {
+      @include type.type-style("heading-02");
       color: var(--cds-text-primary);
-      margin-bottom: spacing.$spacing-04;
+      margin-bottom: spacing.$spacing-03;
+      font-weight: 400;
     }
 
     p {
-      @include type.type-style("body-long-02");
+      @include type.type-style("body-compact-01");
       color: var(--cds-text-secondary);
-      max-width: 85ch;
-      line-height: 1.625;
+      max-width: 65ch;
+      line-height: 1.5;
+    }
+  }
+}
+
+@include breakpoint.breakpoint(md) {
+  .cds--features-container {
+    padding: spacing.$spacing-08 0;
+  }
+
+  .cds--features-header {
+    margin-bottom: spacing.$spacing-08;
+
+    h2 {
+      @include type.type-style("heading-04");
     }
   }
 }
