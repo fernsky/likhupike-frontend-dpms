@@ -1,40 +1,35 @@
 <div class="cds--features-container">
-  <div class="cds--grid">
-    <div class="cds--row">
-      <div
-        class="cds--col-lg-12 cds--col-md-8 cds--col-sm-4 cds--features-header"
-      >
-        <h2>{{ "systemFeatures.title" | transloco }}</h2>
-        <p class="cds--features-subtitle">
-          {{ "systemFeatures.subtitle" | transloco }}
-        </p>
-      </div>
-    </div>
+  <div class="cds--features-header">
+    <h2>{{ "systemFeatures.title" | transloco }}</h2>
+    <div class="cds--features-decoration"></div>
+  </div>
 
-    <div class="cds--row">
-      <div class="cds--col-lg-16 cds--col-md-8 cds--col-sm-4">
-        <ul class="cds--features-list">
-          <li *ngFor="let feature of features">
-            <span class="cds--feature-icon">
-              <mat-icon>{{ feature.icon }}</mat-icon>
-            </span>
-            <div class="cds--feature-content">
-              <h4>
-                {{
-                  "systemFeatures.features." + feature.translationKey + ".title"
-                    | transloco
-                }}
-              </h4>
-              <p>
-                {{
-                  "systemFeatures.features." +
-                    feature.translationKey +
-                    ".description" | transloco
-                }}
-              </p>
-            </div>
-          </li>
-        </ul>
+  <p class="cds--features-subtitle">
+    {{ "systemFeatures.subtitle" | transloco }}
+  </p>
+
+  <div class="cds--features-grid">
+    <div
+      class="cds--feature-tile elevation-2"
+      *ngFor="let feature of features"
+      [ngClass]="feature.colorClass"
+    >
+      <div class="feature-icon-container">
+        <i class="material-icons">{{ feature.icon }}</i>
+      </div>
+      <div class="feature-content">
+        <h4>
+          {{
+            "systemFeatures.features." + feature.translationKey + ".title"
+              | transloco
+          }}
+        </h4>
+        <p>
+          {{
+            "systemFeatures.features." + feature.translationKey + ".description"
+              | transloco
+          }}
+        </p>
       </div>
     </div>
   </div>

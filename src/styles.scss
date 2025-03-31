@@ -13,133 +13,45 @@
 @use "@carbon/styles";
 @use "@carbon/styles/scss/colors";
 
-// Apply g100 theme tokens globally
+// Custom color palette for application
 :root {
-  // Background colors
-  --background: #{theme.$background};
-  --background-hover: #{theme.$background-hover};
-  --background-active: #{theme.$background-active};
-  --background-selected: #{theme.$background-selected};
-
-  // Layer colors
-  --layer-01: #{theme.$layer-01};
-  --layer-02: #{theme.$layer-02};
-  --layer-hover: #{theme.$layer-hover};
-  --layer-active: #{theme.$layer-active};
-  --layer-selected: #{theme.$layer-selected};
-
-  // Text colors
-  --text-primary: #{theme.$text-primary};
-  --text-secondary: #{theme.$text-secondary};
-  --text-placeholder: #{theme.$text-placeholder};
-  --text-on-color: #{theme.$text-on-color};
-  --text-helper: #{theme.$text-helper};
-  --text-error: #{theme.$text-error};
-
-  // Interactive colors
-  --interactive-01: #{colors.$blue-60};
-  --interactive-02: #{colors.$blue-70};
-  --interactive-03: #{colors.$blue-50};
-  --interactive-04: #{colors.$blue-40};
-
-  // Border colors
-  --border-subtle: #{theme.$border-subtle};
-  --border-strong: #{theme.$border-strong};
-  --border-inverse: #{theme.$border-inverse};
-
-  // Focus colors
-  --focus: #{theme.$focus};
-  --focus-inset: #{theme.$focus-inset};
-
-  // Support colors
-  --support-error: #{colors.$red-60};
-  --support-success: #{colors.$green-50};
-  --support-warning: #{colors.$yellow-30};
-  --support-info: #{colors.$blue-50};
-
-  // Field colors
-  --field-01: #{theme.$field-01};
-  --field-02: #{theme.$field-02};
-  --field-hover: #{theme.$field-hover};
-
-  // Button colors
-  --button-primary: #{colors.$blue-60};
-  --button-primary-hover: #{colors.$blue-70};
-  --button-secondary: #{colors.$gray-80};
-  --button-secondary-hover: #{colors.$gray-90};
-  --button-tertiary: #{colors.$blue-40};
-  --button-tertiary-hover: #{colors.$blue-50};
-
-  // Link colors
-  --link-01: #{colors.$blue-60};
-  --link-02: #{colors.$blue-70};
-  --link-visited: #{colors.$purple-60};
+  --brand-primary: #005eb8;
+  --brand-secondary: #0f62fe;
+  --brand-accent: #6929c4;
+  --brand-background-light: #f4f4f4;
+  --brand-background-dark: #161616;
+  --brand-success: #24a148;
+  --brand-warning: #f1c21b;
+  --brand-error: #da1e28;
+  --brand-text-light: #ffffff;
+  --brand-text-dark: #161616;
+  --brand-highlight: #0043ce;
+  --brand-subtle-accent: #edf5ff;
+  --brand-overlay: rgba(22, 22, 22, 0.7);
+  --brand-shadow: rgba(0, 0, 0, 0.1);
 }
 
-// Global body styles
-html,
+// Global styles
 body {
-  height: 100%;
   margin: 0;
   padding: 0;
-  background-color: var(--background);
-  color: var(--text-primary);
   font-family: "IBM Plex Sans", sans-serif;
 }
 
-// Add Carbon helper classes
-.cds--body {
-  background-color: var(--background);
-  color: var(--text-primary);
+// Common transition for smooth hover effects
+.transition-all {
+  transition: all 0.3s ease;
 }
 
-.cds--layer {
-  background-color: var(--layer-01);
-  color: var(--text-primary);
+// Card styles
+.elevation-1 {
+  box-shadow: 0 2px 6px var(--brand-shadow);
 }
 
-// Apply g100 theme globally
-body {
-  @include theme.theme(themes.$g100);
+.elevation-2 {
+  box-shadow: 0 4px 8px var(--brand-shadow);
 }
 
-// Ensure proper z-index management
-.cds--header {
-  z-index: 9000;
-}
-
-.cds--side-nav {
-  z-index: 8000;
-}
-
-// Fix for keyboard focus styling
-:focus:not(.cds--btn) {
-  outline: 2px solid var(--focus);
-  outline-offset: -2px;
-}
-
-// Fix modal and dialog styling for the g100 theme
-.cds--modal,
-.cds--dialog {
-  background-color: var(--layer-01);
-  color: var(--text-primary);
-}
-
-// Apply dark theme scrollbars for better integration with g100
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--layer-01);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--layer-hover);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--layer-active);
+.elevation-3 {
+  box-shadow: 0 8px 16px var(--brand-shadow);
 }

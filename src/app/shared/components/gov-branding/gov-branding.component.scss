@@ -1,36 +1,25 @@
-@use "@carbon/styles/scss/spacing" as spacing;
-@use "@carbon/styles/scss/type" as type;
-@use "@carbon/styles/scss/breakpoint" as breakpoint;
+@use "@carbon/styles/scss/spacing" as *;
+@use "@carbon/styles/scss/type" as *;
+@use "@carbon/styles/scss/breakpoint" as *;
 
 .cds--header {
-  background: linear-gradient(
-    135deg,
-    var(--cds-background) 0%,
-    var(--cds-layer-01) 100%
-  );
-  border-bottom: 1px solid var(--cds-border-subtle);
-  height: 3.5rem;
-  width: 100%;
-  position: fixed;
-  z-index: 1000;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s cubic-bezier(0.2, 0, 0.38, 0.9);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  position: relative;
+  background-color: var(--brand-background-light);
+  border-bottom: none;
+  overflow: hidden;
+  padding: $spacing-04 $spacing-05;
+  height: auto;
+
+  &--elevated {
+    box-shadow: 0 4px 8px var(--brand-shadow);
+  }
 
   &__global {
     display: flex;
     height: 100%;
-    max-width: 1584px;
-    margin: 0 auto;
     align-items: center;
-    padding: 0 spacing.$spacing-07;
-    width: 100%;
-    box-sizing: border-box;
     position: relative;
-
-    @media screen and (max-width: 480px) {
-      padding: 0 spacing.$spacing-03; // Less padding
-    }
+    z-index: 2;
   }
 
   &__name {
@@ -38,128 +27,104 @@
     align-items: center;
     height: 100%;
     text-decoration: none;
-    padding: 0 spacing.$spacing-05;
-    gap: spacing.$spacing-05;
-    border-right: 1px solid var(--cds-border-subtle);
-    transition: all 0.2s cubic-bezier(0.2, 0, 0.38, 0.9);
-    background-color: transparent;
-    position: relative;
-    min-width: auto; // Changed from 320px to auto for mobile
+    gap: $spacing-05;
+    padding: $spacing-03 0;
 
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background: linear-gradient(
-        90deg,
-        var(--cds-interactive-01),
-        var(--cds-interactive-02)
-      );
-      opacity: 0;
-      transition: opacity 0.2s ease;
-    }
-
-    &:hover {
-      background-color: var(--cds-layer-selected);
-
-      &::after {
-        opacity: 1;
-      }
-
-      .cds--header__logo {
-        transform: scale(1.05);
-      }
-
-      .cds--header__title {
-        color: var(--cds-text-primary);
-      }
-    }
-
-    @include breakpoint.breakpoint(sm) {
-      gap: spacing.$spacing-03;
-      padding: 0 spacing.$spacing-03;
-      min-width: auto;
-    }
-
-    @media screen and (max-width: 480px) {
-      padding: 0 spacing.$spacing-03;
-      gap: spacing.$spacing-03;
+    &:hover .cds--header__title {
+      color: var(--brand-highlight);
     }
   }
 
+  &__title-container {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-02;
+  }
+
   &__logo {
-    height: 2.25rem;
+    height: 3rem;
     width: auto;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-    transition: transform 0.2s cubic-bezier(0.2, 0, 0.38, 0.9);
+    transition: transform 0.3s ease;
 
-    @include breakpoint.breakpoint(sm) {
-      height: 1.75rem;
-    }
-
-    @media screen and (max-width: 480px) {
-      height: 1.75rem; // Smaller logo on mobile
+    &:hover {
+      transform: scale(1.05);
     }
   }
 
   &__title {
-    @include type.type-style("heading-compact-02");
-    color: var(--cds-text-02);
-    font-weight: 500;
-    letter-spacing: -0.25px;
+    @include type-style("heading-03");
+    color: var(--brand-primary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    transition: color 0.2s ease;
-    max-width: 600px;
-
-    @include breakpoint.breakpoint(md) {
-      max-width: 400px;
-    }
-
-    @include breakpoint.breakpoint(sm) {
-      max-width: 280px;
-    }
-
-    @media screen and (max-width: 768px) {
-      max-width: 280px;
-    }
-
-    @media screen and (max-width: 480px) {
-      max-width: 160px; // Even shorter on mobile
-      font-size: 0.875rem; // Smaller font on mobile
-    }
+    font-weight: 600;
+    transition: color 0.3s ease;
   }
 
-  &__nav-container {
+  &__subtitle {
+    @include type-style("body-compact-01");
+    color: var(--brand-text-dark);
+    opacity: 0.8;
+  }
+
+  &__utils {
     margin-left: auto;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    padding: 0 spacing.$spacing-05;
-    background-color: transparent;
-    position: relative;
-
-    &::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 1px;
-      height: 60%;
-      background: var(--cds-border-subtle);
-    }
-
-    @media screen and (max-width: 480px) {
-      padding: 0 spacing.$spacing-03; // Less padding on mobile
-    }
   }
+}
 
-  @media screen and (max-width: 480px) {
-    height: 3rem; // Slightly smaller header height
+.gov-logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-03;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 1) 70%,
+    rgba(240, 240, 240, 1) 100%
+  );
+  box-shadow: 0 2px 6px var(--brand-shadow);
+}
+
+.gov-header-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    var(--brand-subtle-accent) 0%,
+    var(--brand-background-light) 100%
+  );
+  z-index: 1;
+}
+
+.gov-header-decoration {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--brand-primary),
+    var(--brand-secondary),
+    var(--brand-accent)
+  );
+  z-index: 2;
+}
+
+@include breakpoint(md) {
+  .cds--header {
+    padding: $spacing-05 $spacing-07;
+
+    &__title {
+      @include type-style("heading-04");
+    }
+
+    &__logo {
+      height: 3.5rem;
+    }
   }
 }

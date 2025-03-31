@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
-import { TilesModule, GridModule } from 'carbon-components-angular';
-import { MatIconModule } from '@angular/material/icon';
 
 interface Feature {
-  icon: string;
   translationKey: string;
+  icon: string;
+  colorClass: string;
 }
 
 @Component({
@@ -15,14 +13,7 @@ interface Feature {
   templateUrl: './system-features.component.html',
   styleUrls: ['./system-features.component.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    TranslocoPipe,
-    TranslocoModule,
-    TilesModule,
-    GridModule,
-  ],
+  imports: [CommonModule, TranslocoModule],
   providers: [
     provideTranslocoScope({
       scope: 'system-features',
@@ -33,20 +24,24 @@ interface Feature {
 export class SystemFeaturesComponent {
   features: Feature[] = [
     {
-      icon: 'account_balance',
       translationKey: 'municipalServices',
+      icon: 'apartment',
+      colorClass: 'feature-primary',
     },
     {
-      icon: 'speed',
       translationKey: 'quickProcessing',
+      icon: 'rocket_launch',
+      colorClass: 'feature-success',
     },
     {
-      icon: 'analytics',
       translationKey: 'dataIntegration',
+      icon: 'data_object',
+      colorClass: 'feature-info',
     },
     {
-      icon: 'public',
       translationKey: 'citizenPortal',
+      icon: 'person',
+      colorClass: 'feature-warning',
     },
   ];
 }

@@ -1,202 +1,192 @@
-@use "@carbon/styles/scss/spacing" as spacing;
-@use "@carbon/styles/scss/type" as type;
-@use "@carbon/styles/scss/breakpoint" as breakpoint;
-@use "@carbon/styles/scss/grid" as grid;
-@use "@carbon/styles/scss/motion" as motion;
-@use "@carbon/styles/scss/theme" as theme;
+@use "@carbon/styles/scss/spacing" as *;
+@use "@carbon/styles/scss/type" as *;
+@use "@carbon/styles/scss/theme" as *;
+@use "@carbon/styles/scss/breakpoint" as *;
+@use "@carbon/styles/scss/grid" as *;
 
 :host {
   display: block;
-  height: 100%;
+  height: 100vh;
 }
 
 .cds--auth-container {
   display: flex;
   flex-direction: column;
-  background-color: var(--cds-background);
+  height: 100%;
   position: relative;
-  margin: 0 auto;
-  max-width: 1584px;
-  width: 100%;
+}
+
+.cds--auth-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    var(--brand-background-light) 0%,
+    #ffffff 100%
+  );
+  z-index: -1;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("/images/pattern-bg.svg");
+    background-size: cover;
+    opacity: 0.05;
+  }
 }
 
 .cds--auth-header {
   width: 100%;
-  background-color: var(--cds-background);
-  padding: 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  position: relative;
-  z-index: 1000;
-
-  app-gov-branding {
-    display: block;
-    width: 100%;
-  }
+  z-index: 10;
 }
 
 .cds--auth-content {
   flex: 1;
-  padding: 0;
-  background-color: var(--cds-layer-01);
-  position: relative;
-  overflow: hidden;
-  min-height: calc(100vh - 48px); // Adjusted for header height
   display: flex;
   align-items: center;
-  padding-bottom: spacing.$spacing-12;
+  padding: $spacing-05;
+  z-index: 5;
+  position: relative;
+
+  @include breakpoint(md) {
+    padding: $spacing-07;
+  }
 
   .cds--grid {
     width: 100%;
-    max-width: calc(1584px - 4rem);
-    margin: 0 auto;
-    padding: 0; // Remove default padding on mobile
-    position: relative;
-    z-index: 1;
+  }
+}
 
-    @media screen and (min-width: 1055px) {
-      padding: 0 2rem; // Add padding back on desktop
-      padding-top: spacing.$spacing-12; // Add top padding for desktop
+.cds--auth-row {
+  align-items: center;
+}
+
+.cds--auth-features {
+  display: none;
+  animation: fadeIn 0.8s ease-in-out;
+
+  @include breakpoint(lg) {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 }
 
-@keyframes patternShift {
-  0% {
-    background-position:
-      0 0,
-      0 0,
-      0 0,
-      0 0;
-  }
-  100% {
-    background-position:
-      100px 100px,
-      0 0,
-      0 0,
-      0 0;
-  }
-}
-
-@keyframes pulsePattern {
-  0% {
-    opacity: 0.1;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 0.2;
-    transform: scale(1.1);
-  }
-}
-
-@keyframes slowFloat {
-  0% {
-    transform: translate(0, 0) scale(1);
-  }
-  100% {
-    transform: translate(3%, 3%) scale(1.1);
-  }
-}
-
-@keyframes slowFloat2 {
-  0% {
-    transform: translate(0, 0) scale(1);
-  }
-  100% {
-    transform: translate(-3%, -2%) scale(1.08);
-  }
-}
-
-@keyframes arcFloat {
-  0% {
-    transform: rotate(-15deg) scale(1.2);
-  }
-  100% {
-    transform: rotate(-12deg) scale(1.25);
-  }
-}
-
-.cds--auth-features {
-  display: none; // Hide by default
-  align-items: flex-start;
-  justify-content: flex-start;
-  background: linear-gradient(
-    135deg,
-    var(--cds-layer-01) 0%,
-    var(--cds-background) 100%
-  );
-  padding: 0;
-  width: 100%;
-  max-width: none;
-  box-sizing: border-box;
-
-  @media screen and (min-width: 1055px) {
-    display: flex; // Show only above 1055px
-    padding: 0;
-    padding-bottom: spacing.$spacing-12; // Add bottom padding for desktop
-  }
-}
-
-.cds--auth-form-container {
+.cds--auth-form {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100%;
-  min-height: auto;
-  padding: spacing.$spacing-05; // Reduced padding on mobile
-  padding-top: spacing.$spacing-12; // Add top padding for mobile
-  background: transparent;
-  position: relative;
-  z-index: 1;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
+  animation: slideIn 0.6s ease-out;
 
-  @media screen and (min-width: 672px) {
-    padding: spacing.$spacing-07; // More padding on tablet
-  }
-
-  @media screen and (min-width: 1055px) {
-    width: 50%; // Half width above 1055px
-    padding: spacing.$spacing-07 spacing.$spacing-09;
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 }
 
-.cds--auth-form-wrapper {
+.cds--auth-form-content {
   width: 100%;
-  max-width: 480px;
-  padding: 0 spacing.$spacing-05; // Add some padding to keep content from touching edges on mobile
+  max-width: 450px;
+  padding: $spacing-07;
+  border-radius: 8px;
+  background-color: #ffffff;
+  position: relative;
+  overflow: hidden;
 
-  @media screen and (min-width: 672px) {
-    padding: 0; // Remove padding on larger screens
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 100%;
+    background: linear-gradient(
+      to bottom,
+      var(--brand-primary),
+      var(--brand-accent)
+    );
   }
+}
 
-  h1 {
-    @include type.type-style("heading-05");
-    font-weight: 400;
-    color: var(--cds-text-primary);
-    margin-bottom: spacing.$spacing-07;
-    letter-spacing: 0;
+.cds--auth-form-header {
+  margin-bottom: $spacing-06;
+
+  h2 {
+    @include type-style("heading-04");
+    color: var(--brand-text-dark);
+    font-weight: 600;
+    margin-bottom: $spacing-03;
   }
 
   p {
-    @include type.type-style("body-long-02");
-    color: var(--cds-text-secondary);
-    line-height: 1.5;
-    margin-bottom: spacing.$spacing-06;
+    @include type-style("body-long-01");
+    color: var(--brand-text-dark);
+    opacity: 0.8;
   }
 }
 
 .cds--auth-footer {
-  padding: spacing.$spacing-05;
-  background-color: var(--cds-background);
-  border-top: 1px solid var(--cds-border-subtle);
+  padding: $spacing-05;
+  background-color: var(--brand-background-light);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 10;
+
+  .cds--auth-footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-03;
+
+    @include breakpoint(md) {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
 
   p {
-    @include type.type-style("helper-text-01");
-    color: var(--cds-text-helper);
+    @include type-style("helper-text-01");
     text-align: center;
     margin: 0;
-    letter-spacing: 0.16px;
+    color: var(--brand-text-dark);
+    opacity: 0.7;
+  }
+
+  .cds--auth-footer-links {
+    display: flex;
+    gap: $spacing-05;
+
+    a {
+      @include type-style("helper-text-01");
+      color: var(--brand-primary);
+      text-decoration: none;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: var(--brand-highlight);
+        text-decoration: underline;
+      }
+    }
   }
 }
