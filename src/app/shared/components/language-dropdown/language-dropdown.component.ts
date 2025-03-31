@@ -86,9 +86,14 @@ export class LanguageDropdownComponent
       const selectedLang = this.languages.find(
         (lang) => lang.code === event.item.value
       );
+      console.log('Selected language:', selectedLang);
 
-      if (selectedLang) {
+      if (
+        selectedLang &&
+        selectedLang.code !== this.languageService.getCurrentLanguage().code
+      ) {
         this.switchLanguage(selectedLang);
+        this.updateSelectedItem(selectedLang.code);
       }
     }
   }

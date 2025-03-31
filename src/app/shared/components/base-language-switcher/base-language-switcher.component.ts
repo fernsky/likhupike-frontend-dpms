@@ -21,12 +21,15 @@ export abstract class BaseLanguageSwitcherComponent {
     protected languageService: LanguageService,
     protected translocoService: TranslocoService
   ) {
-    this.currentLanguage$ = this.languageService.currentLanguage$;
     this.languages = this.languageService.availableLanguages;
+    this.currentLanguage$ = this.languageService.currentLanguage$;
   }
 
   protected switchLanguage(language: Language): void {
-    this.languageService.setLanguage(language);
+    if (language && language.code) {
+      console.log('Switching to language:', language);
+      this.languageService.setLanguage(language);
+    }
   }
 
   protected getLocalizedName(lang: Language): string {
