@@ -37,7 +37,9 @@ import { isPlatformBrowser, NgIf } from '@angular/common';
       .ssr-fallback {
         position: absolute;
         inset: 0;
-        background: var(--cds-background-inverse);
+        background: var(
+          --cds-field-01
+        ); /* Use field-01 instead of background-inverse */
         opacity: 0.05;
       }
     `,
@@ -50,8 +52,8 @@ export class BackgroundParticlesComponent implements OnInit, OnDestroy {
 
   // Configurable inputs with defaults aligned to Carbon Design System
   @Input() particleCount = 15;
-  @Input() particleColor = '--cds-layer-accent'; // Carbon token
-  @Input() particleOpacity = 0.3; // Base opacity
+  @Input() particleColor = '--cds-text-03'; // Use text-03 instead of layer-accent
+  @Input() particleOpacity = 0.15; // Reduced opacity
   @Input() particleSize = { min: 0.5, max: 1.5 }; // Size range
   @Input() particleSpeed = 0.15; // Movement speed
 

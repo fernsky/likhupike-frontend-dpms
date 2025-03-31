@@ -7,12 +7,6 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatSelectModule } from '@angular/material/select';
 import { Store } from '@ngrx/store';
 import { Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -26,34 +20,57 @@ import { AppState } from '@app/core/store';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { PasswordValidatorService } from '@app/shared/validators/password-validator.service';
 import { NumberFormatService } from '@app/shared/services/number-format.service';
+import { MatIconModule } from '@angular/material/icon';
+
+// Carbon imports
+import {
+  ButtonModule,
+  CheckboxModule,
+  DropdownModule,
+  NFormsModule,
+  InputModule,
+  LinkModule,
+  NotificationModule,
+  UIShellModule,
+} from 'carbon-components-angular';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: [
-    './register.component.scss',
-    '../../components/base-auth/base-auth.component.scss',
-  ],
+  styleUrls: ['./register.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
-    MatCardModule,
-    MatInputModule,
-    MatButtonModule,
     MatIconModule,
-    MatCheckboxModule,
-    MatSelectModule,
     TranslocoModule,
+    // Carbon modules
+    ButtonModule,
+    CheckboxModule,
+    DropdownModule,
+    NFormsModule,
+    InputModule,
+    LinkModule,
+    NotificationModule,
+    UIShellModule,
   ],
 })
 export class RegisterComponent implements OnInit, OnDestroy {
   registerForm!: FormGroup;
   hidePassword = true;
   hideConfirmPassword = true;
-  loading = false;
-  wardNumbers = Array.from({ length: 5 }, (_, i) => i + 1);
+
+  // Properly formatted for Carbon dropdown-list
+  wardNumbers = Array.from({ length: 5 }, (_, i) => {
+    const number = i + 1;
+    return {
+      content: `${this.getFormattedWardNumber(number)}`,
+      value: number,
+      selected: false,
+    };
+  });
+
   private destroy$ = new Subject<void>();
 
   // Initialize observables properly
@@ -62,7 +79,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private store: Store<AppState>, // Add proper store typing
+    private store: Store<AppState>,
     private passwordValidator: PasswordValidatorService,
     private numberFormat: NumberFormatService,
     private translocoService: TranslocoService
@@ -117,6 +134,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   getFormattedWardNumber(number: number): string {
     return this.numberFormat.formatNumber(number);
+  }
+
+  togglePasswordVisibility(field: 'password' | 'confirm'): void {
+    if (field === 'password') {
+      this.hidePassword = !this.hidePassword;
+    } else {
+      this.hideConfirmPassword = !this.hideConfirmPassword;
+    }
   }
 
   ngOnInit(): void {
