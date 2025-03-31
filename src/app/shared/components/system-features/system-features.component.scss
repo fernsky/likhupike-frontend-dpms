@@ -5,11 +5,15 @@
 @use "@carbon/styles/scss/motion" as motion;
 
 .cds--features-container {
-  padding: spacing.$spacing-07 0;
   width: 100%;
   max-width: 1584px;
   margin: 0 auto;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  min-height: inherit;
 }
 
 .cds--features-header {
@@ -141,10 +145,6 @@
 }
 
 @include breakpoint.breakpoint(md) {
-  .cds--features-container {
-    padding: spacing.$spacing-08 0;
-  }
-
   .cds--features-header {
     margin-bottom: spacing.$spacing-08;
 
