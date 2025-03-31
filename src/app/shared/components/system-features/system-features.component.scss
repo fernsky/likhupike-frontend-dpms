@@ -6,12 +6,13 @@
 
 .cds--features-container {
   width: 100%;
-  max-width: 1584px;
-  margin: 0 auto;
+  padding: 0;
+  margin: 0;
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   height: 100%;
   min-height: inherit;
 }
@@ -42,6 +43,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: spacing.$spacing-05;
+  width: 100%;
 
   li {
     display: flex;
@@ -141,6 +143,11 @@
       flex: 1;
       line-height: 1.5;
     }
+  }
+
+  @include breakpoint.breakpoint(lg) {
+    grid-template-columns: 1fr;
+    gap: spacing.$spacing-06;
   }
 }
 

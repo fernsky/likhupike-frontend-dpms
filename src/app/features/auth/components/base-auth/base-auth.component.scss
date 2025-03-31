@@ -11,7 +11,6 @@
 }
 
 .cds--auth-container {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: var(--cds-background);
@@ -37,6 +36,7 @@
 
 .cds--auth-content {
   flex: 1;
+  margin-top: spacing.$spacing-09; // Adjusted for header height
   padding: 0;
   background-color: var(--cds-layer-01);
   position: relative;
@@ -69,44 +69,25 @@
 .cds--auth-features {
   height: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   background: linear-gradient(
     135deg,
     var(--cds-layer-01) 0%,
     var(--cds-background) 100%
   );
-  position: sticky;
-  top: 0;
-  max-width: 100%;
+  padding: spacing.$spacing-07 spacing.$spacing-05;
   box-sizing: border-box;
-  overflow-y: auto;
-  max-height: calc(100vh - 48px);
 
   @include breakpoint.breakpoint(lg) {
     display: flex;
-    padding: spacing.$spacing-09;
-  }
-
-  &::after {
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: linear-gradient(
-      to bottom,
-      transparent,
-      rgba(0, 0, 0, 0.1),
-      transparent
-    );
+    padding: spacing.$spacing-09 spacing.$spacing-05;
   }
 }
 
 .cds--auth-form-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   height: 100%;
   min-height: auto;
