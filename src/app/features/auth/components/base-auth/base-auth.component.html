@@ -1,19 +1,21 @@
 <div class="cds--auth-container">
-  <app-background-particles [particleOpacity]="0.2"></app-background-particles>
+  <app-background-particles
+    [particleOpacity]="0.05"
+    [particleColor]="'--cds-text-05'"
+  ></app-background-particles>
 
-  <header class="cds--auth-header">
-    <app-gov-branding></app-gov-branding>
-  </header>
+  <app-gov-branding [elevated]="true"></app-gov-branding>
 
   <main class="cds--auth-content">
-    <div class="cds--grid">
-      <div class="cds--row">
-        <div class="cds--col-lg-8 cds--auth-features">
+    <div class="cds--grid cds--no-gutter">
+      <div class="cds--row cds--no-gutter">
+        <!-- Features section (left side) -->
+        <div class="cds--col-lg-7 cds--auth-features">
           <app-system-features></app-system-features>
         </div>
-        <div
-          class="cds--col-md-8 cds--col-lg-7 cds--offset-lg-1 cds--auth-form-container"
-        >
+
+        <!-- Form container (right side) -->
+        <div class="cds--col-md-8 cds--col-lg-5 cds--auth-form-container">
           <div class="cds--auth-form-wrapper">
             <router-outlet></router-outlet>
           </div>
@@ -21,4 +23,16 @@
       </div>
     </div>
   </main>
+
+  <footer class="cds--auth-footer">
+    <div class="cds--grid">
+      <div class="cds--row">
+        <div class="cds--col">
+          <p class="cds--type-caption-01">
+            {{ "system.footer.copyright" | transloco }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
 </div>

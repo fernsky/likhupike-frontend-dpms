@@ -7,6 +7,7 @@ import { RouterOutlet } from '@angular/router';
 
 // Import Carbon components
 import { GridModule } from 'carbon-components-angular';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-base-auth',
@@ -20,6 +21,7 @@ import { GridModule } from 'carbon-components-angular';
     SystemFeaturesComponent,
     RouterOutlet,
     GridModule,
+    TranslocoModule,
   ],
 })
 export class BaseAuthComponent {}

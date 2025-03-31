@@ -5,49 +5,45 @@
 @use "@carbon/styles/scss/motion" as motion;
 @use "@carbon/styles/scss/theme" as theme;
 @use "@carbon/styles/scss/config" as config;
+@use "@carbon/styles/scss/components/ui-shell" as ui-shell;
 
 :host {
   display: block;
   height: 100%;
+  background-color: var(--cds-ui-background);
 }
 
-// Main container with Carbon background color
+// Main container with Carbon theme background
 .cds--auth-container {
   position: relative;
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: var(--cds-background);
   color: var(--cds-text-01);
-
-  // Carbon-style subtle gradient for visual interest
-  background-image: linear-gradient(
-    to bottom,
-    var(--cds-background),
-    var(--cds-layer-01)
-  );
 }
 
-// Header styling with Carbon tokens
+// Header styling with Carbon tokens - FULL WIDTH
 .cds--auth-header {
   position: relative;
   z-index: 3;
-  background-color: var(--cds-layer);
+  width: 100%;
+  background-color: var(--cds-ui-02); // White background for header
   border-bottom: 1px solid var(--cds-border-subtle);
-  padding: spacing.$spacing-04 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); // Subtle shadow for depth
 
   app-gov-branding {
     display: block;
-    max-width: 1584px; // Carbon's max container width
+    width: 100%;
+    max-width: 1584px; // Carbon max width
     margin: 0 auto;
-    padding: 0 spacing.$spacing-05;
+    padding: spacing.$spacing-05;
 
     @include breakpoint.breakpoint(md) {
-      padding: 0 spacing.$spacing-06;
+      padding: spacing.$spacing-05 spacing.$spacing-06;
     }
 
     @include breakpoint.breakpoint(lg) {
-      padding: 0 spacing.$spacing-07;
+      padding: spacing.$spacing-05 spacing.$spacing-07;
     }
   }
 }
@@ -55,27 +51,43 @@
 // Main content area with Carbon grid and spacing
 .cds--auth-content {
   flex: 1;
-  padding: spacing.$spacing-09 0;
   display: flex;
   align-items: center;
-
-  @include breakpoint.breakpoint(md) {
-    padding: spacing.$spacing-08 0;
-  }
-
-  @include breakpoint.breakpoint(sm) {
-    padding: spacing.$spacing-07 0;
-  }
+  padding: 0;
 
   .cds--grid {
-    width: 100%;
+    height: 100%;
+    max-width: none; // Full width grid
+
+    .cds--row {
+      height: 100%;
+    }
   }
 }
 
-// Features section (left side)
+// Features section styling (left side) - Follow Carbon's layering
 .cds--auth-features {
-  @include breakpoint.breakpoint(md) {
-    display: none;
+  // No border radius for cleaner design
+  background-color: var(--cds-ui-02);
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  display: none; // Hidden by default on smaller screens
+
+  @include breakpoint.breakpoint(lg) {
+    display: block; // Show on large screens
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.03) 0%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    pointer-events: none;
   }
 }
 
@@ -83,29 +95,38 @@
 .cds--auth-form-container {
   display: flex;
   justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: var(--cds-ui-01);
+  padding: spacing.$spacing-07;
+
+  @include breakpoint.breakpoint(md) {
+    padding: spacing.$spacing-06;
+  }
+
+  @include breakpoint.breakpoint(sm) {
+    padding: spacing.$spacing-05;
+  }
 }
 
 .cds--auth-form-wrapper {
   width: 100%;
   max-width: 480px;
-  background-color: var(--cds-layer);
-  border: 1px solid var(--cds-border-subtle);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 
-  // Use Carbon motion tokens for transitions
-  transition:
-    transform motion.$duration-moderate-01 motion.$standard-easing,
-    box-shadow motion.$duration-moderate-01 motion.$standard-easing;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
+  // No border, shadow or hover effect - cleaner Carbon design
+  // Use animation for transitions
+  transition: opacity motion.$duration-moderate-01 motion.$standard-easing;
 }
 
-// Ensure responsive layout
-@include breakpoint.breakpoint(md) {
-  .cds--auth-form-wrapper {
-    max-width: 100%;
+// Footer
+.cds--auth-footer {
+  padding: spacing.$spacing-03 0;
+  background-color: var(--cds-ui-02);
+  border-top: 1px solid var(--cds-border-subtle);
+
+  p {
+    color: var(--cds-text-02);
+    text-align: center;
+    margin: 0;
   }
 }
