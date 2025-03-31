@@ -1,39 +1,34 @@
-<div class="dashboard-container" [class.is-mobile]="isHandset$ | async">
+<div class="cds--content">
   <app-header
     [isExpanded]="isSidenavOpen"
+    [showMenu]="(showMenuToggle$ | async) ?? false"
     (menuToggle)="onHeaderMenuToggle()"
   ></app-header>
 
-  <mat-sidenav-container
-    class="sidenav-container"
-    (backdropClick)="onBackdropClick()"
-  >
-    <!-- Sidenav -->
-    <mat-sidenav
-      #sidenav
-      [mode]="(sidenavMode$ | async) ?? 'side'"
-      [opened]="isSidenavOpen"
-      class="sidenav"
-      [class.mobile-open]="isMobileOpen"
-      fixedInViewport
-      [fixedTopGap]="64"
-    >
-      <app-sidenav
-        [collapsed]="!isSidenavOpen"
-        [mobileOpen]="isMobileOpen"
-        (mobileClose)="onMobileClose()"
-      ></app-sidenav>
-    </mat-sidenav>
+  <div class="cds--content-layout">
+    <!-- Add backdrop for mobile -->
+    <div
+      class="mobile-backdrop"
+      [class.show]="isSidenavOpen && (showMenuToggle$ | async)"
+      (click)="onMobileClose()"
+    ></div>
 
-    <!-- Main Content -->
-    <mat-sidenav-content [class.content-shifted]="isSidenavOpen">
-      <main class="main-content" role="main">
-        <div class="page-wrapper">
-          <div class="router-outlet-container">
+    <app-sidenav
+      [collapsed]="!isSidenavOpen"
+      (mobileClose)="onMobileClose()"
+    ></app-sidenav>
+
+    <main
+      class="cds--content-layout__content"
+      [class.cds--content-layout__content--expanded]="!isSidenavOpen"
+    >
+      <div class="cds--grid">
+        <div class="cds--row">
+          <div class="cds--col">
             <router-outlet></router-outlet>
           </div>
         </div>
-      </main>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+      </div>
+    </main>
+  </div>
 </div>

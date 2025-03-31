@@ -1,554 +1,67 @@
-// Variables
-$sidenav-width: 290px;
-$sidenav-collapsed-width: 80px;
-$transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
-$nepali-font: var(--font-nepali);
-$navy-dark: #1a2942; // Lighter deep navy
-$navy-medium: #233b72; // Lighter rich navy
-$navy-light: #2a4894; // Lighter bright navy
-$gold-accent: #d4af37; // Royal gold accent
+@use "@carbon/styles/scss/spacing" as *;
+@use "@carbon/styles/scss/type" as *;
+@use "@carbon/styles/scss/theme" as *;
+@use "@carbon/styles/scss/motion" as *;
+@use "@carbon/styles/scss/config" as *; // Add this for prefix
 
-// Premium Sidenav Mixins
-@mixin hover-effect {
-  &:hover {
-    background: linear-gradient(
-      to right,
-      rgba(11, 31, 66, 0.04) 0%,
-      rgba(11, 31, 66, 0.08) 100%
-    );
-    transform: translateX(4px);
-  }
-}
-
-@mixin focus-visible {
-  &:focus-visible {
-    outline: 2px solid $navy-light;
-    outline-offset: -2px;
-  }
-}
-
-// Main Container with premium styling
-.sidenav-container {
-  width: $sidenav-width;
+:host {
+  display: block;
   height: 100%;
-  background: linear-gradient(to bottom, $navy-dark 0%, $navy-medium 100%);
-  color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  transition: width 0.3s $transition-timing;
-  position: relative;
-  overflow: hidden; // Change this to hidden
-  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
-  height: 100%; // Set to 100% instead of 100vh
-
-  // Remove fixed positioning as it's handled by mat-sidenav
-  position: relative;
-  left: auto;
-  top: auto;
-
-  // Decorative pattern overlay
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(160deg, rgba(41, 98, 255, 0.05) 0%, transparent 60%),
-      radial-gradient(
-        circle at 70% 20%,
-        rgba(255, 255, 255, 0.12) 0%,
-        transparent 60%
-      );
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  // Collapsed state styles
-  &.collapsed {
-    width: $sidenav-collapsed-width;
-
-    .sidenav-header {
-      padding: 1rem 0.5rem;
-
-      .branding-container {
-        .logo-container {
-          margin-bottom: 0;
-
-          &::after {
-            display: none;
-          }
-        }
-
-        .gov-logo {
-          height: 40px;
-          transition: all 0.3s $transition-timing;
-        }
-      }
-    }
-
-    .hidden {
-      opacity: 0;
-      width: 0;
-      height: 0;
-      overflow: hidden;
-    }
-
-    .submenu {
-      display: none;
-    }
-
-    .nav-icon {
-      margin-right: 0;
-    }
-
-    .badge {
-      opacity: 0;
-      width: 0;
-      overflow: hidden;
-    }
-  }
-
-  // Scrollbar styling
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  // Main navigation area becomes scrollable
-  .nav-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0; // Important for Firefox
-    overflow: hidden; // Add this
-
-    .nav-list {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding: 1rem 0.75rem;
-      margin-right: -8px; // Compensate for scrollbar
-      height: 100%; // Add this
-
-      // Custom scrollbar
-      &::-webkit-scrollbar {
-        width: 4px;
-        height: 4px;
-      }
-
-      &::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.05);
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 2px;
-
-        &:hover {
-          background: rgba(255, 255, 255, 0.3);
-        }
-      }
-
-      // Improve spacing and consistency
-      .nav-item-wrapper {
-        margin: 2px 0;
-
-        .nav-item {
-          min-height: 44px; // Consistent height
-          padding: 0 1rem;
-          margin: 2px 0;
-        }
-
-        // Submenu improvements
-        .submenu {
-          margin-left: 0.5rem;
-
-          .nav-item {
-            height: 40px; // Slightly smaller for submenu items
-            padding-left: 2.75rem;
-          }
-        }
-      }
-    }
-  }
-
-  // Footer stays at bottom
-  .secondary-actions {
-    flex-shrink: 0;
-    padding: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    position: sticky;
-    bottom: 0;
-    width: 100%;
-    z-index: 3;
-  }
 }
 
-// Navigation sections
-.nav-section {
-  padding: 2rem 0.5rem;
-  position: relative;
-  z-index: 2;
-}
+.cds--side-nav {
+  position: fixed;
+  top: 3rem;
+  left: 0;
+  height: calc(100vh - 3rem);
+  background: $layer-01;
+  border-right: 1px solid $border-subtle;
+  width: 16rem;
+  transition: width $duration-moderate-01 motion(standard, productive);
+  overflow-y: auto;
+  z-index: 1000;
 
-// Navigation List
-.nav-list {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 0.75rem 0.25rem;
-  position: relative;
-  z-index: 2;
-}
+  &[rail="true"] {
+    width: 3rem;
 
-// Navigation Item Wrapper
-.nav-item-wrapper {
-  position: relative;
-  margin: 0.25rem 0;
-  padding: 0 0.75rem; // Add consistent padding to wrapper
-
-  &.has-children {
-    > .nav-item {
-      padding-right: 2.75rem;
-      width: 100%; // Ensure full width within padding
+    .sidenav-icon {
+      margin: 0;
     }
   }
 
-  &.expanded {
-    > .nav-item .expand-icon {
-      transform: rotate(180deg);
-    }
-
-    > .nav-item {
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    > .submenu {
-      max-height: 500px;
-      opacity: 1;
-    }
-  }
-}
-
-// Navigation Item
-.nav-item {
-  display: flex;
-  align-items: center; // Align to top for multiline text
-  padding: 0.75rem 1.25rem;
-  color: rgba(255, 255, 255, 0.9); // Increased contrast
-  text-decoration: none;
-  transition: all 0.3s $transition-timing;
-  border-radius: 12px; // Full rounded corners for menu items
-  margin: 0; // Remove margin since we have padding on wrapper
-  cursor: pointer;
-  border: none;
-  background: transparent;
-  width: 100%; // Full width within wrapper padding
-  text-align: left;
-  position: relative;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  font-size: 0.875rem; // Base font size for all menu items
-  font-weight: 400; // Base font weight
-
-  @include hover-effect;
-  @include focus-visible;
-
-  &.active {
-    background: rgba(255, 255, 255, 0.15); // Lighter active state
-    color: #ffffff;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-
-    &::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      height: 60%;
-      width: 4px;
-      background: #ffffff;
-      border-radius: 0 2px 2px 0;
-    }
-
-    .nav-icon {
-      color: #ffffff;
-    }
+  &--collapsed {
+    width: 3rem;
   }
 
-  &.parent-item {
-    width: 100%;
-    font-size: 0.9375rem; // Slightly larger for parent items
-    font-weight: 500; // Bolder for parent items
-    letter-spacing: 0.3px;
-    padding: 0.875rem 1.25rem; // Slightly more padding for parent items
-
-    .nav-icon {
-      font-size: 1.25rem; // Slightly larger icons for parent items
-    }
+  &__items {
+    padding: 0;
   }
 
-  // Ensure icon is vertically centered when text wraps
-  .nav-icon {
-    margin-top: 0.15rem; // Slight adjustment to align with first line of text
-  }
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.1); // Lighter hover state
-  }
-}
-
-// Icons
-.nav-icon {
-  margin-right: 1rem;
-  color: rgba(255, 255, 255, 0.85); // Brighter icons
-  transition: all 0.3s $transition-timing;
-  flex-shrink: 0;
-  width: 24px;
-  height: 24px;
-  font-size: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.expand-icon {
-  position: absolute;
-  right: 1rem;
-  transition: transform 0.3s $transition-timing;
-  font-size: 18px;
-  color: rgba(255, 255, 255, 0.5);
-
-  &.hidden {
-    opacity: 0;
-    width: 0;
-    overflow: hidden;
-  }
-}
-
-// Labels
-.nav-label {
-  white-space: normal; // Allow text to wrap
-  overflow-wrap: break-word;
-  word-wrap: break-word; // Legacy support
-  hyphens: auto; // Optional: add hyphens for better readability
-  overflow: visible; // Show overflow text
-  text-overflow: inherit; // Don't use ellipsis
-  transition: all 0.3s $transition-timing;
-  flex: 1;
-  line-height: 1.3; // Increase line height for better readability on multiple lines
-  padding-right: 4px; // Small padding to prevent text touching the edge
-  padding: 0.5rem 4px 0.5rem 0;
-  max-width: 120px;
-  &.nepali {
-    font-family: $nepali-font;
-    font-size: 1.1rem;
-  }
-
-  &.hidden {
-    opacity: 0;
-    width: 0;
-    overflow: hidden;
-  }
-}
-
-// Submenu - Refined
-.submenu {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: all 0.3s $transition-timing;
-  padding: 0.25rem 0; // Add vertical padding
-
-  .nav-item {
-    padding: 0.5rem 1rem 0.5rem 3.5rem; // Increase left padding
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.75);
-    margin: 0.125rem 0.5rem; // Add horizontal margin for nested items
-    border-radius: 8px;
-    background: transparent;
-    width: calc(100% - 1rem); // Account for margin
-    font-size: 0.8125rem; // Smaller font for submenu items
-    padding: 0.625rem 1rem 0.625rem 3.25rem; // Adjusted padding
-    height: 38px; // Slightly reduced height for submenu items
+  &__item {
+    height: 3rem;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.05);
-      transform: none;
+      background-color: $layer-hover;
     }
 
-    &.active {
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: none;
-      font-weight: 500; // Keep active items more prominent
-
-      &::before {
-        display: none;
-      }
-    }
-
-    .nav-icon {
-      font-size: 18px;
-      width: 20px;
-      height: 20px;
-      margin-right: 0.75rem;
-      font-size: 1.125rem; // Slightly smaller icons in submenu
-      width: 20px;
-      height: 20px;
-      margin-right: 0.75rem;
+    &--active {
+      background-color: $layer-selected;
     }
   }
-}
 
-// Badge
-.badge {
-  min-width: 20px;
-  height: 20px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  font-size: 0.7rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 0.35rem;
-  font-weight: 600;
-  margin-left: 0.5rem;
-  transition: all 0.3s $transition-timing;
-
-  &.warn {
-    background: #ff4d4f;
-    animation: pulse 2s infinite;
+  .sidenav-icon {
+    margin-right: $spacing-03;
+    width: 1rem;
+    height: 1rem;
+    font-size: 1rem;
+    color: $icon-primary;
   }
 
-  &.primary {
-    background: $navy-light;
+  &__menu-item {
+    height: 2.5rem;
   }
 
-  &.accent {
-    background: #1890ff;
-  }
-}
-
-// Secondary Actions
-.secondary-actions {
-  padding: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  position: relative;
-  z-index: 2;
-  margin-top: auto; // Push to bottom of the sidenav
-
-  mat-divider {
-    border-top-color: rgba(255, 255, 255, 0.1);
-    margin: 0.75rem 0;
-  }
-
-  button {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-}
-
-// Animation for badges
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-// Remove shine animation
-@keyframes shine {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-// Responsive hover effects
-@media (hover: hover) {
-  .sidenav-container .sidenav-header .branding-container .gov-logo:hover {
-    transform: translateY(-3px) scale(1.05);
-    filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.4));
-  }
-}
-
-// Improved Responsive Design
-
-// High Contrast Mode
-@media (prefers-contrast: more) {
-  .sidenav-container {
-    background: #000;
-  }
-
-  .nav-item.active::before {
-    width: 6px;
-  }
-}
-
-// Reduced Motion
-@media (prefers-reduced-motion: reduce) {
-  .sidenav-container,
-  .nav-item,
-  .submenu,
-  .nav-label,
-  .expand-icon {
-    transition: none !important;
-  }
-
-  .badge.warn {
-    animation: none !important;
-  }
-}
-
-// Print Styles
-@media print {
-  .sidenav-container {
-    display: none;
-  }
-}
-
-// Backdrop
-.sidenav-backdrop {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-  opacity: 0;
-  visibility: hidden;
-  transition:
-    opacity 0.3s ease,
-    visibility 0.3s ease;
-
-  &.visible {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  @media (max-width: 1199px) {
-    display: block;
-  }
-}
-
-// Remove duplicate media query block to avoid conflicts
-// Delete the other @media (max-width: 1199px) block
-
-// Add touch handling for mobile devices
-@media (hover: none) {
-  .nav-item {
-    &:active {
-      background: rgba(255, 255, 255, 0.15);
-    }
+  [lang="ne"] {
+    font-family: var(--font-nepali);
   }
 }

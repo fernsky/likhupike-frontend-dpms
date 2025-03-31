@@ -1,211 +1,108 @@
+@use "@carbon/styles/scss/spacing" as *;
+@use "@carbon/styles/scss/type" as *;
+@use "@carbon/styles/scss/breakpoint" as *;
+@use "@carbon/styles/scss/theme" as *;
+
 :host {
-  display: block;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 9000;
 }
 
-.app-header {
-  height: 84px;
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
+.cds--header {
+  position: relative;
+  z-index: inherit;
+  background: $background;
+  border-bottom: 1px solid $border-subtle;
+  height: 3rem;
+  width: 100%;
 
-  .header-start {
+  // Menu trigger button
+  .cds--header__menu-trigger {
+    width: 3.5rem;
+    height: 3.5rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 16px;
-    flex: 1;
-    min-width: 0;
+    justify-content: center;
+    transition: background-color motion(standard, productive);
 
-    @media (max-width: 480px) {
-      gap: 0px;
+    &:hover {
+      background-color: $background-hover;
     }
 
-    .menu-toggle {
-      margin-right: 8px;
-
-      &.expanded {
-        background-color: rgba(0, 0, 0, 0.04);
-
-        .mat-icon {
-          color: #1a73e8;
-        }
-      }
-    }
-
-    ::ng-deep app-gov-branding {
-      flex: 1;
-      min-width: 0;
-
-      .gov-branding {
-        padding: 0;
-        background: none;
-        border: none;
-      }
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      gap: 12px;
-
-      .logo {
-        height: 32px;
-        width: auto;
-        transition: transform 0.2s ease;
-
-        &:hover {
-          transform: scale(1.05);
-        }
-      }
-
-      .brand-text {
-        display: flex;
-        flex-direction: column;
-        gap: 0.13rem;
-
-        .brand-title {
-          color: #1a2942; // Changed to match municipality theme
-          font-size: 16px;
-          font-weight: 600;
-          line-height: 1.2;
-
-          &:lang(ne) {
-            font-family: var(--font-nepali);
-            font-size: 18px;
-          }
-        }
-
-        .brand-subtitle {
-          color: #5f6368;
-          font-size: 12px;
-          line-height: 1.2;
-
-          &:lang(ne) {
-            font-family: var(--font-nepali);
-            font-size: 13px;
-          }
-        }
-      }
+    &.cds--header__action--active {
+      background-color: $background-selected;
+      color: $text-primary;
     }
   }
 
-  .header-end {
+  // Brand section
+  .cds--header__name {
     display: flex;
     align-items: center;
-    gap: 8px;
+    height: 100%;
+    padding: 0 $spacing-05;
+    text-decoration: none;
+    border-right: 1px solid $border-subtle;
+    transition: background-color motion(standard, productive);
+    gap: $spacing-05;
 
-    .mat-icon-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      line-height: 40px;
-      border-radius: 50%;
+    &:hover {
+      background-color: $background-hover;
+    }
 
-      &:hover {
-        background: rgba(0, 0, 0, 0.04);
+    .cds--header__logo {
+      height: 2rem;
+      width: auto;
+    }
+
+    .cds--header__title {
+      @include type-style("heading-compact-01");
+      color: $text-primary;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      &:lang(ne) {
+        font-family: var(--font-nepali);
       }
-
-      mat-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 24px;
-        height: 24px;
-        font-size: 24px;
-        line-height: 1;
-      }
-    }
-  }
-}
-
-// Override Material styles
-::ng-deep {
-  .user-menu.mat-mdc-menu-panel {
-    min-width: 200px !important;
-  }
-
-  .mat-mdc-menu-item {
-    gap: 12px;
-
-    .mat-icon {
-      margin: 0;
     }
   }
 
-  .mat-badge-warn .mat-badge-content {
-    background-color: #f44336;
-  }
-
-  .mat-mdc-icon-button {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    .mat-icon {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      width: 24px !important;
-      height: 24px !important;
-      line-height: 1 !important;
-      margin: 0 !important;
-    }
+  // Navigation container (language dropdown)
+  .cds--header__nav-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    padding: 0 $spacing-05;
   }
 }
 
 // Responsive styles
-@media (max-width: 600px) {
-  .app-header {
-    padding: 0 8px;
+@include breakpoint-down(md) {
+  .cds--header {
+    .cds--header__name {
+      padding: 0 $spacing-03;
+      gap: $spacing-03;
 
-    ::ng-deep app-gov-branding {
-      .gov-branding {
-        .system-title {
-          font-size: 1rem;
-        }
+      .cds--header__logo {
+        height: 1.75rem;
+      }
+
+      .cds--header__title {
+        @include type-style("label-01");
+        max-width: 160px;
       }
     }
 
-    .header-start {
-      .brand {
-        .brand-text {
-          .brand-title {
-            font-size: 14px;
-
-            &:lang(ne) {
-              font-size: 16px;
-            }
-          }
-          .brand-subtitle {
-            font-size: 11px;
-
-            &:lang(ne) {
-              font-size: 12px;
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .app-header {
-    .header-end {
-      app-header-language-toggle,
-      .user-menu {
-        display: none;
-      }
+    .cds--header__nav-container {
+      padding: 0 $spacing-03;
     }
   }
 }

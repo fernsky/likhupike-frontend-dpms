@@ -41,6 +41,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import {
+  SideNavModule,
+  UIShellModule,
+  IconModule,
+} from 'carbon-components-angular';
 
 interface NavItem {
   id: string;
@@ -99,6 +104,9 @@ interface NavItem {
     MatDividerModule,
     MatTooltipModule,
     TranslocoModule,
+    SideNavModule,
+    UIShellModule,
+    IconModule,
   ],
   providers: [
     provideTranslocoScope({
@@ -112,14 +120,17 @@ interface NavItem {
   ],
 })
 export class SidenavComponent implements OnInit, OnDestroy {
-  @Input() collapsed = false; // Now controlled from header
-  @Input() mobileOpen = false;
+  @Input() collapsed = false;
+  @Input() rail = false; // Add rail input to match Carbon sidenav
+  @Input() expanded = true; // Add expanded input
   @Output() mobileClose = new EventEmitter<void>();
   @Output() mobileToggle = new EventEmitter<void>();
+  @Output() selectedChange = new EventEmitter<string>(); // Add event emitter for selection
 
+  theme = 'g100'; // Add theme property for Carbon
   isHandset$: Observable<boolean>;
   currentUrl = '';
-  expandedItems = new Set<string>();
+  expandedMenus = new Set<string>();
   currentLang = 'en';
   private destroy$ = new Subject<void>();
 
@@ -174,20 +185,45 @@ export class SidenavComponent implements OnInit, OnDestroy {
       });
   }
 
-  toggleExpand(itemId: string): void {
-    if (this.expandedItems.has(itemId)) {
-      this.expandedItems.delete(itemId);
-    } else {
-      this.expandedItems.add(itemId);
+  onSelected(item: NavItem): void {
+    if (item.route) {
+      this.router.navigate([item.route]);
+      this.mobileClose.emit();
     }
   }
 
-  isExpanded(itemId: string): boolean {
-    return this.expandedItems.has(itemId);
+  isMenuExpanded(menuId: string): boolean {
+    return this.expandedMenus.has(menuId);
   }
 
-  isActive(route: string): boolean {
+  toggleMenu(menuId: string): void {
+    if (this.expandedMenus.has(menuId)) {
+      this.expandedMenus.delete(menuId);
+    } else {
+      this.expandedMenus.add(menuId);
+    }
+  }
+
+  isRouteActive(route: string | undefined): boolean {
+    if (!route) return false;
     return this.currentUrl.startsWith(route);
+  }
+
+  getItemLabel(item: NavItem): string {
+    return this.currentLang === 'ne' ? item.labelNp : item.label;
+  }
+
+  onLogout(): void {
+    this.store.dispatch(AuthActions.logout());
+    this.mobileClose.emit();
+  }
+
+  closeMobileNav(): void {
+    this.mobileClose.emit();
+  }
+
+  toggleMobileNav(): void {
+    this.mobileToggle.emit();
   }
 
   private setupRouteListener(): void {
@@ -206,7 +242,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   private expandParentItems(url: string): void {
     this.navigationItems.forEach((item) => {
       if (item.children?.some((child) => child.route === url)) {
-        this.expandedItems.add(item.id);
+        this.expandedMenus.add(item.id);
       }
     });
   }
@@ -244,19 +280,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
         )
       )
     );
-  }
-
-  onLogout(): void {
-    this.store.dispatch(AuthActions.logout());
-  }
-
-  closeMobileNav(): void {
-    this.mobileClose.emit();
-  }
-
-  toggleMobileNav(): void {
-    this.mobileOpen = !this.mobileOpen;
-    this.mobileToggle.emit();
   }
 
   ngOnDestroy(): void {

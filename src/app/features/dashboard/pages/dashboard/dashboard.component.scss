@@ -6,6 +6,16 @@ $navy-medium: #233b72; // Lighter rich navy
 $navy-light: #2a4894; // Lighter bright navy
 $gold-accent: #d4af37; // Royal gold accent
 
+@use "@carbon/styles/scss/spacing" as *;
+@use "@carbon/styles/scss/breakpoint" as *;
+@use "@carbon/styles/scss/theme" as *;
+@use "@carbon/styles/scss/motion" as *;
+
+:host {
+  display: block;
+  height: 100vh;
+}
+
 // Main Container
 .dashboard-container {
   display: flex;
@@ -289,5 +299,37 @@ $gold-accent: #d4af37; // Royal gold accent
 @media (prefers-contrast: more) {
   .router-outlet-container {
     border: 2px solid var(--text-primary);
+  }
+}
+
+.cds--content {
+  margin-top: 3rem;
+  min-height: calc(100vh - 3rem);
+  background: $background;
+}
+
+.cds--content-layout {
+  display: flex;
+  height: calc(100vh - 3rem);
+  position: relative;
+
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: $spacing-05;
+    margin-left: 16rem; // Width of expanded sidenav
+    transition: margin-left $duration-moderate-01 motion(standard, productive);
+
+    &--expanded {
+      margin-left: 3rem; // Width of collapsed sidenav
+    }
+  }
+}
+
+// Responsive adjustments
+@include breakpoint-down(lg) {
+  .cds--content-layout__content {
+    margin-left: 0 !important;
+    padding: $spacing-05 $spacing-03;
   }
 }

@@ -1,147 +1,41 @@
-<!-- Backdrop -->
-<div
-  class="sidenav-backdrop"
-  [class.visible]="mobileOpen"
-  (click)="closeMobileNav()"
-></div>
-
-<nav
-  class="sidenav-container"
-  [class.collapsed]="collapsed"
-  [class.mobile-open]="mobileOpen"
-  role="navigation"
->
-  <!-- Navigation -->
-  <div class="nav-section">
-    <div class="nav-list" role="menubar" [attr.aria-label]="'Navigation'">
-      <ng-container *ngFor="let item of navigationItems">
-        <div
-          class="nav-item-wrapper"
-          [class.has-children]="item.children?.length"
-          [class.expanded]="isExpanded(item.id)"
-          role="none"
-          *ngIf="hasPermission(item.permissions) | async"
-        >
-          <!-- Single Menu Item -->
-          <a
-            *ngIf="!item.children?.length"
-            [routerLink]="item.route"
-            routerLinkActive="active"
-            class="nav-item"
-            role="menuitem"
-            [attr.aria-current]="
-              isActive(item.route || '') ? 'page' : undefined
-            "
-            [matTooltip]="
-              collapsed
-                ? currentLang === 'ne'
-                  ? item.labelNp
-                  : item.label
-                : ''
-            "
-            matTooltipPosition="right"
-          >
-            <mat-icon class="nav-icon" aria-hidden="true">{{
-              item.icon
-            }}</mat-icon>
-            <span class="nav-label" [class.hidden]="collapsed">
-              {{ currentLang === "ne" ? item.labelNp : item.label }}
-            </span>
-          </a>
-
-          <!-- Parent Menu Item -->
-          <button
-            *ngIf="item.children?.length"
-            class="nav-item parent-item"
-            (click)="toggleExpand(item.id)"
-            role="menuitem"
-            [attr.aria-expanded]="isExpanded(item.id)"
-            [attr.aria-controls]="'submenu-' + item.id"
-            [matTooltip]="
-              collapsed
-                ? currentLang === 'ne'
-                  ? item.labelNp
-                  : item.label
-                : ''
-            "
-            matTooltipPosition="right"
-          >
-            <mat-icon class="nav-icon" aria-hidden="true">{{
-              item.icon
-            }}</mat-icon>
-            <span class="nav-label" [class.hidden]="collapsed">
-              {{ currentLang === "ne" ? item.labelNp : item.label }}
-            </span>
-            <mat-icon class="expand-icon" [class.hidden]="collapsed"
-              >expand_more</mat-icon
-            >
-          </button>
-
-          <!-- Submenu -->
-          <div
-            *ngIf="item.children?.length && (!collapsed || isExpanded(item.id))"
-            [@submenuAnimation]="isExpanded(item.id) ? 'expanded' : 'collapsed'"
-            class="submenu"
-            [id]="'submenu-' + item.id"
-            role="menu"
-            [attr.aria-hidden]="!isExpanded(item.id)"
-          >
-            <ng-container *ngFor="let child of item.children">
-              <a
-                *ngIf="hasPermission(child.permissions) | async"
-                [routerLink]="child.route"
-                routerLinkActive="active"
-                class="nav-item child-item"
-                role="menuitem"
-                [attr.aria-current]="
-                  isActive(child.route || '') ? 'page' : undefined
-                "
-                [matTooltip]="
-                  collapsed
-                    ? currentLang === 'ne'
-                      ? child.labelNp
-                      : child.label
-                    : ''
-                "
-                matTooltipPosition="right"
-              >
-                <mat-icon class="nav-icon" aria-hidden="true">{{
-                  child.icon
-                }}</mat-icon>
-                <span class="nav-label" [class.hidden]="collapsed">
-                  {{ currentLang === "ne" ? child.labelNp : child.label }}
-                </span>
-                <span
-                  *ngIf="child.badge"
-                  class="badge"
-                  [ngClass]="child.badge.color"
-                  role="status"
-                  [attr.aria-label]="child.badge.value + ' notifications'"
-                >
-                  {{ child.badge.value }}
-                </span>
-              </a>
-            </ng-container>
-          </div>
-        </div>
-      </ng-container>
-    </div>
-  </div>
-
-  <!-- Bottom Action: Logout -->
-  <div class="secondary-actions">
-    <button
-      class="nav-item"
-      (click)="onLogout()"
-      role="menuitem"
-      aria-label="Logout"
-      [matTooltip]="collapsed ? ('sidenav.user.logout' | transloco) : ''"
-      matTooltipPosition="right"
+<cds-sidenav [rail]="collapsed">
+  <ng-container *ngFor="let item of navigationItems">
+    <!-- Menu with children -->
+    <cds-sidenav-menu
+      *ngIf="item.children?.length && (hasPermission(item.permissions) | async)"
+      [title]="getItemLabel(item)"
+      [expanded]="isMenuExpanded(item.id)"
+      (selected)="toggleMenu(item.id)"
     >
-      <mat-icon aria-hidden="true">logout</mat-icon>
-      <span class="nav-label" [class.hidden]="collapsed">{{
-        "sidenav.user.logout" | transloco
-      }}</span>
-    </button>
-  </div>
-</nav>
+      <mat-icon size="16">{{ item.icon }}</mat-icon>
+      <cds-sidenav-item
+        *ngFor="let child of item.children"
+        [route]="[child.route]"
+        [active]="isRouteActive(child.route)"
+        (selected)="onSelected(child)"
+      >
+        <mat-icon size="16">{{ child.icon }}</mat-icon>
+        {{ getItemLabel(child) }}
+      </cds-sidenav-item>
+    </cds-sidenav-menu>
+
+    <!-- Single items -->
+    <cds-sidenav-item
+      *ngIf="
+        !item.children?.length && (hasPermission(item.permissions) | async)
+      "
+      [route]="[item.route]"
+      [active]="isRouteActive(item.route)"
+      (selected)="onSelected(item)"
+    >
+      <mat-icon size="16">{{ item.icon }}</mat-icon>
+      {{ getItemLabel(item) }}
+    </cds-sidenav-item>
+  </ng-container>
+
+  <!-- Logout item -->
+  <cds-sidenav-item (selected)="onLogout()">
+    <mat-icon size="16">logout</mat-icon>
+    {{ "sidenav.user.logout" | transloco }}
+  </cds-sidenav-item>
+</cds-sidenav>

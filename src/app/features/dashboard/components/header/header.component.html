@@ -1,66 +1,14 @@
-<header class="app-header">
-  <div class="header-start">
-    <button
-      mat-icon-button
-      class="menu-toggle"
+<div>
+  <cds-header [name]="'header.brand.title' | transloco">
+    <!-- Only show hamburger when showMenu is true -->
+    <cds-hamburger
+      *ngIf="showMenu"
+      [active]="isExpanded"
       (click)="onMenuToggle()"
-      [class.expanded]="isExpanded"
-      [attr.aria-label]="'header.menuToggle' | transloco"
-    >
-      <mat-icon [@rotateAnimation]="isExpanded ? 'expanded' : 'collapsed'">
-        {{ isExpanded ? "close" : "menu" }}
-      </mat-icon>
-    </button>
-    <a class="brand" routerLink="/dashboard">
-      <img
-        src="assets/images/nepal-government-logo.png"
-        [alt]="'header.brand.title' | transloco"
-        class="logo"
-      />
-      <div class="brand-text">
-        <!-- This div will be hidden on mobile -->
-        <span class="brand-title">{{ "header.brand.title" | transloco }}</span>
-        <span class="brand-subtitle">{{
-          "header.brand.subtitle" | transloco
-        }}</span>
-      </div>
-    </a>
-  </div>
+    ></cds-hamburger>
 
-  <div class="header-end">
-    <!-- These components will be hidden on mobile -->
-    <app-header-language-toggle></app-header-language-toggle>
-    <button
-      mat-icon-button
-      [matTooltip]="'header.notifications' | transloco"
-      class="notification-btn"
-      matBadgeColor="warn"
-      matBadgeSize="small"
-    >
-      <mat-icon>notifications</mat-icon>
-    </button>
-    <button
-      mat-icon-button
-      [matMenuTriggerFor]="userMenu"
-      class="user-menu-trigger"
-    >
-      <mat-icon>account_circle</mat-icon>
-    </button>
-  </div>
-</header>
-
-<mat-menu #userMenu="matMenu" class="user-menu">
-  <button mat-menu-item>
-    <mat-icon>person</mat-icon>
-    <span>{{ "header.profile" | transloco }}</span>
-  </button>
-  <button mat-menu-item>
-    <mat-icon>settings</mat-icon>
-    <span>{{ "header.settings" | transloco }}</span>
-  </button>
-  <mat-divider></mat-divider>
-  <button mat-menu-item>
-    <mat-icon>logout</mat-icon>
-    <span>{{ "header.logout" | transloco }}</span>
-  </button>
-</mat-menu>
+    <cds-header-global>
+      <app-language-dropdown></app-language-dropdown>
+    </cds-header-global>
+  </cds-header>
+</div>
