@@ -1,84 +1,156 @@
-<mat-card-header>
-  <mat-card-title>{{ "login.title" | transloco }}</mat-card-title>
-  <mat-card-subtitle>{{ "login.subtitle" | transloco }}</mat-card-subtitle>
-</mat-card-header>
+<div class="cds--login-container">
+  <h1 class="cds--type-productive-heading-04">
+    {{ "login.title" | transloco }}
+  </h1>
+  <p class="cds--type-body-long-01 cds--login-subtitle">
+    {{ "login.subtitle" | transloco }}
+  </p>
 
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-  <mat-form-field appearance="outline">
-    <mat-label>{{ "login.fields.email.label" | transloco }}</mat-label>
-    <input
-      matInput
-      formControlName="email"
-      type="email"
-      [placeholder]="'login.fields.email.placeholder' | transloco"
-    />
-    <mat-icon matPrefix>email</mat-icon>
-    <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
-      {{ "login.fields.email.errors.required" | transloco }}
-    </mat-error>
-    <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
-      {{ "login.fields.email.errors.invalid" | transloco }}
-    </mat-error>
-  </mat-form-field>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="cds--form">
+    <!-- Email Input -->
+    <div class="cds--form-item">
+      <cds-label [helperText]="'login.fields.email.helper' | transloco">
+        {{ "login.fields.email.label" | transloco }}
+      </cds-label>
+      <div
+        class="cds--text-input__field-wrapper cds--text-input__field-wrapper--with-icons"
+      >
+        <mat-icon class="cds--text-input__icon mat-icon">email</mat-icon>
+        <input
+          cdsText
+          [placeholder]="'login.fields.email.placeholder' | transloco"
+          formControlName="email"
+          type="email"
+          [invalid]="
+            (loginForm.get('email')?.invalid &&
+              loginForm.get('email')?.touched) ??
+            false
+          "
+          [attr.data-invalid]="
+            loginForm.get('email')?.invalid && loginForm.get('email')?.touched
+          "
+          aria-controls="email-error-msg"
+        />
+      </div>
+      <div
+        *ngIf="
+          loginForm.get('email')?.invalid && loginForm.get('email')?.touched
+        "
+        class="cds--form-requirement"
+        id="email-error-msg"
+      >
+        <ng-container *ngIf="loginForm.get('email')?.hasError('required')">
+          {{ "login.fields.email.errors.required" | transloco }}
+        </ng-container>
+        <ng-container *ngIf="loginForm.get('email')?.hasError('email')">
+          {{ "login.fields.email.errors.invalid" | transloco }}
+        </ng-container>
+      </div>
+    </div>
 
-  <mat-form-field appearance="outline">
-    <mat-label>{{ "login.fields.password.label" | transloco }}</mat-label>
-    <input
-      matInput
-      formControlName="password"
-      [type]="hidePassword ? 'password' : 'text'"
-      [placeholder]="'login.fields.password.placeholder' | transloco"
-    />
-    <mat-icon matPrefix>lock</mat-icon>
-    <button
-      mat-icon-button
-      matSuffix
-      type="button"
-      (click)="hidePassword = !hidePassword"
-    >
-      <mat-icon>{{ hidePassword ? "visibility_off" : "visibility" }}</mat-icon>
-    </button>
-    <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
-      {{ "login.fields.password.errors.required" | transloco }}
-    </mat-error>
-  </mat-form-field>
+    <!-- Password Input -->
+    <div class="cds--form-item">
+      <cds-label [helperText]="'login.fields.password.helper' | transloco">
+        {{ "login.fields.password.label" | transloco }}
+      </cds-label>
+      <div
+        class="cds--text-input__field-wrapper cds--text-input__field-wrapper--with-icons"
+      >
+        <mat-icon class="cds--text-input__icon mat-icon">lock</mat-icon>
+        <input
+          cdsText
+          [placeholder]="'login.fields.password.placeholder' | transloco"
+          formControlName="password"
+          [type]="hidePassword ? 'password' : 'text'"
+          [invalid]="
+            (loginForm.get('password')?.invalid &&
+              loginForm.get('password')?.touched) ??
+            false
+          "
+          [attr.data-invalid]="
+            loginForm.get('password')?.invalid &&
+            loginForm.get('password')?.touched
+          "
+          aria-controls="password-error-msg"
+        />
+        <button
+          cdsButton="ghost"
+          size="sm"
+          class="cds--text-input__password-visibility-toggle"
+          type="button"
+          (click)="togglePasswordVisibility()"
+          [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+        >
+          <mat-icon>{{
+            hidePassword ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+      </div>
+      <div
+        *ngIf="
+          loginForm.get('password')?.invalid &&
+          loginForm.get('password')?.touched
+        "
+        class="cds--form-requirement"
+        id="password-error-msg"
+      >
+        <ng-container *ngIf="loginForm.get('password')?.hasError('required')">
+          {{ "login.fields.password.errors.required" | transloco }}
+        </ng-container>
+        <ng-container *ngIf="loginForm.get('password')?.hasError('minlength')">
+          {{ "login.fields.password.errors.minlength" | transloco }}
+        </ng-container>
+      </div>
+    </div>
 
-  <div class="form-error" *ngIf="loginForm.hasError('serverError')">
-    <mat-icon>error_outline</mat-icon>
-    <span>{{ loginForm.getError("serverError") }}</span>
-  </div>
+    <!-- Server Error Display - Fixed to use proper notification pattern -->
+    <div *ngIf="loginForm.hasError('serverError')" class="cds--login-error">
+      <div class="cds--inline-notification cds--inline-notification--error">
+        <div class="cds--inline-notification__details">
+          <mat-icon class="cds--inline-notification__icon">error</mat-icon>
+          <div class="cds--inline-notification__text-wrapper">
+            <div class="cds--inline-notification__title">Error</div>
+            <div class="cds--inline-notification__subtitle">
+              {{ loginForm.getError("serverError") }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <div class="form-navigation">
-    <button
-      mat-flat-button
-      color="primary"
-      type="submit"
-      class="submit-btn"
-      [disabled]="loginForm.invalid || loading"
-    >
-      <span class="submit-content">
-        <mat-icon>login</mat-icon>
+    <!-- Submit Button -->
+    <div class="cds--form-item cds--login-submit">
+      <button
+        cdsButton
+        type="submit"
+        [disabled]="loginForm.invalid || loading"
+        [isExpressive]="true"
+      >
+        <span class="cds--btn__icon">
+          <mat-icon>login</mat-icon>
+        </span>
         {{
           loading
             ? ("login.actions.submitting" | transloco)
             : ("login.actions.submit" | transloco)
         }}
-      </span>
-    </button>
-  </div>
-
-  <div class="form-footer">
-    <div class="no-account-link">
-      <span>{{ "login.actions.noAccount" | transloco }}</span>
-      <a mat-button color="primary" routerLink="/auth/register">
-        {{ "login.actions.register" | transloco }}
-      </a>
+      </button>
     </div>
 
-    <div class="forgot-password-link">
-      <a mat-button routerLink="/auth/forgot-password">
-        {{ "login.actions.forgotPassword" | transloco }}
-      </a>
+    <!-- Footer Links -->
+    <div class="cds--login-footer">
+      <div class="cds--login-no-account">
+        <span>{{ "login.actions.noAccount" | transloco }}</span>
+        <a cdsLink routerLink="/auth/register">
+          {{ "login.actions.register" | transloco }}
+        </a>
+      </div>
+
+      <div class="cds--login-forgot-password">
+        <a cdsLink routerLink="/auth/forgot-password">
+          {{ "login.actions.forgotPassword" | transloco }}
+        </a>
+      </div>
     </div>
-  </div>
-</form>
+  </form>
+</div>

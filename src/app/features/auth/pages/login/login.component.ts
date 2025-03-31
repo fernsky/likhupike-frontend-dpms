@@ -7,41 +7,43 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDividerModule } from '@angular/material/divider';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import * as AuthActions from '@app/core/store/auth/auth.actions';
 import { selectAuthState } from '@app/core/store/auth/auth.selectors';
 import { TranslocoModule } from '@jsverse/transloco';
+import { MatIconModule } from '@angular/material/icon';
+
+// Carbon Imports
+import {
+  ButtonModule,
+  NFormsModule,
+  InputModule,
+  LinkModule,
+  NotificationModule,
+  UIShellModule,
+} from 'carbon-components-angular';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: [
-    './login.component.scss',
-    '../../components/base-auth/base-auth.component.scss',
-  ],
+  styleUrls: ['./login.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
     RouterLink,
-    MatCardModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatFormFieldModule,
-    MatDividerModule,
     TranslocoModule,
+    MatIconModule,
+
+    ButtonModule,
+    NFormsModule,
+    InputModule,
+    LinkModule,
+    UIShellModule,
+    NotificationModule,
   ],
 })
 export class LoginComponent implements OnInit, OnDestroy {
@@ -80,6 +82,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     } else {
       this.loginForm.markAllAsTouched();
     }
+  }
+
+  togglePasswordVisibility(): void {
+    this.hidePassword = !this.hidePassword;
   }
 
   ngOnDestroy(): void {

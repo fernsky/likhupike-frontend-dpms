@@ -1,29 +1,31 @@
 {
-  "title": "Welcome Back",
-  "subtitle": "Sign in to your account",
+  "title": "Login",
+  "subtitle": "Welcome back! Please enter your credentials to continue.",
   "fields": {
     "email": {
       "label": "Email",
       "placeholder": "Enter your email",
+      "helper": "Enter the email address you used during registration",
       "errors": {
         "required": "Email is required",
-        "invalid": "Please enter a valid email address",
-        "governmentEmail": "Please use a valid government email address"
+        "invalid": "Please enter a valid email address"
       }
     },
     "password": {
       "label": "Password",
       "placeholder": "Enter your password",
+      "helper": "Enter your account password",
       "errors": {
-        "required": "Password is required"
+        "required": "Password is required",
+        "minlength": "Password must be at least 8 characters"
       }
     }
   },
   "actions": {
-    "submit": "Sign In",
-    "submitting": "Signing in...",
-    "register": "Create Account",
+    "submit": "Login",
+    "submitting": "Logging in...",
     "noAccount": "Don't have an account?",
-    "forgotPassword": "Forgot Password?"
+    "register": "Register",
+    "forgotPassword": "Forgot password?"
   }
 }
