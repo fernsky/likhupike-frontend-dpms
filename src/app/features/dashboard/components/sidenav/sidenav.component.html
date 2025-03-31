@@ -7,14 +7,12 @@
       [expanded]="isMenuExpanded(item.id)"
       (selected)="toggleMenu(item.id)"
     >
-      <mat-icon size="16">{{ item.icon }}</mat-icon>
       <cds-sidenav-item
         *ngFor="let child of item.children"
         [route]="[child.route]"
         [active]="isRouteActive(child.route)"
         (selected)="onSelected(child)"
       >
-        <mat-icon size="16">{{ child.icon }}</mat-icon>
         {{ getItemLabel(child) }}
       </cds-sidenav-item>
     </cds-sidenav-menu>
@@ -28,14 +26,12 @@
       [active]="isRouteActive(item.route)"
       (selected)="onSelected(item)"
     >
-      <mat-icon size="16">{{ item.icon }}</mat-icon>
       {{ getItemLabel(item) }}
     </cds-sidenav-item>
   </ng-container>
 
   <!-- Logout item -->
-  <cds-sidenav-item (selected)="onLogout()">
-    <mat-icon size="16">logout</mat-icon>
+  <cds-sidenav-item (click)="onLogout()">
     {{ "sidenav.user.logout" | transloco }}
   </cds-sidenav-item>
 </cds-sidenav>

@@ -1,14 +1,10 @@
-<div>
-  <cds-header [name]="'header.brand.title' | transloco">
-    <!-- Only show hamburger when showMenu is true -->
-    <cds-hamburger
-      *ngIf="showMenu"
-      [active]="isExpanded"
-      (click)="onMenuToggle()"
-    ></cds-hamburger>
-
-    <cds-header-global>
-      <app-language-dropdown></app-language-dropdown>
-    </cds-header-global>
-  </cds-header>
-</div>
+<cds-header [name]="'header.brand.title' | transloco">
+  <cds-hamburger
+    *ngIf="showMenu"
+    [active]="isExpanded"
+    (click)="onMenuToggle()"
+  ></cds-hamburger>
+  <cds-header-global>
+    <app-language-dropdown></app-language-dropdown>
+  </cds-header-global>
+</cds-header>

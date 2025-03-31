@@ -6,13 +6,14 @@
   ></app-header>
 
   <div class="cds--content-layout">
-    <!-- Add backdrop for mobile -->
+    <!-- Backdrop for mobile only -->
     <div
       class="mobile-backdrop"
       [class.show]="isSidenavOpen && (showMenuToggle$ | async)"
       (click)="onMobileClose()"
     ></div>
 
+    <!-- Fixed sidenav implementation -->
     <app-sidenav
       [collapsed]="!isSidenavOpen"
       (mobileClose)="onMobileClose()"
@@ -22,13 +23,7 @@
       class="cds--content-layout__content"
       [class.cds--content-layout__content--expanded]="!isSidenavOpen"
     >
-      <div class="cds--grid">
-        <div class="cds--row">
-          <div class="cds--col">
-            <router-outlet></router-outlet>
-          </div>
-        </div>
-      </div>
+      <router-outlet></router-outlet>
     </main>
   </div>
 </div>

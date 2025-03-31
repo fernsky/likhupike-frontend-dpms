@@ -16,8 +16,6 @@ import * as AuthSelectors from '@app/core/store/auth/auth.selectors';
 import * as AuthActions from '@app/core/store/auth/auth.actions';
 import { filter, takeUntil, map } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-
-import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -51,7 +49,6 @@ interface NavItem {
   id: string;
   label: string;
   labelNp: string;
-  icon: string;
   route?: string;
   permissions?: PermissionType[];
   children?: NavItem[];
@@ -96,7 +93,6 @@ interface NavItem {
     RouterModule,
     ReactiveFormsModule,
     MatButtonModule,
-    MatIconModule,
     MatMenuModule,
     MatFormFieldModule,
     MatInputModule,
@@ -139,13 +135,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
       id: 'user-management',
       label: 'User Management',
       labelNp: 'प्रयोगकर्ता व्यवस्थापन',
-      icon: 'people',
       children: [
         {
           id: 'user-list',
           label: 'User List',
           labelNp: 'प्रयोगकर्ता सूची',
-          icon: 'list',
           route: '/dashboard/users/list',
           permissions: [PermissionType.VIEW_USER],
         },
@@ -153,7 +147,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
           id: 'user-create',
           label: 'Add New User',
           labelNp: 'नयाँ प्रयोगकर्ता',
-          icon: 'person_add',
           route: '/dashboard/users/create',
           permissions: [PermissionType.CREATE_USER],
         },

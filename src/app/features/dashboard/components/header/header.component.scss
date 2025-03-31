@@ -1,6 +1,4 @@
 @use "@carbon/styles/scss/spacing" as *;
-@use "@carbon/styles/scss/type" as *;
-@use "@carbon/styles/scss/breakpoint" as *;
 @use "@carbon/styles/scss/theme" as *;
 
 :host {
@@ -12,97 +10,7 @@
 }
 
 .cds--header {
-  position: relative;
-  z-index: inherit;
   background: $background;
   border-bottom: 1px solid $border-subtle;
   height: 3rem;
-  width: 100%;
-
-  // Menu trigger button
-  .cds--header__menu-trigger {
-    width: 3.5rem;
-    height: 3.5rem;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color motion(standard, productive);
-
-    &:hover {
-      background-color: $background-hover;
-    }
-
-    &.cds--header__action--active {
-      background-color: $background-selected;
-      color: $text-primary;
-    }
-  }
-
-  // Brand section
-  .cds--header__name {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    padding: 0 $spacing-05;
-    text-decoration: none;
-    border-right: 1px solid $border-subtle;
-    transition: background-color motion(standard, productive);
-    gap: $spacing-05;
-
-    &:hover {
-      background-color: $background-hover;
-    }
-
-    .cds--header__logo {
-      height: 2rem;
-      width: auto;
-    }
-
-    .cds--header__title {
-      @include type-style("heading-compact-01");
-      color: $text-primary;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-
-      &:lang(ne) {
-        font-family: var(--font-nepali);
-      }
-    }
-  }
-
-  // Navigation container (language dropdown)
-  .cds--header__nav-container {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-    padding: 0 $spacing-05;
-  }
-}
-
-// Responsive styles
-@include breakpoint-down(md) {
-  .cds--header {
-    .cds--header__name {
-      padding: 0 $spacing-03;
-      gap: $spacing-03;
-
-      .cds--header__logo {
-        height: 1.75rem;
-      }
-
-      .cds--header__title {
-        @include type-style("label-01");
-        max-width: 160px;
-      }
-    }
-
-    .cds--header__nav-container {
-      padding: 0 $spacing-03;
-    }
-  }
 }
