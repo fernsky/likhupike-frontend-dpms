@@ -58,11 +58,73 @@
 }
 
 .cds--ward-level-section {
-  margin: $spacing-06 0;
-  padding: $spacing-05;
-  border: 1px solid var(--cds-border-subtle-01);
-  background-color: var(--cds-layer-01);
-  border-radius: 4px;
+  margin: $spacing-05 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  border-radius: 0;
+
+  // Make section title subtle
+  legend,
+  h3,
+  h4 {
+    color: var(--cds-text-03);
+    @include type-style("heading-compact-01");
+    font-weight: 400;
+  }
+
+  // Style checkboxes
+  .cds--checkbox-label {
+    color: var(--cds-text-03);
+    @include type-style("body-compact-01");
+
+    &::before {
+      border-color: var(--cds-text-03);
+      background-color: transparent;
+    }
+  }
+
+  // Style dropdowns
+  .cds--dropdown {
+    border-color: var(--cds-border-subtle-01);
+
+    .cds--dropdown-text {
+      color: var(--cds-text-03);
+      background-color: var(--cds-field-01);
+    }
+
+    .cds--dropdown__wrapper {
+      border-bottom-color: var(--cds-border-subtle-01);
+    }
+  }
+
+  // Style labels
+  .cds--label {
+    color: var(--cds-text-03);
+    @include type-style("label-01");
+    font-weight: 400;
+  }
+
+  // Style select elements
+  select {
+    color: var(--cds-text-03);
+    border-color: var(--cds-border-subtle-01);
+    background-color: var(--cds-field-01);
+
+    &:focus {
+      border-color: var(--cds-focus);
+    }
+  }
+
+  // Style radio buttons
+  .cds--radio-button__label {
+    color: var(--cds-text-03);
+
+    &::before {
+      border-color: var(--cds-text-03);
+      background-color: transparent;
+    }
+  }
 }
 
 .cds--register-error {
