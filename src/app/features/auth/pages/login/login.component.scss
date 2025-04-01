@@ -8,36 +8,52 @@
   max-width: 400px;
   margin: 0 auto;
   padding: $spacing-05;
+  text-align: left;
 
   h1 {
     @include type-style("heading-04");
     margin-bottom: $spacing-05;
+    color: $text-secondary;
+    font-weight: 400;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -$spacing-03;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 2px;
+      background-color: var(--cds-interactive-01);
+    }
   }
 
   .cds--login-subtitle {
     @include type-style("body-long-01");
-    margin-bottom: $spacing-06;
+    margin-bottom: $spacing-07;
+    color: $text-secondary;
   }
 }
 
 .cds--form {
   .cds--form-item {
     margin-bottom: $spacing-05;
+    text-align: left;
   }
 
   .cds--text-input__field-wrapper {
     position: relative;
 
+    // Remove icon styling
     .cds--text-input__icon {
-      position: absolute;
-      left: $spacing-04;
-      top: 50%;
-      transform: translateY(-50%);
+      display: none;
     }
 
     input[cdsText] {
-      padding-left: $spacing-08;
       height: $spacing-09;
+      // Remove left padding previously used for icons
+      padding-left: $spacing-05;
     }
 
     .cds--text-input__password-visibility-toggle {
@@ -54,10 +70,11 @@
 
 .cds--login-error {
   margin: $spacing-05 0;
+  text-align: left;
 }
 
 .cds--login-submit {
-  margin-top: $spacing-06;
+  margin-top: $spacing-07;
 
   button {
     width: 100%;
@@ -65,12 +82,11 @@
 }
 
 .cds--login-footer {
-  margin-top: $spacing-06;
+  margin-top: $spacing-07;
   padding-top: $spacing-05;
-  border-top: 1px solid $border-subtle;
-  opacity: 0.7;
-  color: $text-secondary;
-  font-size: 0.75rem; // Smaller font size
+  border-top: 1px solid var(--cds-border-subtle-01);
+  color: var(--cds-text-02);
+  @include type-style("caption-01");
 
   .cds--login-no-account {
     display: flex;
@@ -80,12 +96,12 @@
     margin-bottom: $spacing-05;
 
     a {
-      color: $link-primary;
+      color: var(--cds-link-01);
       text-decoration: none;
-      font-size: 0.75rem; // Smaller font size
+      @include type-style("caption-01");
 
       &:hover {
-        color: $link-primary-hover;
+        color: var(--cds-link-hover);
         text-decoration: underline;
       }
     }
@@ -95,12 +111,12 @@
     text-align: center;
 
     a {
-      color: $link-primary;
+      color: var(--cds-link-01);
       text-decoration: none;
-      font-size: 0.75rem; // Smaller font size
+      @include type-style("caption-01");
 
       &:hover {
-        color: $link-primary-hover;
+        color: var(--cds-link-hover);
         text-decoration: underline;
       }
     }
