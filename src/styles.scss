@@ -111,6 +111,11 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; // Prevent horizontal scrollbar
+}
+
+html {
+  overflow-x: hidden; // Ensure no horizontal scrollbar
 }
 
 // Map legacy variable names to new CDS tokens for backward compatibility

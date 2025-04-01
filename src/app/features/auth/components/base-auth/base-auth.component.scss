@@ -7,16 +7,20 @@
 
 :host {
   display: block;
-  height: 100vh;
+  min-height: 100vh; // Change from fixed height to min-height
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .cds--auth-layout {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 100vh; // Change from fixed height to min-height
   background-color: var(--cds-background);
   position: relative;
   overflow: hidden;
+  max-width: 2000px;
+  margin: 0 auto;
 }
 
 .cds--auth-header {
@@ -32,17 +36,27 @@
   padding: 0;
   overflow-y: auto;
   position: relative;
+  // Remove max-height constraint
+  min-height: calc(100vh - 180px); // Use min-height instead
+  // Ensure colors extend to full height
+  background-color: var(--cds-layer);
 }
 
 .cds--auth-container {
   width: 100%;
   max-width: 100%;
   padding: 0;
-  height: 100%;
+  min-height: inherit;
 }
 
 .cds--auth-content-row {
   height: 100%;
+  min-height: inherit;
+  background: linear-gradient(
+    145deg,
+    var(--cds-layer) 0%,
+    var(--cds-background) 100%
+  );
 }
 
 // Fix for system features to take full available space
@@ -52,7 +66,7 @@
   position: relative;
   padding: 0;
   overflow: hidden;
-  background-color: var(--cds-layer-01);
+  min-height: 100%;
 
   @include breakpoint(lg) {
     display: block;
@@ -68,6 +82,9 @@
   align-items: center;
   position: relative;
   background-color: var(--cds-layer);
+  overflow-y: auto;
+  // Ensure background extends to full height
+  min-height: 100%;
 
   @include breakpoint(lg) {
     animation: fadeIn 0.5s cubic-bezier(0.2, 0, 0.38, 0.9) 0.1s forwards;
@@ -77,9 +94,10 @@
 .cds--auth-form-content {
   max-width: 400px;
   width: 100%;
-  margin-top: $spacing-08;
+  margin: $spacing-08 auto;
   position: relative;
   z-index: 1;
+  padding-bottom: $spacing-09; // Add more bottom padding
 }
 
 .cds--auth-form-header {
@@ -111,7 +129,9 @@
   background-color: var(--cds-background);
   border-top: 1px solid var(--cds-border-subtle-01);
   z-index: 2;
-  position: relative;
+  position: relative; // Ensure this is relative
+  width: 100%; // Make sure it's full width
+  bottom: auto; // Ensure not stuck to bottom
 }
 
 .cds--footer-content {
@@ -185,5 +205,27 @@ html {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+// Ensure grid columns don't overflow
+.cds--row {
+  margin-right: 0;
+  margin-left: 0;
+  height: 100%;
+}
+
+.cds--col-lg-5,
+.cds--col-lg-7,
+.cds--col-lg-11 {
+  padding-right: 0;
+  padding-left: 0;
+  height: 100%;
+}
+
+// Fix for IE and some browsers where the footer might behave as sticky
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .cds--auth-footer {
+    position: static;
   }
 }
