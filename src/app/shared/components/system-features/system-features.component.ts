@@ -5,7 +5,6 @@ import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 interface Feature {
   translationKey: string;
   icon: string;
-  colorClass: string;
 }
 
 @Component({
@@ -26,22 +25,18 @@ export class SystemFeaturesComponent {
     {
       translationKey: 'municipalServices',
       icon: 'apartment',
-      colorClass: 'feature-primary',
     },
     {
       translationKey: 'quickProcessing',
       icon: 'rocket_launch',
-      colorClass: 'feature-success',
     },
     {
       translationKey: 'dataIntegration',
       icon: 'data_object',
-      colorClass: 'feature-info',
     },
     {
       translationKey: 'citizenPortal',
       icon: 'person',
-      colorClass: 'feature-warning',
     },
   ];
 }

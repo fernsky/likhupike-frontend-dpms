@@ -1,33 +1,42 @@
 <section class="cds--feature-section">
-  <header class="cds--feature-header">
-    <h2 class="cds--feature-title">{{ "systemFeatures.title" | transloco }}</h2>
-    <p class="cds--feature-description">
-      {{ "systemFeatures.subtitle" | transloco }}
-    </p>
-  </header>
+  <div class="cds--pattern-background"></div>
 
-  <div class="cds--feature-grid">
-    <div
-      class="cds--feature-card"
-      *ngFor="let feature of features; let i = index"
-      [attr.data-index]="i"
-    >
-      <div class="cds--feature-icon-wrapper">
-        <i class="material-icons">{{ feature.icon }}</i>
-      </div>
-      <div class="cds--feature-content">
-        <h3 class="cds--feature-card-title">
-          {{
-            "systemFeatures.features." + feature.translationKey + ".title"
-              | transloco
-          }}
-        </h3>
-        <p class="cds--feature-card-description">
-          {{
-            "systemFeatures.features." + feature.translationKey + ".description"
-              | transloco
-          }}
-        </p>
+  <div class="cds--feature-inner">
+    <header class="cds--feature-header">
+      <h2 class="cds--feature-title">
+        {{ "systemFeatures.title" | transloco }}
+      </h2>
+      <p class="cds--feature-description">
+        {{ "systemFeatures.subtitle" | transloco }}
+      </p>
+    </header>
+
+    <div class="cds--feature-grid">
+      <div
+        class="cds--feature-card"
+        *ngFor="let feature of features; let i = index"
+      >
+        <div class="cds--feature-card-header">
+          <div class="cds--feature-card-icon">
+            <i class="material-icons">{{ feature.icon }}</i>
+          </div>
+        </div>
+        <div class="cds--feature-card-content">
+          <h3 class="cds--feature-card-title">
+            {{
+              "systemFeatures.features." + feature.translationKey + ".title"
+                | transloco
+            }}
+          </h3>
+          <p class="cds--feature-card-description">
+            {{
+              "systemFeatures.features." +
+                feature.translationKey +
+                ".description" | transloco
+            }}
+          </p>
+        </div>
+        <div class="cds--feature-accent"></div>
       </div>
     </div>
   </div>

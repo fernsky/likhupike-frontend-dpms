@@ -16,17 +16,6 @@
     color: var(--cds-text-02);
     font-weight: 400;
     position: relative;
-
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: -$spacing-03;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 40px;
-      height: 2px;
-      background-color: var(--cds-interactive-01);
-    }
   }
 
   .cds--register-subtitle {

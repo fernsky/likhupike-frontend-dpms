@@ -67,6 +67,38 @@
     var(--brand-secondary) 0%,
     var(--brand-secondary-dark) 100%
   );
+
+  // Add CDS token variables used in components
+  // Background and layer tokens
+  --cds-background: #{colors.$gray-10};
+  --cds-background-active: #{colors.$gray-30};
+  --cds-layer: #ffffff;
+  --cds-layer-01: #{colors.$gray-10};
+  --cds-layer-active-01: #{colors.$gray-30};
+
+  // Text tokens
+  --cds-text-01: #{colors.$gray-100};
+  --cds-text-02: #{colors.$gray-70};
+
+  // Border tokens
+  --cds-border-subtle-00: #{colors.$gray-20};
+  --cds-border-subtle-01: #{colors.$gray-20};
+
+  // Interactive element tokens
+  --cds-interactive-01: #{colors.$blue-60};
+  --cds-link-01: #{colors.$blue-60};
+  --cds-link-hover: #{colors.$blue-70};
+
+  // Support color tokens
+  --cds-support-info: #{colors.$blue-70};
+  --cds-support-success: #{colors.$green-60};
+  --cds-support-warning: #{colors.$yellow-40};
+  --cds-support-error: #{colors.$red-60};
+
+  // Form field tokens
+  --cds-field-01: #ffffff;
+  --cds-field-hover-01: #{colors.$gray-10};
+  --cds-field-disabled: #{colors.$gray-10};
 }
 
 // Global Carbon-based styles
@@ -80,6 +112,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+// Map legacy variable names to new CDS tokens for backward compatibility
+$text-primary: var(--cds-text-01);
+$text-secondary: var(--cds-text-02);
+$background-ui: var(--cds-background);
+$border-subtle: var(--cds-border-subtle-01);
+$link-primary: var(--cds-link-01);
+$link-primary-hover: var(--cds-link-hover);
 
 // Enterprise-grade elevation classes with refined shadows
 .cds--elevation-1 {

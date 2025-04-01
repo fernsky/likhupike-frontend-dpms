@@ -45,11 +45,13 @@
   height: 100%;
 }
 
+// Fix for system features to take full available space
 .cds--auth-features {
   display: none;
   height: 100%;
   position: relative;
-  padding: $spacing-08 $spacing-07;
+  padding: 0;
+  overflow: hidden;
   background-color: var(--cds-layer-01);
 
   @include breakpoint(lg) {
