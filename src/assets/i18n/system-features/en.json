@@ -1,22 +1,22 @@
 {
-  "title": "Digital Profile Information System",
-  "subtitle": "A unified digital profile management system for local governments",
+  "title": "Transforming Municipal Services",
+  "subtitle": "Our digital platform brings government services closer to citizens with innovative technology and streamlined processes.",
   "features": {
     "municipalServices": {
-      "title": "Digital Identity",
-      "description": "Secure and verified digital identity for every citizen"
+      "title": "Municipal Services Integration",
+      "description": "Access all municipal services in one unified platform with seamless integration across departments."
     },
     "quickProcessing": {
-      "title": "Quick Access",
-      "description": "Fast and secure access to digital services"
+      "title": "Quick Processing & Approvals",
+      "description": "Experience faster turnaround times with our streamlined digital workflows and automated approval systems."
     },
     "dataIntegration": {
-      "title": "Data Security",
-      "description": "End-to-end encrypted data with secure infrastructure"
+      "title": "Smart Data Integration",
+      "description": "Benefit from intelligent data management that connects across government systems for a unified citizen experience."
     },
     "citizenPortal": {
-      "title": "One Profile",
-      "description": "Single digital profile for all government services"
+      "title": "Citizen-Centric Portal",
+      "description": "Designed with citizens in mind, providing an intuitive interface for all your government service needs."
     }
   }
 }

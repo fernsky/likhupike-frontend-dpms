@@ -5,17 +5,25 @@
 
   <main class="cds--auth-main">
     <div class="cds--grid cds--auth-container">
-      <div class="cds--row">
-        <!-- Features column -->
-        <div class="cds--col-lg-7 cds--auth-features">
-          <app-system-features></app-system-features>
-        </div>
-
-        <!-- Auth form column -->
+      <div class="cds--row cds--auth-content-row">
+        <!-- Auth form column (now on the left) -->
         <div class="cds--col-sm-4 cds--col-md-8 cds--col-lg-5 cds--auth-form">
-          <div class="cds--auth-form-container">
+          <div class="cds--auth-form-content">
+            <div class="cds--auth-form-header">
+              <h1 class="cds--auth-form-title">
+                {{ "auth.welcomeTitle" | transloco }}
+              </h1>
+              <p class="cds--auth-form-instructions">
+                {{ "auth.welcomeMessage" | transloco }}
+              </p>
+            </div>
             <router-outlet></router-outlet>
           </div>
+        </div>
+
+        <!-- Features column (now on the right) -->
+        <div class="cds--col-lg-7 cds--auth-features">
+          <app-system-features></app-system-features>
         </div>
       </div>
     </div>

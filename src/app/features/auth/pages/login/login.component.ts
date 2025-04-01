@@ -12,7 +12,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import * as AuthActions from '@app/core/store/auth/auth.actions';
 import { selectAuthState } from '@app/core/store/auth/auth.selectors';
-import { TranslocoModule } from '@jsverse/transloco';
+import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 import { MatIconModule } from '@angular/material/icon';
 
 // Carbon Imports
@@ -44,6 +44,12 @@ import {
     LinkModule,
     UIShellModule,
     NotificationModule,
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'login',
+      alias: 'login',
+    }),
   ],
 })
 export class LoginComponent implements OnInit, OnDestroy {

@@ -14,81 +14,92 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: var(--brand-background-light);
+  background-color: var(--cds-background);
+  position: relative;
+  overflow: hidden;
 }
 
 .cds--auth-header {
   width: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 .cds--auth-main {
   flex: 1;
   display: flex;
-  padding: $spacing-06 0;
+  padding: 0;
   overflow-y: auto;
-
-  @include breakpoint(md) {
-    padding: $spacing-08 0;
-  }
+  position: relative;
 }
 
 .cds--auth-container {
-  margin: auto;
   width: 100%;
-  max-width: 1600px;
+  max-width: 100%;
+  padding: 0;
+  height: 100%;
+}
+
+.cds--auth-content-row {
+  height: 100%;
 }
 
 .cds--auth-features {
   display: none;
-  padding: 0 $spacing-05;
+  height: 100%;
+  position: relative;
+  padding: $spacing-08 $spacing-07;
+  background-color: var(--cds-layer-01);
 
   @include breakpoint(lg) {
     display: block;
-    animation: fadeIn 0.4s ease-out forwards;
+    animation: fadeIn 0.5s cubic-bezier(0.2, 0, 0.38, 0.9) forwards;
   }
 }
 
 .cds--auth-form {
-  padding: 0 $spacing-05;
+  height: 100%;
+  padding: $spacing-09 $spacing-07;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  position: relative;
+  background-color: var(--cds-layer);
 
   @include breakpoint(lg) {
-    animation: fadeIn 0.4s ease-out forwards;
+    animation: fadeIn 0.5s cubic-bezier(0.2, 0, 0.38, 0.9) 0.1s forwards;
   }
 }
 
-.cds--auth-form-container {
+.cds--auth-form-content {
+  max-width: 400px;
   width: 100%;
-  max-width: 480px;
-  padding: $spacing-07;
-  background-color: #ffffff;
-  border-radius: 4px;
-  border: 1px solid var(--brand-shadow-light);
-  box-shadow: 0 4px 16px var(--brand-shadow-light);
 }
 
 .cds--auth-form-header {
-  margin-bottom: $spacing-07;
+  margin-bottom: $spacing-08;
 }
 
 .cds--auth-form-title {
-  @include type-style("heading-04");
-  color: var(--brand-text-dark);
-  margin: 0 0 $spacing-04;
+  @include type-style("heading-05");
+  color: var(--cds-text-01);
+  margin: 0 0 $spacing-05;
+  font-weight: 400;
 }
 
 .cds--auth-form-instructions {
-  @include type-style("body-01");
-  color: var(--brand-text-secondary);
+  @include type-style("body-long-01");
+  color: var(--cds-text-02);
   margin: 0;
   line-height: 1.5;
 }
 
 .cds--auth-footer {
   padding: $spacing-05;
-  border-top: 1px solid var(--brand-shadow-light);
-  background-color: #ffffff;
+  background-color: var(--cds-background);
+  border-top: 1px solid var(--cds-border-subtle-01);
+  z-index: 2;
+  position: relative;
 }
 
 .cds--footer-content {
@@ -104,7 +115,7 @@
 
 .cds--footer-copyright {
   @include type-style("caption-01");
-  color: var(--brand-text-secondary);
+  color: var(--cds-text-02);
   margin: 0 0 $spacing-03;
 
   @include breakpoint(md) {
@@ -118,7 +129,7 @@
 
 .cds--footer-link {
   @include type-style("caption-01");
-  color: var(--brand-primary);
+  color: var(--cds-link-01);
   text-decoration: none;
   margin-left: $spacing-05;
 
@@ -131,10 +142,36 @@
   }
 }
 
-// Create improved Asset for Pattern BG
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&display=swap");
 
-// Add beautiful scrolling
 html {
   scroll-behavior: smooth;
+}
+
+// Background pattern effect for auth-form
+.cds--auth-form::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(
+    var(--cds-background-active) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+  opacity: 0.1;
+  z-index: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

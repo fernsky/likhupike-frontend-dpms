@@ -4,7 +4,7 @@ import { GovBrandingComponent } from '@app/shared/components/gov-branding/gov-br
 import { SystemFeaturesComponent } from '@app/shared/components/system-features/system-features.component';
 import { RouterOutlet } from '@angular/router';
 import { GridModule } from 'carbon-components-angular';
-import { TranslocoModule } from '@jsverse/transloco';
+import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-base-auth',
@@ -18,6 +18,12 @@ import { TranslocoModule } from '@jsverse/transloco';
     RouterOutlet,
     GridModule,
     TranslocoModule,
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'auth',
+      alias: 'auth',
+    }),
   ],
 })
 export class BaseAuthComponent {}

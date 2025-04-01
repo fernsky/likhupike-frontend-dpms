@@ -17,7 +17,11 @@ import {
   selectAuthError,
 } from '@app/core/store/auth/auth.selectors';
 import { AppState } from '@app/core/store';
-import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
+import {
+  provideTranslocoScope,
+  TranslocoModule,
+  TranslocoService,
+} from '@jsverse/transloco';
 import { PasswordValidatorService } from '@app/shared/validators/password-validator.service';
 import { NumberFormatService } from '@app/shared/services/number-format.service';
 import { MatIconModule } from '@angular/material/icon';
@@ -54,6 +58,12 @@ import {
     LinkModule,
     NotificationModule,
     UIShellModule,
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'register',
+      alias: 'register',
+    }),
   ],
 })
 export class RegisterComponent implements OnInit, OnDestroy {

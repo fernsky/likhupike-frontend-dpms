@@ -17,7 +17,7 @@ import {
   selectAuthState,
   selectForgotPasswordEmail,
 } from '@app/core/store/auth/auth.selectors';
-import { TranslocoModule } from '@jsverse/transloco';
+import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 import { PasswordValidatorService } from '@app/shared/validators/password-validator.service';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -54,6 +54,12 @@ import {
     UIShellModule,
     NotificationModule,
     ProgressIndicatorModule,
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'forgot-password',
+      alias: 'forgot-password',
+    }),
   ],
 })
 export class ForgotPasswordComponent implements OnInit, OnDestroy {
