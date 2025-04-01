@@ -31,7 +31,7 @@
       }
     },
     "wardLevel": {
-      "label": "I am a ward level user",
+      "label": "I am a ward level user.",
       "helper": "Select this if you are a ward level representative",
       "wardNumber": {
         "helper": "Select the ward you represent",
