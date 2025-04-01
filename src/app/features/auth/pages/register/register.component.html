@@ -160,7 +160,9 @@
     <!-- Ward Level Section -->
     <div class="cds--ward-level-section">
       <cds-checkbox formControlName="isWardLevelUser" [hideLabel]="false">
-        {{ "register.fields.wardLevel.label" | transloco }}
+        <span class="cds--ward-level-checkbox">
+          {{ "register.fields.wardLevel.label" | transloco }}
+        </span>
       </cds-checkbox>
 
       <div *ngIf="registerForm.get('isWardLevelUser')?.value">

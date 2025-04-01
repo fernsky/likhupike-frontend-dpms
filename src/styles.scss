@@ -79,6 +79,7 @@
   // Text tokens
   --cds-text-01: #{colors.$gray-100};
   --cds-text-02: #{colors.$gray-70};
+  --cds-text-03: #{colors.$gray-50}; // Adding tertiary text color for subtle text
 
   // Border tokens
   --cds-border-subtle-00: #{colors.$gray-20};
@@ -88,6 +89,7 @@
   --cds-interactive-01: #{colors.$blue-60};
   --cds-link-01: #{colors.$blue-60};
   --cds-link-hover: #{colors.$blue-70};
+  --cds-focus: #{colors.$blue-60}; // Adding focus state color
 
   // Support color tokens
   --cds-support-info: #{colors.$blue-70};

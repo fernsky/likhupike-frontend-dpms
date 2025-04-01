@@ -1,8 +1,8 @@
 @use "@carbon/styles/scss/spacing" as *;
 @use "@carbon/styles/scss/type" as *;
-@use "@carbon/styles/scss/theme" as *;
 @use "@carbon/styles/scss/breakpoint" as *;
 
+// Container styling
 .cds--register-container {
   width: 100%;
   max-width: 400px;
@@ -15,7 +15,6 @@
     margin-bottom: $spacing-05;
     color: var(--cds-text-02);
     font-weight: 400;
-    position: relative;
   }
 
   .cds--register-subtitle {
@@ -25,6 +24,7 @@
   }
 }
 
+// Form element styling
 .cds--form {
   .cds--form-item {
     margin-bottom: $spacing-05;
@@ -34,14 +34,8 @@
   .cds--text-input__field-wrapper {
     position: relative;
 
-    // Remove icon styling
-    .cds--text-input__icon {
-      display: none;
-    }
-
     input[cdsText] {
       height: $spacing-09;
-      // Remove left padding previously used for icons
       padding-left: $spacing-05;
     }
 
@@ -57,14 +51,17 @@
   }
 }
 
+// Ward level section styling (subtle appearance)
 .cds--ward-level-section {
   margin: $spacing-05 0;
   padding: 0;
   border: none;
   background-color: transparent;
-  border-radius: 0;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
 
-  // Make section title subtle
+  // Make section headings subtle
   legend,
   h3,
   h4 {
@@ -73,65 +70,33 @@
     font-weight: 400;
   }
 
-  // Style checkboxes
-  .cds--checkbox-label {
+  // Style labels and form elements for subtlety
+  .cds--label,
+  .cds--checkbox-label,
+  .cds--radio-button__label,
+  .cds--dropdown-text {
     color: var(--cds-text-03);
     @include type-style("body-compact-01");
-
-    &::before {
-      border-color: var(--cds-text-03);
-      background-color: transparent;
-    }
   }
 
-  // Style dropdowns
+  // Subtle border colors for form elements
+  select,
   .cds--dropdown {
     border-color: var(--cds-border-subtle-01);
-
-    .cds--dropdown-text {
-      color: var(--cds-text-03);
-      background-color: var(--cds-field-01);
-    }
-
-    .cds--dropdown__wrapper {
-      border-bottom-color: var(--cds-border-subtle-01);
-    }
-  }
-
-  // Style labels
-  .cds--label {
-    color: var(--cds-text-03);
-    @include type-style("label-01");
-    font-weight: 400;
-  }
-
-  // Style select elements
-  select {
-    color: var(--cds-text-03);
-    border-color: var(--cds-border-subtle-01);
-    background-color: var(--cds-field-01);
 
     &:focus {
       border-color: var(--cds-focus);
     }
   }
-
-  // Style radio buttons
-  .cds--radio-button__label {
-    color: var(--cds-text-03);
-
-    &::before {
-      border-color: var(--cds-text-03);
-      background-color: transparent;
-    }
-  }
 }
 
+// Error message styling
 .cds--register-error {
   margin: $spacing-05 0;
   text-align: left;
 }
 
+// Submit button styling
 .cds--register-submit {
   margin-top: $spacing-07;
 
@@ -140,6 +105,7 @@
   }
 }
 
+// Footer styling
 .cds--register-footer {
   margin-top: $spacing-07;
   padding-top: $spacing-05;
@@ -157,7 +123,6 @@
     a {
       color: var(--cds-link-01);
       text-decoration: none;
-      @include type-style("caption-01");
 
       &:hover {
         color: var(--cds-link-hover);
