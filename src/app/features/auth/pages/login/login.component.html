@@ -9,13 +9,10 @@
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="cds--form">
     <!-- Email Input -->
     <div class="cds--form-item">
-      <cds-label [helperText]="'login.fields.email.helper' | transloco">
+      <cds-label>
         {{ "login.fields.email.label" | transloco }}
       </cds-label>
-      <div
-        class="cds--text-input__field-wrapper cds--text-input__field-wrapper--with-icons"
-      >
-        <mat-icon class="cds--text-input__icon mat-icon">email</mat-icon>
+      <div class="cds--text-input__field-wrapper">
         <input
           cdsText
           [placeholder]="'login.fields.email.placeholder' | transloco"
@@ -50,13 +47,10 @@
 
     <!-- Password Input -->
     <div class="cds--form-item">
-      <cds-label [helperText]="'login.fields.password.helper' | transloco">
+      <cds-label>
         {{ "login.fields.password.label" | transloco }}
       </cds-label>
-      <div
-        class="cds--text-input__field-wrapper cds--text-input__field-wrapper--with-icons"
-      >
-        <mat-icon class="cds--text-input__icon mat-icon">lock</mat-icon>
+      <div class="cds--text-input__field-wrapper">
         <input
           cdsText
           [placeholder]="'login.fields.password.placeholder' | transloco"
