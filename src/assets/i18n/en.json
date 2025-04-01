@@ -63,8 +63,11 @@
   },
   "system": {
     "footer": {
-      "copyright": "© {{year}} Intensive Study and Research Center. All Rights Reserved.",
-      "version": "Version {{version}}"
+      "copyright": "© {{year}} Intensive Study and Research Center. All rights reserved.",
+      "version": "Version {{version}}",
+      "privacy": "Privacy Policy",
+      "terms": "Terms and Conditions",
+      "help": "Help"
     }
   }
 }
