@@ -61,7 +61,7 @@ import {
   ],
   providers: [
     provideTranslocoScope({
-      scope: 'register',
+      scope: 'registration',
       alias: 'register',
     }),
   ],

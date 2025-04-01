@@ -58,7 +58,7 @@ import {
   providers: [
     provideTranslocoScope({
       scope: 'forgot-password',
-      alias: 'forgot-password',
+      alias: 'forgotPassword',
     }),
   ],
 })

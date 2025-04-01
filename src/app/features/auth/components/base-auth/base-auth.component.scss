@@ -59,10 +59,10 @@
 
 .cds--auth-form {
   height: 100%;
-  padding: $spacing-09 $spacing-07;
+  padding: $spacing-07 $spacing-07 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
   position: relative;
   background-color: var(--cds-layer);
 
@@ -74,24 +74,31 @@
 .cds--auth-form-content {
   max-width: 400px;
   width: 100%;
+  margin-top: $spacing-08;
 }
 
 .cds--auth-form-header {
-  margin-bottom: $spacing-08;
+  position: relative;
+  margin-bottom: $spacing-07;
+  text-align: center;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -$spacing-03;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 2px;
+    background-color: var(--cds-interactive-01);
+  }
 }
 
 .cds--auth-form-title {
-  @include type-style("heading-05");
+  @include type-style("heading-04");
   color: var(--cds-text-01);
-  margin: 0 0 $spacing-05;
-  font-weight: 400;
-}
-
-.cds--auth-form-instructions {
-  @include type-style("body-long-01");
-  color: var(--cds-text-02);
   margin: 0;
-  line-height: 1.5;
+  font-weight: 400;
 }
 
 .cds--auth-footer {
