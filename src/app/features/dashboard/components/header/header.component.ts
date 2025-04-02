@@ -6,6 +6,7 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 import { UIShellModule } from 'carbon-components-angular';
 import { LanguageDropdownComponent } from '@app/shared/components/language-dropdown/language-dropdown.component';
@@ -18,6 +19,7 @@ import { LanguageDropdownComponent } from '@app/shared/components/language-dropd
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
     TranslocoModule,
     UIShellModule,
     LanguageDropdownComponent,
@@ -26,6 +28,10 @@ import { LanguageDropdownComponent } from '@app/shared/components/language-dropd
     provideTranslocoScope({
       scope: 'header',
       alias: 'header',
+    }),
+    provideTranslocoScope({
+      scope: 'government-branding',
+      alias: 'govBranding',
     }),
   ],
 })

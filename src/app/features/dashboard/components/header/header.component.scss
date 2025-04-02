@@ -1,4 +1,6 @@
 @use "@carbon/styles/scss/spacing" as *;
+@use "@carbon/styles/scss/type" as *;
+@use "@carbon/styles/scss/breakpoint" as *;
 
 :host {
   position: fixed !important;
@@ -15,10 +17,104 @@
   cds-header {
     z-index: 9000 !important;
     position: relative !important;
+    background-color: #ffffff !important;
   }
 
   cds-hamburger {
     z-index: 9001 !important;
     position: relative !important;
+  }
+
+  // Government branding styles
+  .cds--header__brand {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    text-decoration: none;
+    gap: $spacing-02;
+    max-width: 70%;
+
+    @include breakpoint(md) {
+      gap: $spacing-03;
+      max-width: 80%;
+    }
+
+    &:focus {
+      outline-offset: -2px;
+    }
+  }
+
+  .cds--header__name {
+    display: none;
+  }
+
+  .cds--header__divider {
+    height: 24px;
+    width: 1px;
+    background-color: var(--brand-shadow-light, #e0e0e0);
+    margin: 0 $spacing-02;
+
+    @include breakpoint(md) {
+      height: 28px;
+      margin: 0 $spacing-03;
+    }
+  }
+
+  .cds--header__title-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .cds--header__logo {
+    height: 30px;
+    width: auto;
+
+    @include breakpoint(md) {
+      height: 38px;
+    }
+  }
+
+  .cds--header__title {
+    @include type-style("body-compact-01");
+    color: var(--brand-text-dark, #161616);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @include breakpoint(md) {
+      @include type-style("heading-compact-01");
+    }
+
+    @include breakpoint(lg) {
+      @include type-style("heading-compact-02");
+    }
+  }
+
+  .cds--header__subtitle {
+    display: none;
+
+    @include breakpoint(md) {
+      display: block;
+      @include type-style("caption-01");
+      color: var(--brand-text-secondary, #525252);
+    }
+
+    @include breakpoint(lg) {
+      @include type-style("body-compact-01");
+    }
+  }
+
+  .gov-logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    flex-shrink: 0;
+
+    @include breakpoint(md) {
+      height: 40px;
+    }
   }
 }

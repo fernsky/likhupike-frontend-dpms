@@ -1,7 +1,7 @@
 <cds-header
-  [name]="'header.brand.title' | transloco"
-  brand=""
   [attr.aria-label]="'header.navigation.label' | transloco"
+  brand=""
+  name=""
 >
   <cds-hamburger
     *ngIf="showMenu"
@@ -9,6 +9,27 @@
     (click)="onMenuToggle()"
     aria-label="Toggle menu"
   ></cds-hamburger>
+
+  <!-- Government Branding -->
+  <a class="cds--header__brand" routerLink="/">
+    <div class="gov-logo-container">
+      <img
+        src="assets/images/nepal-government-logo.png"
+        [alt]="'govBranding.logoAlt' | transloco"
+        class="cds--header__logo"
+      />
+    </div>
+    <div class="cds--header__divider"></div>
+    <div class="cds--header__title-container">
+      <span class="cds--header__title">{{
+        "govBranding.systemTitle" | transloco
+      }}</span>
+      <span class="cds--header__subtitle">{{
+        "govBranding.systemSubtitle" | transloco
+      }}</span>
+    </div>
+  </a>
+
   <cds-header-global>
     <app-language-dropdown></app-language-dropdown>
   </cds-header-global>
