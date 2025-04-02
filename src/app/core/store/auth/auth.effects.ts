@@ -8,7 +8,7 @@ import {
   tap,
   withLatestFrom,
 } from 'rxjs/operators';
-import { of, from } from 'rxjs';
+import { of, from, Observable } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { StorageService } from '../../services/storage.service';
 import { Router } from '@angular/router';
@@ -75,7 +75,7 @@ export class AuthEffects {
             this.storageService.setUser(authUser);
 
             this.snackBar.open(
-              message || 'Login successful', // Use API message
+              message || 'Login successful',
               this.translocoService.translate('common.actions.close'),
               {
                 duration: 4000,
@@ -88,20 +88,9 @@ export class AuthEffects {
               user: authUser,
             });
           }),
-          catchError((error) => {
-            // Use API error message directly
-            const errorMessage = error.error?.message || error.message;
-            this.snackBar.open(
-              errorMessage,
-              this.translocoService.translate('common.actions.close'),
-              {
-                duration: 5000,
-                panelClass: ['error-snackbar', 'bottom-right'],
-              }
-            );
-
-            return of(AuthActions.loginFailure({ error: errorMessage }));
-          })
+          catchError((error) =>
+            this.handleNetworkError(error, AuthActions.loginFailure)
+          )
         )
       )
     )
@@ -118,7 +107,7 @@ export class AuthEffects {
             }
 
             this.snackBar.open(
-              response.message || 'Registration successful', // Use API message
+              response.message || 'Registration successful',
               this.translocoService.translate('common.actions.close'),
               {
                 duration: 8000,
@@ -128,18 +117,9 @@ export class AuthEffects {
 
             return AuthActions.registerSuccess({ response: response.data });
           }),
-          catchError((error) => {
-            const errorMessage = error.error?.message || error.message;
-            this.snackBar.open(
-              errorMessage,
-              this.translocoService.translate('common.actions.close'),
-              {
-                duration: 5000,
-                panelClass: ['error-snackbar', 'bottom-right'],
-              }
-            );
-            return of(AuthActions.registerFailure({ error: errorMessage }));
-          })
+          catchError((error) =>
+            this.handleNetworkError(error, AuthActions.registerFailure)
+          )
         )
       )
     )
@@ -249,20 +229,12 @@ export class AuthEffects {
 
             return AuthActions.requestPasswordResetSuccess();
           }),
-          catchError((error) => {
-            const errorMessage = error.error?.message || error.message;
-            this.snackBar.open(
-              errorMessage,
-              this.translocoService.translate('common.actions.close'),
-              {
-                duration: 5000,
-                panelClass: ['error-snackbar'],
-              }
-            );
-            return of(
-              AuthActions.requestPasswordResetFailure({ error: errorMessage })
-            );
-          })
+          catchError((error) =>
+            this.handleNetworkError(
+              error,
+              AuthActions.requestPasswordResetFailure
+            )
+          )
         )
       )
     )
@@ -289,20 +261,9 @@ export class AuthEffects {
 
             return AuthActions.resetPasswordSuccess();
           }),
-          catchError((error) => {
-            const errorMessage = error.error?.message || error.message;
-            this.snackBar.open(
-              errorMessage,
-              this.translocoService.translate('common.actions.close'),
-              {
-                duration: 5000,
-                panelClass: ['error-snackbar'],
-              }
-            );
-            return of(
-              AuthActions.resetPasswordFailure({ error: errorMessage })
-            );
-          })
+          catchError((error) =>
+            this.handleNetworkError(error, AuthActions.resetPasswordFailure)
+          )
         )
       )
     )
@@ -318,6 +279,56 @@ export class AuthEffects {
       ),
     { dispatch: false }
   );
+
+  /**
+   * Centralized network error handler
+   * @param error The error object from the API call
+   * @param errorAction The action creator function to dispatch
+   * @returns Observable with the error action
+   */
+  private handleNetworkError(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error: any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    errorActionCreator: any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): Observable<any> {
+    let errorMessage;
+
+    if (this.isNetworkError(error)) {
+      errorMessage = this.translocoService.translate(
+        'auth.errors.couldnotReachServer'
+      );
+    } else {
+      errorMessage = error.error?.message || error.message;
+    }
+
+    // Display the error message
+    this.snackBar.open(
+      errorMessage,
+      this.translocoService.translate('common.actions.close'),
+      {
+        duration: 5000,
+        panelClass: ['error-snackbar', 'bottom-right'],
+      }
+    );
+
+    // Return the appropriate error action
+    return of(errorActionCreator({ error: errorMessage }));
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private isNetworkError(error: any): boolean {
+    return (
+      error.error?.status === 500 ||
+      error.status === 0 ||
+      (error.name === 'HttpErrorResponse' && !error.status) ||
+      (error.message &&
+        (error.message.includes('ECONNREFUSED') ||
+          error.message.includes('Failed to fetch') ||
+          error.message.includes('Network Error')))
+    );
+  }
 
   constructor(
     private actions$: Actions,
