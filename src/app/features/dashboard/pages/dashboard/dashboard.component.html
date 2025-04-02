@@ -15,7 +15,9 @@
 
     <!-- Modify the conditional visibility to ensure sidenav is always rendered -->
     <app-sidenav
-      [style.display]="!(showMenuToggle$ | async) || isSidenavOpen ? 'block' : 'none'"
+      [style.display]="
+        !(showMenuToggle$ | async) || isSidenavOpen ? 'block' : 'none'
+      "
       [collapsed]="!isSidenavOpen && !(showMenuToggle$ | async)"
       [expanded]="isSidenavOpen"
       (mobileClose)="onMobileClose()"
