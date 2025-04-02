@@ -82,14 +82,19 @@
       </legend>
 
       <div class="cds--permissions-grid" formGroupName="permissions">
-        <div *ngFor="let permission of permissionTypes" class="cds--permission-checkbox">
+        <div
+          *ngFor="let permission of permissionTypes"
+          class="cds--permission-checkbox"
+        >
           <cds-checkbox [formControlName]="permission" [hideLabel]="false">
             <div class="cds--permission-label">
               <span class="cds--permission-name">
                 {{ "user.permissions." + permission + ".title" | transloco }}
               </span>
               <span class="cds--permission-description">
-                {{ "user.permissions." + permission + ".description" | transloco }}
+                {{
+                  "user.permissions." + permission + ".description" | transloco
+                }}
               </span>
             </div>
           </cds-checkbox>
