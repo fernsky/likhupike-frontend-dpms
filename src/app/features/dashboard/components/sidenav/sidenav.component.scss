@@ -13,7 +13,6 @@
   z-index: 1001 !important;
   display: flex !important;
   flex-direction: column !important;
-  overflow-y: auto !important;
   background-color: $background !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
   width: 16rem !important;
@@ -28,7 +27,6 @@
   // Remove unwanted top border and space
   .cds--side-nav {
     height: 100%;
-    overflow-y: auto;
     border-top: none !important;
     padding-top: 0 !important;
     margin-top: 0 !important;

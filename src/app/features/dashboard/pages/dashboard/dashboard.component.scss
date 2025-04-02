@@ -17,7 +17,6 @@
 
   &__content {
     flex: 1;
-    overflow-y: auto;
     padding: $spacing-04; // Slightly reduced padding
     margin-left: 16rem; // Default sidenav width
     transition: margin-left $duration-moderate-01 motion(standard, productive);

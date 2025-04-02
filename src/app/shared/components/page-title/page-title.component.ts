@@ -1,14 +1,13 @@
 import { Component, Input, ContentChild, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslocoModule } from '@jsverse/transloco';
-import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-page-title',
   templateUrl: './page-title.component.html',
   styleUrls: ['./page-title.component.scss'],
   standalone: true,
-  imports: [CommonModule, TranslocoModule, MatIconModule],
+  imports: [CommonModule, TranslocoModule],
 })
 export class PageTitleComponent {
   @Input() title = '';
@@ -17,7 +16,6 @@ export class PageTitleComponent {
   @Input() description = '';
   @Input() descriptionTranslationKey?: string;
   @Input() descriptionParams?: Record<string, string | number>;
-  @Input() icon?: string;
 
   @ContentChild('actions') actionsTemplate?: TemplateRef<unknown>;
 }

@@ -49,7 +49,6 @@ $carbon--exit-easing: cubic-bezier(0.2, 0, 1, 0.9);
   flex: 1;
   display: flex;
   padding: 0;
-  overflow-y: auto;
   position: relative;
   min-height: calc(100vh - 180px);
   background-color: var(--cds-layer);
@@ -121,7 +120,6 @@ $carbon--exit-easing: cubic-bezier(0.2, 0, 1, 0.9);
   align-items: center;
   position: relative;
   background-color: var(--cds-layer);
-  overflow-y: auto;
   min-height: 100%;
 
   @include breakpoint(lg) {

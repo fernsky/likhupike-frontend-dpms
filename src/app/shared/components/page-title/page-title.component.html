@@ -1,9 +1,6 @@
 <div class="cds--page-header">
   <div class="cds--page-header__container">
     <div class="cds--page-header__title-container">
-      <div class="cds--page-header__icon" *ngIf="icon">
-        <mat-icon>{{ icon }}</mat-icon>
-      </div>
       <div class="cds--page-header__text-container">
         <h1 class="cds--page-header__title">
           {{
@@ -12,16 +9,6 @@
               : title
           }}
         </h1>
-        <p
-          class="cds--page-header__subtitle"
-          *ngIf="description || descriptionTranslationKey"
-        >
-          {{
-            descriptionTranslationKey
-              ? (descriptionTranslationKey | transloco: descriptionParams)
-              : description
-          }}
-        </p>
       </div>
     </div>
     <div class="cds--page-header__actions" *ngIf="actionsTemplate">

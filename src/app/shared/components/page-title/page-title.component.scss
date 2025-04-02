@@ -6,37 +6,17 @@
 
 .cds--page-header {
   width: 100%;
-  margin-bottom: $spacing-07;
 
   &__container {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    border-bottom: 1px solid var(--cds-border-subtle);
     padding-bottom: $spacing-05;
   }
 
   &__title-container {
     display: flex;
     align-items: flex-start;
-    gap: $spacing-05;
-  }
-
-  &__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 40px;
-    width: 40px;
-    background-color: var(--cds-background);
-    color: var(--cds-text-secondary);
-    border: 1px solid var(--cds-border-subtle);
-
-    mat-icon {
-      font-size: 20px;
-      height: 20px;
-      width: 20px;
-    }
   }
 
   &__text-container {
@@ -46,14 +26,15 @@
   }
 
   &__title {
-    @include type-style("heading-03");
-    color: var(--cds-text-primary);
+    @include type-style("productive-heading-04");
+    color: var(--cds-text-01);
     font-weight: 400;
+    letter-spacing: -0.5px;
   }
 
   &__subtitle {
-    @include type-style("body-long-01");
-    color: var(--cds-text-secondary);
+    @include type-style("body-01");
+    color: var(--cds-text-02);
     max-width: 40rem;
   }
 
@@ -67,7 +48,7 @@
 // Carbon responsive behavior
 @include breakpoint-down("md") {
   .cds--page-header {
-    margin-bottom: $spacing-06;
+    margin-bottom: $spacing-05;
 
     &__container {
       flex-direction: column;
@@ -87,29 +68,18 @@
 
 @include breakpoint-down("sm") {
   .cds--page-header {
-    margin-bottom: $spacing-05;
+    margin-bottom: $spacing-04;
 
     &__container {
       padding-bottom: $spacing-04;
     }
 
-    &__icon {
-      height: 32px;
-      width: 32px;
-
-      mat-icon {
-        font-size: 16px;
-        height: 16px;
-        width: 16px;
-      }
-    }
-
     &__title {
-      @include type-style("heading-02");
+      @include type-style("productive-heading-03");
     }
 
     &__subtitle {
-      @include type-style("body-01");
+      @include type-style("body-short-01");
     }
   }
 }
