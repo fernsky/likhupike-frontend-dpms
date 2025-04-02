@@ -13,13 +13,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslocoModule } from '@jsverse/transloco';
 import {
   UserResponse,
   UpdateUserRequest,
@@ -29,7 +24,17 @@ import * as UserSelectors from '../../../../store/user.selectors';
 import { Location } from '@angular/common';
 import { takeUntil, filter } from 'rxjs/operators';
 import { Subject, combineLatest } from 'rxjs';
-import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
+import { NumberFormatService } from '@app/shared/services/number-format.service';
+
+// Carbon imports
+import {
+  ButtonModule,
+  CheckboxModule,
+  DropdownModule,
+  NFormsModule,
+  InputModule,
+  NotificationModule,
+} from 'carbon-components-angular';
 
 @Component({
   selector: 'app-update-user-details',
@@ -39,14 +44,15 @@ import { BaseButtonComponent } from '@app/shared/components/base-button/base-but
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatCheckboxModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatIconModule,
     TranslocoModule,
-    BaseButtonComponent,
+    MatIconModule,
+    // Carbon modules
+    ButtonModule,
+    CheckboxModule,
+    DropdownModule,
+    NFormsModule,
+    InputModule,
+    NotificationModule,
   ],
 })
 export class UpdateUserDetailsComponent implements OnInit, OnDestroy {
@@ -76,11 +82,23 @@ export class UpdateUserDetailsComponent implements OnInit, OnDestroy {
   errors$ = this.store.select(UserSelectors.selectUserErrors);
   private destroy$ = new Subject<void>();
 
+  // Formatted for Carbon dropdown-list
+  wardNumbers = Array.from({ length: 33 }, (_, i) => {
+    const number = i + 1;
+    return {
+      content: `${this.getFormattedWardNumber(number)}`,
+      value: number,
+      selected: false,
+    };
+  });
+
   constructor(
     private fb: FormBuilder,
     private store: Store,
     private location: Location,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private numberFormat: NumberFormatService,
+    private transloco: TranslocoService
   ) {}
 
   ngOnInit(): void {
@@ -94,7 +112,7 @@ export class UpdateUserDetailsComponent implements OnInit, OnDestroy {
     ])
       .pipe(
         takeUntil(this.destroy$),
-        filter(([updating]) => updating === false) // Only proceed when not updating
+        filter(([updating]) => updating === false)
       )
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .subscribe(([_, updatedUser, errors]) => {
@@ -147,12 +165,53 @@ export class UpdateUserDetailsComponent implements OnInit, OnDestroy {
           const wardControl = this.updateForm.get('wardNumber');
           if (isWardLevel) {
             wardControl?.enable();
+            wardControl?.setValidators([
+              Validators.required,
+              Validators.min(1),
+              Validators.max(33),
+            ]);
           } else {
             wardControl?.disable();
-            wardControl?.setValue(null);
+            wardControl?.clearValidators();
           }
+          wardControl?.updateValueAndValidity();
         });
     }
+  }
+
+  getFormattedWardNumber(number: number): string {
+    return this.numberFormat.formatNumber(number);
+  }
+
+  hasEmailError(): boolean {
+    const control = this.updateForm.get('email');
+    return (
+      Boolean(control?.invalid && control?.touched) ||
+      Boolean(this.updateForm.get('email')?.hasError('email'))
+    );
+  }
+
+  hasWardNumberError(): boolean {
+    if (!this.updateForm.get('isWardLevelUser')?.value) return false;
+
+    const wardControl = this.updateForm.get('wardNumber');
+    return Boolean(
+      (wardControl?.invalid && wardControl?.touched) ||
+        (this.updateForm.hasError('wardNumberRequired') && wardControl?.touched)
+    );
+  }
+
+  getEmailErrorText(): string {
+    if (!this.hasEmailError()) return '';
+
+    const control = this.updateForm.get('email');
+    if (control?.hasError('required')) {
+      return this.transloco.translate('user.form.errors.emailRequired');
+    }
+    if (control?.hasError('email')) {
+      return this.transloco.translate('user.form.errors.emailInvalid');
+    }
+    return '';
   }
 
   onSubmit(): void {
