@@ -89,8 +89,12 @@
       </cds-text-label>
     </div>
 
-    <!-- Ward Level Section -->
-    <div class="cds--ward-level-section">
+    <!-- Ward Level Section (Updated) -->
+    <fieldset class="cds--ward-level-section">
+      <legend class="cds--fieldset__legend">
+        {{ "register.fields.wardLevel.title" | transloco }}
+      </legend>
+
       <cds-checkbox formControlName="isWardLevelUser" [hideLabel]="false">
         <span class="cds--ward-level-checkbox">
           {{ "register.fields.wardLevel.label" | transloco }}
@@ -118,7 +122,7 @@
           <cds-dropdown-list [items]="wardNumbers"></cds-dropdown-list>
         </cds-dropdown>
       </div>
-    </div>
+    </fieldset>
 
     <!-- Error Display -->
     <div

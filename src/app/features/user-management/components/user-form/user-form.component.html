@@ -50,8 +50,8 @@
       </cds-text-label>
     </div>
 
-    <!-- Ward Level Section -->
-    <div class="cds--ward-level-section">
+    <!-- Ward Level Section (Updated) -->
+    <fieldset class="cds--ward-level-section">
       <cds-checkbox formControlName="isWardLevelUser" [hideLabel]="false">
         <span class="cds--ward-level-checkbox">
           {{ "user.form.isWardLevelUser" | transloco }}
@@ -73,7 +73,7 @@
           <cds-dropdown-list [items]="wardNumbers"></cds-dropdown-list>
         </cds-dropdown>
       </div>
-    </div>
+    </fieldset>
 
     <!-- Permissions Section -->
     <div class="cds--permissions-section">

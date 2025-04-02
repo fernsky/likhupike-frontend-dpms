@@ -222,10 +222,6 @@ $text-secondary: var(--cds-text-02, #525252);
     .bx--dropdown {
       background-color: var(--cds-field-01);
       width: 100%;
-
-      .bx--list-box__field {
-        height: $spacing-09;
-      }
     }
   }
 }
@@ -268,22 +264,60 @@ $text-secondary: var(--cds-text-02, #525252);
 
 .cds--ward-level-section {
   margin-bottom: $spacing-07;
-  padding: $spacing-05;
-  background-color: var(--cds-layer-accent);
-  border-radius: 4px;
+  padding: $spacing-05 $spacing-05;
+  background-color: var(--cds-layer-01);
+  border-radius: 0;
   transition: all 150ms $carbon--standard-easing;
-  border: 1px solid var(--cds-border-subtle-01);
+  border-left: 4px solid var(--cds-border-interactive);
+  border-bottom: 1px solid var(--cds-border-subtle);
+  border-top: 1px solid var(--cds-border-subtle);
+  border-right: 1px solid var(--cds-border-subtle);
 
   &:hover {
-    border-color: var(--cds-border-subtle);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border-left-color: var(--cds-interactive-01);
+    background-color: var(--cds-layer-hover-01);
+    box-shadow: none;
   }
 
   .cds--ward-level-checkbox {
     font-weight: 400;
     display: block;
-    color: var(--cds-text-02);
-    margin-bottom: $spacing-03;
+    color: var(--cds-text-01);
+    margin-bottom: $spacing-04;
+    padding-left: $spacing-01;
+  }
+
+  ::ng-deep {
+    .bx--checkbox-label {
+      display: flex;
+      align-items: flex-start;
+      padding-left: 0;
+
+      &::before {
+        border: 1px solid var(--cds-icon-01);
+        border-radius: 1px;
+        background-color: transparent;
+      }
+
+      &:hover::before {
+        border-color: var(--cds-interactive-04);
+      }
+
+      .bx--checkbox-label-text {
+        padding-left: $spacing-05;
+        color: var(--cds-text-01);
+        font-weight: 400;
+      }
+    }
+
+    .bx--checkbox:checked + .bx--checkbox-label::before {
+      background-color: var(--cds-interactive-01);
+      border-color: var(--cds-interactive-01);
+    }
+
+    .bx--checkbox:focus + .bx--checkbox-label::before {
+      box-shadow: 0 0 0 2px var(--cds-focus);
+    }
   }
 
   .cds--ward-dropdown-wrapper {
@@ -413,6 +447,55 @@ $text-secondary: var(--cds-text-02, #525252);
     min-height: 1.5rem;
 
     .bx--checkbox-label-text {
+      padding-left: $spacing-05;
+    }
+  }
+
+  // Enhanced checkbox styling
+  .bx--checkbox-wrapper {
+    margin-bottom: $spacing-03;
+  }
+
+  .bx--checkbox:checked + .bx--checkbox-label::before {
+    border-width: 1px;
+    transform: scale(1);
+  }
+
+  .bx--checkbox-label::before {
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+    border-width: 1px;
+  }
+
+  .bx--checkbox-label::after {
+    width: 10px;
+    height: 5px;
+    left: 3px;
+    top: 6px;
+  }
+
+  .bx--checkbox:focus + .bx--checkbox-label::before {
+    border-color: var(--cds-interactive-01);
+  }
+
+  // Fix checkbox alignment in all contexts
+  .cds--permission-checkbox .bx--checkbox-label,
+  .cds--ward-level-section .bx--checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    min-height: 1.5rem;
+    cursor: pointer;
+
+    &:hover {
+      .bx--checkbox-label-text {
+        color: var(--cds-text-01);
+      }
+    }
+
+    .bx--checkbox-label-text {
+      font-size: 14px;
+      transition: color 110ms $carbon--standard-easing;
       padding-left: $spacing-05;
     }
   }
