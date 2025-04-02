@@ -5,29 +5,20 @@
 @use "@carbon/styles/scss/colors" as *;
 
 .cds--content {
-  margin-top: 2.5rem; // Smaller space for mobile header
-  min-height: calc(100vh - 2.5rem);
+  margin-top: 3rem; // Standard height
+  min-height: calc(100vh - 3rem);
   position: relative; // Create a new stacking context
-
-  @include breakpoint(md) {
-    margin-top: 3rem; // Regular space for desktop header
-    min-height: calc(100vh - 3rem);
-  }
 }
 
 .cds--content-layout {
   display: flex;
-  height: calc(100vh - 2.5rem); // Adjust for smaller header on mobile
+  height: calc(100vh - 3rem);
   position: relative;
-
-  @include breakpoint(md) {
-    height: calc(100vh - 3rem); // Regular height on desktop
-  }
 
   &__content {
     flex: 1;
     overflow-y: auto;
-    padding: $spacing-05;
+    padding: $spacing-04; // Slightly reduced padding
     margin-left: 16rem; // Default sidenav width
     transition: margin-left $duration-moderate-01 motion(standard, productive);
     width: calc(100% - 16rem);
@@ -46,11 +37,11 @@
   }
 }
 
-// Mobile backdrop - adjust for smaller header
+// Mobile backdrop
 .mobile-backdrop {
   display: none;
   position: fixed;
-  top: 2.5rem; // Match smaller header height
+  top: 3rem;
   left: 0;
   right: 0;
   bottom: 0;
@@ -63,29 +54,20 @@
     display: block;
     opacity: 1;
   }
-
-  @include breakpoint(md) {
-    top: 3rem; // Regular top position on desktop
-  }
 }
 
 // Make sure sidenav is properly positioned and visible
 .dashboard-sidenav {
   position: fixed !important;
-  top: 2.5rem !important; // Match smaller header height
+  top: 3rem !important;
   left: 0 !important;
   bottom: 0 !important;
   z-index: 1001 !important;
   transition: transform $duration-moderate-01 motion(standard, productive);
   width: 16rem !important; // Force proper width
-  height: calc(100vh - 2.5rem) !important; // Adjust for smaller header
+  height: calc(100vh - 3rem) !important;
   background-color: $background !important; // Ensure it has background
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important; // Visual separation
-
-  @include breakpoint(md) {
-    top: 3rem !important; // Regular top position on desktop
-    height: calc(100vh - 3rem) !important; // Regular height on desktop
-  }
 }
 
 // Visibility classes for sidenav
