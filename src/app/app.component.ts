@@ -28,16 +28,6 @@ export class AppComponent implements OnInit, OnDestroy {
     // No need for additional language initialization
     // since the language service constructor handles it
     this.globalNotificationSvc.registerViewContainerRef(this.viewContainerRef);
-
-    // Mocking an API call and based on result, showing notification!
-    setTimeout(() => {
-      this.globalNotificationSvc.showNotification({
-        type: 'info',
-        title: 'Notification',
-        message: 'Sample info message',
-        target: '.notification-box',
-      });
-    });
   }
 
   ngOnDestroy() {

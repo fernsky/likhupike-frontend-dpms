@@ -12,7 +12,7 @@ import { of, from, Observable } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { StorageService } from '../../services/storage.service';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { GlobalNotificationService } from '../../services/global-notification.service';
 import * as AuthActions from './auth.actions';
 import { AuthUser } from './auth.types';
 import { TranslocoService } from '@jsverse/transloco';
@@ -74,14 +74,12 @@ export class AuthEffects {
             this.storageService.setRefreshToken(data.refreshToken);
             this.storageService.setUser(authUser);
 
-            this.snackBar.open(
-              message || 'Login successful',
-              this.translocoService.translate('common.actions.close'),
-              {
-                duration: 4000,
-                panelClass: ['success-snackbar', 'bottom-right'],
-              }
-            );
+            this.globalNotificationService.showNotification({
+              type: 'success',
+              title: 'Success',
+              message: message || 'Login successful',
+              duration: 4000,
+            });
 
             return AuthActions.loginSuccess({
               token: data.token,
@@ -106,14 +104,12 @@ export class AuthEffects {
               throw new Error(response.error?.message || 'Registration failed');
             }
 
-            this.snackBar.open(
-              response.message || 'Registration successful',
-              this.translocoService.translate('common.actions.close'),
-              {
-                duration: 8000,
-                panelClass: ['success-snackbar', 'bottom-right'],
-              }
-            );
+            this.globalNotificationService.showNotification({
+              type: 'success',
+              title: 'Success',
+              message: response.message || 'Registration successful',
+              duration: 8000,
+            });
 
             return AuthActions.registerSuccess({ response: response.data });
           }),
@@ -162,8 +158,11 @@ export class AuthEffects {
                   this.translocoService.selectTranslate('common.actions.close')
                 )
               )
-          ).subscribe(([message, closeText]) => {
-            this.snackBar.open(message, closeText, {
+          ).subscribe(([message]) => {
+            this.globalNotificationService.showNotification({
+              type: 'info',
+              title: 'Logout',
+              message: message,
               duration: 3000,
             });
           });
@@ -184,7 +183,10 @@ export class AuthEffects {
           AuthActions.terminateSessionFailure
         ),
         tap(({ error }) => {
-          this.snackBar.open(error, 'Close', {
+          this.globalNotificationService.showNotification({
+            type: 'error',
+            title: 'Error',
+            message: error,
             duration: 5000,
           });
         })
@@ -199,7 +201,10 @@ export class AuthEffects {
         ofType(AuthActions.terminateSession),
         tap(({ reason }) => {
           this.storageService.clearAuth();
-          this.snackBar.open(reason, 'Close', {
+          this.globalNotificationService.showNotification({
+            type: 'warning',
+            title: 'Session Terminated',
+            message: reason,
             duration: 5000,
           });
           this.router.navigate(['/auth/login']);
@@ -218,14 +223,12 @@ export class AuthEffects {
               throw new Error(response.error?.message || 'Request failed');
             }
 
-            this.snackBar.open(
-              response.message || 'OTP has been sent to your email',
-              this.translocoService.translate('common.actions.close'),
-              {
-                duration: 5000,
-                panelClass: ['success-snackbar'],
-              }
-            );
+            this.globalNotificationService.showNotification({
+              type: 'success',
+              title: 'Password Reset',
+              message: response.message || 'OTP has been sent to your email',
+              duration: 5000,
+            });
 
             return AuthActions.requestPasswordResetSuccess();
           }),
@@ -250,14 +253,12 @@ export class AuthEffects {
               throw new Error(response.error?.message || 'Reset failed');
             }
 
-            this.snackBar.open(
-              response.message || 'Password reset successful',
-              this.translocoService.translate('common.actions.close'),
-              {
-                duration: 5000,
-                panelClass: ['success-snackbar'],
-              }
-            );
+            this.globalNotificationService.showNotification({
+              type: 'success',
+              title: 'Success',
+              message: response.message || 'Password reset successful',
+              duration: 5000,
+            });
 
             return AuthActions.resetPasswordSuccess();
           }),
@@ -303,15 +304,13 @@ export class AuthEffects {
       errorMessage = error.error?.message || error.message;
     }
 
-    // Display the error message
-    this.snackBar.open(
-      errorMessage,
-      this.translocoService.translate('common.actions.close'),
-      {
-        duration: 5000,
-        panelClass: ['error-snackbar', 'bottom-right'],
-      }
-    );
+    // Display the error message using Carbon notifications
+    this.globalNotificationService.showNotification({
+      type: 'error',
+      title: 'Error',
+      message: errorMessage,
+      duration: 5000,
+    });
 
     // Return the appropriate error action
     return of(errorActionCreator({ error: errorMessage }));
@@ -336,7 +335,7 @@ export class AuthEffects {
     private storageService: StorageService,
     private router: Router,
     private store: Store,
-    private snackBar: MatSnackBar,
+    private globalNotificationService: GlobalNotificationService,
     private translocoService: TranslocoService
   ) {}
 }
