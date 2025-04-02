@@ -82,16 +82,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
   onHeaderMenuToggle(): void {
     // Toggle the sidenav visibility
     console.log(
-      'Header menu toggle received, current state:',
+      'Header menu toggle clicked, current state:',
       this.isSidenavOpen
     );
     this.isSidenavOpen = !this.isSidenavOpen;
     console.log('New sidenav state:', this.isSidenavOpen);
-    this.cdr.detectChanges(); // Force change detection
 
-    // Ensure the sidenav state change is properly detected
+    // Force multiple change detection cycles to ensure UI updates
+    this.cdr.detectChanges();
     setTimeout(() => {
       this.cdr.detectChanges();
+      // Add another cycle for good measure
+      setTimeout(() => {
+        this.cdr.detectChanges();
+      }, 50);
     }, 0);
   }
 

@@ -7,6 +7,7 @@
 .cds--content {
   margin-top: 3rem; // Space for the fixed header
   min-height: calc(100vh - 3rem);
+  position: relative; // Create a new stacking context
 }
 
 .cds--content-layout {
@@ -45,7 +46,7 @@
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000; // Updated z-index to be lower than sidenav but higher than content
+  z-index: 1000; // Lower than sidenav but higher than content
   transition: opacity $duration-moderate-01 motion(standard, productive);
   opacity: 0;
 
@@ -57,13 +58,35 @@
 
 // Make sure sidenav is properly positioned and visible
 .dashboard-sidenav {
+  position: fixed !important;
+  top: 3rem !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  z-index: 1001 !important;
   transition: transform $duration-moderate-01 motion(standard, productive);
-  z-index: 1001; // Ensure it's above other content
-  position: fixed;
-  top: 3rem;
-  left: 0;
-  bottom: 0;
-  display: block; // Ensure it's displayed by default
+  width: 16rem !important; // Force proper width
+  height: calc(100vh - 3rem) !important; // Force proper height
+  background-color: $background !important; // Ensure it has background
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important; // Visual separation
+}
+
+// Visibility classes for sidenav
+.visible {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+}
+
+.hidden {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+// Ensure sidenav is above content but below header
+app-sidenav,
+cds-sidenav {
+  z-index: 1001 !important;
 }
 
 // Mobile-specific styles
@@ -72,6 +95,10 @@
     margin-left: 0 !important;
     width: 100% !important;
     padding: $spacing-04;
+  }
+
+  .dashboard-sidenav {
+    width: 16rem !important;
   }
 }
 
