@@ -63,6 +63,10 @@
     "chooseLanguage": "Choose Language",
     "selectLanguageAria": "Select language"
   },
+  "breadcrumbs": {
+    "dashboard": "Dashboard",
+    "users": "Users"
+  },
   "system": {
     "footer": {
       "copyright": "© {{year}} Intensive Study and Research Center. All rights reserved.",

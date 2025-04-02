@@ -8,7 +8,7 @@ export const DASHBOARD_ROUTES: Routes = [
     component: DashboardComponent,
     data: {
       breadcrumb: {
-        translationKey: 'dashboard',
+        translationKey: 'breadcrumbs.dashboard',
         icon: 'dashboard',
         path: '/dashboard',
       },
@@ -18,7 +18,7 @@ export const DASHBOARD_ROUTES: Routes = [
         path: 'users',
         data: {
           breadcrumb: {
-            translationKey: 'users',
+            translationKey: 'breadcrumbs.users',
             icon: 'group',
             path: '/dashboard/users',
           },
