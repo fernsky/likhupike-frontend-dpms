@@ -10,7 +10,12 @@
   right: 0 !important;
   z-index: 9000 !important;
   display: block !important;
-  height: 3rem !important;
+  // Make header more compact on mobile
+  height: 2.5rem !important;
+
+  @include breakpoint(md) {
+    height: 3rem !important; // Regular height on desktop
+  }
 }
 
 // Enhanced header styles
@@ -19,12 +24,14 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
     background-color: #ffffff !important;
     border-bottom: 2px solid $blue-60 !important;
+    height: 100% !important; // Ensure full height
   }
 
   cds-header {
     z-index: 9000 !important;
     position: relative !important;
-    padding: 0 $spacing-03 !important;
+    padding: 0 $spacing-02 !important; // Smaller padding on mobile
+    height: 100% !important;
 
     @include breakpoint(md) {
       padding: 0 $spacing-05 !important;
@@ -32,12 +39,23 @@
   }
 
   .hamburger-icon {
-    margin-right: $spacing-03 !important;
+    margin-right: $spacing-02 !important; // Reduced margin on mobile
+    transform: scale(0.85) !important; // Make hamburger icon smaller on mobile
+
+    @include breakpoint(md) {
+      margin-right: $spacing-03 !important;
+      transform: scale(1) !important;
+    }
   }
 
   cds-hamburger {
     z-index: 9001 !important;
     position: relative !important;
+    height: 2.5rem !important; // Match smaller header height
+
+    @include breakpoint(md) {
+      height: 3rem !important;
+    }
   }
 
   // Elegant branding styles
@@ -46,13 +64,15 @@
     align-items: center !important;
     height: 100% !important;
     text-decoration: none !important;
-    gap: $spacing-03 !important;
-    max-width: 80% !important;
+    gap: $spacing-02 !important; // Smaller gap on mobile
+    max-width: 75% !important; // Slightly narrower on mobile
     transition: opacity 0.15s ease !important;
-    padding-left: $spacing-03 !important; // Add padding on all sizes
+    padding-left: $spacing-02 !important; // Smaller padding on mobile
 
     @include breakpoint(md) {
-      padding-left: $spacing-05 !important; // Add more padding on desktop
+      padding-left: $spacing-05 !important;
+      gap: $spacing-03 !important;
+      max-width: 80% !important;
     }
 
     &:hover {
@@ -69,10 +89,15 @@
   }
 
   .cds--header__divider {
-    height: 20px !important;
+    height: 16px !important; // Smaller divider on mobile
     width: 1px !important;
     background-color: $gray-30 !important;
-    margin: 0 $spacing-03 !important;
+    margin: 0 $spacing-02 !important; // Smaller margin on mobile
+
+    @include breakpoint(md) {
+      height: 20px !important;
+      margin: 0 $spacing-03 !important;
+    }
   }
 
   .cds--header__title-container {
@@ -83,11 +108,11 @@
   }
 
   .cds--header__logo {
-    height: 22px !important; // Smaller logo
+    height: 18px !important; // Even smaller logo on mobile
     width: auto !important;
 
     @include breakpoint(md) {
-      height: 24px !important; // Still smaller on desktop
+      height: 24px !important;
     }
   }
 
@@ -95,7 +120,7 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    height: 24px !important;
+    height: 20px !important; // Smaller container on mobile
     flex-shrink: 0 !important;
 
     @include breakpoint(md) {
@@ -104,18 +129,18 @@
   }
 
   .cds--header__title {
-    // Fix the syntax error by removing !important after the mixin
-    @include type-style("heading-compact-01");
+    @include type-style("body-compact-01"); // Smaller font on mobile
     color: $gray-100 !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     font-weight: 600 !important;
     letter-spacing: -0.01em !important;
+    font-size: 0.75rem !important; // Explicitly set smaller font size
 
     @include breakpoint(md) {
-      // Fix this one too
       @include type-style("heading-compact-02");
+      font-size: unset !important;
     }
   }
 
@@ -132,43 +157,62 @@
     height: 100% !important;
   }
 
-  // Make sure dropdown is properly styled
+  // Make language dropdown ultra compact on mobile
   app-language-dropdown {
     height: 100% !important;
     display: flex !important;
     align-items: center !important;
+    transform: scale(0.85) !important; // Scale entire component down on mobile
 
-    // Make dropdown smaller on mobile devices
+    @include breakpoint(md) {
+      transform: scale(1) !important;
+    }
+
     ::ng-deep {
       .cds--dropdown {
-        height: 2rem !important; // Smaller height on mobile
-        min-width: 2.5rem !important; // Smaller width on mobile
+        height: 1.75rem !important; // Super small height on mobile
+        min-width: 2rem !important; // Super small width on mobile
 
         @include breakpoint(md) {
-          height: 2.5rem !important; // Regular height on desktop
-          min-width: 4rem !important; // Regular width on desktop
+          height: 2.5rem !important;
+          min-width: 4rem !important;
         }
       }
 
       // Scale down text and icons
       .cds--dropdown-text {
-        font-size: 0.75rem !important; // Smaller font on mobile
-        padding-right: $spacing-03 !important; // Less padding
+        font-size: 0.65rem !important; // Smaller font on mobile
+        padding-right: $spacing-02 !important; // Less padding
+        padding-left: $spacing-02 !important; // Less padding
 
         @include breakpoint(md) {
-          font-size: 0.875rem !important; // Regular font on desktop
-          padding-right: $spacing-05 !important; // Regular padding
+          font-size: 0.875rem !important;
+          padding-right: $spacing-05 !important;
+          padding-left: $spacing-03 !important;
         }
       }
 
       // Make chevron smaller
       .cds--dropdown__arrow {
-        width: 0.75rem !important;
-        height: 0.75rem !important;
+        width: 0.625rem !important;
+        height: 0.625rem !important;
+        right: $spacing-02 !important; // Less spacing
 
         @include breakpoint(md) {
           width: 1rem !important;
           height: 1rem !important;
+          right: $spacing-03 !important;
+        }
+      }
+
+      // Make the menu items smaller in the dropdown
+      .cds--list-box__menu-item {
+        height: 1.75rem !important;
+        padding: $spacing-01 $spacing-02 !important;
+
+        @include breakpoint(md) {
+          height: 2.5rem !important;
+          padding: $spacing-02 $spacing-05 !important;
         }
       }
     }

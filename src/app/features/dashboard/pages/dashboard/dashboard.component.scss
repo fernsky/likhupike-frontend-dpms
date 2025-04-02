@@ -5,15 +5,24 @@
 @use "@carbon/styles/scss/colors" as *;
 
 .cds--content {
-  margin-top: 3rem; // Space for the fixed header
-  min-height: calc(100vh - 3rem);
+  margin-top: 2.5rem; // Smaller space for mobile header
+  min-height: calc(100vh - 2.5rem);
   position: relative; // Create a new stacking context
+
+  @include breakpoint(md) {
+    margin-top: 3rem; // Regular space for desktop header
+    min-height: calc(100vh - 3rem);
+  }
 }
 
 .cds--content-layout {
   display: flex;
-  height: calc(100vh - 3rem);
+  height: calc(100vh - 2.5rem); // Adjust for smaller header on mobile
   position: relative;
+
+  @include breakpoint(md) {
+    height: calc(100vh - 3rem); // Regular height on desktop
+  }
 
   &__content {
     flex: 1;
@@ -37,11 +46,11 @@
   }
 }
 
-// Mobile backdrop
+// Mobile backdrop - adjust for smaller header
 .mobile-backdrop {
   display: none;
   position: fixed;
-  top: 3rem;
+  top: 2.5rem; // Match smaller header height
   left: 0;
   right: 0;
   bottom: 0;
@@ -54,20 +63,29 @@
     display: block;
     opacity: 1;
   }
+
+  @include breakpoint(md) {
+    top: 3rem; // Regular top position on desktop
+  }
 }
 
 // Make sure sidenav is properly positioned and visible
 .dashboard-sidenav {
   position: fixed !important;
-  top: 3rem !important;
+  top: 2.5rem !important; // Match smaller header height
   left: 0 !important;
   bottom: 0 !important;
   z-index: 1001 !important;
   transition: transform $duration-moderate-01 motion(standard, productive);
   width: 16rem !important; // Force proper width
-  height: calc(100vh - 3rem) !important; // Force proper height
+  height: calc(100vh - 2.5rem) !important; // Adjust for smaller header
   background-color: $background !important; // Ensure it has background
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important; // Visual separation
+
+  @include breakpoint(md) {
+    top: 3rem !important; // Regular top position on desktop
+    height: calc(100vh - 3rem) !important; // Regular height on desktop
+  }
 }
 
 // Visibility classes for sidenav
