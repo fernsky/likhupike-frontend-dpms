@@ -12,7 +12,11 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import * as AuthActions from '@app/core/store/auth/auth.actions';
 import { selectAuthState } from '@app/core/store/auth/auth.selectors';
-import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
+import {
+  provideTranslocoScope,
+  TranslocoModule,
+  TranslocoService,
+} from '@jsverse/transloco';
 import { MatIconModule } from '@angular/material/icon';
 
 // Carbon Imports
@@ -56,11 +60,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   hidePassword = true;
   loading = false;
+  formSubmitted = false;
   private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
-    private store: Store
+    private store: Store,
+    private transloco: TranslocoService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -80,7 +86,49 @@ export class LoginComponent implements OnInit, OnDestroy {
       });
   }
 
+  hasEmailError(): boolean {
+    const control = this.loginForm.get('email');
+    return Boolean(
+      control?.invalid && (control?.touched || this.formSubmitted)
+    );
+  }
+
+  hasPasswordError(): boolean {
+    const control = this.loginForm.get('password');
+    return Boolean(
+      control?.invalid && (control?.touched || this.formSubmitted)
+    );
+  }
+
+  getEmailErrorText(): string {
+    if (!this.hasEmailError()) return '';
+
+    const control = this.loginForm.get('email');
+    if (control?.hasError('required')) {
+      return this.transloco.translate('login.fields.email.errors.required');
+    }
+    if (control?.hasError('email')) {
+      return this.transloco.translate('login.fields.email.errors.invalid');
+    }
+    return '';
+  }
+
+  getPasswordErrorText(): string {
+    if (!this.hasPasswordError()) return '';
+
+    const control = this.loginForm.get('password');
+    if (control?.hasError('required')) {
+      return this.transloco.translate('login.fields.password.errors.required');
+    }
+    if (control?.hasError('minlength')) {
+      return this.transloco.translate('login.fields.password.errors.minlength');
+    }
+    return '';
+  }
+
   onSubmit(): void {
+    this.formSubmitted = true;
+
     if (this.loginForm.valid) {
       this.store.dispatch(
         AuthActions.login({ credentials: this.loginForm.value })

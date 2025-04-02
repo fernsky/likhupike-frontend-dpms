@@ -9,95 +9,55 @@
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="cds--form">
     <!-- Email Input -->
     <div class="cds--form-item">
-      <cds-label>
+      <cds-text-label
+        [helperText]="'login.fields.email.helper' | transloco"
+        [invalidText]="getEmailErrorText()"
+        [invalid]="hasEmailError()"
+      >
         {{ "login.fields.email.label" | transloco }}
-      </cds-label>
-      <div class="cds--text-input__field-wrapper">
         <input
           cdsText
           [placeholder]="'login.fields.email.placeholder' | transloco"
           formControlName="email"
           type="email"
-          [invalid]="
-            (loginForm.get('email')?.invalid &&
-              loginForm.get('email')?.touched) ??
-            false
-          "
-          [attr.data-invalid]="
-            loginForm.get('email')?.invalid && loginForm.get('email')?.touched
-          "
-          aria-controls="email-error-msg"
+          [invalid]="hasEmailError()"
         />
-      </div>
-      <div
-        *ngIf="
-          loginForm.get('email')?.invalid && loginForm.get('email')?.touched
-        "
-        class="cds--form-requirement"
-        id="email-error-msg"
-      >
-        <ng-container *ngIf="loginForm.get('email')?.hasError('required')">
-          {{ "login.fields.email.errors.required" | transloco }}
-        </ng-container>
-        <ng-container *ngIf="loginForm.get('email')?.hasError('email')">
-          {{ "login.fields.email.errors.invalid" | transloco }}
-        </ng-container>
-      </div>
+      </cds-text-label>
     </div>
 
     <!-- Password Input -->
     <div class="cds--form-item">
-      <cds-label>
-        {{ "login.fields.password.label" | transloco }}
-      </cds-label>
-      <div class="cds--text-input__field-wrapper">
-        <input
-          cdsText
-          [placeholder]="'login.fields.password.placeholder' | transloco"
-          formControlName="password"
-          [type]="hidePassword ? 'password' : 'text'"
-          [invalid]="
-            (loginForm.get('password')?.invalid &&
-              loginForm.get('password')?.touched) ??
-            false
-          "
-          [attr.data-invalid]="
-            loginForm.get('password')?.invalid &&
-            loginForm.get('password')?.touched
-          "
-          aria-controls="password-error-msg"
-        />
-        <button
-          cdsButton="ghost"
-          size="sm"
-          class="cds--text-input__password-visibility-toggle"
-          type="button"
-          (click)="togglePasswordVisibility()"
-          [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
-        >
-          <mat-icon>{{
-            hidePassword ? "visibility_off" : "visibility"
-          }}</mat-icon>
-        </button>
-      </div>
-      <div
-        *ngIf="
-          loginForm.get('password')?.invalid &&
-          loginForm.get('password')?.touched
-        "
-        class="cds--form-requirement"
-        id="password-error-msg"
+      <cds-text-label
+        [helperText]="'login.fields.password.helper' | transloco"
+        [invalidText]="getPasswordErrorText()"
+        [invalid]="hasPasswordError()"
       >
-        <ng-container *ngIf="loginForm.get('password')?.hasError('required')">
-          {{ "login.fields.password.errors.required" | transloco }}
-        </ng-container>
-        <ng-container *ngIf="loginForm.get('password')?.hasError('minlength')">
-          {{ "login.fields.password.errors.minlength" | transloco }}
-        </ng-container>
-      </div>
+        {{ "login.fields.password.label" | transloco }}
+        <div class="cds--password-input-wrapper">
+          <input
+            cdsText
+            [placeholder]="'login.fields.password.placeholder' | transloco"
+            formControlName="password"
+            [type]="hidePassword ? 'password' : 'text'"
+            [invalid]="hasPasswordError()"
+          />
+          <button
+            cdsButton="ghost"
+            size="sm"
+            class="cds--text-input__password-visibility-toggle"
+            type="button"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+          >
+            <mat-icon>{{
+              hidePassword ? "visibility_off" : "visibility"
+            }}</mat-icon>
+          </button>
+        </div>
+      </cds-text-label>
     </div>
 
-    <!-- Server Error Display - Fixed to use proper notification pattern -->
+    <!-- Server Error Display -->
     <div *ngIf="loginForm.hasError('serverError')" class="cds--login-error">
       <div class="cds--inline-notification cds--inline-notification--error">
         <div class="cds--inline-notification__details">
@@ -114,12 +74,7 @@
 
     <!-- Submit Button -->
     <div class="cds--form-item cds--login-submit">
-      <button
-        cdsButton
-        type="submit"
-        [disabled]="loginForm.invalid || loading"
-        [isExpressive]="true"
-      >
+      <button cdsButton type="submit" [disabled]="loginForm.invalid || loading">
         <span class="cds--btn__icon">
           <mat-icon>login</mat-icon>
         </span>
