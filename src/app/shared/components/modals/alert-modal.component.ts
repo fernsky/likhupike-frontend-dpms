@@ -6,7 +6,7 @@ import {
   ModalModule,
   ButtonModule,
 } from 'carbon-components-angular';
-import { BaseModal } from './base-modal.component';
+import { BaseModalComponent } from './base-modal.component';
 
 @Component({
   selector: 'app-alert-modal',
@@ -31,7 +31,7 @@ import { BaseModal } from './base-modal.component';
   standalone: true,
   imports: [CommonModule, TranslocoModule, ModalModule, ButtonModule],
 })
-export class AlertModal extends BaseModal {
+export class AlertModalComponent extends BaseModalComponent {
   @Output() ok = new EventEmitter<void>();
 
   constructor(

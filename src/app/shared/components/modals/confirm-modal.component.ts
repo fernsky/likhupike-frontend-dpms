@@ -6,7 +6,7 @@ import {
   ModalModule,
   ButtonModule,
 } from 'carbon-components-angular';
-import { BaseModal } from './base-modal.component';
+import { BaseModalComponent } from './base-modal.component';
 
 @Component({
   selector: 'app-confirm-modal',
@@ -43,7 +43,7 @@ import { BaseModal } from './base-modal.component';
   standalone: true,
   imports: [CommonModule, TranslocoModule, ModalModule, ButtonModule],
 })
-export class ConfirmModalComponent extends BaseModal {
+export class ConfirmModalComponent extends BaseModalComponent {
   @Output() confirm = new EventEmitter<void>();
   @Output() cancelAction = new EventEmitter<void>();
 

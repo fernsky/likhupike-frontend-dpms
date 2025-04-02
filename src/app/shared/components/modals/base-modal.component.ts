@@ -8,7 +8,7 @@ import { ModalService } from 'carbon-components-angular';
 @Component({
   template: '',
 })
-export class BaseModal {
+export class BaseModalComponent {
   open = true;
   @Output() closeEvent = new EventEmitter<void>();
 
