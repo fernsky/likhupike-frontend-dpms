@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   OnDestroy,
   HostListener,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
@@ -47,7 +48,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store,
     private router: Router,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private cdr: ChangeDetectorRef // Add ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -58,6 +60,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe((result) => {
         // On mobile, keep sidenav closed by default
         this.isSidenavOpen = !result.matches;
+        this.cdr.detectChanges(); // Force change detection
       });
   }
 
@@ -73,21 +76,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
       // On desktop, default to open sidenav
       this.isSidenavOpen = true;
     }
+    this.cdr.detectChanges(); // Force change detection
   }
 
   onHeaderMenuToggle(): void {
+    // Toggle the sidenav visibility
     this.isSidenavOpen = !this.isSidenavOpen;
+    this.cdr.detectChanges(); // Force change detection
   }
 
   onMobileClose(): void {
-    // Only close on mobile
+    // Always close on mobile
     if (this.breakpointObserver.isMatched(`(max-width: ${BREAKPOINT_MD}px)`)) {
       this.isSidenavOpen = false;
+      this.cdr.detectChanges(); // Force change detection
     }
   }
 
   onSidenavToggle(): void {
     this.isSidenavOpen = !this.isSidenavOpen;
+    this.cdr.detectChanges(); // Force change detection
   }
 
   onLogout(): void {

@@ -169,11 +169,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
   onSelected(item: NavItem): void {
     if (item.route) {
       this.router.navigate([item.route]);
-      this.isHandset$.pipe(takeUntil(this.destroy$)).subscribe((isHandset) => {
-        if (isHandset) {
-          this.mobileClose.emit();
-        }
-      });
+
+      // Always emit the close event on mobile when an item is selected
+      // Don't check isHandset first, let the parent component decide what to do
+      this.mobileClose.emit();
     }
   }
 

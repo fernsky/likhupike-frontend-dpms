@@ -1,5 +1,4 @@
 <div class="cds--content">
-  <!-- Header passes the sidenav state to show the correct hamburger icon state -->
   <app-header
     [isExpanded]="isSidenavOpen"
     [showMenu]="(showMenuToggle$ | async) ?? false"
@@ -7,24 +6,27 @@
   ></app-header>
 
   <div class="cds--content-layout">
-    <!-- Backdrop for mobile only, overlays content when sidenav is open on mobile -->
+    <!-- Backdrop for mobile only -->
     <div
       class="mobile-backdrop"
       [class.show]="isSidenavOpen && (showMenuToggle$ | async)"
       (click)="onMobileClose()"
     ></div>
 
-    <!-- Pass the collapsed state to sidenav based on isSidenavOpen -->
+    <!-- The key change: on mobile (showMenuToggle$ is true) hide sidenav when not open -->
     <app-sidenav
-      [collapsed]="!isSidenavOpen"
+      *ngIf="!(showMenuToggle$ | async) || isSidenavOpen"
+      [collapsed]="!isSidenavOpen && !(showMenuToggle$ | async)"
       [expanded]="isSidenavOpen"
       (mobileClose)="onMobileClose()"
       (mobileToggle)="onSidenavToggle()"
+      class="dashboard-sidenav"
     ></app-sidenav>
 
     <main
       class="cds--content-layout__content"
-      [class.cds--content-layout__content--expanded]="!isSidenavOpen"
+      [class.full-width]="(showMenuToggle$ | async) && !isSidenavOpen"
+      [class.collapsed-width]="!isSidenavOpen && !(showMenuToggle$ | async)"
     >
       <router-outlet></router-outlet>
     </main>

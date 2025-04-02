@@ -11,20 +11,10 @@
   left: 0;
   bottom: 0;
   z-index: 1000;
-  transition: transform $duration-moderate-01 motion(standard, productive);
   display: flex;
   flex-direction: column;
 
-  @include breakpoint-down(md) {
-    &:not(.open) {
-      transform: translateX(-100%);
-    }
-
-    &.open {
-      transform: translateX(0);
-      box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1);
-    }
-  }
+  // No transform needed here, we use ngIf in the parent
 }
 
 :host ::ng-deep {
