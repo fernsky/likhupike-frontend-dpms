@@ -6,7 +6,7 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslocoModule } from '@jsverse/transloco';
+import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 import { UIShellModule } from 'carbon-components-angular';
 import { LanguageDropdownComponent } from '@app/shared/components/language-dropdown/language-dropdown.component';
 
@@ -21,6 +21,12 @@ import { LanguageDropdownComponent } from '@app/shared/components/language-dropd
     TranslocoModule,
     UIShellModule,
     LanguageDropdownComponent,
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'header',
+      alias: 'header',
+    }),
   ],
 })
 export class HeaderComponent {
