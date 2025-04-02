@@ -9,18 +9,16 @@ import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subject, BehaviorSubject, combineLatest } from 'rxjs';
+import { Subject, combineLatest } from 'rxjs';
 import {
   takeUntil,
   distinctUntilChanged,
   map,
-  take,
   filter,
 } from 'rxjs/operators';
 import {
@@ -43,7 +41,6 @@ import {
   LoadingModule,
   ModalModule,
   ModalService,
-  ModalButtonType,
   IconModule,
   DropdownModule,
   CheckboxModule,
@@ -60,7 +57,6 @@ import {
 
 // Components
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
-import { PageTitleComponent } from '@shared/components/page-title/page-title.component';
 
 // Models & Actions
 import {
@@ -70,7 +66,6 @@ import {
 } from '../../models/user.interface';
 import { UserActions } from '../../store/user.actions';
 import * as UserSelectors from '../../store/user.selectors';
-import { RoleType } from '@app/core/models/role.enum';
 import { PermissionType } from '@app/core/models/permission.enum';
 
 @Component({
@@ -83,7 +78,6 @@ import { PermissionType } from '@app/core/models/permission.enum';
     ReactiveFormsModule,
     TranslocoModule,
     BreadcrumbComponent,
-    PageTitleComponent,
 
     // Carbon modules
     ButtonModule,

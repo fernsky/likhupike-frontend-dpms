@@ -11,6 +11,14 @@
 @use "@carbon/styles/scss/components/dropdown";
 @use "@carbon/styles/scss/components/form";
 
+// Define the Carbon standard easing curve
+$carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
+$tag-background-01: #e0e0e0;
+$tag-hover-01: #c6c6c6;
+$tag-text-01: #393939;
+$support-01: #da1e28;
+$hover-row: #e8e8e8;
+
 :host {
   --text-01: var(--cds-text-01, #161616);
   --text-02: var(--cds-text-02, #525252);
@@ -66,13 +74,13 @@
 
     &__title {
       @include type-style("productive-heading-04");
-      color: $text-01;
+      color: var(--text-01);
       margin-bottom: $spacing-03;
     }
 
     &__subtitle {
       @include type-style("body-long-01");
-      color: $text-02;
+      color: var(--text-02);
     }
 
     &__actions {
@@ -97,7 +105,7 @@
   }
 
   .cds--table-container {
-    background-color: $layer-01;
+    background-color: var(--layer-01);
     width: 100%;
     position: relative;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
@@ -143,20 +151,20 @@
           margin-bottom: $spacing-05;
 
           svg {
-            fill: $icon-01;
+            fill: var(--icon-01);
           }
         }
 
         &__title {
           @include type-style("productive-heading-03");
           margin-bottom: $spacing-03;
-          color: $text-01;
+          color: var(--text-01);
         }
 
         &__text {
           @include type-style("body-long-01");
           margin-bottom: $spacing-06;
-          color: $text-02;
+          color: var(--text-02);
         }
 
         &--error {
@@ -173,7 +181,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    border-bottom: 1px solid $border-subtle-01;
+    border-bottom: 1px solid var(--border-subtle-01);
 
     .cds--toolbar-content {
       display: flex;
@@ -211,7 +219,7 @@
     .cds--table-toolbar-filter-panel {
       margin-top: $spacing-05;
       padding-top: $spacing-05;
-      border-top: 1px solid $border-subtle-01;
+      border-top: 1px solid var(--border-subtle-01);
 
       .cds--form-field-row {
         margin-bottom: $spacing-05;
@@ -264,7 +272,7 @@
 
         .cds--data-table tbody tr:hover td {
           background-color: $hover-row;
-          color: $text-01;
+          color: var(--text-01);
         }
 
         .cds--overflow-menu-wrapper {
@@ -276,7 +284,7 @@
   }
 
   .cds--pagination-container {
-    border-top: 1px solid $border-subtle-01;
+    border-top: 1px solid var(--border-subtle-01);
 
     cds-pagination {
       width: 100%;
