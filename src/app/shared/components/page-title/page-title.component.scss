@@ -1,293 +1,115 @@
-.page-title-container {
-  margin: 0 0 1rem;
-  position: relative;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+@use "@carbon/styles/scss/spacing" as *;
+@use "@carbon/styles/scss/type" as *;
+@use "@carbon/styles/scss/theme" as *;
+@use "@carbon/styles/scss/breakpoint" as *;
+@use "@carbon/styles/scss/motion" as *;
 
-  .title-wrapper {
+.cds--page-header {
+  width: 100%;
+  margin-bottom: $spacing-07;
+
+  &__container {
     display: flex;
-    justify-content: space-between;
     align-items: flex-start;
-    gap: 1.5rem;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--cds-border-subtle);
+    padding-bottom: $spacing-05;
   }
 
-  .title-content {
+  &__title-container {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-05;
+  }
+
+  &__icon {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 0.5rem 0;
-    position: relative;
-    margin-bottom: 0; // Remove margin since it's handled by container
-    flex: 1;
-  }
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    background-color: var(--cds-background);
+    color: var(--cds-text-secondary);
+    border: 1px solid var(--cds-border-subtle);
 
-  .icon-wrapper {
-    .icon-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #123772, #1a4894);
-      box-shadow:
-        0 4px 12px rgba(18, 55, 114, 0.15),
-        0 2px 4px rgba(18, 55, 114, 0.08),
-        inset 0 2px 4px rgba(255, 255, 255, 0.1);
-      position: relative;
-
-      &::before {
-        content: "";
-        position: absolute;
-        inset: 1px;
-        background: linear-gradient(
-          135deg,
-          rgba(255, 255, 255, 0.15),
-          transparent
-        );
-        border-radius: 13px;
-      }
-    }
-
-    .title-icon {
-      color: #ffffff;
-      font-size: 24px;
-      width: 24px;
-      height: 24px;
-      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+    mat-icon {
+      font-size: 20px;
+      height: 20px;
+      width: 20px;
     }
   }
 
-  .text-content {
-    flex: 1;
-
-    .title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: #0b1f42;
-      margin: 0 0 0.25rem;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-    }
-
-    .description {
-      font-size: 0.875rem;
-      line-height: 1.4;
-      color: #546e7a;
-      margin: 0;
-      max-width: 650px;
-    }
-  }
-
-  .actions {
-    padding-top: 0.5rem;
+  &__text-container {
     display: flex;
-    gap: 0.75rem;
+    flex-direction: column;
+    gap: $spacing-02;
+  }
+
+  &__title {
+    @include type-style("heading-03");
+    color: var(--cds-text-primary);
+    font-weight: 400;
+  }
+
+  &__subtitle {
+    @include type-style("body-long-01");
+    color: var(--cds-text-secondary);
+    max-width: 40rem;
+  }
+
+  &__actions {
+    display: flex;
     align-items: center;
-
-    ::ng-deep {
-      .create-button {
-        height: 42px;
-        border-radius: 21px;
-        padding: 0 1.5rem;
-        background: rgba(18, 55, 114, 0.98);
-        color: white;
-        font-weight: 500;
-        box-shadow: 0 2px 6px rgba(11, 31, 66, 0.12);
-        transition: all 0.2s ease;
-
-        &:hover {
-          transform: translateY(-1px);
-        }
-
-        mat-icon {
-          margin-right: 0.5rem;
-        }
-      }
-    }
+    gap: $spacing-03;
   }
 }
 
-@media (max-width: 768px) {
-  .page-title-container {
-    .title-content {
-      padding: 1rem;
-      gap: 1rem;
-    }
+// Carbon responsive behavior
+@include breakpoint-down("md") {
+  .cds--page-header {
+    margin-bottom: $spacing-06;
 
-    .icon-wrapper {
-      .icon-container {
-        width: 44px;
-        height: 44px;
-      }
-
-      .title-icon {
-        font-size: 24px;
-        width: 24px;
-        height: 24px;
-      }
-    }
-
-    .title {
-      font-size: 1.25rem;
-    }
-
-    .description {
-      font-size: 0.875rem;
-    }
-
-    .title-wrapper {
+    &__container {
       flex-direction: column;
-      gap: 1rem;
+      gap: $spacing-05;
     }
 
-    .actions {
+    &__title-container {
       width: 100%;
-      padding-top: 0;
+    }
 
-      ::ng-deep .create-button {
-        width: 100%;
-      }
+    &__actions {
+      width: 100%;
+      margin-top: $spacing-05;
     }
   }
 }
 
-@media (max-width: 768px) {
-  .page-title-container {
-    margin: 0 0 0.75rem;
-    padding-bottom: 0.5rem;
+@include breakpoint-down("sm") {
+  .cds--page-header {
+    margin-bottom: $spacing-05;
 
-    .title-wrapper {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      gap: 0.75rem;
+    &__container {
+      padding-bottom: $spacing-04;
     }
 
-    .title-content {
-      gap: 0.75rem;
-      padding: 0;
-      padding-bottom: 0.5rem;
+    &__icon {
+      height: 32px;
+      width: 32px;
 
-      .icon-wrapper {
-        .icon-container {
-          width: 40px; // Increased from 36px
-          height: 40px;
-          border-radius: 12px;
-
-          .title-icon {
-            font-size: 20px; // Increased from 18px
-            width: 20px;
-            height: 20px;
-          }
-        }
-      }
-
-      .text-content {
-        .title {
-          font-size: 1.375rem; // Increased from 1.125rem
-          margin: 0;
-          letter-spacing: -0.02em;
-          font-weight: 600;
-          color: #0b1f42; // Keep original color
-          line-height: 1.2;
-        }
-
-        .description {
-          font-size: 0.875rem; // Increased from 0.75rem
-          margin-top: 0.25rem;
-          line-height: 1.4;
-          color: #546e7a; // Keep original color
-        }
+      mat-icon {
+        font-size: 16px;
+        height: 16px;
+        width: 16px;
       }
     }
 
-    .actions {
-      padding: 0;
-      margin: 0;
-
-      ::ng-deep .create-button {
-        height: 36px;
-        width: 36px;
-        min-width: 36px;
-        padding: 0;
-        border-radius: 50%;
-
-        mat-icon {
-          margin: 0;
-          font-size: 20px;
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .page-title-container {
-    margin: 0 0 0.5rem;
-
-    .title-wrapper {
-      gap: 0.5rem;
+    &__title {
+      @include type-style("heading-02");
     }
 
-    .title-content {
-      gap: 0.5rem;
-
-      .icon-wrapper {
-        .icon-container {
-          width: 36px; // Still keeping it reasonably sized
-          height: 36px;
-          border-radius: 8px;
-
-          .title-icon {
-            font-size: 16px;
-            width: 16px;
-            height: 16px;
-          }
-        }
-      }
-
-      .text-content {
-        .title {
-          font-size: 1.25rem; // Increased from 1rem
-          color: #0b1f42; // Keep original color
-        }
-        .description {
-          font-size: 0.813rem; // Increased from 0.75rem
-          color: #546e7a; // Keep original color
-          opacity: 0.85;
-        }
-      }
-    }
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .page-title-container {
-    .title {
-      color: #f1f5f9;
-    }
-
-    .description {
-      color: #94a3b8;
-    }
-  }
-}
-
-@media print {
-  .page-title-container {
-    background: none;
-    padding: 1rem 0;
-    margin-bottom: 1rem;
-    box-shadow: none;
-
-    &::before {
-      display: none;
-    }
-
-    .title {
-      -webkit-text-fill-color: initial;
-      color: black;
+    &__subtitle {
+      @include type-style("body-01");
     }
   }
 }

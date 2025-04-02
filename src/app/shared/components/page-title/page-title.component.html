@@ -1,20 +1,21 @@
-<div class="page-title-container">
-  <div class="title-wrapper">
-    <div class="title-content">
-      <div class="icon-wrapper" *ngIf="icon">
-        <div class="icon-container">
-          <mat-icon class="title-icon" [inline]="true">{{ icon }}</mat-icon>
-        </div>
+<div class="cds--page-header">
+  <div class="cds--page-header__container">
+    <div class="cds--page-header__title-container">
+      <div class="cds--page-header__icon" *ngIf="icon">
+        <mat-icon>{{ icon }}</mat-icon>
       </div>
-      <div class="text-content">
-        <h1 class="title">
+      <div class="cds--page-header__text-container">
+        <h1 class="cds--page-header__title">
           {{
             titleTranslationKey
               ? (titleTranslationKey | transloco: titleParams)
               : title
           }}
         </h1>
-        <p class="description" *ngIf="description || descriptionTranslationKey">
+        <p
+          class="cds--page-header__subtitle"
+          *ngIf="description || descriptionTranslationKey"
+        >
           {{
             descriptionTranslationKey
               ? (descriptionTranslationKey | transloco: descriptionParams)
@@ -23,7 +24,7 @@
         </p>
       </div>
     </div>
-    <div class="actions" *ngIf="actionsTemplate">
+    <div class="cds--page-header__actions" *ngIf="actionsTemplate">
       <ng-container *ngTemplateOutlet="actionsTemplate"></ng-container>
     </div>
   </div>
