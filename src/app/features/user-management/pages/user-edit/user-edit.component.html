@@ -1,57 +1,81 @@
-<div class="user-edit-container">
-  <mat-progress-bar
-    class="page-loading-bar"
-    mode="indeterminate"
-    *ngIf="loading$ | async"
-  ></mat-progress-bar>
-
+<div class="cds--user-edit-container">
+  <!-- Breadcrumb Navigation -->
   <app-breadcrumb></app-breadcrumb>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading$ | async" class="cds--loading-progress">
+    <div class="cds--loading-overlay"></div>
+    <cds-loading withOverlay="false"></cds-loading>
+  </div>
+
+  <!-- Page Header -->
   <app-page-title
-    [titleTranslationKey]="getPageTitle(user$ | async)"
-    [descriptionTranslationKey]="'user.edit.description'"
-    icon="manage_accounts"
+    [title]="getPageTitle(user$ | async)"
+    [description]="'user.edit.description' | transloco"
   >
     <ng-template #actions>
-      <app-page-title-button
-        variant="secondary"
-        size="medium"
-        icon="arrow_back"
-        [fullText]="'common.actions.back' | transloco"
-        (clicked)="onBack()"
-      ></app-page-title-button>
+      <button
+        cdsButton="ghost"
+        (click)="onBack()"
+        size="md"
+        class="cds--back-button"
+      >
+        <mat-icon>arrow_back</mat-icon>
+        {{ "common.actions.back" | transloco }}
+      </button>
     </ng-template>
   </app-page-title>
 
-  <div class="sections-container" *ngIf="user$ | async as user">
-    <app-form-section
-      icon="person"
-      [title]="'user.edit.tabs.details' | transloco"
-    >
-      <app-update-user-details [user]="user"></app-update-user-details>
-    </app-form-section>
-
-    <app-form-section
-      icon="password"
-      [title]="'user.edit.tabs.password' | transloco"
-    >
-      <app-reset-password [user]="user"></app-reset-password>
-    </app-form-section>
-
-    <app-form-section
-      icon="security"
-      [title]="'user.edit.tabs.permissions' | transloco"
-    >
-      <app-user-permissions [user]="user"></app-user-permissions>
-    </app-form-section>
+  <!-- Error State -->
+  <div *ngIf="error$ | async as error" class="cds--user-edit-error">
+    <div class="cds--inline-notification cds--inline-notification--error">
+      <div class="cds--inline-notification__details">
+        <mat-icon class="cds--inline-notification__icon">error</mat-icon>
+        <div class="cds--inline-notification__text-wrapper">
+          <div class="cds--inline-notification__title">
+            {{ "user.edit.errors.title" | transloco }}
+          </div>
+          <div class="cds--inline-notification__subtitle">{{ error }}</div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div
-    class="no-user-message"
-    *ngIf="
-      ((user$ | async) === null || (user$ | async) === undefined) &&
-      (loading$ | async) === false
-    "
-  >
-    {{ "user.edit.userNotFound" | transloco }}
+  <!-- Main Content Area -->
+  <div class="cds--content-area" *ngIf="user$ | async as user">
+    <!-- Carbon Tabs - Correct Implementation -->
+    <cds-tabs type="contained" class="cds--user-tabs" [cacheActive]="true">
+      <cds-tab
+        [heading]="'user.edit.tabs.details' | transloco"
+        [tabContent]="detailsTab"
+      ></cds-tab>
+      <cds-tab
+        [heading]="'user.edit.tabs.password' | transloco"
+        [tabContent]="passwordTab"
+      ></cds-tab>
+      <cds-tab
+        [heading]="'user.edit.tabs.permissions' | transloco"
+        [tabContent]="permissionsTab"
+      ></cds-tab>
+    </cds-tabs>
+
+    <!-- Tab Content Templates -->
+    <ng-template #detailsTab>
+      <div class="cds--tab-panel">
+        <app-update-user-details [user]="user"></app-update-user-details>
+      </div>
+    </ng-template>
+
+    <ng-template #passwordTab>
+      <div class="cds--tab-panel">
+        <app-reset-password [user]="user"></app-reset-password>
+      </div>
+    </ng-template>
+
+    <ng-template #permissionsTab>
+      <div class="cds--tab-panel">
+        <app-user-permissions [user]="user"></app-user-permissions>
+      </div>
+    </ng-template>
   </div>
 </div>

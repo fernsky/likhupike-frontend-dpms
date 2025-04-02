@@ -1,15 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router'; // Add Router
+import { Router, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 import { Store } from '@ngrx/store';
-import { filter, Subject, takeUntil, combineLatest } from 'rxjs';
-import { MatTabsModule } from '@angular/material/tabs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import {
-  provideTranslocoScope,
   TranslocoModule,
   TranslocoService,
+  provideTranslocoScope,
 } from '@jsverse/transloco';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { UserResponse } from '../../models/user.interface';
 import { UserActions } from '../../store/user.actions';
 import * as UserSelectors from '../../store/user.selectors';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
@@ -17,11 +19,15 @@ import { PageTitleComponent } from '@app/shared/components/page-title/page-title
 import { UpdateUserDetailsComponent } from './components/update-user-details/update-user-details.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { UserPermissionsComponent } from './components/user-permissions/user-permissions.component';
-import { MatIconModule } from '@angular/material/icon';
-import { Location } from '@angular/common';
-import { FormSectionComponent } from '@app/shared/components/form-section/form-section.component';
-import { PageTitleButtonComponent } from '@app/shared/components/page-title-button/page-title-button.component';
-import { UserResponse } from '../../models/user.interface';
+
+// Carbon imports
+import {
+  ButtonModule,
+  TabsModule,
+  LoadingModule,
+  NotificationModule,
+  UIShellModule,
+} from 'carbon-components-angular';
 
 @Component({
   selector: 'app-user-edit',
@@ -30,18 +36,20 @@ import { UserResponse } from '../../models/user.interface';
   standalone: true,
   imports: [
     CommonModule,
-    MatTabsModule,
     TranslocoModule,
-    MatProgressBarModule,
-    BreadcrumbComponent,
     MatIconModule,
+    BreadcrumbComponent,
     PageTitleComponent,
     UpdateUserDetailsComponent,
     ResetPasswordComponent,
     UserPermissionsComponent,
-    FormSectionComponent,
 
-    PageTitleButtonComponent,
+    // Carbon modules
+    ButtonModule,
+    TabsModule,
+    LoadingModule,
+    NotificationModule,
+    UIShellModule,
   ],
   providers: [
     provideTranslocoScope({
@@ -55,7 +63,6 @@ export class UserEditComponent implements OnInit, OnDestroy {
   user$ = this.store.select(UserSelectors.selectSelectedUser);
   error$ = this.store.select(UserSelectors.selectUserErrors);
   private destroy$ = new Subject<void>();
-  activeTabIndex = 0;
 
   constructor(
     private store: Store,
@@ -68,51 +75,26 @@ export class UserEditComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.dispatch(UserActions.clearErrors());
 
-    // Load user data and handle navigation
+    // Load user data based on the ID from the route
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       if (params['id']) {
-        // Clear selected user before loading new one
         this.store.dispatch(UserActions.loadUser({ id: params['id'] }));
-
-        // Monitor the user data and error states
-        combineLatest([this.user$, this.loading$])
-          .pipe(
-            takeUntil(this.destroy$),
-            // Wait until loading is complete and we have data or error
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            filter(([_, loading]) => !loading)
-          )
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          .subscribe(([user, _]) => {
-            console.log('User data in component:', user);
-            if (!user) {
-              console.error('No user data available');
-              this.router.navigate(['/dashboard/users/list']);
-            }
-          });
       }
     });
-
-    // Handle query param for active tab
-    this.route.queryParams
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((params) => {
-        this.activeTabIndex = parseInt(params['tab'] || '0', 10);
-      });
   }
 
   onBack(): void {
     this.location.back();
   }
 
+  getPageTitle(user: UserResponse | null): string {
+    return (
+      user?.email || this.transloco.translate('user.edit.title', { email: '' })
+    );
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  getPageTitle(user: UserResponse | null): string {
-    return this.transloco.translate('user.edit.title', {
-      email: user!.email,
-    });
   }
 }
