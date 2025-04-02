@@ -57,10 +57,12 @@
     </div>
   </div>
 
-  <!-- Form Actions - Modified for equal spacing -->
+  <!-- Form Actions - Only show cancel when form is dirty -->
   <div class="cds--user-form-actions">
     <button
+      *ngIf="updateForm.dirty"
       cdsButton="secondary"
+      size="lg"
       type="button"
       (click)="onCancel()"
       [disabled]="(loading$ | async) === true"
@@ -69,6 +71,7 @@
     </button>
     <button
       cdsButton
+      size="lg"
       type="submit"
       [disabled]="
         !updateForm.valid || !updateForm.dirty || (loading$ | async) === true

@@ -101,18 +101,20 @@ $carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
 
 .cds--user-form-actions {
   display: flex;
-  justify-content: space-between; // Changed from flex-start to space-between
-  gap: $spacing-03;
-  margin-top: $spacing-06;
+  justify-content: flex-end; // Reverted to right-aligned buttons
+  gap: $spacing-05; // Increased gap between buttons
+  margin-top: $spacing-07;
   border-top: none;
   padding-top: 0;
 
   button {
-    flex: 1; // Added to make buttons take equal space
-    min-width: 120px;
+    min-width: 120px; // Minimum width for buttons
     position: relative;
     overflow: hidden;
     transition: all 150ms $carbon--standard-easing;
+    height: $spacing-09; // Ensure large button height
+    padding-left: $spacing-05;
+    padding-right: $spacing-05;
 
     &:not(:disabled):hover {
       transform: translateY(-1px);
@@ -153,8 +155,7 @@ $carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
     gap: $spacing-03;
 
     button {
-      width: 100%;
-      min-width: 100%;
+      width: 100%; // Full width on mobile
     }
   }
 }
