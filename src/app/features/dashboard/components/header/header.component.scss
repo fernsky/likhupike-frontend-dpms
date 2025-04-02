@@ -116,6 +116,15 @@
     display: none !important;
   }
 
+  // Hide language dropdown on mobile
+  .desktop-only-element {
+    display: none !important; // Hide by default on mobile
+
+    @include breakpoint(md) {
+      display: block !important; // Show on desktop/tablet
+    }
+  }
+
   // Enhanced global menu area
   cds-header-global {
     margin-left: auto !important;
