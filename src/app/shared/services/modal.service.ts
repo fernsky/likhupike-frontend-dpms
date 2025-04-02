@@ -3,8 +3,8 @@ import {
   ModalService as CarbonModalService,
   ModalButtonType,
 } from 'carbon-components-angular';
-import { ConfirmModal } from '@app/shared/components/modals/confirm-modal.component';
-import { AlertModal } from '@app/shared/components/modals/alert-modal.component';
+import { ConfirmModalComponent } from '@app/shared/components/modals/confirm-modal.component';
+import { AlertModalComponent } from '@app/shared/components/modals/alert-modal.component';
 
 export interface ModalButton {
   text: string;
@@ -36,7 +36,7 @@ export class AppModalService {
     component: Type<T>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     inputs: Record<string, any> = {}
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): ComponentRef<any> {
     // This is the correct way to use the Carbon modal service
     return this.modalService.create({
@@ -60,7 +60,7 @@ export class AppModalService {
     return new Promise<boolean>((resolve) => {
       // Create a modal with the ConfirmModal component
       this.modalService.create({
-        component: ConfirmModal, // Use the component
+        component: ConfirmModalComponent, // Use the component
         inputs: {
           // Pass all options as inputs
           title: options.title || '',
@@ -96,7 +96,7 @@ export class AppModalService {
     return new Promise<void>((resolve) => {
       // Create a modal with the AlertModal component
       this.modalService.create({
-        component: AlertModal, // Use the component
+        component: AlertModalComponent, // Use the component
         inputs: {
           // Pass all options as inputs
           title: options.title || '',

@@ -168,14 +168,17 @@ export class UserListComponent implements OnInit, OnDestroy {
     {
       content: this.transloco.translate('user.list.columns.email'),
       value: 'email',
+      selected: false,
     },
     {
       content: this.transloco.translate('user.list.sort.createdAt'),
       value: 'createdAt',
+      selected: false,
     },
     {
       content: this.transloco.translate('user.list.sort.updatedAt'),
       value: 'updatedAt',
+      selected: false,
     },
   ];
 

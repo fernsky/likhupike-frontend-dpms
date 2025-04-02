@@ -60,10 +60,12 @@
                     [placeholder]="'user.list.sort.label' | transloco"
                     [size]="'md'"
                     [dropUp]="false"
-                    [type]="'default'"
-                    [items]="sortOptions"
+                    [type]="'single'"
                     (selected)="onFiltersChange({ sortBy: $event })"
                   >
+                    <cds-dropdown-list
+                      [items]="sortOptions"
+                    ></cds-dropdown-list>
                   </cds-dropdown>
 
                   <!-- Filter button -->
