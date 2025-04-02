@@ -324,7 +324,7 @@ html {
   // Improve CDS input styling
   input[cdsText] {
     transition: all 110ms $carbon--standard-easing;
-
+    font-family: "IBM Plex Sans", sans-serif;
     &:focus {
       box-shadow: 0 0 0 2px var(--cds-focus);
       outline: none;
