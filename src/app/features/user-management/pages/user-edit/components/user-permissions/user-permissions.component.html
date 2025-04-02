@@ -1,51 +1,71 @@
-<form
-  [formGroup]="permissionsForm"
-  (ngSubmit)="onSubmit()"
-  class="permissions-form"
->
-  <div class="form-content" formGroupName="permissions">
-    <div class="permissions-grid">
-      <div *ngFor="let permission of permissionTypes" class="permission-item">
-        <mat-checkbox [formControlName]="permission">
-          <div class="permission-label">
-            <span class="permission-name">
+<form [formGroup]="permissionsForm" (ngSubmit)="onSubmit()" class="cds--form">
+  <!-- Permissions Section - Improved Layout -->
+  <fieldset class="cds--permissions-section" formGroupName="permissions">
+    <legend class="cds--fieldset__legend">
+      {{ "user.form.sections.permissions" | transloco }}
+    </legend>
+
+    <div class="cds--permissions-grid">
+      <div
+        *ngFor="let permission of permissionTypes"
+        class="cds--permission-checkbox"
+      >
+        <cds-checkbox [formControlName]="permission" [hideLabel]="false">
+          <div class="cds--permission-label">
+            <span class="cds--permission-name">
               {{ "user.permissions." + permission + ".title" | transloco }}
             </span>
-            <span class="permission-description">
+            <span class="cds--permission-description">
               {{
                 "user.permissions." + permission + ".description" | transloco
               }}
             </span>
           </div>
-        </mat-checkbox>
+        </cds-checkbox>
+      </div>
+    </div>
+  </fieldset>
+
+  <!-- Error Display -->
+  <div *ngIf="errors$ | async as error" class="cds--user-form-error">
+    <div class="cds--inline-notification cds--inline-notification--error">
+      <div class="cds--inline-notification__details">
+        <mat-icon class="cds--inline-notification__icon">error</mat-icon>
+        <div class="cds--inline-notification__text-wrapper">
+          <div class="cds--inline-notification__title">
+            {{ "user.form.error.title" | transloco }}
+          </div>
+          <div class="cds--inline-notification__subtitle">{{ error }}</div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="form-actions">
-    <app-base-button
+  <!-- Form Actions - Aligned with User Form -->
+  <div class="cds--form-actions">
+    <button
       *ngIf="permissionsForm.dirty"
-      variant="secondary"
-      icon="close"
-      size="large"
+      cdsButton="secondary"
+      size="md"
+      type="button"
       (click)="onCancel()"
+      [disabled]="(loading$ | async) === true"
+      class="cds--btn--secondary"
     >
       {{ "common.actions.cancel" | transloco }}
-    </app-base-button>
-
-    <app-base-button
-      variant="primary"
-      icon="security"
+    </button>
+    <button
+      cdsButton="primary"
+      size="md"
       type="submit"
-      size="large"
-      [loading]="(loading$ | async) ?? false"
       [disabled]="
         !permissionsForm.valid ||
         !permissionsForm.dirty ||
-        ((loading$ | async) ?? false)
+        (loading$ | async) === true
       "
+      class="cds--btn--primary"
     >
-      {{ "user.form.updatePermissions" | transloco }}
-    </app-base-button>
+      {{ "user.form.actions.updatePermissions" | transloco }}
+    </button>
   </div>
 </form>

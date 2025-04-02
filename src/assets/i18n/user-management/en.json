@@ -117,7 +117,8 @@
     "email": "Email Address",
     "email.placeholder": "Enter your email address",
     "actions": {
-      "resetPassword": "Reset Password"
+      "resetPassword": "Reset Password",
+      "updatePermissions": "Update Permissions"
     },
     "fields": {
       "email": {

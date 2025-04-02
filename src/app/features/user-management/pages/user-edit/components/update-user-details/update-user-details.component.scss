@@ -105,23 +105,34 @@ $carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
 
 .cds--form-actions {
   display: flex;
-  flex-direction: row-reverse; // Per Carbon standard - primary on right
-  justify-content: flex-end;
+  flex-direction: row;
+  justify-content: flex-start;
   margin-top: $spacing-07;
-  gap: $spacing-04;
+  align-items: center;
 
   button {
-    min-width: 11rem; // Carbon standard button width
-    height: 3rem; // Carbon standard height for md buttons
+    min-width: 11rem;
+    height: 3rem;
     padding-left: $spacing-05;
     padding-right: $spacing-05;
 
-    // Make text properly aligned and sized
     font-size: 0.875rem;
     font-weight: 400;
     letter-spacing: 0.16px;
     line-height: 1.29;
     text-align: left;
+
+    .cds--btn__icon {
+      display: flex;
+      align-items: center;
+      margin-right: $spacing-03;
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
   }
 }
 
@@ -140,9 +151,14 @@ $carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
   .cds--form-actions {
     flex-direction: column-reverse;
     width: 100%;
+    gap: $spacing-03;
 
     button {
       width: 100%;
+
+      &:first-child {
+        margin-right: 0;
+      }
     }
   }
 }

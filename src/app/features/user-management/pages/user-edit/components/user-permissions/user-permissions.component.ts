@@ -8,17 +8,22 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
+import { MatIconModule } from '@angular/material/icon';
 import { UserResponse } from '../../../../models/user.interface';
 import { UserActions } from '../../../../store/user.actions';
 import * as UserSelectors from '../../../../store/user.selectors';
 import { PermissionType } from '@app/core/models/permission.enum';
-import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
 import { combineLatest, Subject } from 'rxjs';
 import { takeUntil, filter } from 'rxjs/operators';
+
+// Carbon imports
+import {
+  ButtonModule,
+  CheckboxModule,
+  NFormsModule,
+  NotificationModule,
+} from 'carbon-components-angular';
 
 @Component({
   selector: 'app-user-permissions',
@@ -28,11 +33,13 @@ import { takeUntil, filter } from 'rxjs/operators';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    MatIconModule,
     TranslocoModule,
-    BaseButtonComponent,
+    MatIconModule,
+    // Carbon modules
+    ButtonModule,
+    CheckboxModule,
+    NFormsModule,
+    NotificationModule,
   ],
 })
 export class UserPermissionsComponent implements OnInit, OnDestroy {
@@ -61,7 +68,7 @@ export class UserPermissionsComponent implements OnInit, OnDestroy {
   }
   private _user!: UserResponse;
 
-  permissionsForm: FormGroup;
+  permissionsForm!: FormGroup;
   loading$ = this.store.select(UserSelectors.selectUserUpdating);
   errors$ = this.store.select(UserSelectors.selectUserErrors);
   permissionTypes = Object.values(PermissionType);
@@ -71,19 +78,7 @@ export class UserPermissionsComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private store: Store,
     private cd: ChangeDetectorRef
-  ) {
-    this.permissionsForm = this.fb.group({
-      permissions: this.fb.group(
-        Object.values(PermissionType).reduce(
-          (acc, permission) => ({
-            ...acc,
-            [permission]: [false],
-          }),
-          {}
-        )
-      ),
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -145,23 +140,6 @@ export class UserPermissionsComponent implements OnInit, OnDestroy {
 
     this.permissionsForm.patchValue({ permissions: permissionsValue });
     this.permissionsForm.markAsPristine();
-  }
-
-  private updateFormWithPermissions(user: UserResponse): void {
-    const permissionsValue = Object.values(PermissionType).reduce(
-      (acc, permission) => ({
-        ...acc,
-        [permission]: user.permissions.includes(permission),
-      }),
-      {}
-    );
-
-    this.permissionsForm.patchValue(
-      { permissions: permissionsValue },
-      { emitEvent: false }
-    );
-    this.permissionsForm.markAsPristine();
-    this.cd.detectChanges();
   }
 
   onCancel(): void {

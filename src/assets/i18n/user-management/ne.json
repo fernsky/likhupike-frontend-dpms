@@ -133,7 +133,8 @@
     "profilePicture": "प्रोफाइल तस्वीर",
     "uploadPhoto": "तस्वीर अपलोड गर्न क्लिक गर्नुहोस्",
     "actions": {
-      "resetPassword": "पासवर्ड रिसेट गर्नुहोस्"
+      "resetPassword": "पासवर्ड रिसेट गर्नुहोस्",
+      "updatePermissions": "अनुमतिहरू अपडेट गर्नुहोस्"
     },
     "fields": {
       "email": {
