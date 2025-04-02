@@ -1,41 +1,25 @@
-<section class="cds--feature-section">
-  <div class="cds--feature-inner">
-    <header class="cds--feature-header">
-      <h2 class="cds--feature-title">
-        {{ "systemFeatures.title" | transloco }}
-      </h2>
-      <p class="cds--feature-description">
-        {{ "systemFeatures.subtitle" | transloco }}
-      </p>
-    </header>
+<div class="infographic-container">
+  <div class="infographic-visual">
+    <!-- Central visual element -->
+    <div class="central-circle">
+      <div class="pulse-circle"></div>
+    </div>
 
-    <div class="cds--feature-grid">
+    <!-- Orbiting feature icons -->
+    <div class="orbit">
       <div
-        class="cds--feature-card"
+        class="feature-node"
         *ngFor="let feature of features; let i = index"
+        [style.--rotation]="i * 90 + 'deg'"
+        [style.--feature-color]="feature.color"
       >
-        <div class="cds--feature-card-header">
-          <div class="cds--feature-card-icon">
-            <i class="material-icons">{{ feature.icon }}</i>
-          </div>
+        <div class="feature-icon">
+          <i class="material-icons">{{ feature.icon }}</i>
         </div>
-        <div class="cds--feature-card-content">
-          <h3 class="cds--feature-card-title">
-            {{
-              "systemFeatures.features." + feature.translationKey + ".title"
-                | transloco
-            }}
-          </h3>
-          <p class="cds--feature-card-description">
-            {{
-              "systemFeatures.features." +
-                feature.translationKey +
-                ".description" | transloco
-            }}
-          </p>
-        </div>
-        <div class="cds--feature-accent"></div>
+        <div class="connector-line"></div>
       </div>
     </div>
   </div>
-</section>
+
+  <div class="wave-decoration"></div>
+</div>

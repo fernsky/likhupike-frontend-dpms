@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 
 interface Feature {
-  translationKey: string;
   icon: string;
+  color: string;
 }
 
 @Component({
@@ -22,21 +22,9 @@ interface Feature {
 })
 export class SystemFeaturesComponent {
   features: Feature[] = [
-    {
-      translationKey: 'municipalServices',
-      icon: 'apartment',
-    },
-    {
-      translationKey: 'quickProcessing',
-      icon: 'rocket_launch',
-    },
-    {
-      translationKey: 'dataIntegration',
-      icon: 'data_object',
-    },
-    {
-      translationKey: 'citizenPortal',
-      icon: 'person',
-    },
+    { icon: 'apartment', color: '#0f62fe' },
+    { icon: 'rocket_launch', color: '#6929c4' },
+    { icon: 'data_object', color: '#1192e8' },
+    { icon: 'person', color: '#005d5d' },
   ];
 }
