@@ -201,7 +201,6 @@ $carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
     width: 100%;
 
     ::ng-deep button.cds--list-box__field {
-      height: $spacing-09;
       transition: all 110ms $carbon--standard-easing;
 
       &:hover:not([disabled]) {
