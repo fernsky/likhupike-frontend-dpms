@@ -4,23 +4,23 @@ import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import { map, catchError, exhaustMap, withLatestFrom } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslocoService } from '@jsverse/transloco';
 import { UserActions } from './user.actions';
 import { UserService } from '../services/user.service';
 import * as UserSelectors from './user.selectors';
-import { UrlParamsService } from '../services/url-params.service'; // Add this import at the top
+import { UrlParamsService } from '../services/url-params.service';
+import { GlobalNotificationService } from '../../../core/services/global-notification.service';
 
 @Injectable()
 export class UserEffects {
   constructor(
     private actions$: Actions,
     private userService: UserService,
-    private snackBar: MatSnackBar,
     private transloco: TranslocoService,
     private router: Router,
     private store: Store,
-    private urlParamsService: UrlParamsService // Add this injection
+    private urlParamsService: UrlParamsService,
+    private globalNotificationService: GlobalNotificationService
   ) {}
 
   createUser$ = createEffect(() =>
@@ -29,7 +29,7 @@ export class UserEffects {
       exhaustMap(({ request }) =>
         this.userService.createUser(request).pipe(
           map(({ user, message }) => {
-            this.showSuccess(message); // Use API's success message
+            this.showSuccess(message);
             return UserActions.createUserSuccess({ user });
           }),
           catchError((error) => {
@@ -63,7 +63,6 @@ export class UserEffects {
             });
           }),
           catchError((error) => {
-            // Clear users array on error
             return of(
               UserActions.loadUsersFailure({
                 error: {
@@ -103,11 +102,11 @@ export class UserEffects {
       exhaustMap(({ id, request }) =>
         this.userService.updateUser(id, request).pipe(
           map(({ user, message }) => {
-            this.showSuccess(message); // Use API's message
+            this.showSuccess(message);
             return UserActions.updateUserSuccess({ user });
           }),
           catchError((error) => {
-            this.showError(error.message); // Use API's error message
+            this.showError(error.message);
             return of(UserActions.updateUserFailure({ error }));
           })
         )
@@ -121,12 +120,12 @@ export class UserEffects {
       exhaustMap(({ id }) =>
         this.userService.deleteUser(id).pipe(
           map(({ message }) => {
-            this.showSuccess(message); // Use API success message
+            this.showSuccess(message);
             this.router.navigate(['/dashboard/users/list']);
             return UserActions.deleteUserSuccess({ id });
           }),
           catchError((error) => {
-            this.showError(error.message); // Use API error message
+            this.showError(error.message);
             return of(UserActions.deleteUserFailure({ error }));
           })
         )
@@ -140,11 +139,11 @@ export class UserEffects {
       exhaustMap(({ id }) =>
         this.userService.approveUser(id).pipe(
           map(({ user, message }) => {
-            this.showSuccess(message); // Use API success message
+            this.showSuccess(message);
             return UserActions.approveUserSuccess({ user, message });
           }),
           catchError((error) => {
-            this.showError(error.message); // Use API error message
+            this.showError(error.message);
             return of(UserActions.approveUserFailure({ error }));
           })
         )
@@ -195,11 +194,9 @@ export class UserEffects {
       ofType(UserActions.filterChange),
       withLatestFrom(this.store.select(UserSelectors.selectCurrentFilter)),
       map(([{ filter }, currentFilter]) => {
-        // Don't reset page to 1 on every filter change
         const newFilter = {
           ...currentFilter,
           ...filter,
-          // Only reset page if other filters change
           page:
             filter.page ??
             (Object.keys(filter).length > 0 ? 1 : (currentFilter.page ?? 1)),
@@ -218,7 +215,6 @@ export class UserEffects {
       ofType(UserActions.setPage),
       map(({ pageIndex, pageSize }) => {
         const filter = { page: pageIndex, size: pageSize };
-        // Directly trigger filter change with the new page
         return UserActions.filterChange({ filter });
       })
     )
@@ -239,21 +235,21 @@ export class UserEffects {
     )
   );
 
-  // Helper method to show success messages
   private showSuccess(message: string): void {
-    this.snackBar.open(
-      message, // Use API message directly
-      this.transloco.translate('common.actions.close'),
-      { duration: 3000, panelClass: ['success-snackbar'] }
-    );
+    this.globalNotificationService.showNotification({
+      type: 'success',
+      title: 'Success',
+      message: message,
+      duration: 3000,
+    });
   }
 
-  // Helper method to show error messages
   private showError(message: string): void {
-    this.snackBar.open(
-      message, // Use the error message directly from the API
-      this.transloco.translate('common.actions.close'),
-      { duration: 5000, panelClass: ['error-snackbar'] }
-    );
+    this.globalNotificationService.showNotification({
+      type: 'error',
+      title: 'Error',
+      message: message,
+      duration: 5000,
+    });
   }
 }
