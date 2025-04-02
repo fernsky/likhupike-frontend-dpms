@@ -516,6 +516,25 @@ export class UserListComponent implements OnInit, OnDestroy {
     return header.ascending ? 'arrow--up' : 'arrow--down';
   }
 
+  // Add this new method for toggling permissions
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  togglePermission(permission: string, event: any): void {
+    const permissionsControl = this.filterForm.get('permissions');
+    const currentPermissions = permissionsControl?.value || [];
+
+    if (event) {
+      // Add permission if not already included
+      if (!currentPermissions.includes(permission)) {
+        permissionsControl?.setValue([...currentPermissions, permission]);
+      }
+    } else {
+      // Remove permission
+      permissionsControl?.setValue(
+        currentPermissions.filter((p: string) => p !== permission)
+      );
+    }
+  }
+
   // Cleanup
   ngOnDestroy(): void {
     this.destroy$.next();

@@ -101,14 +101,20 @@
                       [label]="'user.list.filters.ward.label' | transloco"
                       [size]="'md'"
                       [dropUp]="false"
-                      [type]="'default'"
+                      [type]="'single'"
                       formControlName="wardNumber"
                     >
                       <cds-dropdown-list
-                        [items]="[
-                        { content: 'user.list.filters.ward.all' | transloco, value: null, selected: true },
-                        ...wardNumberOptions
-                      ]"
+                        [items]="
+                          [
+                            {
+                              content:
+                                ('user.list.filters.ward.all' | transloco),
+                              value: null,
+                              selected: true,
+                            },
+                          ].concat(wardNumberOptions)
+                        "
                       ></cds-dropdown-list>
                     </cds-dropdown>
                   </div>
@@ -121,7 +127,7 @@
                       "
                       [size]="'md'"
                       [dropUp]="false"
-                      [type]="'default'"
+                      [type]="'single'"
                       formControlName="isApproved"
                     >
                       <cds-dropdown-list
@@ -186,8 +192,7 @@
                           [checked]="
                             filterForm.value.permissions?.includes(permission)
                           "
-                          (change)="$event ? filterForm.get('permissions')?.setValue([...filterForm.value.permissions || [], permission]) : 
-                                   filterForm.get('permissions')?.setValue((filterForm.value.permissions || []).filter(p => p !== permission))"
+                          (change)="togglePermission(permission, $event)"
                         >
                           {{
                             "user.permissions." + permission + ".title"
@@ -260,7 +265,7 @@
 
           <!-- Error State -->
           <div
-            *ngIf="hasError$ | async && !(loading$ | async)"
+            *ngIf="(hasError$ | async) === true && !(loading$ | async)"
             class="cds--data-table-error"
           >
             <div class="cds--empty-state cds--empty-state--error">
@@ -283,7 +288,7 @@
           <cds-table
             *ngIf="
               (totalUsers$ | async) > 0 &&
-              !(hasError$ | async) &&
+              (hasError$ | async) !== true &&
               !(loading$ | async)
             "
             [model]="tableModel"
@@ -341,10 +346,7 @@
 
                   <cds-overflow-menu-divider></cds-overflow-menu-divider>
 
-                  <cds-overflow-menu-item
-                    [danger]="true"
-                    (selected)="onDeleteUser(data.user)"
-                  >
+                  <cds-overflow-menu-item (selected)="onDeleteUser(data.user)">
                     {{ "common.actions.delete" | transloco }}
                   </cds-overflow-menu-item>
                 </cds-overflow-menu>
@@ -360,13 +362,13 @@
             <cds-pagination
               [model]="{
                 pageLength: pageSize,
-                totalItems: (totalUsers$ | async) || 0,
+                totalDataLength: (totalUsers$ | async) || 0,
                 currentPage: currentPage,
               }"
-              [disabled]="loading$ | async"
-              [pageSizes]="[5, 10, 25, 50]"
-              (pageChange)="onPageChange($event)"
-              (pageSizeChange)="onPageSizeChange($event)"
+              [skeleton]="false"
+              [disabled]="(loading$ | async) === true"
+              (pageChange)="onPageChange($event.page)"
+              (pageSizeChange)="onPageSizeChange($event.pageSize)"
             >
             </cds-pagination>
           </div>
