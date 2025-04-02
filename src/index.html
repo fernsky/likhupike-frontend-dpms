@@ -21,116 +21,71 @@
       rel="stylesheet"
     />
 
-    <!-- Fonts for our application -->
+    <!-- Fonts for our application - preloaded -->
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
 
-    <!-- Improved early font detection -->
+    <!-- Optimized language detection and font application script -->
     <script>
-      // Set up MutationObserver to watch for language changes
-      function setupLanguageObserver() {
+      // Execute immediately - as early as possible
+      (function () {
         try {
-          // Apply initial language based on localStorage
-          applyLanguageFromStorage();
+          const savedLang = localStorage.getItem("selected_language") || "en";
+          const htmlEl = document.documentElement;
 
-          // Set up observer to detect language class changes
-          const observer = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) {
-              // If class attribute changed, check if language class was added/removed
-              if (
-                mutation.type === "attributes" &&
-                mutation.attributeName === "class"
-              ) {
-                const htmlElement = mutation.target;
-                const classes = htmlElement.classList;
+          // Set lang attribute
+          htmlEl.setAttribute("lang", savedLang);
 
-                // Check for language classes
-                if (classes.contains("lang-ne")) {
-                  applyFont("ne");
-                } else if (classes.contains("lang-en")) {
-                  applyFont("en");
-                }
+          // Add language class
+          htmlEl.classList.add(`lang-${savedLang}`);
+
+          // Set font directly - this is faster than relying on CSS
+          if (savedLang === "ne") {
+            htmlEl.style.fontFamily = '"Noto Sans Devanagari", sans-serif';
+          } else {
+            htmlEl.style.fontFamily = '"IBM Plex Sans", sans-serif';
+          }
+
+          // Add storage event listener for cross-tab sync
+          window.addEventListener("storage", function (e) {
+            if (e.key === "selected_language") {
+              const newLang = e.newValue || "en";
+
+              // Update lang attribute
+              htmlEl.setAttribute("lang", newLang);
+
+              // Remove all lang classes and add the new one
+              htmlEl.classList.remove("lang-en", "lang-ne");
+              htmlEl.classList.add(`lang-${newLang}`);
+
+              // Update font
+              if (newLang === "ne") {
+                htmlEl.style.fontFamily = '"Noto Sans Devanagari", sans-serif';
+              } else {
+                htmlEl.style.fontFamily = '"IBM Plex Sans", sans-serif';
               }
-            });
-          });
-
-          // Start observing the HTML element for class changes
-          observer.observe(document.documentElement, {
-            attributes: true,
-            attributeFilter: ["class"],
-          });
-
-          // Also listen for storage events (if language is changed in another tab)
-          window.addEventListener("storage", function (event) {
-            if (event.key === "selected_language") {
-              applyLanguageFromStorage();
             }
           });
         } catch (e) {
-          console.warn("Could not set up language observer:", e);
+          // Silent fail - default styles will apply
         }
-      }
-
-      // Apply language settings from localStorage
-      function applyLanguageFromStorage() {
-        try {
-          const savedLang = localStorage.getItem("selected_language");
-          if (savedLang) {
-            // Apply the language class
-            document.documentElement.classList.remove("lang-en", "lang-ne");
-            document.documentElement.classList.add(`lang-${savedLang}`);
-
-            // Apply the font directly
-            applyFont(savedLang);
-          }
-        } catch (e) {
-          console.warn("Could not apply language from storage:", e);
-        }
-      }
-
-      // Apply font based on language code
-      function applyFont(langCode) {
-        const fontFamily =
-          langCode === "ne"
-            ? '"Noto Sans Devanagari", sans-serif'
-            : '"IBM Plex Sans", sans-serif';
-
-        document.documentElement.style.fontFamily = fontFamily;
-        document.body.style.fontFamily = fontFamily;
-
-        // Also set the lang attribute for accessibility
-        document.documentElement.lang = langCode;
-      }
-
-      // Run setup when DOM is ready
-      document.addEventListener("DOMContentLoaded", setupLanguageObserver);
-
-      // But also try to apply language immediately to prevent FOUC
-      try {
-        const savedLang = localStorage.getItem("selected_language");
-        if (savedLang) {
-          document.documentElement.classList.add(`lang-${savedLang}`);
-
-          // Set font immediately
-          const fontFamily =
-            savedLang === "ne"
-              ? '"Noto Sans Devanagari", sans-serif'
-              : '"IBM Plex Sans", sans-serif';
-
-          document.documentElement.style.fontFamily = fontFamily;
-        }
-      } catch (e) {
-        console.warn("Early language detection failed:", e);
-      }
+      })();
     </script>
 
+    <!-- Critical CSS for language-specific fonts -->
     <style>
-      /* Default font settings that will be overridden if needed */
-      html {
+      body {
+        margin: 0;
+        font-family: inherit;
+      }
+
+      /* These classes are applied early by the script above */
+      html.lang-en {
         font-family: "IBM Plex Sans", sans-serif;
       }
+
       html.lang-ne {
         font-family: "Noto Sans Devanagari", sans-serif;
       }
