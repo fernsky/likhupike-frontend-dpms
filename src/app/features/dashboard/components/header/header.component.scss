@@ -49,6 +49,11 @@
     gap: $spacing-03 !important;
     max-width: 80% !important;
     transition: opacity 0.15s ease !important;
+    padding-left: $spacing-03 !important; // Add padding on all sizes
+
+    @include breakpoint(md) {
+      padding-left: $spacing-05 !important; // Add more padding on desktop
+    }
 
     &:hover {
       opacity: 0.9 !important;
@@ -132,5 +137,40 @@
     height: 100% !important;
     display: flex !important;
     align-items: center !important;
+
+    // Make dropdown smaller on mobile devices
+    ::ng-deep {
+      .cds--dropdown {
+        height: 2rem !important; // Smaller height on mobile
+        min-width: 2.5rem !important; // Smaller width on mobile
+
+        @include breakpoint(md) {
+          height: 2.5rem !important; // Regular height on desktop
+          min-width: 4rem !important; // Regular width on desktop
+        }
+      }
+
+      // Scale down text and icons
+      .cds--dropdown-text {
+        font-size: 0.75rem !important; // Smaller font on mobile
+        padding-right: $spacing-03 !important; // Less padding
+
+        @include breakpoint(md) {
+          font-size: 0.875rem !important; // Regular font on desktop
+          padding-right: $spacing-05 !important; // Regular padding
+        }
+      }
+
+      // Make chevron smaller
+      .cds--dropdown__arrow {
+        width: 0.75rem !important;
+        height: 0.75rem !important;
+
+        @include breakpoint(md) {
+          width: 1rem !important;
+          height: 1rem !important;
+        }
+      }
+    }
   }
 }
