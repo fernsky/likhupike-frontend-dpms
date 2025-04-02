@@ -35,19 +35,17 @@ export class GlobalNotificationService {
   }
 
   /**
-   * Ideally the point of a global notification would be to render notification in a specific area/target
-   * So probably a good idea to override the target
-   *
-   * You can exeucte any logic you need here, another approach would be to simply extend the `NotificationService`.
-   * To do this, you would need to override the injected services (Injector, NgZone, ViewContainerRef), by extending
-   * Notification service, you wouldn't need to create `wrapper` functions such as this. Downside of this approach is that
-   * you would have to specifiy the target
+   * Shows a notification in the bottom-right corner of the screen
+   * @param obj Notification configuration object
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   showNotification(obj: any) {
+    // Use the bottom-right positioned notification box
     this.notificationService.showNotification({
       ...obj,
-      target: '.notification-box',
+      target: '.notification-box.bottom-right',
+      showClose: true, // Allow users to close notifications
+      lowContrast: false, // Make notifications more visible
     });
   }
 }
