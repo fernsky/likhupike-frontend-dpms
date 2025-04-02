@@ -16,10 +16,10 @@
     <!-- Remove style.display and use ngClass for better control -->
     <app-sidenav
       [ngClass]="{
-        visible: !(showMenuToggle$ | async) || isSidenavOpen,
+        visible: (showMenuToggle$ | async) === false || isSidenavOpen,
         hidden: (showMenuToggle$ | async) && !isSidenavOpen,
       }"
-      [collapsed]="!isSidenavOpen && !(showMenuToggle$ | async)"
+      [collapsed]="!isSidenavOpen && (showMenuToggle$ | async) === false"
       [expanded]="isSidenavOpen"
       (mobileClose)="onMobileClose()"
       (mobileToggle)="onSidenavToggle()"
@@ -29,7 +29,9 @@
     <main
       class="cds--content-layout__content"
       [class.full-width]="(showMenuToggle$ | async) && !isSidenavOpen"
-      [class.collapsed-width]="!isSidenavOpen && !(showMenuToggle$ | async)"
+      [class.collapsed-width]="
+        !isSidenavOpen && (showMenuToggle$ | async) === false
+      "
     >
       <router-outlet></router-outlet>
     </main>

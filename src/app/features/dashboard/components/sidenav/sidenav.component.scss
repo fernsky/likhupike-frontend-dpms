@@ -60,6 +60,10 @@
       margin-top: auto;
       border-top: 1px solid $gray-20;
     }
+
+    .cds--side-nav__header-navigation {
+      display: none;
+    }
   }
 
   // Reset Carbon's default border on sidenav elements
