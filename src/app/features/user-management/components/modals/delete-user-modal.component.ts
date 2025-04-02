@@ -6,7 +6,7 @@ import {
   ModalModule,
   ButtonModule,
 } from 'carbon-components-angular';
-import { BaseModal } from '@app/shared/components/modals/base-modal.component';
+import { BaseModalComponent } from '@app/shared/components/modals/base-modal.component';
 import { UserResponse } from '../../models/user.interface';
 
 @Component({
@@ -40,12 +40,12 @@ import { UserResponse } from '../../models/user.interface';
   standalone: true,
   imports: [CommonModule, TranslocoModule, ModalModule, ButtonModule],
 })
-export class DeleteUserModalComponent extends BaseModal {
+export class DeleteUserModalComponent extends BaseModalComponent {
   constructor(
     @Inject('user') public user: UserResponse,
     @Inject('onDelete') public onDelete: () => void,
     @Inject('size') public size: 'sm' | 'md' | 'lg' | 'xs' = 'sm',
-    protected modalService: ModalService,
+    protected override modalService: ModalService,
     private transloco: TranslocoService
   ) {
     super();

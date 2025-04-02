@@ -52,8 +52,8 @@ import {
 
 // Components
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
-import { ConfirmModal } from '@app/shared/components/modals/confirm-modal.component';
-import { AlertModal } from '@app/shared/components/modals/alert-modal.component';
+import { ConfirmModalComponent } from '@app/shared/components/modals/confirm-modal.component';
+import { AlertModalComponent } from '@app/shared/components/modals/alert-modal.component';
 import { AppModalService } from '@app/shared/services/modal.service';
 
 // Models & Actions
@@ -98,8 +98,8 @@ import { PermissionType } from '@app/core/models/permission.enum';
     ModalModule,
 
     // New modal components
-    ConfirmModal,
-    AlertModal,
+    ConfirmModalComponent,
+    AlertModalComponent,
   ],
   providers: [
     provideTranslocoScope({
@@ -332,11 +332,14 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   // Templates for custom cell rendering
   @ViewChild('permissionsCellTemplate', { static: true })
-  permissionsCellTemplate: TemplateRef<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  permissionsCellTemplate!: TemplateRef<any>;
   @ViewChild('statusCellTemplate', { static: true })
-  statusCellTemplate: TemplateRef<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  statusCellTemplate!: TemplateRef<any>;
   @ViewChild('actionsCellTemplate', { static: true })
-  actionsCellTemplate: TemplateRef<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  actionsCellTemplate!: TemplateRef<any>;
 
   // Event handlers
   onCreateUser(): void {
@@ -379,7 +382,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     }
 
     // Map column index to field name
-    const columnToField = {
+    const columnToField: Record<number, string> = {
       0: 'email',
       1: 'wardNumber',
       3: 'isApproved',
@@ -401,7 +404,7 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   onDeleteUser(user: UserResponse): void {
     // Enterprise pattern: use the component-based modal approach
-    this.appModalService.openComponentModal(ConfirmModal, {
+    this.appModalService.openComponentModal(ConfirmModalComponent, {
       title: this.transloco.translate('user.delete.confirmTitle'),
       message: this.transloco.translate('user.delete.confirmMessage', {
         name: user.email,
@@ -421,7 +424,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     if (user.isApproved) return;
 
     // Enterprise pattern: use the component-based modal approach
-    this.appModalService.openComponentModal(ConfirmModal, {
+    this.appModalService.openComponentModal(ConfirmModalComponent, {
       title: this.transloco.translate('user.approve.confirmTitle'),
       message: this.transloco.translate('user.approve.confirmMessage', {
         email: user.email,
