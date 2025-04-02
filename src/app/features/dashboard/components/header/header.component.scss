@@ -1,23 +1,38 @@
 @use "@carbon/styles/scss/spacing" as *;
 @use "@carbon/styles/scss/type" as *;
 @use "@carbon/styles/scss/breakpoint" as *;
+@use "@carbon/styles/scss/colors" as *;
 
 :host {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
   right: 0 !important;
-  z-index: 9000 !important; // Much higher than sidenav
+  z-index: 9000 !important;
   display: block !important;
   height: 3rem !important;
 }
 
-// Ensure all header elements have proper z-index
+// Enhanced header styles
 :host ::ng-deep {
+  .custom-header {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    background-color: #ffffff !important;
+    border-bottom: 2px solid $blue-60 !important;
+  }
+
   cds-header {
     z-index: 9000 !important;
     position: relative !important;
-    background-color: #ffffff !important;
+    padding: 0 $spacing-03 !important;
+
+    @include breakpoint(md) {
+      padding: 0 $spacing-05 !important;
+    }
+  }
+
+  .hamburger-icon {
+    margin-right: $spacing-03 !important;
   }
 
   cds-hamburger {
@@ -25,96 +40,97 @@
     position: relative !important;
   }
 
-  // Government branding styles
-  .cds--header__brand {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    text-decoration: none;
-    gap: $spacing-02;
-    max-width: 70%;
+  // Elegant branding styles
+  .elegant-brand {
+    display: flex !important;
+    align-items: center !important;
+    height: 100% !important;
+    text-decoration: none !important;
+    gap: $spacing-03 !important;
+    max-width: 80% !important;
+    transition: opacity 0.15s ease !important;
 
-    @include breakpoint(md) {
-      gap: $spacing-03;
-      max-width: 80%;
+    &:hover {
+      opacity: 0.9 !important;
     }
 
     &:focus {
-      outline-offset: -2px;
+      outline-offset: -2px !important;
     }
   }
 
   .cds--header__name {
-    display: none;
+    display: none !important;
   }
 
   .cds--header__divider {
-    height: 24px;
-    width: 1px;
-    background-color: var(--brand-shadow-light, #e0e0e0);
-    margin: 0 $spacing-02;
-
-    @include breakpoint(md) {
-      height: 28px;
-      margin: 0 $spacing-03;
-    }
+    height: 20px !important;
+    width: 1px !important;
+    background-color: $gray-30 !important;
+    margin: 0 $spacing-03 !important;
   }
 
   .cds--header__title-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-width: 0;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    min-width: 0 !important;
   }
 
   .cds--header__logo {
-    height: 30px;
-    width: auto;
+    height: 22px !important; // Smaller logo
+    width: auto !important;
 
     @include breakpoint(md) {
-      height: 38px;
-    }
-  }
-
-  .cds--header__title {
-    @include type-style("body-compact-01");
-    color: var(--brand-text-dark, #161616);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    @include breakpoint(md) {
-      @include type-style("heading-compact-01");
-    }
-
-    @include breakpoint(lg) {
-      @include type-style("heading-compact-02");
-    }
-  }
-
-  .cds--header__subtitle {
-    display: none;
-
-    @include breakpoint(md) {
-      display: block;
-      @include type-style("caption-01");
-      color: var(--brand-text-secondary, #525252);
-    }
-
-    @include breakpoint(lg) {
-      @include type-style("body-compact-01");
+      height: 24px !important; // Still smaller on desktop
     }
   }
 
   .gov-logo-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 32px;
-    flex-shrink: 0;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 24px !important;
+    flex-shrink: 0 !important;
 
     @include breakpoint(md) {
-      height: 40px;
+      height: 28px !important;
     }
+  }
+
+  .cds--header__title {
+    // Fix the syntax error by removing !important after the mixin
+    @include type-style("heading-compact-01");
+    color: $gray-100 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.01em !important;
+
+    @include breakpoint(md) {
+      // Fix this one too
+      @include type-style("heading-compact-02");
+    }
+  }
+
+  // Hide subtitle completely
+  .cds--header__subtitle {
+    display: none !important;
+  }
+
+  // Enhanced global menu area
+  cds-header-global {
+    margin-left: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    height: 100% !important;
+  }
+
+  // Make sure dropdown is properly styled
+  app-language-dropdown {
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
   }
 }
