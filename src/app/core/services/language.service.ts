@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import { BehaviorSubject } from 'rxjs';
 
@@ -29,6 +29,7 @@ export const AVAILABLE_LANGUAGES: Language[] = [
 })
 export class LanguageService {
   private readonly LANGUAGE_KEY = 'selected_language';
+  private renderer: Renderer2;
 
   readonly availableLanguages: Language[] = AVAILABLE_LANGUAGES;
 
@@ -37,7 +38,11 @@ export class LanguageService {
   );
   currentLanguage$ = this.currentLanguageSubject.asObservable();
 
-  constructor(private translocoService: TranslocoService) {
+  constructor(
+    private translocoService: TranslocoService,
+    private rendererFactory: RendererFactory2
+  ) {
+    this.renderer = rendererFactory.createRenderer(null, null);
     this.initializeLanguage();
   }
 
@@ -55,6 +60,17 @@ export class LanguageService {
     localStorage.setItem(this.LANGUAGE_KEY, language.code);
     this.currentLanguageSubject.next(language);
     this.translocoService.setActiveLang(language.code);
+
+    // Apply language-specific class to the html element for font switching
+    const html = document.documentElement;
+
+    // Remove any existing language classes
+    this.availableLanguages.forEach((lang) => {
+      this.renderer.removeClass(html, `lang-${lang.code}`);
+    });
+
+    // Add the current language class
+    this.renderer.addClass(html, `lang-${language.code}`);
   }
 
   getCurrentLanguage(): Language {

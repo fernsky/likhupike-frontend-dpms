@@ -14,6 +14,10 @@
 @use "@carbon/styles/scss/colors";
 @use "@carbon/styles/scss/utilities";
 
+// Import both required fonts
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600&display=swap");
+
 // Enterprise-grade color palette - refined for professional applications
 :root {
   // Primary colors - professional blue tones
@@ -107,13 +111,22 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: "IBM Plex Sans", sans-serif;
+  font-family: "IBM Plex Sans", sans-serif; // Default font
   background-color: var(--brand-background-light);
   color: var(--brand-text-dark);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden; // Prevent horizontal scrollbar
+}
+
+// Language-specific font classes
+.lang-en {
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
+.lang-ne {
+  font-family: "Noto Sans Devanagari", sans-serif;
 }
 
 html {
