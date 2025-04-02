@@ -6,6 +6,12 @@
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!-- Preconnect to Google Fonts for better performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Material icons -->
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined"
       rel="stylesheet"
@@ -14,12 +20,121 @@
       href="https://fonts.googleapis.com/css2?family=Material+Icons"
       rel="stylesheet"
     />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Fonts for our application -->
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=IBM+Plex+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Noto+Sans+Devanagari:wght@100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Improved early font detection -->
+    <script>
+      // Set up MutationObserver to watch for language changes
+      function setupLanguageObserver() {
+        try {
+          // Apply initial language based on localStorage
+          applyLanguageFromStorage();
+
+          // Set up observer to detect language class changes
+          const observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+              // If class attribute changed, check if language class was added/removed
+              if (
+                mutation.type === "attributes" &&
+                mutation.attributeName === "class"
+              ) {
+                const htmlElement = mutation.target;
+                const classes = htmlElement.classList;
+
+                // Check for language classes
+                if (classes.contains("lang-ne")) {
+                  applyFont("ne");
+                } else if (classes.contains("lang-en")) {
+                  applyFont("en");
+                }
+              }
+            });
+          });
+
+          // Start observing the HTML element for class changes
+          observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["class"],
+          });
+
+          // Also listen for storage events (if language is changed in another tab)
+          window.addEventListener("storage", function (event) {
+            if (event.key === "selected_language") {
+              applyLanguageFromStorage();
+            }
+          });
+        } catch (e) {
+          console.warn("Could not set up language observer:", e);
+        }
+      }
+
+      // Apply language settings from localStorage
+      function applyLanguageFromStorage() {
+        try {
+          const savedLang = localStorage.getItem("selected_language");
+          if (savedLang) {
+            // Apply the language class
+            document.documentElement.classList.remove("lang-en", "lang-ne");
+            document.documentElement.classList.add(`lang-${savedLang}`);
+
+            // Apply the font directly
+            applyFont(savedLang);
+          }
+        } catch (e) {
+          console.warn("Could not apply language from storage:", e);
+        }
+      }
+
+      // Apply font based on language code
+      function applyFont(langCode) {
+        const fontFamily =
+          langCode === "ne"
+            ? '"Noto Sans Devanagari", sans-serif'
+            : '"IBM Plex Sans", sans-serif';
+
+        document.documentElement.style.fontFamily = fontFamily;
+        document.body.style.fontFamily = fontFamily;
+
+        // Also set the lang attribute for accessibility
+        document.documentElement.lang = langCode;
+      }
+
+      // Run setup when DOM is ready
+      document.addEventListener("DOMContentLoaded", setupLanguageObserver);
+
+      // But also try to apply language immediately to prevent FOUC
+      try {
+        const savedLang = localStorage.getItem("selected_language");
+        if (savedLang) {
+          document.documentElement.classList.add(`lang-${savedLang}`);
+
+          // Set font immediately
+          const fontFamily =
+            savedLang === "ne"
+              ? '"Noto Sans Devanagari", sans-serif'
+              : '"IBM Plex Sans", sans-serif';
+
+          document.documentElement.style.fontFamily = fontFamily;
+        }
+      } catch (e) {
+        console.warn("Early language detection failed:", e);
+      }
+    </script>
+
+    <style>
+      /* Default font settings that will be overridden if needed */
+      html {
+        font-family: "IBM Plex Sans", sans-serif;
+      }
+      html.lang-ne {
+        font-family: "Noto Sans Devanagari", sans-serif;
+      }
+    </style>
   </head>
   <body>
     <app-root></app-root>

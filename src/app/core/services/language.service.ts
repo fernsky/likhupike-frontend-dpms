@@ -38,6 +38,7 @@ export class LanguageService {
   private readonly LANGUAGE_KEY = 'selected_language';
   private renderer: Renderer2;
   private isBrowser: boolean;
+  private languageInitialized = false;
 
   readonly availableLanguages: Language[] = AVAILABLE_LANGUAGES;
 
@@ -84,6 +85,9 @@ export class LanguageService {
   }
 
   private initializeLanguage(): void {
+    // Skip if already initialized or not in browser
+    if (this.languageInitialized || !this.isBrowser) return;
+
     // Use the safe localStorage wrapper method
     const savedLang = this.getLocalStorageItem(this.LANGUAGE_KEY);
 
@@ -93,32 +97,57 @@ export class LanguageService {
       : this.availableLanguages[0];
 
     if (defaultLang) {
-      this.setLanguage(defaultLang);
-    } else {
-      // Extra safety - always fallback to first language if something went wrong
-      this.setLanguage(this.availableLanguages[0]);
+      // Don't trigger DOM updates since they happen in index.html
+      this.currentLanguageSubject.next(defaultLang);
+      this.translocoService.setActiveLang(defaultLang.code);
+      this.languageInitialized = true;
     }
   }
 
   setLanguage(language: Language): void {
+    // Skip if we're setting the same language that's already active
+    if (this.currentLanguageSubject.value.code === language.code) return;
+
     // Use safe localStorage wrapper
     this.setLocalStorageItem(this.LANGUAGE_KEY, language.code);
-
     this.currentLanguageSubject.next(language);
     this.translocoService.setActiveLang(language.code);
 
     // Only manipulate the DOM if we're in a browser environment
     if (this.isBrowser) {
-      // Apply language-specific class to the html element for font switching
+      // Apply language class (font is applied via index.html)
+      this.applyLanguageClass(language.code);
+
+      // The font is directly applied by script in index.html
+      // This avoids multiple heavy font-family changes
+    }
+  }
+
+  /**
+   * Get current language code as string
+   */
+  getCurrentLanguageCode(): string {
+    return this.currentLanguageSubject.value?.code || 'en';
+  }
+
+  /**
+   * Apply language class to document element
+   */
+  private applyLanguageClass(langCode: string): void {
+    if (!this.isBrowser) return;
+
+    try {
       const html = document.documentElement;
 
-      // Remove any existing language classes
+      // First remove all language classes
       this.availableLanguages.forEach((lang) => {
-        this.renderer.removeClass(html, `lang-${lang.code}`);
+        html.classList.remove(`lang-${lang.code}`);
       });
 
-      // Add the current language class
-      this.renderer.addClass(html, `lang-${language.code}`);
+      // Then add the current one
+      html.classList.add(`lang-${langCode}`);
+    } catch (e) {
+      console.error('Error applying language class:', e);
     }
   }
 

@@ -120,13 +120,20 @@ body {
   overflow-x: hidden; // Prevent horizontal scrollbar
 }
 
-// Language-specific font classes
-.lang-en {
-  font-family: "IBM Plex Sans", sans-serif;
+// Language-specific font classes - more specific selector to ensure it overrides
+html.lang-en,
+html.lang-en body {
+  font-family: "IBM Plex Sans", sans-serif !important;
 }
 
-.lang-ne {
-  font-family: "Noto Sans Devanagari", sans-serif;
+html.lang-ne,
+html.lang-ne body {
+  font-family: "Noto Sans Devanagari", sans-serif !important;
+}
+
+// Make sure all auth components inherit the font family
+.cds--auth-layout {
+  font-family: inherit;
 }
 
 html {
