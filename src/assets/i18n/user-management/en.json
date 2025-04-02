@@ -115,17 +115,31 @@
   },
   "form": {
     "email": "Email Address",
+    "email.placeholder": "Enter your email address",
+    "fields": {
+      "email": {
+        "label": "Email Address",
+        "placeholder": "Enter your email address",
+        "helper": "Your email will be used for login and notifications"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Enter a strong password",
+        "helper": "Password must be at least 8 characters with mixed types"
+      },
+      "wardNumber": {
+        "label": "Ward Number",
+        "placeholder": "Select ward number",
+        "helper": "This determines which ward's data the user can access"
+      }
+    },
     "password": "Password",
+    "password.placeholder": "Enter a strong password",
     "passwordRequirements": "Password must contain at least one digit, one lowercase, one uppercase letter and one special character",
-    "newPassword": "New Password",
-    "confirmPassword": "Confirm Password",
-    "resetPassword": "Reset Password",
-    "updatePermissions": "Update Permissions",
+    "wardHelp": "Select the ward this user will be assigned to",
     "wardNumber": "Ward Number",
     "selectWard": "Select Ward",
-    "roles": "User Roles",
-    "isMunicipalityLevel": "This is a municipality-level position",
-    "isWardLevelUser": "This is a ward level user.",
+    "isWardLevelUser": "This is a ward level user",
     "profilePicture": "Profile Picture",
     "uploadPhoto": "Click to upload photo",
     "permissions": "User Permissions",
@@ -149,6 +163,9 @@
       "rolesRequired": "At least one role must be selected",
       "wardNumberRequired": "Ward number is required for ward level users",
       "wardNumberRange": "Ward number must be between 1 and 33"
+    },
+    "error": {
+      "title": "Error"
     }
   },
   "delete": {

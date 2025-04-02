@@ -1,25 +1,24 @@
-<div class="create-user-container">
+<div class="cds--create-user-container">
   <app-breadcrumb></app-breadcrumb>
-  <mat-progress-bar
-    *ngIf="loading$ | async"
-    mode="indeterminate"
-    class="page-loading-bar"
-  ></mat-progress-bar>
+
+  <div *ngIf="loading$ | async" class="cds--loading-progress">
+    <div class="cds--loading-overlay"></div>
+    <cds-loading withOverlay="false"></cds-loading>
+  </div>
 
   <app-page-title
     titleTranslationKey="user.create.title"
     descriptionTranslationKey="user.create.description"
     icon="person_add"
-  >
-    <!-- Optional action buttons can go here -->
-  </app-page-title>
+  ></app-page-title>
 
-  <div class="content-area">
+  <div class="cds--content-area">
     <app-user-form
       [loading]="(loading$ | async) ?? false"
       [errors]="errors$ | async"
       (submitForm)="onSubmit($event)"
-      (cancel)="onCancel()"
+      (cancelForm)="onCancel()"
     ></app-user-form>
   </div>
 </div>
+ 

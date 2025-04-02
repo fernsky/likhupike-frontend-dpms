@@ -1,14 +1,14 @@
-<div class="form-section">
-  <div class="section-header">
-    <p *ngIf="icon">
+<div class="cds--form-section">
+  <div class="cds--form-section-header">
+    <span *ngIf="icon" class="cds--form-section-icon">
       <mat-icon>{{ icon }}</mat-icon>
-    </p>
-    <div class="header-content">
-      <h2>{{ title }}</h2>
-      <p class="subtitle" *ngIf="subtitle">{{ subtitle }}</p>
+    </span>
+    <div class="cds--form-section-header-content">
+      <h2 class="cds--type-productive-heading-02">{{ title }}</h2>
+      <p class="cds--type-body-long-01" *ngIf="subtitle">{{ subtitle }}</p>
     </div>
   </div>
-  <div class="section-content">
+  <div class="cds--form-section-content">
     <ng-content></ng-content>
   </div>
 </div>

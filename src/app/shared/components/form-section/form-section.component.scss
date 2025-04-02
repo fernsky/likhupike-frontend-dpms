@@ -1,167 +1,112 @@
-.form-section {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  width: 100%;
-  margin-bottom: 1.5rem;
+@use "@carbon/styles/scss/spacing" as *;
+@use "@carbon/styles/scss/type" as *;
+@use "@carbon/styles/scss/theme" as *;
+@use "@carbon/styles/scss/breakpoint" as *;
+@use "@carbon/styles/scss/motion" as *;
 
-  .section-header {
+// Define missing Carbon motion variables
+$duration--moderate-01: 150ms;
+$carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
+$carbon--entrance-easing: cubic-bezier(0, 0, 0.38, 0.9);
+$carbon--exit-easing: cubic-bezier(0.2, 0, 1, 0.9);
+
+// Define the motion mixin if it's not available
+@function motion($name, $mode) {
+  @if $name == "standard" {
+    @return $carbon--standard-easing;
+  } @else if $name == "entrance" {
+    @return $carbon--entrance-easing;
+  } @else if $name == "exit" {
+    @return $carbon--exit-easing;
+  } @else {
+    @return $carbon--standard-easing;
+  }
+}
+
+.cds--form-section {
+  background: $layer-01;
+  border-radius: 4px;
+  border: 1px solid $border-subtle;
+  width: 100%;
+  margin-bottom: $spacing-05;
+  transition: all 110ms $duration--moderate-01 motion(standard, productive);
+
+  &:hover {
+    border-color: $border-strong;
+  }
+
+  .cds--form-section-header {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
-    padding: 1.75rem 2rem;
-    background: linear-gradient(to right, #f8fafb, #ffffff);
-
+    gap: $spacing-04;
+    padding: $spacing-05;
+    background-color: $layer-accent;
     position: relative;
-    overflow: hidden;
+    border-bottom: 1px solid $border-subtle;
 
-    &::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 4px;
-      background: linear-gradient(to bottom, #123772, #1a4894);
-      opacity: 0.9;
-    }
-
-    mat-icon {
-      color: #123772;
-      opacity: 0.9;
-      font-size: 24px;
-      width: 24px;
-      height: 24px;
-      filter: drop-shadow(0 2px 4px rgba(18, 55, 114, 0.15));
-      transition: all 0.2s ease;
-    }
-
-    .header-content {
-      flex: 1;
-
-      h2 {
-        margin: 0;
-        font-size: 1.1rem;
-        font-weight: 500;
-        background: linear-gradient(135deg, #0b1f42 0%, #123772 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        text-fill-color: transparent;
-        letter-spacing: -0.02em;
-        line-height: 1.3;
-      }
-
-      .subtitle {
-        margin: 0.25rem 0 0;
-        font-size: 0.875rem;
-        color: #64748b;
-        line-height: 1.4;
-      }
-    }
-
-    &:hover {
-      mat-icon {
-        transform: translateY(-1px);
-        opacity: 1;
-        filter: drop-shadow(0 3px 6px rgba(18, 55, 114, 0.2));
-      }
-
-      h2 {
-        background: linear-gradient(135deg, #123772 0%, #1a4894 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-      }
-    }
-  }
-
-  .section-content {
-    padding: 1.5rem;
-    background: white;
-    position: relative;
-
-    &::before {
-      content: "";
-      position: absolute;
-      left: 1.5rem;
-      right: 1.5rem;
-      top: 0;
-      height: 1px;
-      background: rgba(0, 0, 0, 0.06);
-      opacity: 0;
-      transition: opacity 0.2s ease;
-    }
-
-    &:hover::before {
-      opacity: 1;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .form-section {
-    border-radius: 8px;
-    margin-bottom: 1rem;
-
-    .section-header {
-      padding: 1.25rem 1.5rem;
-      gap: 1rem;
-      min-height: 4.5rem;
-
-      &::before {
-        width: 3px;
-      }
+    .cds--form-section-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       mat-icon {
-        font-size: 24px;
-        width: 24px;
-        height: 24px;
-      }
-
-      .header-content {
-        h2 {
-          font-size: 1.125rem;
-        }
-
-        .subtitle {
-          font-size: 0.813rem;
-        }
-      }
-    }
-
-    .section-content {
-      padding: 2rem 1rem;
-      padding-bottom: 4rem;
-      &::before {
-        left: 1rem;
-        right: 1rem;
-      }
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .form-section {
-    .section-header {
-      padding: 1rem;
-      gap: 0.75rem;
-
-      mat-icon {
+        color: $icon-primary;
         font-size: 20px;
         width: 20px;
         height: 20px;
       }
+    }
 
-      .header-content {
-        h2 {
-          font-size: 1rem;
-        }
+    .cds--form-section-header-content {
+      flex: 1;
 
-        .subtitle {
-          font-size: 0.75rem;
-        }
+      h2 {
+        margin: 0;
+        @include type-style("heading-02");
+        color: $text-primary;
       }
+
+      p {
+        margin: $spacing-02 0 0;
+        @include type-style("body-long-01");
+        color: $text-secondary;
+      }
+    }
+  }
+
+  .cds--form-section-content {
+    padding: $spacing-05;
+    background: $layer;
+  }
+}
+
+@include breakpoint-down("md") {
+  .cds--form-section {
+    margin-bottom: $spacing-03;
+
+    .cds--form-section-header {
+      padding: $spacing-04;
+      gap: $spacing-03;
+    }
+
+    .cds--form-section-content {
+      padding: $spacing-04;
+    }
+  }
+}
+
+@include breakpoint-down("sm") {
+  .cds--form-section {
+    border-radius: 0;
+    margin-bottom: $spacing-03;
+
+    .cds--form-section-header {
+      padding: $spacing-03;
+      gap: $spacing-03;
+    }
+
+    .cds--form-section-content {
+      padding: $spacing-03;
     }
   }
 }

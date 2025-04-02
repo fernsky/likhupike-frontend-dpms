@@ -1,392 +1,324 @@
-.user-form {
+@use "@carbon/styles/scss/spacing" as *;
+@use "@carbon/styles/scss/type" as *;
+@use "@carbon/styles/scss/theme" as *;
+@use "@carbon/styles/scss/breakpoint" as *;
+@use "@carbon/styles/scss/motion" as *;
+
+// Define missing Carbon motion variables if needed
+$duration--moderate-01: 150ms;
+$carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
+$carbon--entrance-easing: cubic-bezier(0, 0, 0.38, 0.9);
+$carbon--exit-easing: cubic-bezier(0.2, 0, 1, 0.9);
+$border-subtle-hover: $border-subtle; // Define border-subtle-hover
+
+// Define the motion mixin if it's not available
+@function motion($name, $mode) {
+  @if $name == "standard" {
+    @return $carbon--standard-easing;
+  } @else if $name == "entrance" {
+    @return $carbon--entrance-easing;
+  } @else if $name == "exit" {
+    @return $carbon--exit-easing;
+  } @else {
+    @return $carbon--standard-easing;
+  }
+}
+
+.cds--form {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding-bottom: calc(88px + 2rem); // Height of buttons + padding
+  gap: $spacing-07;
+  margin-bottom: $spacing-09;
 
-  .form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    width: 100%;
-    padding: 2rem;
+  .cds--form-section {
+    background-color: $layer-01;
+    border-radius: 4px;
+    border: 1px solid $border-subtle;
+    padding: $spacing-05 $spacing-05 $spacing-07;
+    transition: all 110ms $duration--moderate-01 motion(standard, productive);
 
-    mat-form-field {
-      width: 100%;
-    }
-
-    .municipality-toggle {
-      padding: 0.5rem 0;
-    }
-  }
-
-  .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    padding: 1.5rem 0;
-    margin-top: 1rem;
-    width: 100%; // Add this to ensure full width
-
-    app-base-button {
-      flex-shrink: 0; // Prevent shrinking
-    }
-  }
-
-  .basic-info {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-
-    .credentials-group {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr); // 2 columns for desktop
-      gap: 1.5rem;
-      width: 100%;
-    }
-
-    .ward-assignment {
-      width: 100%;
-      background: #f8fafb;
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin-top: 1rem;
+    h3 {
       display: flex;
-      flex-direction: column;
-      gap: 1rem;
+      align-items: center;
+      gap: $spacing-03;
+      margin-bottom: $spacing-06;
+      color: $text-primary;
+      position: relative;
+      padding-bottom: $spacing-03;
+      border-bottom: 1px solid $border-subtle;
 
-      mat-checkbox {
-        font-size: 1rem;
-      }
-
-      mat-form-field {
-        width: 300px;
-        min-width: 200px;
-        max-width: 100%;
-      }
-    }
-  }
-
-  .permissions {
-    .permissions-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1rem;
-
-      .permission-item {
-        background: #f8fafb;
-        border-radius: 8px;
-        padding: 1rem;
-        transition: all 0.2s ease;
-
-        &:hover {
-          background: #f1f5f9;
-          transform: translateY(-2px);
-        }
-
-        .permission-label {
-          display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-
-          .permission-name {
-            font-weight: 500;
-            color: var(--text-primary);
-            line-height: 1.2;
-          }
-
-          .permission-description {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            line-height: 1.4;
-            white-space: normal; // Ensure text wraps
-            word-wrap: break-word; // Handle long words
-            hyphens: auto; // Enable hyphenation
-            max-width: 100%; // Ensure text stays within container
-          }
-        }
+      .cds--section-icon {
+        color: $icon-primary;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
       }
     }
   }
 
-  .permissions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.25rem;
+  .cds--form-item {
+    margin-bottom: $spacing-06;
 
-    .permission-item {
-      mat-checkbox {
-        width: 100%;
+    cds-label {
+      margin-bottom: $spacing-03;
+      color: $text-primary;
 
-        ::ng-deep .mat-checkbox-layout {
-          width: 100%;
-          white-space: normal;
-        }
-
-        .permission-label {
-          display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-          padding: 0.5rem;
-
-          .permission-name {
-            font-weight: 500;
-            color: var(--text-primary);
-          }
-
-          .permission-description {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            line-height: 1.4;
-          }
-        }
+      ::ng-deep .cds--label {
+        @include type-style("body-short-01");
+        font-weight: 400;
       }
+
+      ::ng-deep .cds--form__helper-text {
+        @include type-style("helper-text-01");
+        color: $text-secondary;
+        margin-top: $spacing-02;
+      }
+    }
+  }
+
+  .cds--text-input__field-wrapper {
+    position: relative;
+    transition: all 110ms $duration--moderate-01 motion(standard, productive);
+
+    &:focus-within {
+      transform: translateY(-1px);
+    }
+
+    input[cdsText] {
+      height: $spacing-09;
+      transition: all 110ms $duration--moderate-01 motion(standard, productive);
+
+      &:hover:not([disabled]) {
+        background-color: var(--cds-field-hover, $field-hover);
+      }
+
+      &:focus {
+        border-color: var(--cds-focus, $focus);
+      }
+    }
+
+    .cds--text-input__password-visibility-toggle {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 $spacing-04;
+      transition: color 110ms $duration--moderate-01
+        motion(standard, productive);
 
       &:hover {
-        background: rgba(0, 0, 0, 0.02);
-        border-radius: 4px;
+        color: var(--cds-text-01, $text-primary);
+      }
+
+      mat-icon {
+        font-size: 20px;
       }
     }
   }
 
-  // Error States
-  .mat-error {
-    font-size: 13px;
-    margin-top: 4px;
-  }
+  .cds--basic-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: $spacing-05;
 
-  // Form Field Customization
-  ::ng-deep {
-    .mat-form-field-wrapper {
-      margin: 0;
-    }
-
-    .mat-form-field-appearance-outline .mat-form-field-outline {
-      color: rgba(0, 0, 0, 0.12);
-    }
-
-    .mat-form-field-appearance-outline.mat-focused
-      .mat-form-field-outline-thick {
-      color: #0b1f42;
-    }
-
-    .mat-form-field-label {
-      font-size: 15px;
-    }
-
-    .mat-form-field-infix {
-      padding: 1em 0;
-    }
-  }
-
-  // Checkbox Styling
-  .mat-checkbox {
-    font-size: 14px;
-  }
-}
-
-// Responsive Design
-@media (max-width: 960px) {
-  .user-form {
-    margin: 1rem auto;
-    padding: 16px;
-
-    .form-grid {
-      padding: 1.5rem;
-      gap: 1.5rem;
+    @include breakpoint-down("md") {
       grid-template-columns: 1fr;
     }
-
-    .form-actions {
-      padding: 1.5rem 2rem;
-    }
   }
-}
 
-@media (max-width: 768px) {
-  .user-form {
-    gap: 1rem;
-    padding-bottom: 70px;
+  .cds--ward-level-section {
+    grid-column: 1 / -1;
+    margin-top: $spacing-05;
+    padding: $spacing-05;
+    background-color: var(--cds-layer-accent, $layer-accent);
+    border-radius: 4px;
+    transition: all 150ms $duration--moderate-01 motion(standard, productive);
+    border: 1px solid var(--cds-border-subtle-01, $border-subtle);
 
-    .form-grid {
-      padding: 1.5rem;
-      gap: 1.5rem;
-      grid-template-columns: 1fr;
+    &:hover {
+      border-color: var(--cds-border-subtle, $border-interactive);
     }
 
-    .basic-info {
-      gap: 1rem;
-
-      .credentials-group {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-
-      .ward-assignment {
-        padding: 1rem;
-        gap: 0.75rem;
-
-        mat-form-field {
-          width: 100%;
-        }
-      }
+    .cds--ward-level-checkbox {
+      font-weight: 500;
+      display: block;
+      margin-bottom: $spacing-03;
     }
 
-    .form-actions {
-      flex-direction: column-reverse;
-      gap: 0.75rem;
-      padding: 1rem;
+    .cds--ward-dropdown-container {
+      margin-top: $spacing-05;
+      max-width: 400px;
 
-      margin: 0;
-
-      ::ng-deep app-base-button {
+      cds-dropdown {
         width: 100%;
+        margin-top: $spacing-03;
 
-        button {
-          width: 100%;
-          height: 42px !important;
-          min-height: 42px;
-        }
-      }
-    }
-  }
+        ::ng-deep button.cds--list-box__field {
+          transition: all 110ms $duration--moderate-01
+            motion(standard, productive);
 
-  .user-form {
-    gap: 1rem;
-
-    .form-section {
-      .section-content {
-        padding: 1rem;
-
-        &.basic-info,
-        &.ward-assignment .ward-toggle-container,
-        &.permissions .permissions-grid {
-          grid-template-columns: 1fr;
-        }
-
-        &.basic-info {
-          .credentials-group {
-            grid-template-columns: 1fr; // Stack vertically on mobile
-          }
-
-          .ward-assignment {
-            grid-template-columns: 1fr; // Stack on mobile
-            gap: 1rem;
+          &:hover:not([disabled]) {
+            background-color: var(--cds-field-hover, $field-hover);
           }
         }
       }
     }
+  }
 
-    .form-actions {
-      flex-direction: column-reverse;
-      gap: 0.75rem;
+  .cds--permissions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: $spacing-05;
 
-      button {
-        width: 100%;
+    .cds--permission-item {
+      background: var(--cds-layer-accent, $layer-accent);
+      border-radius: 4px;
+      padding: $spacing-05;
+      border: 1px solid var(--cds-border-subtle-01, $border-subtle);
+      transition: all 150ms $duration--moderate-01 motion(standard, productive);
+
+      &:hover {
+        border-color: var(--cds-border-subtle, $border-interactive);
+        transform: translateY(-2px);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
       }
-    }
-  }
 
-  .ward-assignment {
-    min-height: auto !important; // Remove fixed height on mobile
-    grid-template-columns: 1fr !important;
+      .cds--permission-label {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-02;
 
-    mat-checkbox {
-      justify-content: flex-start !important;
-    }
-  }
+        .cds--permission-name {
+          @include type-style("heading-compact-01");
+          color: var(--cds-text-01, $text-primary);
+        }
 
-  .section-content {
-    &.basic-info {
-      .ward-assignment {
-        padding: 1rem;
-        gap: 0.75rem;
-
-        mat-form-field {
-          width: 100%; // Full width on mobile
+        .cds--permission-description {
+          @include type-style("body-compact-01");
+          color: var(--cds-text-02, $text-secondary);
+          line-height: 1.4;
         }
       }
     }
   }
-}
 
-@media (max-width: 600px) {
-  .user-form {
-    margin: 0;
-    border-radius: 0;
-    padding: 12px;
-    gap: 24px;
+  .cds--form-error {
+    margin: $spacing-05 0;
+    animation: fadeIn 240ms $duration--moderate-01 motion(standard, productive);
 
-    .form-grid {
-      padding: 1.5rem;
-      gap: 1rem;
-    }
+    .cds--inline-notification {
+      border-width: 1px;
+      border-left-width: 3px;
+      max-width: 100%;
 
-    .form-actions {
-      padding: 1.5rem;
-      flex-direction: column;
+      .cds--inline-notification__details {
+        padding: $spacing-04 $spacing-05;
+      }
 
-      button {
-        width: 100%;
+      .cds--inline-notification__icon {
+        color: var(--cds-support-error, $support-error);
       }
     }
   }
 
-  .user-form {
-    padding: 0.25rem;
+  .cds--form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing-05;
+    margin-top: $spacing-07;
+    padding-top: $spacing-05;
+    border-top: 1px solid var(--cds-border-subtle-01, $border-subtle);
 
-    .form-grid {
-      padding: 0.5rem;
-      gap: 0.5rem;
-    }
-
-    .form-actions {
-      padding: 0.5rem;
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .user-form {
-    // ...existing code...
-
-    .form-actions {
-      padding: 0.75rem;
-
-      ::ng-deep app-base-button button {
-        height: 38px !important;
-        min-height: 38px;
-        font-size: 0.875rem;
-      }
-    }
-  }
-}
-
-// High Contrast Mode
-@media (prefers-contrast: more) {
-  .user-form {
-    .form-actions {
-      border-top-width: 2px;
-    }
-  }
-}
-
-// Reduce Motion
-@media (prefers-reduced-motion: reduce) {
-  .user-form {
-    .overlay,
     button {
-      transition: none !important;
+      position: relative;
+      overflow: hidden;
+      transition: all 150ms $duration--moderate-01 motion(standard, productive);
+
+      &:not(:disabled):hover {
+        transform: translateY(-1px);
+      }
+
+      &:not(:disabled):active {
+        transform: translateY(0);
+      }
+
+      .cds--btn__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 150ms $duration--moderate-01
+          motion(standard, productive);
+      }
+
+      &:not(:disabled):hover .cds--btn__icon {
+        transform: translateX(2px);
+      }
     }
   }
 }
 
-// Print Styles
-@media print {
-  .user-form {
-    .form-actions {
-      display: none;
+.cds--form-requirement {
+  color: var(--cds-support-error, $support-error);
+  font-size: 12px;
+  margin-top: $spacing-03;
+  animation: slideIn 240ms $duration--moderate-01 motion(standard, productive);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@include breakpoint-down("md") {
+  .cds--form {
+    gap: $spacing-05;
+
+    .cds--form-actions {
+      gap: $spacing-03;
+    }
+
+    .cds--permissions-grid {
+      grid-template-columns: 1fr;
+      gap: $spacing-03;
+    }
+  }
+}
+
+@include breakpoint-down("sm") {
+  .cds--form {
+    gap: $spacing-04;
+
+    .cds--form-section {
+      padding: $spacing-04;
+    }
+
+    .cds--form-actions {
+      flex-direction: column-reverse;
+      gap: $spacing-03;
+
+      button {
+        width: 100%;
+      }
     }
   }
 }
