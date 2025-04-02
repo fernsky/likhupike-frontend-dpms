@@ -101,13 +101,14 @@ $carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
 
 .cds--user-form-actions {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between; // Changed from flex-start to space-between
   gap: $spacing-03;
   margin-top: $spacing-06;
   border-top: none;
   padding-top: 0;
 
   button {
+    flex: 1; // Added to make buttons take equal space
     min-width: 120px;
     position: relative;
     overflow: hidden;

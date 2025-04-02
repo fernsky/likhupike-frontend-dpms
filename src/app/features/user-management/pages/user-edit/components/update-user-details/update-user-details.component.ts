@@ -83,14 +83,16 @@ export class UpdateUserDetailsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   // Formatted for Carbon dropdown-list
-  wardNumbers = Array.from({ length: 33 }, (_, i) => {
-    const number = i + 1;
-    return {
-      content: `${this.getFormattedWardNumber(number)}`,
-      value: number,
-      selected: false,
-    };
-  });
+  get wardNumbers() {
+    return Array.from({ length: 33 }, (_, i) => {
+      const number = i + 1;
+      return {
+        content: `${this.getFormattedWardNumber(number)}`,
+        value: number,
+        selected: number === this._user?.wardNumber,
+      };
+    });
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -156,6 +158,14 @@ export class UpdateUserDetailsComponent implements OnInit, OnDestroy {
           },
           [Validators.min(1), Validators.max(33)],
         ],
+      });
+
+      // Force set the ward number after initialization
+      setTimeout(() => {
+        if (this.user.isWardLevelUser && this.user.wardNumber) {
+          this.updateForm.get('wardNumber')?.setValue(this.user.wardNumber);
+          this.cd.detectChanges();
+        }
       });
 
       // Handle ward level user changes
