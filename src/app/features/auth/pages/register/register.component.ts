@@ -70,6 +70,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   registerForm!: FormGroup;
   hidePassword = true;
   hideConfirmPassword = true;
+  formSubmitted = false;
 
   // Properly formatted for Carbon dropdown-list
   wardNumbers = Array.from({ length: 5 }, (_, i) => {
@@ -142,6 +143,93 @@ export class RegisterComponent implements OnInit, OnDestroy {
       });
   }
 
+  hasEmailError(): boolean {
+    const control = this.registerForm.get('email');
+    return Boolean(
+      control?.invalid && (control?.touched || this.formSubmitted)
+    );
+  }
+
+  hasPasswordError(): boolean {
+    const control = this.registerForm.get('password');
+    return Boolean(
+      control?.invalid && (control?.touched || this.formSubmitted)
+    );
+  }
+
+  hasConfirmPasswordError(): boolean {
+    const control = this.registerForm.get('confirmPassword');
+    return Boolean(
+      (control?.invalid && (control?.touched || this.formSubmitted)) ||
+        (this.registerForm.hasError('passwordMismatch') &&
+          (control?.touched || this.formSubmitted))
+    );
+  }
+
+  hasWardNumberError(): boolean {
+    if (!this.registerForm.get('isWardLevelUser')?.value) return false;
+
+    const wardControl = this.registerForm.get('wardNumber');
+    return Boolean(
+      (wardControl?.invalid && (wardControl?.touched || this.formSubmitted)) ||
+        (this.registerForm.hasError('wardNumberRequired') &&
+          (wardControl?.touched || this.formSubmitted))
+    );
+  }
+
+  getEmailErrorText(): string {
+    if (!this.hasEmailError()) return '';
+
+    const control = this.registerForm.get('email');
+    if (control?.hasError('required')) {
+      return this.translocoService.translate(
+        'register.fields.email.errors.required'
+      );
+    }
+    if (control?.hasError('email')) {
+      return this.translocoService.translate(
+        'register.fields.email.errors.invalid'
+      );
+    }
+    return '';
+  }
+
+  getPasswordErrorText(): string {
+    if (!this.hasPasswordError()) return '';
+
+    const control = this.registerForm.get('password');
+    if (control?.hasError('required')) {
+      return this.translocoService.translate(
+        'register.fields.password.errors.required'
+      );
+    }
+    if (control?.hasError('pattern')) {
+      return this.translocoService.translate(
+        'register.fields.password.errors.pattern'
+      );
+    }
+    return '';
+  }
+
+  getConfirmPasswordErrorText(): string {
+    if (!this.hasConfirmPasswordError()) return '';
+
+    if (this.registerForm.hasError('passwordMismatch')) {
+      return this.translocoService.translate(
+        'register.fields.confirmPassword.errors.mismatch'
+      );
+    }
+
+    const control = this.registerForm.get('confirmPassword');
+    if (control?.hasError('required')) {
+      return this.translocoService.translate(
+        'register.fields.confirmPassword.errors.required'
+      );
+    }
+
+    return '';
+  }
+
   getFormattedWardNumber(number: number): string {
     return this.numberFormat.formatNumber(number);
   }
@@ -167,6 +255,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
+    this.formSubmitted = true;
+
     if (this.registerForm.valid) {
       this.store.dispatch(
         AuthActions.register({

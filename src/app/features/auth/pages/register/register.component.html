@@ -9,152 +9,84 @@
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="cds--form">
     <!-- Email Input -->
     <div class="cds--form-item">
-      <cds-label [helperText]="'register.fields.email.helper' | transloco">
+      <cds-text-label
+        [helperText]="'register.fields.email.helper' | transloco"
+        [invalidText]="getEmailErrorText()"
+        [invalid]="hasEmailError()"
+      >
         {{ "register.fields.email.label" | transloco }}
-      </cds-label>
-      <div class="cds--text-input__field-wrapper">
         <input
           cdsText
           [placeholder]="'register.fields.email.placeholder' | transloco"
           formControlName="email"
           type="email"
-          [invalid]="
-            (registerForm.get('email')?.invalid &&
-              registerForm.get('email')?.touched) ??
-            false
-          "
-          [attr.data-invalid]="
-            registerForm.get('email')?.invalid &&
-            registerForm.get('email')?.touched
-          "
-          aria-controls="email-error-msg"
+          [invalid]="hasEmailError()"
         />
-      </div>
-      <div
-        *ngIf="
-          registerForm.get('email')?.invalid &&
-          registerForm.get('email')?.touched
-        "
-        class="cds--form-requirement"
-        id="email-error-msg"
-      >
-        <ng-container *ngIf="registerForm.get('email')?.hasError('required')">
-          {{ "register.fields.email.errors.required" | transloco }}
-        </ng-container>
-        <ng-container *ngIf="registerForm.get('email')?.hasError('email')">
-          {{ "register.fields.email.errors.invalid" | transloco }}
-        </ng-container>
-      </div>
+      </cds-text-label>
     </div>
 
-    <!-- Password Input -->
+    <!-- Password Input - Fixed layout -->
     <div class="cds--form-item">
-      <cds-label [helperText]="'register.fields.password.helper' | transloco">
+      <cds-text-label
+        [helperText]="'register.fields.password.helper' | transloco"
+        [invalidText]="getPasswordErrorText()"
+        [invalid]="hasPasswordError()"
+      >
         {{ "register.fields.password.label" | transloco }}
-      </cds-label>
-      <div class="cds--text-input__field-wrapper">
-        <input
-          cdsText
-          [placeholder]="'register.fields.password.placeholder' | transloco"
-          formControlName="password"
-          [type]="hidePassword ? 'password' : 'text'"
-          [invalid]="
-            (registerForm.get('password')?.invalid &&
-              registerForm.get('password')?.touched) ??
-            false
-          "
-          [attr.data-invalid]="
-            registerForm.get('password')?.invalid &&
-            registerForm.get('password')?.touched
-          "
-          aria-controls="password-error-msg"
-        />
-        <button
-          cdsButton="ghost"
-          size="sm"
-          class="cds--text-input__password-visibility-toggle"
-          type="button"
-          (click)="togglePasswordVisibility('password')"
-          [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
-        >
-          <mat-icon>{{
-            hidePassword ? "visibility_off" : "visibility"
-          }}</mat-icon>
-        </button>
-      </div>
-      <div
-        *ngIf="
-          registerForm.get('password')?.invalid &&
-          registerForm.get('password')?.touched
-        "
-        class="cds--form-requirement"
-        id="password-error-msg"
-      >
-        <ng-container *ngIf="registerForm.get('password')?.hasError('pattern')">
-          {{ "register.fields.password.errors.pattern" | transloco }}
-        </ng-container>
-      </div>
+        <div class="cds--password-input-wrapper">
+          <input
+            cdsText
+            [placeholder]="'register.fields.password.placeholder' | transloco"
+            formControlName="password"
+            [type]="hidePassword ? 'password' : 'text'"
+            [invalid]="hasPasswordError()"
+          />
+          <button
+            type="button"
+            class="cds--text-input__password-visibility-toggle"
+            (click)="togglePasswordVisibility('password')"
+            [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+          >
+            <mat-icon>{{
+              hidePassword ? "visibility_off" : "visibility"
+            }}</mat-icon>
+          </button>
+        </div>
+      </cds-text-label>
     </div>
 
-    <!-- Confirm Password Input -->
+    <!-- Confirm Password Input - Fixed layout -->
     <div class="cds--form-item">
-      <cds-label
+      <cds-text-label
         [helperText]="'register.fields.confirmPassword.helper' | transloco"
+        [invalidText]="getConfirmPasswordErrorText()"
+        [invalid]="hasConfirmPasswordError()"
       >
         {{ "register.fields.confirmPassword.label" | transloco }}
-      </cds-label>
-      <div class="cds--text-input__field-wrapper">
-        <input
-          cdsText
-          [placeholder]="
-            'register.fields.confirmPassword.placeholder' | transloco
-          "
-          formControlName="confirmPassword"
-          [type]="hideConfirmPassword ? 'password' : 'text'"
-          [invalid]="
-            ((registerForm.get('confirmPassword')?.invalid &&
-              registerForm.get('confirmPassword')?.touched) ||
-              (registerForm.hasError('passwordMismatch') &&
-                registerForm.get('confirmPassword')?.touched)) ??
-            false
-          "
-          [attr.data-invalid]="
-            (registerForm.get('confirmPassword')?.invalid &&
-              registerForm.get('confirmPassword')?.touched) ||
-            (registerForm.hasError('passwordMismatch') &&
-              registerForm.get('confirmPassword')?.touched)
-          "
-          aria-controls="confirm-password-error-msg"
-        />
-        <button
-          cdsButton="ghost"
-          size="sm"
-          class="cds--text-input__password-visibility-toggle"
-          type="button"
-          (click)="togglePasswordVisibility('confirm')"
-          [attr.aria-label]="
-            hideConfirmPassword ? 'Show password' : 'Hide password'
-          "
-        >
-          <mat-icon>{{
-            hideConfirmPassword ? "visibility_off" : "visibility"
-          }}</mat-icon>
-        </button>
-      </div>
-      <div
-        *ngIf="
-          (registerForm.hasError('passwordMismatch') &&
-            registerForm.get('confirmPassword')?.touched) ||
-          (registerForm.get('confirmPassword')?.invalid &&
-            registerForm.get('confirmPassword')?.touched)
-        "
-        class="cds--form-requirement"
-        id="confirm-password-error-msg"
-      >
-        <ng-container *ngIf="registerForm.hasError('passwordMismatch')">
-          {{ "register.fields.confirmPassword.errors.mismatch" | transloco }}
-        </ng-container>
-      </div>
+        <div class="cds--password-input-wrapper">
+          <input
+            cdsText
+            [placeholder]="
+              'register.fields.confirmPassword.placeholder' | transloco
+            "
+            formControlName="confirmPassword"
+            [type]="hideConfirmPassword ? 'password' : 'text'"
+            [invalid]="hasConfirmPasswordError()"
+          />
+          <button
+            type="button"
+            class="cds--text-input__password-visibility-toggle"
+            (click)="togglePasswordVisibility('confirm')"
+            [attr.aria-label]="
+              hideConfirmPassword ? 'Show password' : 'Hide password'
+            "
+          >
+            <mat-icon>{{
+              hideConfirmPassword ? "visibility_off" : "visibility"
+            }}</mat-icon>
+          </button>
+        </div>
+      </cds-text-label>
     </div>
 
     <!-- Ward Level Section -->
@@ -165,33 +97,26 @@
         </span>
       </cds-checkbox>
 
-      <div *ngIf="registerForm.get('isWardLevelUser')?.value">
-        <cds-label
-          [helperText]="
-            'register.fields.wardLevel.wardNumber.helper' | transloco
-          "
-        >
-          {{ "register.fields.wardLevel.wardNumber.label" | transloco }}
-        </cds-label>
+      <div
+        *ngIf="registerForm.get('isWardLevelUser')?.value"
+        class="cds--ward-dropdown-wrapper"
+      >
         <cds-dropdown
           formControlName="wardNumber"
           [placeholder]="
             'register.fields.wardLevel.wardNumber.placeholder' | transloco
           "
+          [label]="'register.fields.wardLevel.wardNumber.label' | transloco"
+          [helperText]="
+            'register.fields.wardLevel.wardNumber.helper' | transloco
+          "
+          [invalid]="hasWardNumberError()"
+          [invalidText]="
+            'register.fields.wardLevel.wardNumber.errors.required' | transloco
+          "
         >
           <cds-dropdown-list [items]="wardNumbers"></cds-dropdown-list>
         </cds-dropdown>
-        <div
-          *ngIf="
-            registerForm.hasError('wardNumberRequired') &&
-            registerForm.get('wardNumber')?.touched
-          "
-          class="cds--form-requirement"
-        >
-          {{
-            "register.fields.wardLevel.wardNumber.errors.required" | transloco
-          }}
-        </div>
       </div>
     </div>
 
