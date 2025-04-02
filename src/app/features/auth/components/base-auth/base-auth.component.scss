@@ -5,9 +5,14 @@
 @use "@carbon/styles/scss/grid" as *;
 @use "@carbon/styles/scss/motion" as *;
 
+// Define easing variables if not imported correctly
+$carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
+$carbon--entrance-easing: cubic-bezier(0, 0, 0.38, 0.9);
+$carbon--exit-easing: cubic-bezier(0.2, 0, 1, 0.9);
+
 :host {
   display: block;
-  min-height: 100vh; // Change from fixed height to min-height
+  min-height: 100vh;
   width: 100%;
   overflow-x: hidden;
 }
@@ -15,19 +20,29 @@
 .cds--auth-layout {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; // Change from fixed height to min-height
+  min-height: 100vh;
   background-color: var(--cds-background);
   position: relative;
   overflow: hidden;
   max-width: 2000px;
   margin: 0 auto;
+
+  // Add subtle gradient to background
+  background-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.01) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 
 .cds--auth-header {
   width: 100%;
   position: relative;
   z-index: 2;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background-color: rgba(var(--cds-layer), 0.95);
+  border-bottom: 1px solid var(--cds-border-subtle-01);
 }
 
 .cds--auth-main {
@@ -36,10 +51,16 @@
   padding: 0;
   overflow-y: auto;
   position: relative;
-  // Remove max-height constraint
-  min-height: calc(100vh - 180px); // Use min-height instead
-  // Ensure colors extend to full height
+  min-height: calc(100vh - 180px);
   background-color: var(--cds-layer);
+
+  // Add subtle dot pattern
+  background-image: radial-gradient(
+    var(--cds-border-subtle-01) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+  background-position: center;
 }
 
 .cds--auth-container {
@@ -71,6 +92,25 @@
   @include breakpoint(lg) {
     display: block;
     animation: fadeIn 0.5s cubic-bezier(0.2, 0, 0.38, 0.9) forwards;
+
+    // Add subtle shadow to separate features from form
+    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.08);
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+      background-size: 16px 16px;
+      z-index: 0;
+      pointer-events: none;
+    }
   }
 }
 
@@ -83,11 +123,28 @@
   position: relative;
   background-color: var(--cds-layer);
   overflow-y: auto;
-  // Ensure background extends to full height
   min-height: 100%;
 
   @include breakpoint(lg) {
     animation: fadeIn 0.5s cubic-bezier(0.2, 0, 0.38, 0.9) 0.1s forwards;
+    position: relative;
+
+    // Add subtle gradient on the right side
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 1px;
+      background: linear-gradient(
+        to bottom,
+        var(--cds-border-subtle-01) 0%,
+        var(--cds-layer) 100%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
   }
 }
 
@@ -97,7 +154,7 @@
   margin: $spacing-08 auto;
   position: relative;
   z-index: 1;
-  padding-bottom: $spacing-09; // Add more bottom padding
+  padding-bottom: $spacing-09;
 }
 
 .cds--auth-form-header {
@@ -114,6 +171,8 @@
     width: 40px;
     height: 2px;
     background-color: var(--cds-interactive-01);
+    border-radius: 2px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   }
 }
 
@@ -129,9 +188,11 @@
   background-color: var(--cds-background);
   border-top: 1px solid var(--cds-border-subtle-01);
   z-index: 2;
-  position: relative; // Ensure this is relative
-  width: 100%; // Make sure it's full width
-  bottom: auto; // Ensure not stuck to bottom
+  position: relative;
+  width: 100%;
+  bottom: auto;
+  // Add subtle shadow above footer
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .cds--footer-content {
@@ -149,6 +210,7 @@
   @include type-style("caption-01");
   color: var(--cds-text-02);
   margin: 0 0 $spacing-03;
+  opacity: 0.8;
 
   @include breakpoint(md) {
     margin-bottom: 0;
@@ -164,13 +226,30 @@
   color: var(--cds-link-01);
   text-decoration: none;
   margin-left: $spacing-05;
+  position: relative;
+  transition: color 110ms $carbon--standard-easing;
 
   &:first-child {
     margin-left: 0;
   }
 
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0%;
+    height: 1px;
+    background-color: var(--cds-link-01);
+    transition: width 150ms $carbon--standard-easing;
+  }
+
   &:hover {
-    text-decoration: underline;
+    color: var(--cds-link-hover);
+
+    &::after {
+      width: 100%;
+    }
   }
 }
 
@@ -193,7 +272,7 @@ html {
     transparent 1px
   );
   background-size: 24px 24px;
-  opacity: 0.05;
+  opacity: 0.03;
   z-index: 0;
 }
 
@@ -227,5 +306,36 @@ html {
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
   .cds--auth-footer {
     position: static;
+  }
+}
+
+// Additional refinements for enterprise look
+::ng-deep {
+  // Improve CDS button styling
+  button[cdsButton] {
+    font-weight: 500;
+    letter-spacing: 0.01em;
+
+    &:focus {
+      box-shadow: 0 0 0 2px var(--cds-focus);
+      outline: none;
+    }
+  }
+
+  // Improve CDS input styling
+  input[cdsText] {
+    transition: all 110ms $carbon--standard-easing;
+
+    &:focus {
+      box-shadow: 0 0 0 2px var(--cds-focus);
+      outline: none;
+    }
+  }
+
+  // Subtle focus state for all interactive elements
+  a:focus,
+  button:focus {
+    outline: 2px solid var(--cds-focus);
+    outline-offset: 2px;
   }
 }

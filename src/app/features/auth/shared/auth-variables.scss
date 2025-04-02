@@ -1,0 +1,63 @@
+// Carbon motion easing curves
+$carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9) !default;
+$carbon--entrance-easing: cubic-bezier(0, 0, 0.38, 0.9) !default;
+$carbon--exit-easing: cubic-bezier(0.2, 0, 1, 0.9) !default;
+
+// Text colors mapped to Carbon Design System variables
+$text-primary: var(--cds-text-01, #161616) !default;
+$text-secondary: var(--cds-text-02, #525252) !default;
+$text-placeholder: var(--cds-text-03, #a8a8a8) !default;
+$text-helper: var(--cds-text-05, #6f6f6f) !default;
+$text-error: var(--cds-support-error, #da1e28) !default;
+
+// Define fallback values for Carbon variables that might be missing
+:root {
+  // Text colors
+  --cds-text-01: #161616;
+  --cds-text-02: #525252;
+  --cds-text-03: #a8a8a8;
+  --cds-text-error: var(--cds-support-error, #da1e28);
+
+  // Interactive states
+  --cds-interactive-01: #0f62fe;
+  --cds-focus: #0f62fe;
+  --cds-link-01: #0f62fe;
+  --cds-link-hover: #0043ce;
+
+  // Background and field colors
+  --cds-field-hover: var(--cds-field-hover-01, #e8e8e8);
+  --cds-layer-accent: var(--cds-layer-01, #f4f4f4);
+
+  // Border colors
+  --cds-border-subtle-01: #e0e0e0;
+  --cds-border-subtle-02: #c6c6c6;
+  --cds-border-subtle-selected: var(--cds-border-subtle-02, #8d8d8d);
+
+  // Status colors
+  --cds-support-error: #da1e28;
+  --cds-support-success: #24a148;
+  --cds-support-info: #0043ce;
+  --cds-support-warning: #f1c21b;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
