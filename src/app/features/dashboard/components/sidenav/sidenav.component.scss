@@ -2,3 +2,68 @@
 @use "@carbon/styles/scss/theme" as *;
 @use "@carbon/styles/scss/motion" as *;
 @use "@carbon/styles/scss/breakpoint" as *;
+@use "@carbon/styles/scss/colors" as *; // Import colors explicitly
+
+:host {
+  height: 100%;
+  position: fixed;
+  top: 3rem;
+  left: 0;
+  z-index: 1000;
+  transition: transform $duration-moderate-01 motion(standard, productive);
+
+  @include breakpoint-down(md) {
+    &:not(.open) {
+      transform: translateX(-100%);
+    }
+
+    &.open {
+      transform: translateX(0);
+    }
+  }
+}
+
+// Ensure proper styling for active items
+:host ::ng-deep {
+  .cds--side-nav__item--active {
+    background-color: $layer-active-01;
+  }
+
+  .cds--side-nav__submenu[aria-expanded="true"] {
+    background-color: $layer-active-01;
+  }
+
+  // Custom badge styling (Carbon-like)
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1rem;
+    height: 1rem;
+    padding: 0 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+    border-radius: 0.75rem;
+    margin-left: $spacing-03;
+
+    &.badge-primary {
+      background-color: $red-60; // Using Carbon color variables directly
+      color: $white-0;
+    }
+
+    &.badge-accent {
+      background-color: $green-60; // Using Carbon color variables directly
+      color: $white-0;
+    }
+
+    &.badge-warn {
+      background-color: $yellow-30; // Using Carbon color variables directly
+      color: $gray-100; // Darker text for visibility on yellow
+    }
+  }
+
+  .logout-item {
+    margin-top: auto;
+  }
+}

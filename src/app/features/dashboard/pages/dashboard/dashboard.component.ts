@@ -1,10 +1,15 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { map } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 
 import * as AuthActions from '@app/core/store/auth/auth.actions';
 import { SharedModule } from '@shared/shared.module';
@@ -29,8 +34,9 @@ const BREAKPOINT_MD = 1056;
     HeaderComponent,
   ],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   isSidenavOpen = true;
+  private destroy$ = new Subject<void>();
 
   // Simple observable for menu visibility based on Carbon's breakpoint
   showMenuToggle$: Observable<boolean> = this.breakpointObserver
@@ -41,32 +47,40 @@ export class DashboardComponent implements OnInit {
     private store: Store,
     private router: Router,
     private breakpointObserver: BreakpointObserver
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     // Set initial sidenav state based on screen size
     this.breakpointObserver
       .observe([`(max-width: ${BREAKPOINT_MD}px)`])
+      .pipe(takeUntil(this.destroy$))
       .subscribe((result) => {
+        // On mobile, keep sidenav closed by default
         this.isSidenavOpen = !result.matches;
       });
   }
 
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-  ngOnInit(): void {}
-
   onHeaderMenuToggle(): void {
     this.isSidenavOpen = !this.isSidenavOpen;
-
-    // For debugging
-    console.log('Sidenav toggled:', this.isSidenavOpen);
   }
 
   onMobileClose(): void {
+    // Only close on mobile
     if (this.breakpointObserver.isMatched(`(max-width: ${BREAKPOINT_MD}px)`)) {
       this.isSidenavOpen = false;
     }
   }
 
+  onSidenavToggle(): void {
+    this.isSidenavOpen = !this.isSidenavOpen;
+  }
+
   onLogout(): void {
     this.store.dispatch(AuthActions.logout());
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

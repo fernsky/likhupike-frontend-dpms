@@ -6,6 +6,7 @@ import {
   ChangeDetectionStrategy,
   Output,
   EventEmitter,
+  HostBinding,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -16,8 +17,6 @@ import * as AuthSelectors from '@app/core/store/auth/auth.selectors';
 import * as AuthActions from '@app/core/store/auth/auth.actions';
 import { filter, takeUntil, map } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatButtonModule } from '@angular/material/button';
 import {
   animate,
   state,
@@ -33,12 +32,6 @@ import {
 
 import { PermissionType } from '@app/core/models/permission.enum';
 
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatBadgeModule } from '@angular/material/badge';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import {
   SideNavModule,
   UIShellModule,
@@ -91,14 +84,6 @@ interface NavItem {
   imports: [
     CommonModule,
     RouterModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatBadgeModule,
-    MatDividerModule,
-    MatTooltipModule,
     TranslocoModule,
     SideNavModule,
     UIShellModule,
@@ -117,13 +102,16 @@ interface NavItem {
 })
 export class SidenavComponent implements OnInit, OnDestroy {
   @Input() collapsed = false;
-  @Input() rail = false; // Add rail input to match Carbon sidenav
-  @Input() expanded = true; // Add expanded input
+  @Input() rail = false;
+  @Input() expanded = true;
   @Output() mobileClose = new EventEmitter<void>();
   @Output() mobileToggle = new EventEmitter<void>();
-  @Output() selectedChange = new EventEmitter<string>(); // Add event emitter for selection
+  @Output() selectedChange = new EventEmitter<string>();
 
-  theme = 'g100'; // Add theme property for Carbon
+  @HostBinding('class.open') get isOpen() {
+    return !this.collapsed;
+  }
+
   isHandset$: Observable<boolean>;
   currentUrl = '';
   expandedMenus = new Set<string>();
@@ -181,7 +169,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
   onSelected(item: NavItem): void {
     if (item.route) {
       this.router.navigate([item.route]);
-      this.mobileClose.emit();
+      this.isHandset$.pipe(takeUntil(this.destroy$)).subscribe((isHandset) => {
+        if (isHandset) {
+          this.mobileClose.emit();
+        }
+      });
     }
   }
 

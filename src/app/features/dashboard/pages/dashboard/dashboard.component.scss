@@ -1,9 +1,11 @@
 @use "@carbon/styles/scss/spacing" as *;
 @use "@carbon/styles/scss/breakpoint" as *;
 @use "@carbon/styles/scss/motion" as *;
+@use "@carbon/styles/scss/theme" as *;
+@use "@carbon/styles/scss/colors" as *;
 
 .cds--content {
-  margin-top: 3rem;
+  margin-top: 3rem; // Space for the fixed header
   min-height: calc(100vh - 3rem);
 }
 
@@ -15,11 +17,12 @@
   &__content {
     flex: 1;
     overflow-y: auto;
-    margin-left: 16rem;
+    padding: $spacing-05;
+    margin-left: 16rem; // Default sidenav width
     transition: margin-left $duration-moderate-01 motion(standard, productive);
 
     &--expanded {
-      margin-left: 3rem;
+      margin-left: 3rem; // Width when sidenav is collapsed
     }
   }
 }
@@ -32,16 +35,20 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 999;
+  transition: opacity $duration-moderate-01 motion(standard, productive);
+  opacity: 0;
 
   &.show {
     display: block;
+    opacity: 1;
   }
 }
 
 @include breakpoint-down(md) {
   .cds--content-layout__content {
-    margin-left: 0;
+    margin-left: 0 !important; // Override default margin on mobile
+    padding: $spacing-04; // Less padding on mobile
   }
 }

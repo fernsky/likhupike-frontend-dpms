@@ -1,4 +1,8 @@
-<cds-sidenav [rail]="collapsed">
+<cds-sidenav
+  [rail]="collapsed"
+  [expanded]="expanded"
+  [attr.aria-label]="'sidenav.navigation.label' | transloco"
+>
   <ng-container *ngFor="let item of navigationItems">
     <!-- Menu with children -->
     <cds-sidenav-menu
@@ -12,8 +16,12 @@
         [route]="[child.route]"
         [active]="isRouteActive(child.route)"
         (selected)="onSelected(child)"
+        [attr.aria-label]="getItemLabel(child)"
       >
         {{ getItemLabel(child) }}
+        <span *ngIf="child.badge" class="badge badge-{{ child.badge.color }}">{{
+          child.badge.value
+        }}</span>
       </cds-sidenav-item>
     </cds-sidenav-menu>
 
@@ -25,13 +33,14 @@
       [route]="[item.route]"
       [active]="isRouteActive(item.route)"
       (selected)="onSelected(item)"
+      [attr.aria-label]="getItemLabel(item)"
     >
       {{ getItemLabel(item) }}
     </cds-sidenav-item>
   </ng-container>
 
-  <!-- Logout item -->
-  <cds-sidenav-item (click)="onLogout()">
+  <!-- Logout item at bottom -->
+  <cds-sidenav-item (click)="onLogout()" class="logout-item">
     {{ "sidenav.user.logout" | transloco }}
   </cds-sidenav-item>
 </cds-sidenav>

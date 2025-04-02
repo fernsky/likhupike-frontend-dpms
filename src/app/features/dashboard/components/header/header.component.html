@@ -1,8 +1,12 @@
-<cds-header [name]="'header.brand.title' | transloco">
+<cds-header
+  [name]="'header.brand.title' | transloco"
+  [attr.aria-label]="'header.navigation.label' | transloco"
+>
   <cds-hamburger
     *ngIf="showMenu"
     [active]="isExpanded"
     (click)="onMenuToggle()"
+    aria-label="Toggle menu"
   ></cds-hamburger>
   <cds-header-global>
     <app-language-dropdown></app-language-dropdown>
