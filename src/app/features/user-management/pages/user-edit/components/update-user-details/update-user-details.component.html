@@ -57,29 +57,28 @@
     </div>
   </div>
 
-  <!-- Form Actions - Only show cancel when form is dirty -->
-  <div class="cds--user-form-actions">
+  <!-- Form Actions - Fixed Carbon styling -->
+  <div class="cds--form-actions">
     <button
       *ngIf="updateForm.dirty"
       cdsButton="secondary"
-      size="lg"
+      size="md"
       type="button"
       (click)="onCancel()"
       [disabled]="(loading$ | async) === true"
+      class="cds--btn--secondary"
     >
       {{ "common.actions.cancel" | transloco }}
     </button>
     <button
-      cdsButton
-      size="lg"
+      cdsButton="primary"
+      size="md"
       type="submit"
       [disabled]="
         !updateForm.valid || !updateForm.dirty || (loading$ | async) === true
       "
+      class="cds--btn--primary"
     >
-      <span class="cds--btn__icon">
-        <mat-icon>save</mat-icon>
-      </span>
       {{ "common.actions.save" | transloco }}
     </button>
   </div>
