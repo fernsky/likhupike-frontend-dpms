@@ -5,31 +5,54 @@
 @use "@carbon/styles/scss/colors" as *;
 
 :host {
-  height: calc(100vh - 3rem) !important; // Standard height
+  height: calc(100vh - 3rem) !important;
   position: fixed !important;
-  top: 3rem !important; // Standard top position
+  top: 3rem !important;
   left: 0 !important;
   bottom: 0 !important;
   z-index: 1001 !important;
   display: flex !important;
   flex-direction: column !important;
-  overflow-y: auto !important; // Enable scrolling
-  background-color: $background !important; // Ensure it has a background
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important; // Visual separation
-  width: 16rem !important; // Fixed width
-  transform: translateX(0) !important; // Ensure it's visible
+  overflow-y: auto !important;
+  background-color: $background !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
+  width: 16rem !important;
+  transform: translateX(0) !important;
+  // Fix unwanted top space
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+  border-top: none !important;
 }
 
 :host ::ng-deep {
-  // Make sidenav take full height
+  // Remove unwanted top border and space
   .cds--side-nav {
     height: 100%;
     overflow-y: auto;
+    border-top: none !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
 
     &__items {
       display: flex;
       flex-direction: column;
       height: 100%;
+      padding-top: 0 !important;
+      margin-top: 0 !important;
+      border-top: none !important;
+    }
+
+    // Remove top line from first item
+    &__item:first-child,
+    &__menu:first-child {
+      border-top: none !important;
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+    }
+
+    // Fix for Carbon's default styling that adds the unwanted line
+    &__menu-title {
+      border-top: none !important;
     }
 
     // Position logout at bottom
@@ -37,6 +60,18 @@
       margin-top: auto;
       border-top: 1px solid $gray-20;
     }
+  }
+
+  // Reset Carbon's default border on sidenav elements
+  .cds--side-nav__divider {
+    display: none !important;
+  }
+
+  // Reset any carbon top borders
+  .cds--side-nav__submenu,
+  .cds--side-nav__menu-title,
+  .cds--side-nav__item a.cds--side-nav__link {
+    border-top: none !important;
   }
 
   // Active item styling
@@ -75,6 +110,23 @@
     &.badge-warn {
       background-color: $yellow-30;
       color: $gray-100;
+    }
+  }
+}
+
+// Specific mobile fixes
+@include breakpoint-down(md) {
+  :host ::ng-deep {
+    .cds--side-nav {
+      // Additional mobile-specific fixes
+      border-top: none !important;
+
+      // Fix for the first item
+      &__submenu:first-of-type,
+      &__menu:first-of-type,
+      &__item:first-of-type {
+        border-top: none !important;
+      }
     }
   }
 }
