@@ -1,83 +1,375 @@
-<div class="user-list-container">
+<div class="cds--user-list-container">
+  <!-- Breadcrumb -->
   <app-breadcrumb></app-breadcrumb>
 
-  <app-page-title
-    titleTranslationKey="user.list.title"
-    descriptionTranslationKey="user.list.subtitle"
-    icon="manage_accounts"
-    class="responsive-title"
-  >
-    <ng-template #actions>
-      <app-page-title-button
-        variant="primary"
-        size="medium"
-        icon="add"
-        [fullText]="'user.list.createButton' | transloco"
-        [mediumText]="'user.list.createShort' | transloco"
-        (clicked)="onCreateUser()"
-      ></app-page-title-button>
-    </ng-template>
-  </app-page-title>
-
-  <!-- Search and Actions -->
-  <div class="search-and-filter-bar">
-    <div class="actions-bar">
-      <app-user-search
-        [initialValue]="searchControl.value ?? ''"
-        (searchChange)="onSearch($event)"
-      ></app-user-search>
-
-      <div class="list-controls">
-        <app-sort-controls
-          [currentSort]="filterForm.get('sortBy')?.value"
-          [currentDirection]="filterForm.get('sortDirection')?.value"
-          (sortChange)="onSortChange($event)"
-        ></app-sort-controls>
-
-        <button
-          mat-stroked-button
-          class="filter-button"
-          [class.active]="showFilters"
-          (click)="toggleFilters()"
-          [matTooltip]="
-            (showFilters
-              ? 'user.list.search.hideFilters'
-              : 'user.list.search.showFilters'
-            ) | transloco
-          "
-        >
-          <mat-icon>filter_list</mat-icon>
-          <span class="filter-text">
-            {{
-              (showFilters
-                ? "user.list.search.hideFilters"
-                : "user.list.search.showFilters"
-              ) | transloco
-            }}
-          </span>
-        </button>
+  <!-- Page Header -->
+  <div class="cds--grid">
+    <div class="cds--row">
+      <div class="cds--col-lg-16">
+        <div class="cds--page-header">
+          <div class="cds--page-header__container">
+            <div class="cds--page-header__title-container">
+              <h1 class="cds--page-header__title">
+                {{ "user.list.title" | transloco }}
+              </h1>
+              <p class="cds--page-header__subtitle">
+                {{ "user.list.subtitle" | transloco }}
+              </p>
+            </div>
+            <div class="cds--page-header__actions">
+              <button
+                cdsButton="primary"
+                (click)="onCreateUser()"
+                class="cds--add-user-button"
+              >
+                <svg cdsIcon="add" size="16"></svg>
+                {{ "user.list.createButton" | transloco }}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Update filters section -->
-    <app-user-filters
-      [show]="showFilters"
-      [filterForm]="filterForm"
-      (filtersChange)="onFiltersChange($event)"
-    ></app-user-filters>
-  </div>
+    <!-- Data Table Section -->
+    <div class="cds--row">
+      <div class="cds--col-lg-16">
+        <div class="cds--table-container">
+          <!-- Table Toolbar -->
+          <div class="cds--table-toolbar">
+            <div class="cds--toolbar-content">
+              <!-- Left side: Search -->
+              <div class="cds--toolbar-search-container">
+                <cds-search
+                  [placeholder]="'user.list.search.placeholder' | transloco"
+                  [size]="'lg'"
+                  [value]="searchValue"
+                  (search)="onSearch($event)"
+                >
+                </cds-search>
+              </div>
 
-  <app-users-table
-    [users]="(users$ | async) ?? []"
-    [loading]="(loading$ | async) ?? false"
-    [totalUsers]="(totalUsers$ | async) ?? 0"
-    [pageIndex]="(currentPage$ | async) ?? 1"
-    [pageSize]="(pageSize$ | async) ?? 10"
-    [hasError]="(hasError$ | async) ?? false"
-    (pageChange)="onPageEvent($event)"
-    (edit)="onEditUser($event)"
-    (delete)="onDeleteUser($event)"
-    (toggleStatus)="onToggleStatus($event)"
-  >
-  </app-users-table>
+              <!-- Right side: Actions -->
+              <div class="cds--toolbar-action-buttons">
+                <!-- Batch actions would go here if needed -->
+
+                <!-- Table Actions -->
+                <div class="cds--toolbar-action">
+                  <!-- Sort dropdown -->
+                  <cds-dropdown
+                    [placeholder]="'user.list.sort.label' | transloco"
+                    [size]="'md'"
+                    [dropUp]="false"
+                    [type]="'default'"
+                    [items]="sortOptions"
+                    (selected)="onFiltersChange({ sortBy: $event })"
+                  >
+                  </cds-dropdown>
+
+                  <!-- Filter button -->
+                  <button
+                    cdsButton="ghost"
+                    [iconOnly]="true"
+                    (click)="toggleFilters()"
+                    [attr.aria-expanded]="showFilters"
+                    [attr.aria-label]="
+                      (showFilters
+                        ? 'user.list.search.hideFilters'
+                        : 'user.list.search.showFilters'
+                      ) | transloco
+                    "
+                  >
+                    <svg cdsIcon="filter" size="16"></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Filter panel (expanded) -->
+            <div *ngIf="showFilters" class="cds--table-toolbar-filter-panel">
+              <form
+                [formGroup]="filterForm"
+                (ngSubmit)="onFiltersChange(filterForm.value)"
+                class="cds--grid"
+              >
+                <div class="cds--row cds--form-field-row">
+                  <!-- Ward Number -->
+                  <div class="cds--col-md-4 cds--col-lg-4">
+                    <cds-dropdown
+                      [label]="'user.list.filters.ward.label' | transloco"
+                      [size]="'md'"
+                      [dropUp]="false"
+                      [type]="'default'"
+                      formControlName="wardNumber"
+                    >
+                      <cds-dropdown-list
+                        [items]="[
+                        { content: 'user.list.filters.ward.all' | transloco, value: null, selected: true },
+                        ...wardNumberOptions
+                      ]"
+                      ></cds-dropdown-list>
+                    </cds-dropdown>
+                  </div>
+
+                  <!-- Approval Status -->
+                  <div class="cds--col-md-4 cds--col-lg-4">
+                    <cds-dropdown
+                      [label]="
+                        'user.list.filters.approvalStatus.label' | transloco
+                      "
+                      [size]="'md'"
+                      [dropUp]="false"
+                      [type]="'default'"
+                      formControlName="isApproved"
+                    >
+                      <cds-dropdown-list
+                        [items]="[
+                          {
+                            content:
+                              'user.list.filters.approvalStatus.all'
+                              | transloco,
+                            value: null,
+                            selected: true,
+                          },
+                          {
+                            content:
+                              'user.list.filters.approvalStatus.approved'
+                              | transloco,
+                            value: true,
+                            selected: false,
+                          },
+                          {
+                            content:
+                              'user.list.filters.approvalStatus.pending'
+                              | transloco,
+                            value: false,
+                            selected: false,
+                          },
+                        ]"
+                      ></cds-dropdown-list>
+                    </cds-dropdown>
+                  </div>
+
+                  <!-- Date created range -->
+                  <div class="cds--col-md-4 cds--col-lg-4">
+                    <cds-date-picker
+                      [label]="'user.list.filters.dateRange.from' | transloco"
+                      formControlName="createdAfter"
+                      [dateFormat]="dateFormat"
+                      [placeholder]="'yyyy/mm/dd'"
+                    >
+                    </cds-date-picker>
+                  </div>
+
+                  <div class="cds--col-md-4 cds--col-lg-4">
+                    <cds-date-picker
+                      [label]="'user.list.filters.dateRange.to' | transloco"
+                      formControlName="createdBefore"
+                      [dateFormat]="dateFormat"
+                      [placeholder]="'yyyy/mm/dd'"
+                    >
+                    </cds-date-picker>
+                  </div>
+
+                  <!-- Permissions -->
+                  <div class="cds--col-md-8 cds--col-lg-8">
+                    <fieldset class="cds--fieldset">
+                      <legend class="cds--label">
+                        {{ "user.list.permissions" | transloco }}
+                      </legend>
+                      <div class="cds--permission-checks">
+                        <cds-checkbox
+                          *ngFor="let permission of permissionTypes"
+                          [id]="'perm-' + permission"
+                          [checked]="
+                            filterForm.value.permissions?.includes(permission)
+                          "
+                          (change)="$event ? filterForm.get('permissions')?.setValue([...filterForm.value.permissions || [], permission]) : 
+                                   filterForm.get('permissions')?.setValue((filterForm.value.permissions || []).filter(p => p !== permission))"
+                        >
+                          {{
+                            "user.permissions." + permission + ".title"
+                              | transloco
+                          }}
+                        </cds-checkbox>
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+
+                <!-- Filter actions -->
+                <div class="cds--row">
+                  <div class="cds--col">
+                    <div class="cds--filter-actions">
+                      <button
+                        cdsButton="ghost"
+                        type="button"
+                        (click)="clearFilters()"
+                        [disabled]="
+                          !filterForm.get('permissions')?.value?.length &&
+                          !filterForm.get('wardNumber')?.value &&
+                          !filterForm.get('isApproved')?.value &&
+                          !filterForm.get('createdAfter')?.value &&
+                          !filterForm.get('createdBefore')?.value
+                        "
+                      >
+                        {{ "user.list.search.clearFilters" | transloco }}
+                      </button>
+                      <button cdsButton="primary" type="submit">
+                        {{ "user.list.search.applyFilters" | transloco }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Loading State -->
+          <div *ngIf="loading$ | async" class="cds--data-table-loading">
+            <div class="cds--loading-overlay"></div>
+            <cds-loading
+              [isActive]="true"
+              [withOverlay]="false"
+              size="lg"
+            ></cds-loading>
+          </div>
+
+          <!-- Empty State -->
+          <div
+            *ngIf="(totalUsers$ | async) === 0 && !(loading$ | async)"
+            class="cds--data-table-empty"
+          >
+            <div class="cds--empty-state">
+              <div class="cds--empty-state__icon">
+                <svg cdsIcon="user--profile" size="32"></svg>
+              </div>
+              <h2 class="cds--empty-state__title">
+                {{ "user.list.emptyState.title" | transloco }}
+              </h2>
+              <p class="cds--empty-state__text">
+                {{ "user.list.empty.description" | transloco }}
+              </p>
+              <button cdsButton="primary" (click)="onCreateUser()">
+                {{ "user.list.createButton" | transloco }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Error State -->
+          <div
+            *ngIf="hasError$ | async && !(loading$ | async)"
+            class="cds--data-table-error"
+          >
+            <div class="cds--empty-state cds--empty-state--error">
+              <div class="cds--empty-state__icon">
+                <svg cdsIcon="error--filled" size="32"></svg>
+              </div>
+              <h2 class="cds--empty-state__title">
+                {{ "user.list.error.title" | transloco }}
+              </h2>
+              <p class="cds--empty-state__text">
+                {{ "user.list.error.description" | transloco }}
+              </p>
+              <button cdsButton="primary" (click)="clearFilters()">
+                {{ "user.list.error.retry" | transloco }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Data Table -->
+          <cds-table
+            *ngIf="
+              (totalUsers$ | async) > 0 &&
+              !(hasError$ | async) &&
+              !(loading$ | async)
+            "
+            [model]="tableModel"
+            [size]="'md'"
+            [striped]="true"
+            [sortable]="true"
+            (sort)="onSort($event)"
+          >
+            <!-- Custom cell templates -->
+            <!-- Permissions cell template -->
+            <ng-template #permissionsCellTemplate let-data="data">
+              <div class="cds--tag-wrapper">
+                <cds-tag
+                  *ngFor="let label of data.permissionLabels | slice: 0 : 2"
+                  [type]="'blue'"
+                >
+                  {{ label }}
+                </cds-tag>
+                <cds-tag
+                  *ngIf="data.permissions.length > 2"
+                  [type]="'gray'"
+                  class="cds--tag-more"
+                >
+                  +{{ data.permissions.length - 2 }}
+                </cds-tag>
+              </div>
+            </ng-template>
+
+            <!-- Status cell template -->
+            <ng-template #statusCellTemplate let-data="data">
+              <cds-tag [type]="data.isApproved ? 'green' : 'red'">
+                {{
+                  (data.isApproved
+                    ? "user.list.filters.approvalStatus.approved"
+                    : "user.list.filters.approvalStatus.pending"
+                  ) | transloco
+                }}
+              </cds-tag>
+            </ng-template>
+
+            <!-- Actions cell template -->
+            <ng-template #actionsCellTemplate let-data="data">
+              <div class="cds--overflow-menu-wrapper">
+                <cds-overflow-menu [flip]="true">
+                  <cds-overflow-menu-item (selected)="onEditUser(data.user.id)">
+                    {{ "common.actions.edit" | transloco }}
+                  </cds-overflow-menu-item>
+
+                  <cds-overflow-menu-item
+                    *ngIf="!data.user.isApproved"
+                    (selected)="onToggleStatus(data.user)"
+                  >
+                    {{ "user.list.approve" | transloco }}
+                  </cds-overflow-menu-item>
+
+                  <cds-overflow-menu-divider></cds-overflow-menu-divider>
+
+                  <cds-overflow-menu-item
+                    [danger]="true"
+                    (selected)="onDeleteUser(data.user)"
+                  >
+                    {{ "common.actions.delete" | transloco }}
+                  </cds-overflow-menu-item>
+                </cds-overflow-menu>
+              </div>
+            </ng-template>
+          </cds-table>
+
+          <!-- Pagination -->
+          <div
+            class="cds--pagination-container"
+            *ngIf="(totalUsers$ | async) > 0"
+          >
+            <cds-pagination
+              [model]="{
+                pageLength: pageSize,
+                totalItems: (totalUsers$ | async) || 0,
+                currentPage: currentPage,
+              }"
+              [disabled]="loading$ | async"
+              [pageSizes]="[5, 10, 25, 50]"
+              (pageChange)="onPageChange($event)"
+              (pageSizeChange)="onPageSizeChange($event)"
+            >
+            </cds-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
