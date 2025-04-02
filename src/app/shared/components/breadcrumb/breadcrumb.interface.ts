@@ -11,9 +11,7 @@ export interface Breadcrumb {
 export interface BreadcrumbData {
   label?: string;
   translationKey?: string;
-  path: string; // explicit path for navigation
-  icon?: string;
-  data?: { [key: string]: unknown };
+  path: string;
 }
 
 export interface BreadcrumbConfig {

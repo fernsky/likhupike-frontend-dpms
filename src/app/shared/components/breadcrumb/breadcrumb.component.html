@@ -1,47 +1,24 @@
-<nav
-  class="breadcrumb"
-  [class.compact]="isCompact"
-  [class.icons-only]="showOnlyIcons"
-  aria-label="Breadcrumb navigation"
->
-  <ol class="desktop-breadcrumb">
-    <ng-container
-      *ngFor="let item of breadcrumbs; let last = last; let first = first"
-    >
-      <li>
-        <a
-          [routerLink]="[item.path]"
-          [queryParams]="item.queryParams"
-          class="breadcrumb-link"
-          [class.active]="last"
-          [attr.aria-current]="last ? 'page' : null"
-          [matTooltip]="
-            showOnlyIcons
-              ? item.translationKey
-                ? ('breadcrumbs.' + item.translationKey | transloco)
-                : item.label
-              : ''
-          "
-          [matTooltipDisabled]="!showOnlyIcons"
-        >
-          <p *ngIf="config.showIcons && item.icon">
-            <mat-icon class="item-icon">
-              {{ item.icon }}
-            </mat-icon>
-          </p>
-          <span class="breadcrumb-text">
-            {{
-              item.translationKey
-                ? ("breadcrumbs." + item.translationKey | transloco)
-                : item.label
-            }}
-          </span>
+<nav class="cds--breadcrumb" aria-label="Breadcrumb">
+  <ol class="cds--breadcrumb-list">
+    <ng-container *ngFor="let crumb of breadcrumbs; let last = last">
+      <li
+        class="cds--breadcrumb-item"
+        [class.cds--breadcrumb-item--current]="last"
+      >
+        <a *ngIf="!last" [routerLink]="[crumb.path]" class="cds--link">
+          {{
+            crumb.translationKey
+              ? ("breadcrumbs." + crumb.translationKey | transloco)
+              : crumb.label
+          }}
         </a>
-        <p *ngIf="!last">
-          <mat-icon class="separator" aria-hidden="true">
-            {{ config.separator }}
-          </mat-icon>
-        </p>
+        <span *ngIf="last" aria-current="page">
+          {{
+            crumb.translationKey
+              ? ("breadcrumbs." + crumb.translationKey | transloco)
+              : crumb.label
+          }}
+        </span>
       </li>
     </ng-container>
   </ol>

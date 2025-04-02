@@ -4,6 +4,80 @@ $navy-medium: #233b72;
 $navy-light: #2a4894;
 $transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 
+@use "@carbon/styles/scss/spacing" as *;
+@use "@carbon/styles/scss/type" as *;
+@use "@carbon/styles/scss/theme" as *;
+@use "@carbon/styles/scss/breakpoint" as *;
+
+// Carbon breadcrumb styling
+.cds--breadcrumb {
+  @include type-style("body-short-01");
+  display: inline;
+  margin-bottom: $spacing-06;
+
+  &-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  &-item {
+    display: flex;
+    align-items: center;
+    margin-right: $spacing-03;
+
+    .cds--link {
+      color: var(--cds-link-01);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-bottom-color 0.2s;
+
+      &:hover {
+        color: var(--cds-link-hover);
+        border-bottom-color: var(--cds-link-hover);
+      }
+    }
+
+    &::after {
+      content: "/";
+      margin-left: $spacing-03;
+      color: var(--cds-text-02);
+    }
+
+    &:last-child::after {
+      display: none;
+    }
+
+    &--current {
+      color: var(--cds-text-01);
+      font-weight: 400;
+    }
+  }
+}
+
+// Responsive adjustments
+@include breakpoint-down("md") {
+  .cds--breadcrumb {
+    margin-bottom: $spacing-05;
+  }
+}
+
+@include breakpoint-down("sm") {
+  .cds--breadcrumb {
+    margin-bottom: $spacing-04;
+
+    &-list {
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+}
+
 .breadcrumb-list {
   display: flex;
   align-items: center;
