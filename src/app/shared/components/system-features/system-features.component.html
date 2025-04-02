@@ -1,8 +1,20 @@
 <div class="infographic-container">
+  <div class="particle-background">
+    <div
+      class="particle"
+      *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+    ></div>
+  </div>
+
+  <div class="glow-effect"></div>
+
   <div class="infographic-visual">
-    <!-- Central visual element -->
+    <!-- Central visual element with multiple layers -->
     <div class="central-circle">
       <div class="pulse-circle"></div>
+      <div class="inner-circle"></div>
+      <div class="center-dot"></div>
+      <div class="orbit-path"></div>
     </div>
 
     <!-- Orbiting feature icons -->
@@ -12,14 +24,19 @@
         *ngFor="let feature of features; let i = index"
         [style.--rotation]="i * 90 + 'deg'"
         [style.--feature-color]="feature.color"
+        [style.--orbit-delay]="i * 0.2 + 's'"
       >
         <div class="feature-icon">
           <i class="material-icons">{{ feature.icon }}</i>
+          <div class="icon-highlight"></div>
         </div>
-        <div class="connector-line"></div>
+        <div class="connector-line">
+          <div class="data-pulse"></div>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="wave-decoration"></div>
+  <div class="radial-glow"></div>
 </div>

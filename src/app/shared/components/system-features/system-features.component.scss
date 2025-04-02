@@ -3,6 +3,7 @@
 @use "@carbon/styles/scss/breakpoint" as *;
 @use "@carbon/styles/scss/theme" as *;
 
+// Modern infographic container with enhanced visuals - light theme
 .infographic-container {
   height: 100%;
   width: 100%;
@@ -12,155 +13,414 @@
   justify-content: center;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(
-    135deg,
-    var(--cds-background) 0%,
-    var(--cds-layer) 100%
-  );
+  background: radial-gradient(circle at center, #ffffff 0%, #f4f4f8 100%);
 }
 
-.infographic-header {
-  text-align: center;
-  margin-bottom: $spacing-07;
-  position: relative;
-  z-index: 2;
+// Floating particles background
+.particle-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
 
-.infographic-title {
-  @include type-style("heading-05");
-  color: var(--cds-text-01);
-  position: relative;
-  display: inline-block;
+.particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: rgba(15, 98, 254, 0.15);
+  border-radius: 50%;
+  opacity: 0;
 
-  &::after {
-    content: "";
-    position: absolute;
-    width: 40px;
-    height: 3px;
-    background-color: var(--cds-interactive-01);
-    bottom: -10px;
+  &:nth-child(1) {
+    top: 20%;
+    left: 20%;
+    animation:
+      float 12s infinite ease-in-out 0s,
+      fade 12s infinite ease-in-out 0s;
+  }
+
+  &:nth-child(2) {
+    top: 70%;
+    left: 35%;
+    animation:
+      float 15s infinite ease-in-out 1s,
+      fade 15s infinite ease-in-out 1s;
+  }
+
+  &:nth-child(3) {
+    top: 30%;
+    left: 80%;
+    animation:
+      float 18s infinite ease-in-out 2s,
+      fade 18s infinite ease-in-out 2s;
+  }
+
+  &:nth-child(4) {
+    top: 65%;
+    left: 70%;
+    animation:
+      float 20s infinite ease-in-out 3s,
+      fade 20s infinite ease-in-out 3s;
+  }
+
+  &:nth-child(5) {
+    top: 15%;
+    left: 65%;
+    animation:
+      float 22s infinite ease-in-out 4s,
+      fade 22s infinite ease-in-out 4s;
+  }
+
+  &:nth-child(6) {
+    top: 40%;
+    left: 25%;
+    animation:
+      float 14s infinite ease-in-out 5s,
+      fade 14s infinite ease-in-out 5s;
+  }
+
+  &:nth-child(7) {
+    top: 55%;
+    left: 15%;
+    animation:
+      float 16s infinite ease-in-out 1.5s,
+      fade 16s infinite ease-in-out 1.5s;
+  }
+
+  &:nth-child(8) {
+    top: 75%;
+    left: 82%;
+    animation:
+      float 13s infinite ease-in-out 2.5s,
+      fade 13s infinite ease-in-out 2.5s;
+  }
+
+  &:nth-child(9) {
+    top: 35%;
     left: 50%;
-    transform: translateX(-50%);
+    animation:
+      float 17s infinite ease-in-out 3.5s,
+      fade 17s infinite ease-in-out 3.5s;
+  }
+
+  &:nth-child(10) {
+    top: 90%;
+    left: 40%;
+    animation:
+      float 19s infinite ease-in-out 4.5s,
+      fade 19s infinite ease-in-out 4.5s;
   }
 }
 
+// Ambient glow effect - lighter for white theme
+.glow-effect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle at center,
+    rgba(15, 98, 254, 0.08) 0%,
+    rgba(15, 98, 254, 0) 70%
+  );
+  z-index: 1;
+  opacity: 0.7;
+  animation: pulse-slow 8s infinite alternate ease-in-out;
+}
+
+// Main infographic visual area
 .infographic-visual {
   position: relative;
-  width: 300px;
-  height: 300px;
+  width: 360px;
+  height: 360px;
   margin: 0 auto;
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 2;
 }
 
+// Enhanced central circle with multiple layers - lighter theme
 .central-circle {
-  width: 80px;
-  height: 80px;
-  background-color: var(--cds-interactive-01);
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, #0f62fe, #6929c4);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  box-shadow: 0 0 20px rgba(15, 98, 254, 0.3);
-  z-index: 2;
+  box-shadow: 0 0 30px rgba(15, 98, 254, 0.3);
+  z-index: 3;
 
   &::before {
     content: "";
     position: absolute;
-    width: 60%;
-    height: 60%;
+    width: 70%;
+    height: 70%;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.9);
-    animation: breathe 3s ease-in-out infinite;
+    background: rgba(255, 255, 255, 0.9);
+    animation: breathe 4s ease-in-out infinite;
   }
 }
 
+// Inner circle with glow effect - adjusted for light theme
+.inner-circle {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  animation: spin 15s linear infinite;
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    box-shadow: inset 0 0 15px rgba(15, 98, 254, 0.4);
+  }
+}
+
+// Bright center point
+.center-dot {
+  position: absolute;
+  width: 20%;
+  height: 20%;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+  z-index: 4;
+  animation: pulse-quick 2s ease-in-out infinite;
+}
+
+// Visible orbit path - more visible on light background
+.orbit-path {
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  border: 1px dashed rgba(15, 98, 254, 0.15);
+  animation: spin 80s linear infinite;
+}
+
+// Pulsating circle - adjusted for light theme
 .pulse-circle {
   position: absolute;
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background-color: rgba(15, 98, 254, 0.1);
-  animation: pulse 2s ease-out infinite;
+  background-color: rgba(15, 98, 254, 0.15);
+  animation: pulse-wave 3s ease-out infinite;
+  z-index: 2;
+
+  &::before {
+    content: "";
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    top: -25%;
+    left: -25%;
+    border-radius: 50%;
+    border: 2px solid rgba(15, 98, 254, 0.08);
+    animation: pulse-wave 3s ease-out infinite 0.5s;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    border-radius: 50%;
+    border: 2px solid rgba(15, 98, 254, 0.05);
+    animation: pulse-wave 3s ease-out infinite 1s;
+  }
 }
 
+// Orbit with enhanced animation
 .orbit {
   position: absolute;
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  animation: rotate 60s linear infinite;
+  animation: rotate 40s linear infinite;
 }
 
+// Feature nodes with staggered appearance
 .feature-node {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 60px;
-  height: 60px;
-  margin-top: -30px;
-  margin-left: -30px;
+  width: 70px;
+  height: 70px;
+  margin-top: -35px;
+  margin-left: -35px;
   transform-origin: center;
-  transform: rotate(var(--rotation)) translateX(140px)
+  transform: rotate(var(--rotation)) translateX(160px)
     rotate(calc(-1 * var(--rotation)));
+  animation: node-appear 0.8s cubic-bezier(0.17, 0.67, 0.83, 0.67)
+    var(--orbit-delay);
+  opacity: 0;
+  animation-fill-mode: forwards;
 }
 
+// Enhanced feature icons with glow effects - with white background
 .feature-icon {
   width: 100%;
   height: 100%;
-  background-color: white;
+  background: #ffffff;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
   position: relative;
-  z-index: 2;
-  transition: all 0.3s ease;
+  z-index: 3;
+  transition: all 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  overflow: hidden;
 
   &:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+    transform: scale(1.15);
+    box-shadow:
+      0 10px 20px rgba(0, 0, 0, 0.1),
+      0 0 15px rgba(var(--feature-color), 0.2);
+
+    i {
+      transform: scale(1.2);
+      color: var(--feature-color);
+    }
+
+    .icon-highlight {
+      opacity: 0.7;
+    }
   }
 
   i {
-    font-size: 24px;
+    font-size: 28px;
     color: var(--feature-color, var(--cds-interactive-01));
+    transition: all 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    z-index: 2;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
   }
 }
 
+// Icon background highlight effect - softer for light theme
+.icon-highlight {
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  top: -10%;
+  left: -10%;
+  background: radial-gradient(
+    circle at center,
+    var(--feature-color) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+  mix-blend-mode: multiply;
+}
+
+// Dynamic connector lines with data flow - more visible
 .connector-line {
   position: absolute;
   top: 50%;
-  right: 60px;
+  right: 70px;
   height: 2px;
-  width: 120px;
+  width: 140px;
   background: linear-gradient(
     90deg,
-    rgba(15, 98, 254, 0.1),
+    rgba(15, 98, 254, 0.05),
     var(--feature-color, var(--cds-interactive-01))
   );
-  z-index: 1;
+  z-index: 2;
   transform-origin: right center;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--feature-color, var(--cds-interactive-01));
+    opacity: 0.3;
+  }
 }
 
+// Animated data pulse along connector line
+.data-pulse {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: white;
+  top: -3px;
+  right: 0;
+  box-shadow: 0 0 8px var(--feature-color, var(--cds-interactive-01));
+  animation: data-flow 3s infinite ease-in-out;
+}
+
+// Enhanced wave decoration - lighter for white theme
 .wave-decoration {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 120px;
+  height: 180px;
+  background: linear-gradient(
+    to top,
+    rgba(15, 98, 254, 0.03) 0%,
+    rgba(15, 98, 254, 0) 100%
+  );
+  opacity: 0.5;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(
+      90deg,
+      rgba(15, 98, 254, 0) 0%,
+      rgba(15, 98, 254, 0.2) 50%,
+      rgba(15, 98, 254, 0) 100%
+    );
+    animation: wave-flow 8s infinite ease-in-out;
+  }
+}
+
+// Bottom radial glow effect - lighter
+.radial-glow {
+  position: absolute;
+  bottom: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 300px;
   background: radial-gradient(
     ellipse at center,
-    rgba(15, 98, 254, 0.03) 0%,
+    rgba(15, 98, 254, 0.06) 0%,
     rgba(15, 98, 254, 0) 70%
   );
   opacity: 0.5;
+  animation: glow-pulse 5s infinite alternate ease-in-out;
 }
 
+// Advanced animations
 @keyframes rotate {
   from {
     transform: rotate(0deg);
@@ -170,18 +430,44 @@
   }
 }
 
-@keyframes pulse {
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-wave {
   0% {
     transform: scale(1);
-    opacity: 0.7;
-  }
-  70% {
-    transform: scale(2);
-    opacity: 0;
+    opacity: 0.5;
   }
   100% {
-    transform: scale(1);
+    transform: scale(2.5);
     opacity: 0;
+  }
+}
+
+@keyframes pulse-quick {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-slow {
+  0% {
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.1);
   }
 }
 
@@ -189,26 +475,118 @@
   0%,
   100% {
     transform: scale(1);
+    opacity: 0.8;
   }
   50% {
-    transform: scale(0.9);
+    transform: scale(0.85);
+    opacity: 0.9;
+  }
+}
+
+@keyframes node-appear {
+  from {
+    opacity: 0;
+    transform: rotate(var(--rotation)) translateX(120px)
+      rotate(calc(-1 * var(--rotation))) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(var(--rotation)) translateX(160px)
+      rotate(calc(-1 * var(--rotation))) scale(1);
+  }
+}
+
+@keyframes data-flow {
+  0% {
+    right: 0;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    right: 140px;
+    opacity: 0;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(15px, 15px);
+  }
+  50% {
+    transform: translate(0, 30px);
+  }
+  75% {
+    transform: translate(-15px, 15px);
+  }
+}
+
+// Adjust fade animation to be more visible on light background
+@keyframes fade {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  30%,
+  70% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes wave-flow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes glow-pulse {
+  0% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0.5;
   }
 }
 
 // Responsive adjustments
 @include breakpoint-down(md) {
   .infographic-visual {
-    width: 250px;
-    height: 250px;
+    width: 320px;
+    height: 320px;
+  }
+
+  .orbit-path {
+    width: 320px;
+    height: 320px;
   }
 
   .feature-node {
-    transform: rotate(var(--rotation)) translateX(115px)
+    width: 60px;
+    height: 60px;
+    margin-top: -30px;
+    margin-left: -30px;
+    transform: rotate(var(--rotation)) translateX(140px)
       rotate(calc(-1 * var(--rotation)));
   }
 
   .connector-line {
-    width: 90px;
-    right: 55px;
+    width: 120px;
+    right: 60px;
+  }
+
+  .feature-icon i {
+    font-size: 24px;
   }
 }
