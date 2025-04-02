@@ -1,8 +1,8 @@
 @use "@carbon/styles/scss/spacing" as *;
 @use "@carbon/styles/scss/type" as *;
+@use "@carbon/styles/scss/theme" as *;
 @use "@carbon/styles/scss/breakpoint" as *;
 
-// Container styling
 .cds--register-container {
   width: 100%;
   max-width: 400px;
@@ -13,18 +13,18 @@
   h1 {
     @include type-style("heading-04");
     margin-bottom: $spacing-05;
-    color: var(--cds-text-02);
+    color: $text-secondary;
     font-weight: 400;
+    position: relative;
   }
 
   .cds--register-subtitle {
     @include type-style("body-long-01");
     margin-bottom: $spacing-07;
-    color: var(--cds-text-02);
+    color: $text-secondary;
   }
 }
 
-// Form element styling
 .cds--form {
   .cds--form-item {
     margin-bottom: $spacing-05;
@@ -34,8 +34,14 @@
   .cds--text-input__field-wrapper {
     position: relative;
 
+    // Remove icon styling
+    .cds--text-input__icon {
+      display: none;
+    }
+
     input[cdsText] {
       height: $spacing-09;
+      // Remove left padding previously used for icons
       padding-left: $spacing-05;
     }
 
@@ -51,52 +57,11 @@
   }
 }
 
-// Ward level section styling (subtle appearance)
-.cds--ward-level-section {
-  margin: $spacing-05 0;
-  padding: 0;
-  border: none;
-  background-color: transparent;
-  display: flex;
-  gap: 1rem;
-  flex-direction: column;
-
-  // Make section headings subtle
-  legend,
-  h3,
-  h4 {
-    color: var(--cds-text-03);
-    @include type-style("heading-compact-01");
-    font-weight: 400;
-  }
-
-  // Style labels and form elements for subtlety
-  .cds--label,
-  .cds--checkbox-label,
-  .cds--radio-button__label,
-  .cds--dropdown-text {
-    color: var(--cds-text-03);
-    @include type-style("body-compact-01");
-  }
-
-  // Subtle border colors for form elements
-  select,
-  .cds--dropdown {
-    border-color: var(--cds-border-subtle-01);
-
-    &:focus {
-      border-color: var(--cds-focus);
-    }
-  }
-}
-
-// Error message styling
 .cds--register-error {
   margin: $spacing-05 0;
   text-align: left;
 }
 
-// Submit button styling
 .cds--register-submit {
   margin-top: $spacing-07;
 
@@ -105,12 +70,26 @@
   }
 }
 
-// Footer styling
+.cds--ward-level-section {
+  margin-bottom: $spacing-07;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-04;
+
+  .cds--ward-level-checkbox {
+    font-weight: 400;
+  }
+
+  cds-dropdown {
+    margin-top: $spacing-05;
+    width: 100%;
+  }
+}
+
 .cds--register-footer {
   margin-top: $spacing-07;
   padding-top: $spacing-05;
   border-top: 1px solid var(--cds-border-subtle-01);
-  text-align: center;
   color: var(--cds-text-02);
   @include type-style("caption-01");
 
@@ -123,6 +102,7 @@
     a {
       color: var(--cds-link-01);
       text-decoration: none;
+      @include type-style("caption-01");
 
       &:hover {
         color: var(--cds-link-hover);
