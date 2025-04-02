@@ -22,6 +22,7 @@ import { AuthEffects } from './core/store/auth/auth.effects';
 import { authReducer } from './core/store/auth/auth.reducer';
 import { AuthFacade } from './core/facades/auth.facade';
 import { apiInterceptor } from './core/interceptors/api.interceptor';
+import { NotificationModule } from 'carbon-components-angular';
 
 const FONT_FAMILY =
   '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif';
@@ -58,5 +59,6 @@ export const appConfig: ApplicationConfig = {
     },
     AuthFacade,
     ...provideTranslocoConfig(),
+    importProvidersFrom(NotificationModule),
   ],
 };
