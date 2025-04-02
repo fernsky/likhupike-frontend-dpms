@@ -187,7 +187,6 @@ $text-secondary: var(--cds-text-02, #525252);
     width: 100%;
 
     ::ng-deep button.cds--list-box__field {
-      height: $spacing-09;
       transition: all 110ms $carbon--standard-easing;
 
       &:hover:not([disabled]) {
