@@ -75,30 +75,27 @@
       </div>
     </fieldset>
 
-    <!-- Permissions Section -->
-    <div class="cds--permissions-section">
-      <h3 class="cds--type-productive-heading-03">
+    <!-- Permissions Section (Updated to match Carbon Design) -->
+    <fieldset class="cds--permissions-section">
+      <legend class="cds--fieldset__legend">
         {{ "user.form.sections.permissions" | transloco }}
-      </h3>
+      </legend>
 
       <div class="cds--permissions-grid" formGroupName="permissions">
-        <div
-          *ngFor="let permission of permissionTypes"
-          class="cds--permission-item"
-        >
+        <div *ngFor="let permission of permissionTypes" class="cds--permission-checkbox">
           <cds-checkbox [formControlName]="permission" [hideLabel]="false">
             <div class="cds--permission-label">
-              <span class="cds--permission-name">{{
-                "user.permissions." + permission + ".title" | transloco
-              }}</span>
-              <span class="cds--permission-description">{{
-                "user.permissions." + permission + ".description" | transloco
-              }}</span>
+              <span class="cds--permission-name">
+                {{ "user.permissions." + permission + ".title" | transloco }}
+              </span>
+              <span class="cds--permission-description">
+                {{ "user.permissions." + permission + ".description" | transloco }}
+              </span>
             </div>
           </cds-checkbox>
         </div>
       </div>
-    </div>
+    </fieldset>
 
     <!-- Error Display -->
     <div *ngIf="errors" class="cds--user-form-error">
