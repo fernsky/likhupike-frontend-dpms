@@ -40,12 +40,73 @@ export class GlobalNotificationService {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   showNotification(obj: any) {
+    if (!this.notificationService) {
+      console.error(
+        'Notification service not initialized. Call registerViewContainerRef first.'
+      );
+      return;
+    }
+
     // Use the bottom-right positioned notification box
-    this.notificationService.showNotification({
+    const notification = this.notificationService.showNotification({
       ...obj,
       target: '.notification-box.bottom-right',
       showClose: true, // Allow users to close notifications
       lowContrast: false, // Make notifications more visible
+      closeLabel: obj.closeLabel || 'Close notification',
+    });
+
+    // Ensure the notification component is properly attached to change detection
+    this.ngZone.run(() => {});
+
+    return notification;
+  }
+
+  /**
+   * Helper method for success notifications
+   */
+  showSuccess(title: string, message: string, duration = 5000) {
+    return this.showNotification({
+      type: 'success',
+      title,
+      message,
+      duration,
+    });
+  }
+
+  /**
+   * Helper method for info notifications
+   */
+  showInfo(title: string, message: string, duration = 5000) {
+    return this.showNotification({
+      type: 'info',
+      title,
+      message,
+      duration,
+    });
+  }
+
+  /**
+   * Helper method for warning notifications
+   */
+  showWarning(title: string, message: string, duration = 5000) {
+    return this.showNotification({
+      type: 'warning',
+      title,
+      message,
+      duration,
+    });
+  }
+
+  /**
+   * Helper method for error notifications
+   */
+  showError(title: string, message: string, duration = 8000) {
+    return this.showNotification({
+      type: 'error',
+      title,
+      message,
+      duration,
     });
   }
 }

@@ -1,11 +1,12 @@
 .notification-container {
   position: fixed;
   z-index: 9000;
-  pointer-events: none;
+  pointer-events: none; /* Container is click-through */
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
+  margin: 0.5rem;
 }
 
 .notification-box {
@@ -17,11 +18,32 @@
     flex-direction: column;
     align-items: flex-end;
     max-width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding-right: 5px;
 
     // Ensure notifications stack from bottom to top
     ::ng-deep .bx--inline-notification {
       margin-top: 0.5rem;
-      pointer-events: all;
+      pointer-events: auto; /* Make notifications clickable */
+
+      /* Ensure all interactive elements inside notifications work */
+      button,
+      a {
+        pointer-events: auto;
+        cursor: pointer;
+      }
+
+      /* Specifically target the close button */
+      .bx--inline-notification__close-button {
+        pointer-events: auto;
+        cursor: pointer;
+
+        &:hover,
+        &:focus {
+          background-color: rgba(0, 0, 0, 0.1);
+        }
+      }
     }
   }
 }

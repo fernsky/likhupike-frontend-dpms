@@ -22,6 +22,11 @@ import {
   RegistrationSuccessData,
 } from '../../models/auth.interface';
 
+interface ErrorWithNetworkFlag {
+  error: string;
+  isNetworkError?: boolean;
+}
+
 @Injectable()
 export class AuthEffects {
   initializeAuth$ = createEffect(() =>
@@ -173,22 +178,30 @@ export class AuthEffects {
     { dispatch: false }
   );
 
-  // Show error messages for auth failures
+  // Show error messages for auth failures, but only if they're not network errors
   authFailures$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(
           AuthActions.loginFailure,
           AuthActions.refreshTokenFailure,
-          AuthActions.terminateSessionFailure
+          AuthActions.terminateSessionFailure,
+          AuthActions.registerFailure,
+          AuthActions.requestPasswordResetFailure,
+          AuthActions.resetPasswordFailure
         ),
-        tap(({ error }) => {
-          this.globalNotificationService.showNotification({
-            type: 'error',
-            title: 'Error',
-            message: error,
-            duration: 5000,
-          });
+        tap((action) => {
+          // Only show notification if it's not a network error
+          // Network errors are already handled in handleNetworkError
+          const errorAction = action as ErrorWithNetworkFlag;
+          if (!errorAction.isNetworkError && errorAction.error) {
+            this.globalNotificationService.showNotification({
+              type: 'error',
+              title: 'Error',
+              message: errorAction.error,
+              duration: 5000,
+            });
+          }
         })
       ),
     { dispatch: false }
@@ -282,10 +295,11 @@ export class AuthEffects {
   );
 
   /**
-   * Centralized network error handler
-   * @param error The error object from the API call
-   * @param errorAction The action creator function to dispatch
-   * @returns Observable with the error action
+   * Refactored network error handler:
+   * - Processes error message but doesn't show notifications directly
+   * - Adds isNetworkError flag to the action payload
+   * - For network errors, shows notification here and adds flag
+   * - For regular errors, just passes error message to action
    */
   private handleNetworkError(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -295,25 +309,32 @@ export class AuthEffects {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): Observable<any> {
     let errorMessage;
+    const isNetworkError = this.isNetworkError(error);
 
-    if (this.isNetworkError(error)) {
+    if (isNetworkError) {
       errorMessage = this.translocoService.translate(
         'auth.errors.couldnotReachServer'
       );
+
+      // Only for network errors, show notification directly
+      // This prevents duplicate notifications for other errors
+      this.globalNotificationService.showNotification({
+        type: 'error',
+        title: 'Connection Error',
+        message: errorMessage,
+        duration: 5000,
+      });
     } else {
       errorMessage = error.error?.message || error.message;
     }
 
-    // Display the error message using Carbon notifications
-    this.globalNotificationService.showNotification({
-      type: 'error',
-      title: 'Error',
-      message: errorMessage,
-      duration: 5000,
-    });
-
-    // Return the appropriate error action
-    return of(errorActionCreator({ error: errorMessage }));
+    // Return the appropriate error action with network error flag
+    return of(
+      errorActionCreator({
+        error: errorMessage,
+        isNetworkError, // Add flag to determine if it's a network error
+      })
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

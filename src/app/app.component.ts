@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewContainerRef,
+  AfterViewInit,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthFacade } from './core/facades/auth.facade';
 import { Subscription } from 'rxjs';
@@ -11,7 +17,7 @@ import { GlobalNotificationService } from './core/services/global-notification.s
   styleUrls: ['./app.component.scss'],
   standalone: true,
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   title = 'Digital Profile Information System';
   private langSubscription: Subscription | null = null;
 
@@ -24,10 +30,15 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Initialize auth first
     this.authFacade.initializeAuth();
+  }
 
-    // No need for additional language initialization
-    // since the language service constructor handles it
-    this.globalNotificationSvc.registerViewContainerRef(this.viewContainerRef);
+  ngAfterViewInit() {
+    // Register view container ref after view is initialized
+    setTimeout(() => {
+      this.globalNotificationSvc.registerViewContainerRef(
+        this.viewContainerRef
+      );
+    });
   }
 
   ngOnDestroy() {
