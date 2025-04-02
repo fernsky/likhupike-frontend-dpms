@@ -15,7 +15,7 @@ import { BaseModal } from './base-modal.component';
       [size]="size"
       [open]="open"
       (overlaySelected)="closeModal()"
-      [theme]="danger ? 'danger' : undefined"
+      [theme]="danger ? 'danger' : 'default'"
     >
       <cds-modal-header
         (closeSelect)="closeModal()"
@@ -43,9 +43,9 @@ import { BaseModal } from './base-modal.component';
   standalone: true,
   imports: [CommonModule, TranslocoModule, ModalModule, ButtonModule],
 })
-export class ConfirmModal extends BaseModal {
+export class ConfirmModalComponent extends BaseModal {
   @Output() confirm = new EventEmitter<void>();
-  @Output() cancel = new EventEmitter<void>();
+  @Output() cancelAction = new EventEmitter<void>();
 
   constructor(
     @Inject('title') public title: string,
@@ -66,7 +66,7 @@ export class ConfirmModal extends BaseModal {
   }
 
   onCancel(): void {
-    this.cancel.emit();
+    this.cancelAction.emit();
     this.closeModal();
   }
 }
