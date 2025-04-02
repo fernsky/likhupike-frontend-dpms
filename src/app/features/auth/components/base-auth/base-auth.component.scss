@@ -94,7 +94,6 @@ $carbon--exit-easing: cubic-bezier(0.2, 0, 1, 0.9);
     animation: fadeIn 0.5s cubic-bezier(0.2, 0, 0.38, 0.9) forwards;
 
     // Add subtle shadow to separate features from form
-    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.08);
     position: relative;
 
     &::before {
