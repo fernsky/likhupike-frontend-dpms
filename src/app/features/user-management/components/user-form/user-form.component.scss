@@ -228,7 +228,7 @@ $carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
     @include type-style("heading-01");
     font-weight: 400;
     margin-bottom: $spacing-05;
-    color: var(--cds-text-01);
+    color: var(--cds-text-02);
     position: relative;
 
     &::after {
@@ -254,6 +254,12 @@ $carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
     padding: $spacing-05;
     border-bottom: 1px solid var(--cds-border-subtle-01);
     transition: all 150ms $carbon--standard-easing;
+
+    // Remove bottom border from last row in desktop view
+    &:nth-last-child(1),
+    &:nth-last-child(2) {
+      border-bottom: none;
+    }
 
     &:hover {
       background-color: var(--cds-layer-hover-01);
@@ -334,13 +340,13 @@ $carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
 
 .cds--user-form-actions {
   display: flex;
-  justify-content: flex-end;
-  gap: $spacing-05;
+  justify-content: flex-start; // Left-align per Carbon guidelines
   margin-top: $spacing-07;
-  padding-top: $spacing-05;
-  border-top: 1px solid var(--cds-border-subtle-01);
+  border-top: none;
+  padding-top: 0;
 
   button {
+    min-width: 160px;
     position: relative;
     overflow: hidden;
     transition: all 150ms $carbon--standard-easing;
@@ -392,6 +398,20 @@ $carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
 @include breakpoint-down("md") {
   .cds--permissions-grid {
     grid-template-columns: 1fr;
+
+    .cds--permission-checkbox {
+      // In mobile view, only the last item should have no border
+      border-bottom: 1px solid var(--cds-border-subtle-01);
+
+      &:nth-last-child(1) {
+        border-bottom: none;
+      }
+
+      // Reset desktop rules
+      &:nth-last-child(2) {
+        border-bottom: 1px solid var(--cds-border-subtle-01);
+      }
+    }
   }
 
   .cds--user-form-actions {
@@ -399,7 +419,8 @@ $carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
     gap: $spacing-03;
 
     button {
-      width: 100%;
+      width: auto; // Allow button to size naturally in mobile
+      min-width: 160px; // Maintain minimum width
     }
   }
 }

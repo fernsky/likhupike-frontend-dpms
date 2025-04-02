@@ -117,18 +117,14 @@
       </div>
     </div>
 
-    <!-- Form Actions -->
+    <!-- Form Actions (Left-aligned per Carbon Design System) -->
     <div class="cds--user-form-actions">
       <button
-        cdsButton="secondary"
-        type="button"
-        [disabled]="loading"
-        (click)="onCancelClick()"
+        cdsButton
+        size="md"
+        type="submit"
+        [disabled]="userForm.invalid || loading"
       >
-        {{ "common.actions.cancel" | transloco }}
-      </button>
-
-      <button cdsButton type="submit" [disabled]="userForm.invalid || loading">
         <span class="cds--btn__icon">
           <mat-icon>add_circle</mat-icon>
         </span>

@@ -208,6 +208,8 @@ export class UserFormComponent implements OnInit {
     }
   }
 
+  // Keep onCancelClick() method for backward compatibility
+  // even though we've removed the cancel button
   onCancelClick(): void {
     this.cancelForm.emit();
   }
