@@ -29,6 +29,8 @@ export class HeaderComponent {
   @Output() menuToggle = new EventEmitter<void>();
 
   onMenuToggle(): void {
+    // Add console log to debug
+    console.log('Menu toggle clicked');
     this.menuToggle.emit();
   }
 }

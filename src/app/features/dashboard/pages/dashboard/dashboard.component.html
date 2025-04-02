@@ -13,9 +13,9 @@
       (click)="onMobileClose()"
     ></div>
 
-    <!-- The key change: on mobile (showMenuToggle$ is true) hide sidenav when not open -->
+    <!-- Modify the conditional visibility to ensure sidenav is always rendered -->
     <app-sidenav
-      *ngIf="!(showMenuToggle$ | async) || isSidenavOpen"
+      [style.display]="!(showMenuToggle$ | async) || isSidenavOpen ? 'block' : 'none'"
       [collapsed]="!isSidenavOpen && !(showMenuToggle$ | async)"
       [expanded]="isSidenavOpen"
       (mobileClose)="onMobileClose()"

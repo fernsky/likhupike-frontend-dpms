@@ -45,7 +45,7 @@
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  z-index: 1000; // Updated z-index to be lower than sidenav but higher than content
   transition: opacity $duration-moderate-01 motion(standard, productive);
   opacity: 0;
 
@@ -55,9 +55,15 @@
   }
 }
 
-// Make sure sidenav is properly positioned
+// Make sure sidenav is properly positioned and visible
 .dashboard-sidenav {
   transition: transform $duration-moderate-01 motion(standard, productive);
+  z-index: 1001; // Ensure it's above other content
+  position: fixed;
+  top: 3rem;
+  left: 0;
+  bottom: 0;
+  display: block; // Ensure it's displayed by default
 }
 
 // Mobile-specific styles
