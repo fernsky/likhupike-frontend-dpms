@@ -7,17 +7,21 @@ import {
   Validators,
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { MatIconModule } from '@angular/material/icon';
-import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 import { UserResponse } from '../../../../models/user.interface';
 import { UserActions } from '../../../../store/user.actions';
 import * as UserSelectors from '../../../../store/user.selectors';
 import { Subject } from 'rxjs';
 import { takeUntil, filter, take } from 'rxjs/operators';
-import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
+
+// Carbon imports
+import {
+  ButtonModule,
+  NFormsModule,
+  InputModule,
+  NotificationModule,
+} from 'carbon-components-angular';
 
 @Component({
   selector: 'app-reset-password',
@@ -27,18 +31,13 @@ import { BaseButtonComponent } from '@app/shared/components/base-button/base-but
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
     MatIconModule,
     TranslocoModule,
-    BaseButtonComponent,
-  ],
-  providers: [
-    provideTranslocoScope({
-      scope: 'user-management',
-      alias: 'user',
-    }),
+    // Carbon modules
+    ButtonModule,
+    NFormsModule,
+    InputModule,
+    NotificationModule,
   ],
 })
 export class ResetPasswordComponent implements OnDestroy {
@@ -70,7 +69,8 @@ export class ResetPasswordComponent implements OnDestroy {
   constructor(
     private fb: FormBuilder,
     private store: Store,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private transloco: TranslocoService
   ) {
     // Setup form reset subscription with error clearing
     this.store
@@ -98,7 +98,22 @@ export class ResetPasswordComponent implements OnDestroy {
     return newPassword === confirmPassword ? null : { passwordMismatch: true };
   }
 
-  getNewPasswordError(): string | null {
+  hasNewPasswordError(): boolean {
+    const control = this.passwordForm.get('newPassword');
+    return Boolean(control?.invalid && control?.touched);
+  }
+
+  hasConfirmPasswordError(): boolean {
+    const control = this.passwordForm.get('confirmPassword');
+    return Boolean(
+      (control?.invalid && control?.touched) ||
+        (this.passwordForm.hasError('passwordMismatch') && control?.touched)
+    );
+  }
+
+  getNewPasswordError(): string {
+    if (!this.hasNewPasswordError()) return '';
+
     const control = this.passwordForm.get('newPassword');
     if (control?.hasError('required')) {
       return 'user.form.errors.passwordRequired';
@@ -109,7 +124,22 @@ export class ResetPasswordComponent implements OnDestroy {
     if (control?.hasError('pattern')) {
       return 'user.form.errors.passwordPattern';
     }
-    return null;
+    return '';
+  }
+
+  getConfirmPasswordError(): string {
+    if (!this.hasConfirmPasswordError()) return '';
+
+    if (this.passwordForm.hasError('passwordMismatch')) {
+      return 'user.form.errors.passwordMismatch';
+    }
+
+    const control = this.passwordForm.get('confirmPassword');
+    if (control?.hasError('required')) {
+      return 'user.form.errors.passwordRequired';
+    }
+
+    return '';
   }
 
   onSubmit(): void {
@@ -118,8 +148,8 @@ export class ResetPasswordComponent implements OnDestroy {
         UserActions.resetUserPassword({
           id: this.user.id,
           request: {
-            newPassword: this.passwordForm.value.newPassword,
-            confirmPassword: this.passwordForm.value.confirmPassword,
+            newPassword: this.passwordForm.value.newPassword!,
+            confirmPassword: this.passwordForm.value.confirmPassword!,
           },
         })
       );
@@ -131,7 +161,7 @@ export class ResetPasswordComponent implements OnDestroy {
     this.resetForm();
   }
 
-  // New method to reset form
+  // Reset form
   private resetForm(): void {
     // Clear all form values without triggering validation
     this.passwordForm.reset(

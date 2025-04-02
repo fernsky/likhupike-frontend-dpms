@@ -101,9 +101,8 @@ $carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
 
 .cds--user-form-actions {
   display: flex;
-  justify-content: flex-end; // Reverted to right-aligned buttons
-  gap: $spacing-05; // Increased gap between buttons
-  margin-top: $spacing-07;
+  justify-content: flex-start; // Changed from flex-end to flex-start
+  gap: $spacing-05;
   border-top: none;
   padding-top: 0;
 

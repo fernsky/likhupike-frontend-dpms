@@ -116,6 +116,9 @@
   "form": {
     "email": "Email Address",
     "email.placeholder": "Enter your email address",
+    "actions": {
+      "resetPassword": "Reset Password"
+    },
     "fields": {
       "email": {
         "label": "Email Address",
@@ -126,6 +129,25 @@
         "label": "Password",
         "placeholder": "Enter a strong password",
         "helper": "Password must be at least 8 characters with mixed types"
+      },
+      "newPassword": {
+        "label": "New Password",
+        "placeholder": "Enter your new password",
+        "helper": "Create a strong password for your account",
+        "errors": {
+          "required": "New password is required",
+          "minlength": "Password must be at least 8 characters long",
+          "pattern": "Password must contain at least one digit, lowercase, uppercase letter and special character"
+        }
+      },
+      "confirmPassword": {
+        "label": "Confirm Password",
+        "placeholder": "Confirm your new password",
+        "helper": "Retype your password to confirm",
+        "errors": {
+          "required": "Please confirm your password",
+          "mismatch": "Passwords do not match"
+        }
       },
       "wardNumber": {
         "label": "Ward Number",
