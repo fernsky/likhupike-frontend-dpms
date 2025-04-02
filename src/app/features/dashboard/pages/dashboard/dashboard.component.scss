@@ -20,9 +20,13 @@
     padding: $spacing-05;
     margin-left: 16rem; // Default sidenav width
     transition: margin-left $duration-moderate-01 motion(standard, productive);
+    width: calc(
+      100% - 16rem
+    ); // Ensure content doesn't expand beyond available space
 
     &--expanded {
       margin-left: 3rem; // Width when sidenav is collapsed
+      width: calc(100% - 3rem);
     }
   }
 }
@@ -46,9 +50,18 @@
   }
 }
 
+// Mobile-specific styles
 @include breakpoint-down(md) {
   .cds--content-layout__content {
     margin-left: 0 !important; // Override default margin on mobile
+    width: 100% !important; // Full width on mobile
     padding: $spacing-04; // Less padding on mobile
+  }
+}
+
+// Extra small screens (phones in portrait)
+@include breakpoint-down(sm) {
+  .cds--content-layout__content {
+    padding: $spacing-03; // Even less padding for very small screens
   }
 }

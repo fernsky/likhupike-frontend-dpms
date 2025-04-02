@@ -3,6 +3,7 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   OnDestroy,
+  HostListener,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
@@ -58,6 +59,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
         // On mobile, keep sidenav closed by default
         this.isSidenavOpen = !result.matches;
       });
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    // Check if we're on mobile and close sidenav if needed
+    const isMobile = this.breakpointObserver.isMatched(
+      `(max-width: ${BREAKPOINT_MD}px)`
+    );
+    if (isMobile) {
+      this.isSidenavOpen = false;
+    } else {
+      // On desktop, default to open sidenav
+      this.isSidenavOpen = true;
+    }
   }
 
   onHeaderMenuToggle(): void {

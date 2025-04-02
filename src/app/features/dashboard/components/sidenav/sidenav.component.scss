@@ -2,15 +2,18 @@
 @use "@carbon/styles/scss/theme" as *;
 @use "@carbon/styles/scss/motion" as *;
 @use "@carbon/styles/scss/breakpoint" as *;
-@use "@carbon/styles/scss/colors" as *; // Import colors explicitly
+@use "@carbon/styles/scss/colors" as *;
 
 :host {
   height: 100%;
   position: fixed;
   top: 3rem;
   left: 0;
+  bottom: 0;
   z-index: 1000;
   transition: transform $duration-moderate-01 motion(standard, productive);
+  display: flex;
+  flex-direction: column;
 
   @include breakpoint-down(md) {
     &:not(.open) {
@@ -19,12 +22,31 @@
 
     &.open {
       transform: translateX(0);
+      box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1);
     }
   }
 }
 
-// Ensure proper styling for active items
 :host ::ng-deep {
+  // Make sidenav take full height
+  .cds--side-nav {
+    height: 100%;
+    overflow-y: auto;
+
+    &__items {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    // Position logout at bottom
+    .logout-item {
+      margin-top: auto;
+      border-top: 1px solid $gray-20;
+    }
+  }
+
+  // Active item styling
   .cds--side-nav__item--active {
     background-color: $layer-active-01;
   }
@@ -33,7 +55,7 @@
     background-color: $layer-active-01;
   }
 
-  // Custom badge styling (Carbon-like)
+  // Custom badge styling
   .badge {
     display: inline-flex;
     align-items: center;
@@ -48,22 +70,18 @@
     margin-left: $spacing-03;
 
     &.badge-primary {
-      background-color: $red-60; // Using Carbon color variables directly
+      background-color: $red-60;
       color: $white-0;
     }
 
     &.badge-accent {
-      background-color: $green-60; // Using Carbon color variables directly
+      background-color: $green-60;
       color: $white-0;
     }
 
     &.badge-warn {
-      background-color: $yellow-30; // Using Carbon color variables directly
-      color: $gray-100; // Darker text for visibility on yellow
+      background-color: $yellow-30;
+      color: $gray-100;
     }
-  }
-
-  .logout-item {
-    margin-top: auto;
   }
 }
