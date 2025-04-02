@@ -7,7 +7,7 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { TranslocoModule } from '@jsverse/transloco';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { PasswordValidatorService } from '@app/shared/validators/password-validator.service';
 import { NumberFormatService } from '@app/shared/services/number-format.service';
 import { FormSectionComponent } from '@app/shared/components/form-section/form-section.component';
@@ -58,6 +58,7 @@ export class UserFormComponent implements OnInit {
   userForm!: FormGroup;
   hidePassword = true;
   permissionTypes = Object.values(PermissionType);
+  formSubmitted = false;
 
   // Formatted for Carbon dropdown-list
   wardNumbers = Array.from({ length: 33 }, (_, i) => {
@@ -72,7 +73,8 @@ export class UserFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private passwordValidator: PasswordValidatorService,
-    private numberFormat: NumberFormatService
+    private numberFormat: NumberFormatService,
+    private transloco: TranslocoService
   ) {}
 
   ngOnInit(): void {
@@ -134,6 +136,20 @@ export class UserFormComponent implements OnInit {
     this.hidePassword = !this.hidePassword;
   }
 
+  hasEmailError(): boolean {
+    const control = this.userForm.get('email');
+    return Boolean(
+      control?.invalid && (control?.touched || this.formSubmitted)
+    );
+  }
+
+  hasPasswordError(): boolean {
+    const control = this.userForm.get('password');
+    return Boolean(
+      control?.invalid && (control?.touched || this.formSubmitted)
+    );
+  }
+
   getErrorMessage(): string {
     if (!this.errors) return '';
 
@@ -144,7 +160,46 @@ export class UserFormComponent implements OnInit {
     return this.errors.message || JSON.stringify(this.errors);
   }
 
+  getEmailErrorText(): string {
+    if (!this.hasEmailError()) return '';
+
+    const control = this.userForm.get('email');
+    if (control?.hasError('required')) {
+      return this.transloco.translate('user.form.errors.emailRequired');
+    }
+    if (control?.hasError('email')) {
+      return this.transloco.translate('user.form.errors.emailInvalid');
+    }
+    return '';
+  }
+
+  getPasswordErrorText(): string {
+    if (!this.hasPasswordError()) return '';
+
+    const control = this.userForm.get('password');
+    if (control?.hasError('required')) {
+      return this.transloco.translate('user.form.errors.passwordRequired');
+    }
+    if (control?.hasError('pattern')) {
+      return this.transloco.translate('user.form.errors.passwordPattern');
+    }
+    return '';
+  }
+
+  isWardNumberInvalid(): boolean {
+    if (!this.userForm.get('isWardLevelUser')?.value) return false;
+
+    const wardControl = this.userForm.get('wardNumber');
+    return (
+      (wardControl?.invalid && (wardControl?.touched || this.formSubmitted)) ||
+      (this.userForm.hasError('wardNumberRequired') &&
+        (wardControl?.touched || this.formSubmitted))
+    );
+  }
+
   onSubmit(): void {
+    this.formSubmitted = true;
+
     if (this.userForm.valid) {
       const formData = this.userForm.getRawValue();
       this.submitForm.emit(formData);
@@ -159,6 +214,7 @@ export class UserFormComponent implements OnInit {
 
   resetForm(): void {
     this.userForm.reset();
+    this.formSubmitted = false;
     this.initForm();
   }
 }

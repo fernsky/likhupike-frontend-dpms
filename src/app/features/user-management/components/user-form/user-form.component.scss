@@ -52,6 +52,23 @@ $carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
     }
   }
 
+  cds-text-label {
+    margin-bottom: $spacing-05;
+    width: 100%;
+
+    ::ng-deep .cds--label {
+      @include type-style("body-short-01");
+      font-weight: 500;
+      margin-bottom: $spacing-03;
+    }
+
+    ::ng-deep .cds--form__helper-text {
+      @include type-style("helper-text-01");
+      color: $text-secondary;
+      margin-top: $spacing-02;
+    }
+  }
+
   .cds--text-input__field-wrapper {
     position: relative;
     transition: all 110ms $carbon--standard-easing;
@@ -90,6 +107,47 @@ $carbon--standard-easing: cubic-bezier(0.2, 0, 0.38, 0.9);
       mat-icon {
         font-size: 20px;
       }
+    }
+  }
+
+  .cds--password-input-wrapper {
+    position: relative;
+    width: 100%;
+
+    input[cdsText] {
+      width: 100%;
+    }
+
+    .cds--text-input__password-visibility-toggle {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 $spacing-04;
+      transition: color 110ms $carbon--standard-easing;
+
+      &:hover {
+        color: var(--cds-text-01);
+      }
+
+      mat-icon {
+        font-size: 20px;
+      }
+    }
+  }
+
+  .cds--ward-dropdown-wrapper {
+    margin-top: $spacing-05;
+  }
+
+  ::ng-deep {
+    .cds--form-requirement {
+      visibility: visible !important;
+      height: auto !important;
+      opacity: 1 !important;
+      margin-top: $spacing-03;
     }
   }
 }

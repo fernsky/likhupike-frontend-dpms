@@ -2,89 +2,52 @@
   <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="cds--form">
     <!-- Email Input -->
     <div class="cds--form-item">
-      <cds-label [helperText]="'user.form.fields.email.helper' | transloco">
+      <cds-text-label
+        [helperText]="'user.form.fields.email.helper' | transloco"
+        [invalidText]="getEmailErrorText()"
+        [invalid]="hasEmailError()"
+      >
         {{ "user.form.email" | transloco }}
-      </cds-label>
-      <div class="cds--text-input__field-wrapper">
         <input
           cdsText
           [placeholder]="'user.form.email.placeholder' | transloco"
           formControlName="email"
           type="email"
-          [invalid]="
-            (userForm.get('email')?.invalid &&
-              userForm.get('email')?.touched) ??
-            false
-          "
-          [attr.data-invalid]="
-            userForm.get('email')?.invalid && userForm.get('email')?.touched
-          "
-          aria-controls="email-error-msg"
+          [invalid]="hasEmailError()"
         />
-      </div>
-      <div
-        *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched"
-        class="cds--form-requirement"
-        id="email-error-msg"
-      >
-        <ng-container *ngIf="userForm.get('email')?.hasError('required')">
-          {{ "user.form.errors.emailRequired" | transloco }}
-        </ng-container>
-        <ng-container *ngIf="userForm.get('email')?.hasError('email')">
-          {{ "user.form.errors.emailInvalid" | transloco }}
-        </ng-container>
-      </div>
+      </cds-text-label>
     </div>
 
     <!-- Password Input -->
     <div class="cds--form-item">
-      <cds-label [helperText]="'user.form.passwordRequirements' | transloco">
-        {{ "user.form.password" | transloco }}
-      </cds-label>
-      <div class="cds--text-input__field-wrapper">
-        <input
-          cdsText
-          [placeholder]="'user.form.password.placeholder' | transloco"
-          formControlName="password"
-          [type]="hidePassword ? 'password' : 'text'"
-          [invalid]="
-            (userForm.get('password')?.invalid &&
-              userForm.get('password')?.touched) ??
-            false
-          "
-          [attr.data-invalid]="
-            userForm.get('password')?.invalid &&
-            userForm.get('password')?.touched
-          "
-          aria-controls="password-error-msg"
-        />
-        <button
-          cdsButton="ghost"
-          size="sm"
-          class="cds--text-input__password-visibility-toggle"
-          type="button"
-          (click)="togglePasswordVisibility()"
-          [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
-        >
-          <mat-icon>{{
-            hidePassword ? "visibility_off" : "visibility"
-          }}</mat-icon>
-        </button>
-      </div>
-      <div
-        *ngIf="
-          userForm.get('password')?.invalid && userForm.get('password')?.touched
-        "
-        class="cds--form-requirement"
-        id="password-error-msg"
+      <cds-text-label
+        [helperText]="'user.form.passwordRequirements' | transloco"
+        [invalidText]="getPasswordErrorText()"
+        [invalid]="hasPasswordError()"
       >
-        <ng-container *ngIf="userForm.get('password')?.hasError('required')">
-          {{ "user.form.errors.passwordRequired" | transloco }}
-        </ng-container>
-        <ng-container *ngIf="userForm.get('password')?.hasError('pattern')">
-          {{ "user.form.errors.passwordPattern" | transloco }}
-        </ng-container>
-      </div>
+        {{ "user.form.password" | transloco }}
+        <div class="cds--password-input-wrapper">
+          <input
+            cdsText
+            [placeholder]="'user.form.password.placeholder' | transloco"
+            formControlName="password"
+            [type]="hidePassword ? 'password' : 'text'"
+            [invalid]="hasEmailError()"
+          />
+          <button
+            cdsButton="ghost"
+            size="sm"
+            class="cds--text-input__password-visibility-toggle"
+            type="button"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+          >
+            <mat-icon>{{
+              hidePassword ? "visibility_off" : "visibility"
+            }}</mat-icon>
+          </button>
+        </div>
+      </cds-text-label>
     </div>
 
     <!-- Ward Level Section -->
@@ -95,25 +58,20 @@
         </span>
       </cds-checkbox>
 
-      <div *ngIf="userForm.get('isWardLevelUser')?.value">
-        <cds-label [helperText]="'user.form.wardHelp' | transloco">
-          {{ "user.form.wardNumber" | transloco }}
-        </cds-label>
+      <div
+        *ngIf="userForm.get('isWardLevelUser')?.value"
+        class="cds--ward-dropdown-wrapper"
+      >
         <cds-dropdown
           formControlName="wardNumber"
           [placeholder]="'user.form.selectWard' | transloco"
+          [label]="'user.form.wardNumber' | transloco"
+          [helperText]="'user.form.wardHelp' | transloco"
+          [invalid]="isWardNumberInvalid()"
+          [invalidText]="'user.form.errors.wardNumberRequired' | transloco"
         >
           <cds-dropdown-list [items]="wardNumbers"></cds-dropdown-list>
         </cds-dropdown>
-        <div
-          *ngIf="
-            userForm.hasError('wardNumberRequired') &&
-            userForm.get('wardNumber')?.touched
-          "
-          class="cds--form-requirement"
-        >
-          {{ "user.form.errors.wardNumberRequired" | transloco }}
-        </div>
       </div>
     </div>
 
