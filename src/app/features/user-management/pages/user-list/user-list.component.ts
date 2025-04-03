@@ -53,8 +53,6 @@ import {
 // Components
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
 import { ConfirmModalComponent } from '@app/shared/components/modals/confirm-modal.component';
-import { AlertModalComponent } from '@app/shared/components/modals/alert-modal.component';
-import { AppModalService } from '@app/shared/services/modal.service';
 
 // Models & Actions
 import {
@@ -96,10 +94,6 @@ import { PermissionType } from '@app/core/models/permission.enum';
     TilesModule,
     PlaceholderModule,
     ModalModule,
-
-    // New modal components
-    ConfirmModalComponent,
-    AlertModalComponent,
   ],
   providers: [
     provideTranslocoScope({
@@ -158,7 +152,11 @@ export class UserListComponent implements OnInit, OnDestroy {
     }),
     value: i + 1,
     selected: false,
-  }));
+  })) as {
+    content: string;
+    value: number | null;
+    selected: boolean;
+  }[];
 
   // For date filters
   dateFormat = 'Y/m/d';
@@ -190,7 +188,6 @@ export class UserListComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private router: Router,
     private modalService: ModalService,
-    private appModalService: AppModalService,
     private transloco: TranslocoService,
     private route: ActivatedRoute,
     private urlParamsService: UrlParamsService
@@ -406,19 +403,22 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   onDeleteUser(user: UserResponse): void {
-    // Enterprise pattern: use the component-based modal approach
-    this.appModalService.openComponentModal(ConfirmModalComponent, {
-      title: this.transloco.translate('user.delete.confirmTitle'),
-      message: this.transloco.translate('user.delete.confirmMessage', {
-        name: user.email,
-      }),
-      confirmText: this.transloco.translate('common.delete'),
-      cancelText: this.transloco.translate('common.cancel'),
-      danger: true,
-      size: 'sm',
-      // Handle the confirm action
-      confirm: () => {
-        this.store.dispatch(UserActions.deleteUser({ id: user.id }));
+    // Use the openComponentModal method directly with the component
+    this.modalService.create({
+      component: ConfirmModalComponent,
+      inputs: {
+        title: this.transloco.translate('user.delete.confirmTitle'),
+        message: this.transloco.translate('user.delete.confirmMessage', {
+          name: user.email,
+        }),
+        confirmText: this.transloco.translate('common.delete'),
+        cancelText: this.transloco.translate('common.cancel'),
+        danger: true,
+        size: 'sm',
+        // Handle the confirm action
+        confirm: () => {
+          this.store.dispatch(UserActions.deleteUser({ id: user.id }));
+        },
       },
     });
   }
@@ -426,18 +426,22 @@ export class UserListComponent implements OnInit, OnDestroy {
   onToggleStatus(user: UserResponse): void {
     if (user.isApproved) return;
 
-    // Enterprise pattern: use the component-based modal approach
-    this.appModalService.openComponentModal(ConfirmModalComponent, {
-      title: this.transloco.translate('user.approve.confirmTitle'),
-      message: this.transloco.translate('user.approve.confirmMessage', {
-        email: user.email,
-      }),
-      confirmText: this.transloco.translate('common.action.confirm'),
-      cancelText: this.transloco.translate('common.action.cancel'),
-      size: 'sm',
-      // Handle the confirm action
-      confirm: () => {
-        this.store.dispatch(UserActions.approveUser({ id: user.id }));
+    // Use the same modal service pattern as onDeleteUser
+    this.modalService.create({
+      component: ConfirmModalComponent,
+      inputs: {
+        title: this.transloco.translate('user.approve.confirmTitle'),
+        message: this.transloco.translate('user.approve.confirmMessage', {
+          name: user.email,
+        }),
+        confirmText: this.transloco.translate('common.action.confirm'),
+        cancelText: this.transloco.translate('common.action.cancel'),
+        danger: false,
+        size: 'sm',
+        // Handle the confirm action
+        confirm: () => {
+          this.store.dispatch(UserActions.approveUser({ id: user.id }));
+        },
       },
     });
   }
