@@ -76,7 +76,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       // On desktop, default to open sidenav
       this.isSidenavOpen = true;
     }
-    this.cdr.detectChanges(); // Force change detection
+    //this.cdr.detectChanges(); // Force change detection
   }
 
   onHeaderMenuToggle(): void {
