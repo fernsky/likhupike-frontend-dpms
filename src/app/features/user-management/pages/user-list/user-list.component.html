@@ -1,3 +1,20 @@
+<ng-template #overflowMenuItemTemplate let-data="data">
+  <cds-overflow-menu>
+    <cds-overflow-menu-option> First Option </cds-overflow-menu-option>
+    <cds-overflow-menu-option> Second Option </cds-overflow-menu-option>
+    <cds-overflow-menu-option> Third Option </cds-overflow-menu-option>
+  </cds-overflow-menu>
+</ng-template>
+
+<ng-template #paginationTableItemTemplate let-data="data">
+  <a [attr.href]="data.link">{{ data.name }} {{ data.surname }}</a>
+</ng-template>
+<ng-template #filterableHeaderTemplate let-data="data">
+  <i
+    ><a [attr.href]="data.link">{{ data.name }}</a></i
+  >
+</ng-template>
+
 <cds-table-container>
   <cds-table-header>
     <h4 cdsTableHeaderTitle>Filter table</h4>
@@ -14,8 +31,19 @@
         (clear)="filterNodeNames('')"
       >
       </cds-table-toolbar-search>
-      <button cdsButton="ghost" class="toolbar-action" placement="bottom">
-        <svg cdsIcon="filter" size="16" class="cds--toolbar-action__icon"></svg>
+      <button
+        cdsButton="ghost"
+        class="toolbar-action"
+        [cdsOverflowMenu]="templateRef"
+        placement="bottom"
+        [flip]="true"
+        [offset]="{ x: 3, y: 0 }"
+      >
+        <svg
+          cdsIcon="settings"
+          size="16"
+          class="cds--toolbar-action__icon"
+        ></svg>
       </button>
       <button cdsButton="primary" size="sm">
         Primary Button<svg cdsIcon="add" size="20" class="cds--btn__icon"></svg>
@@ -35,6 +63,10 @@
   >
     <ng-content></ng-content>
   </cds-table>
+  <cds-pagination
+    [model]="model"
+    (selectPage)="selectPage($event)"
+  ></cds-pagination>
 </cds-table-container>
 
 <ng-template #templateRef>

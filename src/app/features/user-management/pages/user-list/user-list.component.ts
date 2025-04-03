@@ -8,13 +8,16 @@ import {
   TableRowSize,
   CheckboxModule,
   IconModule,
+  DialogModule,
+  InputModule,
+  PaginationModule,
 } from 'carbon-components-angular';
 import { IconService } from '@app/core/services/icon.service';
 
 //@ts-expect-error Fixme: No types for carbon icons
 import Add16 from '@carbon/icons/es/add/16';
 //@ts-expect-error Fixme: No types for carbon icons
-import Filter16 from '@carbon/icons/es/filter/16';
+import Settings16 from '@carbon/icons/es/settings/16';
 //@ts-expect-error Fixme: No types for carbon icons
 import Search16 from '@carbon/icons/es/search/16';
 //@ts-expect-error Fixme: No types for carbon icons
@@ -23,7 +26,15 @@ import Close16 from '@carbon/icons/es/close/16';
 @Component({
   selector: 'app-user-list', // Changed from app-model-filter-table
   standalone: true,
-  imports: [TableModule, ButtonModule, CheckboxModule, IconModule],
+  imports: [
+    TableModule,
+    ButtonModule,
+    CheckboxModule,
+    IconModule,
+    DialogModule,
+    InputModule,
+    PaginationModule,
+  ],
 
   templateUrl: './user-list.component.html',
 })
@@ -89,7 +100,7 @@ export class UserListComponent implements OnInit {
     // this.initializeTable();
     // Register icons after ensuring service is available
     setTimeout(() => {
-      this.iconService.registerAll([Filter16, Add16, Search16, Close16]);
+      this.iconService.registerAll([Settings16, Add16, Search16, Close16]);
     });
   }
 
@@ -128,6 +139,27 @@ export class UserListComponent implements OnInit {
     );
   }
 
+  getPage(page: number) {
+		const line = line => [`Item ${line}:1!`, { name: "Item", surname: `${line}:2` }];
+
+		const fullPage = [];
+
+		for (let i = (page - 1) * this.model.pageLength; i < page * this.model.pageLength && i < this.model.totalDataLength; i++) {
+			fullPage.push(line(i + 1));
+		}
+
+		return new Promise(resolve => {
+			setTimeout(() => resolve(fullPage), 150);
+		});
+	}
+
+  selectPage(page: number) {
+    this.getPage(page).then((data: Array<Array<any>>) => {
+      // set the data and update page
+      this.model.data = this.prepareData(data);
+      this.model.currentPage = page;
+    });
+  }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   overflowOnClick = (event: any) => {
     event.stopPropagation();
