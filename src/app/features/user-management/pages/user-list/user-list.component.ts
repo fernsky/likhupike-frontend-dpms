@@ -152,11 +152,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     }),
     value: i + 1,
     selected: false,
-  })) as {
-    content: string;
-    value: number | null;
-    selected: boolean;
-  }[];
+  }));
 
   // For date filters
   dateFormat = 'Y/m/d';

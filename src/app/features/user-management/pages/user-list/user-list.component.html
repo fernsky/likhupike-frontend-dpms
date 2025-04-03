@@ -110,7 +110,7 @@
                             {
                               content:
                                 ('user.list.filters.ward.all' | transloco),
-                              value: null,
+                              value: 0,
                               selected: true,
                             },
                           ].concat(wardNumberOptions)
@@ -244,7 +244,7 @@
 
           <!-- Empty State -->
           <div
-            *ngIf="(totalUsers$ | async) === 0 && !(loading$ | async)"
+            *ngIf="(totalUsers$ | async) === 0 && (loading$ | async) === false"
             class="cds--data-table-empty"
           >
             <div class="cds--empty-state">
