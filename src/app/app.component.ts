@@ -9,6 +9,7 @@ import { RouterOutlet } from '@angular/router';
 import { AuthFacade } from './core/facades/auth.facade';
 import { Subscription } from 'rxjs';
 import { GlobalNotificationService } from './core/services/global-notification.service';
+import { IconService } from './core/services/icon.service';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ import { GlobalNotificationService } from './core/services/global-notification.s
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
+  providers: [IconService], // Add IconService to providers
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   title = 'Digital Profile Information System';

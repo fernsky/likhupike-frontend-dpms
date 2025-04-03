@@ -7,8 +7,9 @@ import {
   ButtonModule,
   TableRowSize,
   CheckboxModule,
-  IconService,
+  IconModule,
 } from 'carbon-components-angular';
+import { IconService } from '@app/core/services/icon.service';
 
 //@ts-expect-error Fixme: No types for carbon icons
 import Add16 from '@carbon/icons/es/add/16';
@@ -22,8 +23,8 @@ import Close16 from '@carbon/icons/es/close/16';
 @Component({
   selector: 'app-user-list', // Changed from app-model-filter-table
   standalone: true,
-  imports: [TableModule, ButtonModule, CheckboxModule],
-  providers: [IconService], // Add IconService to providers
+  imports: [TableModule, ButtonModule, CheckboxModule, IconModule],
+
   templateUrl: './user-list.component.html',
 })
 export class UserListComponent implements OnInit {
@@ -88,7 +89,7 @@ export class UserListComponent implements OnInit {
     // this.initializeTable();
     // Register icons after ensuring service is available
     setTimeout(() => {
-      this.iconService.registerAll([Add16, Filter16, Search16, Close16]);
+      this.iconService.registerAll([Filter16, Add16, Search16, Close16]);
     });
   }
 
