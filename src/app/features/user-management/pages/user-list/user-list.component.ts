@@ -5,6 +5,7 @@ import {
   inject,
   ViewChild,
   TemplateRef,
+  OnDestroy,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
@@ -25,6 +26,7 @@ import { Router } from '@angular/router';
 import * as UserSelectors from '../../store/user.selectors';
 import { UserActions } from '../../store/user.actions';
 import { UserResponse } from '../../models/user.interface';
+import { Subscription } from 'rxjs';
 
 //@ts-expect-error Fixme: No types for carbon icons
 import Add16 from '@carbon/icons/es/add/16';
@@ -52,9 +54,11 @@ import TrashCan16 from '@carbon/icons/es/trash-can/16';
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss'],
 })
-export class UserListComponent implements OnInit {
+export class UserListComponent implements OnInit, OnDestroy {
   private store = inject(Store);
   private router = inject(Router);
+  private subscriptions: Subscription[] = [];
+  private usersData: UserResponse[] = [];
 
   // Reference the templates from the HTML
   @ViewChild('statusTemplate') statusTemplate!: TemplateRef<any>;
@@ -62,7 +66,7 @@ export class UserListComponent implements OnInit {
 
   model = new TableModel();
   size: TableRowSize = 'md';
-  skeleton = false;
+  skeleton = true; // Start with skeleton loading
 
   // Store selectors
   users$ = this.store.select(UserSelectors.selectUsers);
@@ -94,19 +98,28 @@ export class UserListComponent implements OnInit {
       })
     );
 
-    // Subscribe to users and update table after the view is initialized
-    setTimeout(() => {
+    // Subscribe to users and store the data
+    this.subscriptions.push(
       this.users$.subscribe((users) => {
-        if (this.statusTemplate && this.actionTemplate) {
-          this.updateTableData(users);
-        }
-      });
-    });
+        this.usersData = users;
+        // If templates are already available, update the table
+        // if (this.statusTemplate && this.actionTemplate) {
+        this.updateTableData(users);
+        //}
+      })
+    );
 
     // Subscribe to loading state
-    this.loading$.subscribe((loading) => {
-      this.skeleton = loading;
-    });
+    this.subscriptions.push(
+      this.loading$.subscribe((loading) => {
+        this.skeleton = loading;
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    // Clean up subscriptions to prevent memory leaks
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   private initializeTable() {
@@ -114,16 +127,11 @@ export class UserListComponent implements OnInit {
       new TableHeaderItem({ data: 'Email' }),
       new TableHeaderItem({ data: 'Ward' }),
       new TableHeaderItem({ data: 'Status' }),
-      new TableHeaderItem({ data: 'Created At' }),
       new TableHeaderItem({ data: 'Actions' }),
     ];
   }
 
   private updateTableData(users: UserResponse[]) {
-    if (!this.statusTemplate || !this.actionTemplate) {
-      return; // Don't update if templates aren't ready
-    }
-
     this.model.data = users.map((user) => [
       new TableItem({ data: user.email }),
       new TableItem({ data: user.wardNumber || 'N/A' }),
@@ -131,9 +139,7 @@ export class UserListComponent implements OnInit {
         data: user.isApproved ? 'Approved' : 'Pending',
         template: this.statusTemplate,
       }),
-      new TableItem({
-        data: new Date(user.createdAt).toLocaleDateString(),
-      }),
+
       new TableItem({
         data: user,
         template: this.actionTemplate,

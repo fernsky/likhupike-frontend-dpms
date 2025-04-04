@@ -1,3 +1,10 @@
-.actions-buttons {
-  display: flex;
+::ng-deep {
+  // Improve CDS button styling
+
+  .cds--data-table--sticky-header:not(.cds--data-table--xs):not(
+      .cds--data-table--xl
+    ):not(.cds--data-table--sm)
+    td:not(.cds--table-column-menu):not(.cds--table-column-checkbox) {
+    padding-block: 0.4375rem 0.375rem;
+  }
 }
