@@ -82,7 +82,7 @@
 </ng-template>
 
 <ng-template #statusTemplate let-data="data">
-  <span [class]="data === 'Approved' ? 'approved' : 'pending'">
+  <span [class]="data === 'Approved' ? 'approved-status' : 'pending-status'">
     {{ data }}
   </span>
 </ng-template>
@@ -97,3 +97,20 @@
     </button>
   </div>
 </ng-template>
+
+<style>
+  .approved-status {
+    color: #24a148;
+    font-weight: 500;
+  }
+
+  .pending-status {
+    color: #f1c21b;
+    font-weight: 500;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+  }
+</style>

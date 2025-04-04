@@ -1,4 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  Component,
+  OnInit,
+  inject,
+  ViewChild,
+  TemplateRef,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   TableModel,
@@ -48,6 +55,11 @@ export class UserListComponent implements OnInit {
   private store = inject(Store);
   private router = inject(Router);
 
+  // Reference the templates from the HTML
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @ViewChild('statusTemplate') statusTemplate!: TemplateRef<any>;
+  @ViewChild('actionTemplate') actionTemplate!: TemplateRef<any>;
+
   model = new TableModel();
   size: TableRowSize = 'md';
   skeleton = false;
@@ -82,9 +94,13 @@ export class UserListComponent implements OnInit {
       })
     );
 
-    // Subscribe to users and update table
-    this.users$.subscribe((users) => {
-      this.updateTableData(users);
+    // Subscribe to users and update table after the view is initialized
+    setTimeout(() => {
+      this.users$.subscribe((users) => {
+        if (this.statusTemplate && this.actionTemplate) {
+          this.updateTableData(users);
+        }
+      });
     });
 
     // Subscribe to loading state
@@ -104,6 +120,10 @@ export class UserListComponent implements OnInit {
   }
 
   private updateTableData(users: UserResponse[]) {
+    if (!this.statusTemplate || !this.actionTemplate) {
+      return; // Don't update if templates aren't ready
+    }
+
     this.model.data = users.map((user) => [
       new TableItem({ data: user.email }),
       new TableItem({ data: user.wardNumber || 'N/A' }),
