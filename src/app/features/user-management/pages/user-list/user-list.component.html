@@ -62,7 +62,7 @@
   <div style="padding: 1rem" (click)="$event.stopPropagation()">
     <div style="padding-bottom: 1rem; color: grey">Filter Options</div>
     <cds-checkbox
-      [checked]="!showOnlyApproved"
+      [checked]="showOnlyApproved"
       (checkedChange)="toggleApprovalFilter($event)"
     >
       Approved Users

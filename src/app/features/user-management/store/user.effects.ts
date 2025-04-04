@@ -4,11 +4,9 @@ import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import { map, catchError, exhaustMap, withLatestFrom } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { TranslocoService } from '@jsverse/transloco';
 import { UserActions } from './user.actions';
 import { UserService } from '../services/user.service';
 import * as UserSelectors from './user.selectors';
-import { UrlParamsService } from '../services/url-params.service';
 import { GlobalNotificationService } from '../../../core/services/global-notification.service';
 
 @Injectable()
@@ -16,10 +14,8 @@ export class UserEffects {
   constructor(
     private actions$: Actions,
     private userService: UserService,
-    private transloco: TranslocoService,
     private router: Router,
     private store: Store,
-    private urlParamsService: UrlParamsService,
     private globalNotificationService: GlobalNotificationService
   ) {}
 
