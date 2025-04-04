@@ -1,4 +1,10 @@
-import { Component, Input, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  ChangeDetectorRef,
+  NgZone,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -70,7 +76,8 @@ export class ResetPasswordComponent implements OnDestroy {
     private fb: FormBuilder,
     private store: Store,
     private cd: ChangeDetectorRef,
-    private transloco: TranslocoService
+    private transloco: TranslocoService,
+    private ngZone: NgZone
   ) {
     // Setup form reset subscription with error clearing
     this.store
@@ -86,7 +93,9 @@ export class ResetPasswordComponent implements OnDestroy {
           .subscribe((errors) => {
             if (!errors) {
               this.store.dispatch(UserActions.clearErrors());
-              this.resetForm();
+              this.ngZone.run(() => {
+                this.resetForm();
+              });
             }
           });
       });
@@ -187,7 +196,8 @@ export class ResetPasswordComponent implements OnDestroy {
     this.hidePassword = true;
     this.hideConfirmPassword = true;
 
-    this.cd.detectChanges();
+    // Run change detection explicitly to ensure UI is updated
+    this.cd.markForCheck();
   }
 
   ngOnDestroy(): void {
