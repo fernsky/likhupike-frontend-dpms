@@ -50,13 +50,13 @@ import TrashCan16 from '@carbon/icons/es/trash-can/16';
     PaginationModule,
   ],
   templateUrl: './user-list.component.html',
+  styleUrls: ['./user-list.component.scss'],
 })
 export class UserListComponent implements OnInit {
   private store = inject(Store);
   private router = inject(Router);
 
   // Reference the templates from the HTML
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @ViewChild('statusTemplate') statusTemplate!: TemplateRef<any>;
   @ViewChild('actionTemplate') actionTemplate!: TemplateRef<any>;
 
