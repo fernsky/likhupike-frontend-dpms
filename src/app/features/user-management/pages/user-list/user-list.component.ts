@@ -32,6 +32,13 @@ import { UserFilter, UserResponse } from '../../models/user.interface';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil, distinctUntilChanged, map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
+import {
+  TranslocoModule,
+  TranslocoService,
+  provideTranslocoScope,
+} from '@jsverse/transloco';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 
 //@ts-expect-error Fixme: No types for carbon icons
 import Add16 from '@carbon/icons/es/add/16';
@@ -56,6 +63,13 @@ import TrashCan16 from '@carbon/icons/es/trash-can/16';
     InputModule,
     PaginationModule,
     CommonModule,
+    TranslocoModule,
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'user-management',
+      alias: 'user',
+    }),
   ],
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss'],
@@ -66,6 +80,8 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
   private ngZone = inject(NgZone);
+  private dialog = inject(MatDialog);
+  private transloco = inject(TranslocoService);
 
   // Stream control
   private destroy$ = new Subject<void>();
@@ -250,18 +266,20 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
   private initializeTable() {
     this.model.header = [
       new TableHeaderItem({
-        data: 'Email',
+        data: this.transloco.translate('user.list.columns.email'),
         sortable: true,
       }),
       new TableHeaderItem({
-        data: 'Ward',
+        data: this.transloco.translate('user.list.columns.ward'),
         sortable: true,
       }),
       new TableHeaderItem({
-        data: 'Status',
+        data: this.transloco.translate('user.list.columns.approvalStatus'),
         sortable: true,
       }),
-      new TableHeaderItem({ data: 'Actions' }),
+      new TableHeaderItem({
+        data: this.transloco.translate('user.list.columns.actions'),
+      }),
     ];
 
     // Enable pagination
@@ -283,11 +301,17 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
           title: user.email,
         }),
         new TableItem({
-          data: user.wardNumber || 'N/A',
-          title: user.wardNumber ? `Ward ${user.wardNumber}` : 'N/A',
+          data: this.getWardLabel(user.wardNumber),
+          title: this.getWardLabel(user.wardNumber),
         }),
         new TableItem({
-          data: user.isApproved ? 'Approved' : 'Pending',
+          data: user.isApproved
+            ? this.transloco.translate(
+                'user.list.filters.approvalStatus.approved'
+              )
+            : this.transloco.translate(
+                'user.list.filters.approvalStatus.pending'
+              ),
           template: this.statusTemplate,
         }),
         new TableItem({
@@ -327,6 +351,12 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  getWardLabel(wardNumber: number | null): string {
+    return wardNumber === null
+      ? this.transloco.translate('user.municipality')
+      : `${this.transloco.translate('user.ward')} ${wardNumber}`;
+  }
+
   // Event handlers
   onCreateUser() {
     this.router.navigate(['/dashboard/users/create']);
@@ -337,7 +367,47 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onDeleteUser(userId: string) {
-    this.store.dispatch(UserActions.deleteUser({ id: userId }));
+    const user = this.currentUsers.find((u) => u.id === userId);
+    if (!user) return;
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: this.transloco.translate('user.delete.confirmTitle'),
+        message: this.transloco.translate('user.delete.confirmMessage', {
+          name: user.email,
+        }),
+        confirmButton: this.transloco.translate('common.delete'),
+        cancelButton: this.transloco.translate('common.cancel'),
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.store.dispatch(UserActions.deleteUser({ id: userId }));
+      }
+    });
+  }
+
+  onToggleStatus(userId: string): void {
+    const user = this.currentUsers.find((u) => u.id === userId);
+    if (!user || user.isApproved) return;
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: this.transloco.translate('user.approve.confirmTitle'),
+        message: this.transloco.translate('user.approve.confirmMessage', {
+          email: user.email,
+        }),
+        confirmButton: this.transloco.translate('common.action.confirm'),
+        cancelButton: this.transloco.translate('common.action.cancel'),
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.store.dispatch(UserActions.approveUser({ id: userId }));
+      }
+    });
   }
 
   selectPage(page: number) {

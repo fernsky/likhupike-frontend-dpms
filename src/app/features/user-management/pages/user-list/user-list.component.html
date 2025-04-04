@@ -1,8 +1,8 @@
 <cds-table-container>
   <cds-table-header>
-    <h4 cdsTableHeaderTitle>User Management</h4>
+    <h4 cdsTableHeaderTitle>{{ "user.list.title" | transloco }}</h4>
     <p cdsTableHeaderDescription>
-      Manage users, their permissions, and approval status
+      {{ "user.list.subtitle" | transloco }}
     </p>
   </cds-table-header>
 
@@ -11,6 +11,7 @@
       <cds-table-toolbar-search
         [expandable]="true"
         [value]="searchTerm"
+        [placeholder]="'user.list.search.placeholder' | transloco"
         (valueChange)="filterUsers($event)"
         (clear)="filterUsers('')"
       >
@@ -31,7 +32,7 @@
       </button>
 
       <button cdsButton="primary" size="sm" (click)="onCreateUser()">
-        Add User
+        {{ "user.list.createButton" | transloco }}
         <svg cdsIcon="add" size="20" class="cds--btn__icon"></svg>
       </button>
     </cds-table-toolbar-content>
@@ -46,6 +47,7 @@
       [striped]="false"
       [stickyHeader]="true"
       (sort)="sortTable($event)"
+      [ariaLabel]="'user.list.title' | transloco"
     >
     </cds-table>
   </div>
@@ -63,11 +65,14 @@
 <!-- Templates -->
 <ng-template #filterTemplate>
   <div style="padding: 1rem" (click)="$event.stopPropagation()">
+    <div style="padding-bottom: 1rem; color: grey">
+      {{ "user.list.filters.title" | transloco }}
+    </div>
     <cds-checkbox
       [checked]="showOnlyPending"
       (checkedChange)="toggleApprovalFilter($event)"
     >
-      Pending Users
+      {{ "user.list.filters.approvalStatus.pending" | transloco }}
     </cds-checkbox>
   </div>
 </ng-template>
@@ -75,8 +80,10 @@
 <ng-template #statusTemplate let-data="data">
   <div
     [ngClass]="{
-      'status-approved': data === 'Approved',
-      'status-pending': data === 'Pending',
+      'status-approved':
+        data === ('user.list.filters.approvalStatus.approved' | transloco),
+      'status-pending':
+        data === ('user.list.filters.approvalStatus.pending' | transloco),
     }"
   >
     {{ data }}
@@ -88,23 +95,27 @@
     <cds-overflow-menu>
       <cds-overflow-menu-option (click)="onEditUser(data.id)">
         <div class="overflow-option">
-          <svg cdsIcon="settings" size="16"></svg> Edit
+          <svg cdsIcon="edit" size="16"></svg>
+          {{ "user.list.actions.edit" | transloco }}
         </div>
       </cds-overflow-menu-option>
+
+      <cds-overflow-menu-option
+        *ngIf="!data.isApproved"
+        (click)="onToggleStatus(data.id)"
+      >
+        <div class="overflow-option">
+          <svg cdsIcon="checkmark" size="16"></svg>
+          {{ "user.list.actions.approve" | transloco }}
+        </div>
+      </cds-overflow-menu-option>
+
       <cds-overflow-menu-option (click)="onDeleteUser(data.id)">
         <div class="overflow-option">
-          <svg cdsIcon="trash-can" size="16"></svg> Delete
+          <svg cdsIcon="trash-can" size="16"></svg>
+          {{ "user.list.actions.delete" | transloco }}
         </div>
       </cds-overflow-menu-option>
     </cds-overflow-menu>
   </div>
-</ng-template>
-
-<ng-template #paginationTableItemTemplate let-data="data">
-  <a [attr.href]="data.link">{{ data.name }} {{ data.surname }}</a>
-</ng-template>
-<ng-template #filterableHeaderTemplate let-data="data">
-  <i
-    ><a [attr.href]="data.link">{{ data.name }}</a></i
-  >
 </ng-template>
