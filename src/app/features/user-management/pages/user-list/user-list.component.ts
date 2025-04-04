@@ -39,6 +39,8 @@ import {
 } from '@jsverse/transloco';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
+import { FormatApprovalStatusPipe } from '@app/shared/pipes/format-approval-status.pipe';
+import { NumberFormatService } from '@app/shared/services/number-format.service';
 
 //@ts-expect-error Fixme: No types for carbon icons
 import Add16 from '@carbon/icons/es/add/16';
@@ -50,6 +52,8 @@ import Search16 from '@carbon/icons/es/search/16';
 import Edit16 from '@carbon/icons/es/edit/16';
 //@ts-expect-error Fixme: No types for carbon icons
 import TrashCan16 from '@carbon/icons/es/trash-can/16';
+//@ts-expect-error Fixme: No types for carbon icons
+import Checkmark16 from '@carbon/icons/es/checkmark/16';
 
 @Component({
   selector: 'app-user-list',
@@ -64,6 +68,7 @@ import TrashCan16 from '@carbon/icons/es/trash-can/16';
     PaginationModule,
     CommonModule,
     TranslocoModule,
+    FormatApprovalStatusPipe,
   ],
   providers: [
     provideTranslocoScope({
@@ -82,6 +87,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
   private ngZone = inject(NgZone);
   private dialog = inject(MatDialog);
   private transloco = inject(TranslocoService);
+  private numberFormat = inject(NumberFormatService);
 
   // Stream control
   private destroy$ = new Subject<void>();
@@ -123,6 +129,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
       Search16,
       Edit16,
       TrashCan16,
+      Checkmark16,
     ]);
 
     // Initialize with empty headers - we'll populate them after translations are ready
@@ -314,13 +321,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
           title: this.getWardLabel(user.wardNumber),
         }),
         new TableItem({
-          data: user.isApproved
-            ? this.transloco.translate(
-                'user.list.filters.approvalStatus.approved'
-              )
-            : this.transloco.translate(
-                'user.list.filters.approvalStatus.pending'
-              ),
+          data: user.isApproved, // Pass the boolean value
           template: this.statusTemplate,
         }),
         new TableItem({
@@ -361,9 +362,12 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getWardLabel(wardNumber: number | null): string {
-    return wardNumber === null
-      ? this.transloco.translate('user.municipality')
-      : `${this.transloco.translate('user.ward')} ${wardNumber}`;
+    if (wardNumber === null || wardNumber === undefined) {
+      return this.transloco.translate('user.municipality');
+    }
+    
+    const formattedNumber = this.numberFormat.formatNumber(wardNumber);
+    return `${this.transloco.translate('user.ward')} ${formattedNumber}`;
   }
 
   // Event handlers

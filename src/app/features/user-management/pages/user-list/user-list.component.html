@@ -80,13 +80,11 @@
 <ng-template #statusTemplate let-data="data">
   <div
     [ngClass]="{
-      'status-approved':
-        data === ('user.list.filters.approvalStatus.approved' | transloco),
-      'status-pending':
-        data === ('user.list.filters.approvalStatus.pending' | transloco),
+      'status-approved': data,
+      'status-pending': !data,
     }"
   >
-    {{ data }}
+    {{ data | formatApprovalStatus }}
   </div>
 </ng-template>
 
@@ -95,7 +93,7 @@
     <cds-overflow-menu>
       <cds-overflow-menu-option (click)="onEditUser(data.id)">
         <div class="overflow-option">
-          <svg cdsIcon="edit" size="16"></svg>
+          <svg cdsIcon="settings" size="16"></svg>
           {{ "user.list.actions.edit" | transloco }}
         </div>
       </cds-overflow-menu-option>
