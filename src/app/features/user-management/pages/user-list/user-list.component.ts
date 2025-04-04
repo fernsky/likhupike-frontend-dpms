@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { Store } from '@ngrx/store';
 import {
   TableModel,
   TableHeaderItem,
@@ -13,6 +14,10 @@ import {
   PaginationModule,
 } from 'carbon-components-angular';
 import { IconService } from '@app/core/services/icon.service';
+import { Router } from '@angular/router';
+import * as UserSelectors from '../../store/user.selectors';
+import { UserActions } from '../../store/user.actions';
+import { UserResponse } from '../../models/user.interface';
 
 //@ts-expect-error Fixme: No types for carbon icons
 import Add16 from '@carbon/icons/es/add/16';
@@ -21,10 +26,12 @@ import Settings16 from '@carbon/icons/es/settings/16';
 //@ts-expect-error Fixme: No types for carbon icons
 import Search16 from '@carbon/icons/es/search/16';
 //@ts-expect-error Fixme: No types for carbon icons
-import Close16 from '@carbon/icons/es/close/16';
+import Edit16 from '@carbon/icons/es/edit/16';
+//@ts-expect-error Fixme: No types for carbon icons
+import TrashCan16 from '@carbon/icons/es/trash-can/16';
 
 @Component({
-  selector: 'app-user-list', // Changed from app-model-filter-table
+  selector: 'app-user-list',
   standalone: true,
   imports: [
     TableModule,
@@ -35,133 +42,127 @@ import Close16 from '@carbon/icons/es/close/16';
     InputModule,
     PaginationModule,
   ],
-
   templateUrl: './user-list.component.html',
 })
 export class UserListComponent implements OnInit {
-  @Input() size: TableRowSize = 'md';
-  @Input() showSelectionColumn = true;
-  @Input() enableSingleSelect = false;
-  @Input() striped = true;
-  @Input() isDataGrid = false;
-  @Input() noData = false;
-  @Input() stickyHeader = false;
-  @Input() skeleton = false;
+  private store = inject(Store);
+  private router = inject(Router);
 
   model = new TableModel();
-  displayedCountries = ['US', 'France', 'Argentina', 'Japan'];
+  size: TableRowSize = 'md';
+  skeleton = false;
 
-  dataset = [
-    [
-      new TableItem({ data: '800' }),
-      new TableItem({ data: 'East Sadye' }),
-      new TableItem({ data: 'Store' }),
-      new TableItem({ data: 'US' }),
-    ],
-    [
-      new TableItem({ data: '500' }),
-      new TableItem({ data: 'Lueilwitzview' }),
-      new TableItem({ data: 'Store' }),
-      new TableItem({ data: 'US' }),
-    ],
-    [
-      new TableItem({ data: '120' }),
-      new TableItem({ data: 'East Arcelyside' }),
-      new TableItem({ data: 'Store' }),
-      new TableItem({ data: 'France' }),
-    ],
-    [
-      new TableItem({ data: '119' }),
-      new TableItem({ data: 'West Dylan' }),
-      new TableItem({ data: 'Store' }),
-      new TableItem({ data: 'Argentina' }),
-    ],
-    [
-      new TableItem({ data: '54' }),
-      new TableItem({ data: 'Brandynberg' }),
-      new TableItem({ data: 'Store' }),
-      new TableItem({ data: 'Japan' }),
-    ],
-    [
-      new TableItem({ data: '15' }),
-      new TableItem({ data: 'Stoltenbergport' }),
-      new TableItem({ data: 'Store' }),
-      new TableItem({ data: 'Canada' }),
-    ],
-    [
-      new TableItem({ data: '12' }),
-      new TableItem({ data: 'Rheabury' }),
-      new TableItem({ data: 'Store' }),
-      new TableItem({ data: 'US' }),
-    ],
-  ];
+  // Store selectors
+  users$ = this.store.select(UserSelectors.selectUsers);
+  loading$ = this.store.select(UserSelectors.selectUserLoading);
+  pagination$ = this.store.select(UserSelectors.selectPagination);
+  currentFilter$ = this.store.select(UserSelectors.selectCurrentFilter);
 
   constructor(protected iconService: IconService) {
-    // this.initializeTable();
-    // Register icons after ensuring service is available
-    setTimeout(() => {
-      this.iconService.registerAll([Settings16, Add16, Search16, Close16]);
-    });
+    this.iconService.registerAll([
+      Settings16,
+      Add16,
+      Search16,
+      Edit16,
+      TrashCan16,
+    ]);
+    this.initializeTable();
   }
 
   ngOnInit() {
-    this.initializeTable();
+    // Load initial data
+    this.store.dispatch(
+      UserActions.loadUsers({
+        filter: {
+          page: 1,
+          size: 10,
+          sortBy: 'createdAt',
+          sortDirection: 'DESC',
+        },
+      })
+    );
+
+    // Subscribe to users and update table
+    this.users$.subscribe((users) => {
+      this.updateTableData(users);
+    });
+
+    // Subscribe to loading state
+    this.loading$.subscribe((loading) => {
+      this.skeleton = loading;
+    });
   }
 
   private initializeTable() {
     this.model.header = [
-      new TableHeaderItem({ data: 'Node ID' }),
-      new TableHeaderItem({ data: 'Node name' }),
-      new TableHeaderItem({ data: 'Node type' }),
-      new TableHeaderItem({ data: 'Country' }),
+      new TableHeaderItem({ data: 'Email' }),
+      new TableHeaderItem({ data: 'Ward' }),
+      new TableHeaderItem({ data: 'Status' }),
+      new TableHeaderItem({ data: 'Created At' }),
+      new TableHeaderItem({ data: 'Actions' }),
     ];
-    this.model.data = this.dataset;
   }
 
-  filterNodeNames(searchString: string) {
-    this.model.data = this.dataset.filter((row: TableItem[]) =>
-      row[1].data.toLowerCase().includes(searchString.toLowerCase())
-    );
+  private updateTableData(users: UserResponse[]) {
+    this.model.data = users.map((user) => [
+      new TableItem({ data: user.email }),
+      new TableItem({ data: user.wardNumber || 'N/A' }),
+      new TableItem({
+        data: user.isApproved ? 'Approved' : 'Pending',
+        template: this.statusTemplate,
+      }),
+      new TableItem({
+        data: new Date(user.createdAt).toLocaleDateString(),
+      }),
+      new TableItem({
+        data: user,
+        template: this.actionTemplate,
+      }),
+    ]);
   }
 
-  filterCountries(countryName: string, checked: boolean) {
-    if (checked) {
-      this.displayedCountries.push(countryName);
-    } else {
-      this.displayedCountries.splice(
-        this.displayedCountries.indexOf(countryName),
-        1
-      );
-    }
-
-    this.model.data = this.dataset.filter((row: TableItem[]) =>
-      this.displayedCountries.includes(row[3].data)
-    );
+  // Event handlers
+  onCreateUser() {
+    this.router.navigate(['/dashboard/users/create']);
   }
 
-  getPage(page: number) {
-		const line = line => [`Item ${line}:1!`, { name: "Item", surname: `${line}:2` }];
+  onEditUser(userId: string) {
+    this.router.navigate([`/dashboard/users/edit/${userId}`]);
+  }
 
-		const fullPage = [];
-
-		for (let i = (page - 1) * this.model.pageLength; i < page * this.model.pageLength && i < this.model.totalDataLength; i++) {
-			fullPage.push(line(i + 1));
-		}
-
-		return new Promise(resolve => {
-			setTimeout(() => resolve(fullPage), 150);
-		});
-	}
+  onDeleteUser(userId: string) {
+    // Add confirmation dialog here if needed
+    this.store.dispatch(UserActions.deleteUser({ id: userId }));
+  }
 
   selectPage(page: number) {
-    this.getPage(page).then((data: Array<Array<any>>) => {
-      // set the data and update page
-      this.model.data = this.prepareData(data);
-      this.model.currentPage = page;
-    });
+    this.store.dispatch(
+      UserActions.setPage({
+        pageIndex: page,
+        pageSize: this.model.pageLength,
+      })
+    );
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  overflowOnClick = (event: any) => {
-    event.stopPropagation();
-  };
+
+  filterUsers(searchString: string) {
+    this.store.dispatch(
+      UserActions.filterChange({
+        filter: {
+          searchTerm: searchString,
+          page: 1, // Reset to first page on filter
+        },
+      })
+    );
+  }
+
+  toggleApprovalFilter(showApproved: boolean) {
+    this.store.dispatch(
+      UserActions.filterChange({
+        filter: {
+          isApproved: showApproved,
+          page: 1,
+        },
+      })
+    );
+  }
 }

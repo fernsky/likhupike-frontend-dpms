@@ -17,27 +17,27 @@
 
 <cds-table-container>
   <cds-table-header>
-    <h4 cdsTableHeaderTitle>Filter table</h4>
+    <h4 cdsTableHeaderTitle>User Management</h4>
     <p cdsTableHeaderDescription>
-      Use the toolbar's search functionality to filter node names or click the
-      filter icon to filter country names
+      Manage users, their permissions, and approval status
     </p>
   </cds-table-header>
+
   <cds-table-toolbar>
     <cds-table-toolbar-content>
       <cds-table-toolbar-search
         [expandable]="true"
-        (valueChange)="filterNodeNames($event)"
-        (clear)="filterNodeNames('')"
+        (valueChange)="filterUsers($event)"
+        (clear)="filterUsers('')"
       >
       </cds-table-toolbar-search>
+
       <button
         cdsButton="ghost"
         class="toolbar-action"
-        [cdsOverflowMenu]="templateRef"
+        [cdsOverflowMenu]="filterTemplate"
         placement="bottom"
         [flip]="true"
-        [offset]="{ x: 3, y: 0 }"
       >
         <svg
           cdsIcon="settings"
@@ -45,56 +45,55 @@
           class="cds--toolbar-action__icon"
         ></svg>
       </button>
-      <button cdsButton="primary" size="sm">
-        Primary Button<svg cdsIcon="add" size="20" class="cds--btn__icon"></svg>
+
+      <button cdsButton="primary" size="sm" (click)="onCreateUser()">
+        Add User
+        <svg cdsIcon="add" size="20" class="cds--btn__icon"></svg>
       </button>
     </cds-table-toolbar-content>
   </cds-table-toolbar>
+
   <cds-table
     [model]="model"
-    [sortable]="false"
     [size]="size"
     [skeleton]="skeleton"
-    [showSelectionColumn]="showSelectionColumn"
-    [enableSingleSelect]="enableSingleSelect"
-    [stickyHeader]="stickyHeader"
-    [striped]="striped"
-    [isDataGrid]="isDataGrid"
+    [sortable]="true"
+    [stickyHeader]="true"
+    [striped]="true"
   >
-    <ng-content></ng-content>
   </cds-table>
+
   <cds-pagination
     [model]="model"
     (selectPage)="selectPage($event)"
-  ></cds-pagination>
+    [pageInputDisabled]="false"
+  >
+  </cds-pagination>
 </cds-table-container>
 
-<ng-template #templateRef>
-  <div style="padding: 0 1rem" (click)="overflowOnClick($event)">
-    <div style="padding-top: 0.5rem; color: grey">Countries shown</div>
-    <cds-checkbox
-      [checked]="displayedCountries.includes('US')"
-      (checkedChange)="filterCountries('US', $event)"
-    >
-      US
+<!-- Templates -->
+<ng-template #filterTemplate>
+  <div style="padding: 1rem" (click)="$event.stopPropagation()">
+    <div style="padding-bottom: 1rem; color: grey">Filter Options</div>
+    <cds-checkbox (checkedChange)="toggleApprovalFilter($event)">
+      Show only approved users
     </cds-checkbox>
-    <cds-checkbox
-      [checked]="displayedCountries.includes('France')"
-      (checkedChange)="filterCountries('France', $event)"
-    >
-      France
-    </cds-checkbox>
-    <cds-checkbox
-      [checked]="displayedCountries.includes('Argentina')"
-      (checkedChange)="filterCountries('Argentina', $event)"
-    >
-      Argentina
-    </cds-checkbox>
-    <cds-checkbox
-      [checked]="displayedCountries.includes('Japan')"
-      (checkedChange)="filterCountries('Japan', $event)"
-    >
-      Japan
-    </cds-checkbox>
+  </div>
+</ng-template>
+
+<ng-template #statusTemplate let-data="data">
+  <span [class]="data === 'Approved' ? 'approved' : 'pending'">
+    {{ data }}
+  </span>
+</ng-template>
+
+<ng-template #actionTemplate let-data="data">
+  <div class="action-buttons">
+    <button cdsButton="ghost" size="sm" (click)="onEditUser(data.id)">
+      <svg cdsIcon="edit" size="16"></svg>
+    </button>
+    <button cdsButton="ghost" size="sm" (click)="onDeleteUser(data.id)">
+      <svg cdsIcon="trash-can" size="16"></svg>
+    </button>
   </div>
 </ng-template>
