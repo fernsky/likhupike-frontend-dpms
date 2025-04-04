@@ -2,7 +2,13 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { map, catchError, exhaustMap, withLatestFrom } from 'rxjs/operators';
+import {
+  map,
+  catchError,
+  exhaustMap,
+  withLatestFrom,
+  tap,
+} from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { UserActions } from './user.actions';
 import { UserService } from '../services/user.service';
@@ -41,6 +47,10 @@ export class UserEffects {
   loadUsers$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.loadUsers),
+      tap(() => {
+        // Ensure we give time for the loading state to be applied
+        setTimeout(() => {}, 0);
+      }),
       exhaustMap(({ filter }) =>
         this.userService.getUsers(filter).pipe(
           map(({ users, total }) => {

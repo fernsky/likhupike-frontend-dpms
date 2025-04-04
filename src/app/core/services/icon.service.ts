@@ -13,6 +13,7 @@ export class IconService {
   private iconCache: IconCache = new IconMemoryCache();
 
   public registerAll(descriptors: object[]) {
+    console.log('registerAll', descriptors);
     descriptors.forEach((icon) => this.register(icon));
   }
 

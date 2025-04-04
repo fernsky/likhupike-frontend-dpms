@@ -37,18 +37,21 @@
     </cds-table-toolbar-content>
   </cds-table-toolbar>
 
-  <cds-table
-    [model]="model"
-    [size]="size"
-    [skeleton]="skeleton"
-    [sortable]="true"
-    [striped]="false"
-    [stickyHeader]="true"
-    (sort)="sortTable($event)"
-  >
-  </cds-table>
+  <div class="table-container">
+    <cds-table
+      [model]="model"
+      [size]="size"
+      [skeleton]="skeleton"
+      [sortable]="true"
+      [striped]="false"
+      [stickyHeader]="true"
+      (sort)="sortTable($event)"
+    >
+    </cds-table>
+  </div>
 
   <cds-pagination
+    *ngIf="model.totalDataLength > 0"
     [model]="model"
     (selectPage)="selectPage($event)"
     [disabled]="skeleton"
@@ -86,7 +89,7 @@
     <cds-overflow-menu>
       <cds-overflow-menu-option (click)="onEditUser(data.id)">
         <div class="overflow-option">
-          <svg cdsIcon="edit" size="16"></svg> Edit
+          <svg cdsIcon="settings" size="16"></svg> Edit
         </div>
       </cds-overflow-menu-option>
       <cds-overflow-menu-option (click)="onDeleteUser(data.id)">

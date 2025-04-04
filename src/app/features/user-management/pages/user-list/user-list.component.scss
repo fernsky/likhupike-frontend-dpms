@@ -8,13 +8,6 @@
   }
 
   // Status badges
-  .status-approved {
-    color: var(--text-primary);
-  }
-
-  .status-pending {
-    color: var(--text-secondary);
-  }
 
   // Improve overflow menu options
   .overflow-option {
@@ -29,9 +22,17 @@
     justify-content: flex-end;
   }
 
+  // Better table container
+  .table-container {
+    min-height: 300px;
+    width: 100%;
+    position: relative;
+  }
+
   // Ensure table height doesn't jump during loading
   cds-table {
-    min-height: 300px;
+    min-height: 200px;
+    width: 100%;
   }
 
   // Improve pagination appearance
@@ -44,5 +45,15 @@
     position: sticky;
     top: 0;
     z-index: 1;
+  }
+
+  // Improve skeleton rows appearance
+  .cds--skeleton-text {
+    width: 100%;
+  }
+
+  // Fix for skeleton state
+  .cds--data-table--skeleton .cds--table-header-label {
+    opacity: 0.85;
   }
 }

@@ -7,6 +7,8 @@ import {
   TemplateRef,
   OnDestroy,
   AfterViewInit,
+  ChangeDetectorRef,
+  NgZone,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
@@ -27,7 +29,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import * as UserSelectors from '../../store/user.selectors';
 import { UserActions } from '../../store/user.actions';
 import { UserFilter, UserResponse } from '../../models/user.interface';
-import { BehaviorSubject, Observable, Subject, combineLatest } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil, distinctUntilChanged, map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 
@@ -62,17 +64,13 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
   private store = inject(Store);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private cdr = inject(ChangeDetectorRef);
+  private ngZone = inject(NgZone);
 
   // Stream control
   private destroy$ = new Subject<void>();
-  private filtersSubject = new BehaviorSubject<UserFilter>({});
-  filters$ = this.filtersSubject
-    .asObservable()
-    .pipe(
-      distinctUntilChanged(
-        (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
-      )
-    );
+  private templatesReady$ = new BehaviorSubject<boolean>(false);
+  private currentUsers: UserResponse[] = [];
 
   // Reference the templates from the HTML
   @ViewChild('statusTemplate') statusTemplate!: TemplateRef<any>;
@@ -114,6 +112,26 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    // Initialize loading state
+    this.skeleton = true;
+
+    // Subscribe to loading state first to properly handle UI state
+    this.loading$.pipe(takeUntil(this.destroy$)).subscribe((loading) => {
+      this.skeleton = loading;
+
+      // If loading is complete and we have templates and users, update the table
+      if (
+        !loading &&
+        this.templatesReady$.getValue() &&
+        this.currentUsers.length > 0
+      ) {
+        this.updateTableData(this.currentUsers);
+      }
+
+      // Force change detection
+      this.cdr.detectChanges();
+    });
+
     // Read query parameters from URL to sync state
     this.activatedRoute.queryParams
       .pipe(takeUntil(this.destroy$))
@@ -145,62 +163,83 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.updateQueryParams(filter);
     });
 
-    // Subscribe to loading state
-    this.loading$.pipe(takeUntil(this.destroy$)).subscribe((loading) => {
-      this.skeleton = loading;
-    });
-
     // Subscribe to pagination changes
     this.pagination$.pipe(takeUntil(this.destroy$)).subscribe((pagination) => {
       if (pagination) {
         this.model.pageLength = pagination.pageSize;
         this.model.totalDataLength = pagination.totalElements;
         this.model.currentPage = pagination.currentPage;
+
+        // Force change detection to update the UI
+        this.cdr.detectChanges();
       }
     });
 
-    // Listen for changes in users and update table when templates are available
-    combineLatest([
-      this.users$,
-      new Observable<boolean>((observer) => {
-        if (this.statusTemplate && this.actionTemplate) {
-          observer.next(true);
-        }
-
-        // Set up MutationObserver to detect when templates become available
-        const interval = setInterval(() => {
-          if (this.statusTemplate && this.actionTemplate) {
-            observer.next(true);
-            clearInterval(interval);
-          }
-        }, 100);
-
-        return () => clearInterval(interval);
-      }),
-    ])
+    // Track user data updates
+    this.users$
       .pipe(
         takeUntil(this.destroy$),
-        distinctUntilChanged((prev, curr) => {
-          // Only update if users array changes
-          return JSON.stringify(prev[0]) === JSON.stringify(curr[0]);
-        })
+        distinctUntilChanged(
+          (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
+        )
       )
-      .subscribe(([users, templatesReady]) => {
-        if (templatesReady && users) {
-          this.updateTableData(users);
+      .subscribe((users) => {
+        this.currentUsers = users || [];
+
+        // Only update the table if templates are ready
+        if (this.templatesReady$.getValue() && this.currentUsers.length > 0) {
+          // Use ngZone to ensure Angular detects the changes
+          this.ngZone.run(() => {
+            this.updateTableData(this.currentUsers);
+            this.skeleton = false;
+            this.cdr.detectChanges();
+          });
         }
       });
   }
 
   ngAfterViewInit() {
-    // After view init, check if we have users data and update table
-    setTimeout(() => {
-      this.users$.pipe(takeUntil(this.destroy$)).subscribe((users) => {
-        if (users?.length && this.statusTemplate && this.actionTemplate) {
-          this.updateTableData(users);
+    // Check for templates after view initialization
+    if (this.statusTemplate && this.actionTemplate) {
+      this.templatesReady$.next(true);
+
+      // If we already have data, update the table now
+      if (this.currentUsers.length > 0) {
+        setTimeout(() => {
+          this.updateTableData(this.currentUsers);
+          this.skeleton = false;
+          this.cdr.detectChanges();
+        });
+      }
+    } else {
+      // Templates are not ready, set up a polling mechanism
+      const checkTemplates = setInterval(() => {
+        if (this.statusTemplate && this.actionTemplate) {
+          this.templatesReady$.next(true);
+
+          // If we already have data, update the table now
+          if (this.currentUsers.length > 0) {
+            this.updateTableData(this.currentUsers);
+            this.skeleton = false;
+            this.cdr.detectChanges();
+          }
+
+          clearInterval(checkTemplates);
         }
-      });
-    });
+      }, 50); // Check every 50ms
+
+      // Clean up interval if component is destroyed
+      this.destroy$.subscribe(() => clearInterval(checkTemplates));
+    }
+
+    // Force an update after a short delay as a fallback
+    setTimeout(() => {
+      if (this.currentUsers.length > 0 && this.templatesReady$.getValue()) {
+        this.updateTableData(this.currentUsers);
+        this.skeleton = false;
+        this.cdr.detectChanges();
+      }
+    }, 500);
   }
 
   ngOnDestroy() {
@@ -231,28 +270,39 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private updateTableData(users: UserResponse[]) {
-    if (!this.statusTemplate || !this.actionTemplate) {
+    // Make sure we have templates and data
+    if (!this.statusTemplate || !this.actionTemplate || users.length === 0) {
       return;
     }
 
-    this.model.data = users.map((user) => [
-      new TableItem({
-        data: user.email,
-        title: user.email,
-      }),
-      new TableItem({
-        data: user.wardNumber || 'N/A',
-        title: user.wardNumber ? `Ward ${user.wardNumber}` : 'N/A',
-      }),
-      new TableItem({
-        data: user.isApproved ? 'Approved' : 'Pending',
-        template: this.statusTemplate,
-      }),
-      new TableItem({
-        data: user,
-        template: this.actionTemplate,
-      }),
-    ]);
+    try {
+      // Update the table data
+      this.model.data = users.map((user) => [
+        new TableItem({
+          data: user.email,
+          title: user.email,
+        }),
+        new TableItem({
+          data: user.wardNumber || 'N/A',
+          title: user.wardNumber ? `Ward ${user.wardNumber}` : 'N/A',
+        }),
+        new TableItem({
+          data: user.isApproved ? 'Approved' : 'Pending',
+          template: this.statusTemplate,
+        }),
+        new TableItem({
+          data: user,
+          template: this.actionTemplate,
+        }),
+      ]);
+
+      // Turn off skeleton loading if it's still on
+      if (this.skeleton) {
+        this.skeleton = false;
+      }
+    } catch (error) {
+      console.error('Error updating table data:', error);
+    }
   }
 
   private updateQueryParams(filter: UserFilter) {
@@ -273,6 +323,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
       relativeTo: this.activatedRoute,
       queryParams,
       queryParamsHandling: 'merge',
+      replaceUrl: true, // Use replaceUrl to avoid new history entries
     });
   }
 
@@ -286,7 +337,6 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onDeleteUser(userId: string) {
-    // Add confirmation dialog here if needed
     this.store.dispatch(UserActions.deleteUser({ id: userId }));
   }
 
@@ -349,7 +399,6 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
         filter: {
           sortBy: sortField,
           sortDirection: sortDirection,
-          // Don't reset page on sort change
         },
       })
     );
