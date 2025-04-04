@@ -124,10 +124,23 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
       Edit16,
       TrashCan16,
     ]);
-    this.initializeTable();
+
+    // Initialize with empty headers - we'll populate them after translations are ready
+    this.model.header = [];
+    this.model.pageLength = 10;
+    this.model.totalDataLength = 0;
   }
 
   ngOnInit() {
+    // Wait for translations to be ready
+    this.transloco
+      .selectTranslateObject('user.list.columns')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((columns) => {
+        // Initialize table headers with translations
+        this.initializeTable(columns);
+      });
+
     // Initialize loading state
     this.skeleton = true;
 
@@ -263,28 +276,24 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private initializeTable() {
+  private initializeTable(columns: any) {
     this.model.header = [
       new TableHeaderItem({
-        data: this.transloco.translate('user.list.columns.email'),
+        data: columns.email || 'Email',
         sortable: true,
       }),
       new TableHeaderItem({
-        data: this.transloco.translate('user.list.columns.ward'),
+        data: columns.ward || 'Ward',
         sortable: true,
       }),
       new TableHeaderItem({
-        data: this.transloco.translate('user.list.columns.approvalStatus'),
+        data: columns.approvalStatus || 'Status',
         sortable: true,
       }),
       new TableHeaderItem({
-        data: this.transloco.translate('user.list.columns.actions'),
+        data: columns.actions || 'Actions',
       }),
     ];
-
-    // Enable pagination
-    this.model.pageLength = 10;
-    this.model.totalDataLength = 0;
   }
 
   private updateTableData(users: UserResponse[]) {
