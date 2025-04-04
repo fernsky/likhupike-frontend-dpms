@@ -64,7 +64,7 @@ export class UpdateUserDetailsComponent implements OnInit, OnDestroy {
           {
             email: value.email,
             isWardLevelUser: value.isWardLevelUser,
-            wardNumber: value.wardNumber,
+            wardNumber: value.wardNumber, // Simple value now, not an object
           },
           { emitEvent: false }
         );
@@ -82,14 +82,14 @@ export class UpdateUserDetailsComponent implements OnInit, OnDestroy {
   errors$ = this.store.select(UserSelectors.selectUserErrors);
   private destroy$ = new Subject<void>();
 
-  // Formatted for Carbon dropdown-list
+  // Format array for Carbon dropdown
   get wardNumbers() {
     return Array.from({ length: 33 }, (_, i) => {
       const number = i + 1;
       return {
-        content: `${this.getFormattedWardNumber(number)}`,
-        value: number,
-        selected: number === this._user?.wardNumber,
+        content: `Ward ${this.getFormattedWardNumber(number)}`,
+        value: number, // Simple number value
+        selected: number === this.updateForm?.get('wardNumber')?.value,
       };
     });
   }
@@ -98,7 +98,7 @@ export class UpdateUserDetailsComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private store: Store,
     private location: Location,
-    private cd: ChangeDetectorRef,
+    public cd: ChangeDetectorRef,
     private numberFormat: NumberFormatService,
     private transloco: TranslocoService
   ) {}
@@ -124,7 +124,7 @@ export class UpdateUserDetailsComponent implements OnInit, OnDestroy {
             {
               email: updatedUser.email,
               isWardLevelUser: updatedUser.isWardLevelUser,
-              wardNumber: updatedUser.wardNumber,
+              wardNumber: updatedUser.wardNumber, // Simple number value
             },
             { emitEvent: false }
           );
@@ -153,19 +153,11 @@ export class UpdateUserDetailsComponent implements OnInit, OnDestroy {
         isWardLevelUser: [this.user.isWardLevelUser],
         wardNumber: [
           {
-            value: this.user.wardNumber,
+            value: this.user.wardNumber, // Simple number value
             disabled: !this.user.isWardLevelUser,
           },
           [Validators.min(1), Validators.max(33)],
         ],
-      });
-
-      // Force set the ward number after initialization
-      setTimeout(() => {
-        if (this.user.isWardLevelUser && this.user.wardNumber) {
-          this.updateForm.get('wardNumber')?.setValue(this.user.wardNumber);
-          this.cd.detectChanges();
-        }
       });
 
       // Handle ward level user changes
@@ -180,11 +172,25 @@ export class UpdateUserDetailsComponent implements OnInit, OnDestroy {
               Validators.min(1),
               Validators.max(33),
             ]);
+            // Set a default ward number if none is selected
+            if (!wardControl?.value) {
+              wardControl?.setValue(1);
+            }
           } else {
             wardControl?.disable();
             wardControl?.clearValidators();
           }
           wardControl?.updateValueAndValidity();
+          this.cd.detectChanges(); // Force update UI
+        });
+
+      // Listen for ward number changes to update the selected state in dropdown
+      this.updateForm
+        .get('wardNumber')
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe(() => {
+          // Force refresh to update selected state in dropdown
+          this.cd.detectChanges();
         });
     }
   }
@@ -227,10 +233,21 @@ export class UpdateUserDetailsComponent implements OnInit, OnDestroy {
   onSubmit(): void {
     if (this.updateForm.valid && this.updateForm.dirty) {
       const formValue = this.updateForm.getRawValue();
+
+      // Ensure wardNumber is extracted correctly if it's an object
+      let wardNumber = formValue.wardNumber;
+      if (
+        wardNumber &&
+        typeof wardNumber === 'object' &&
+        wardNumber.value !== undefined
+      ) {
+        wardNumber = wardNumber.value;
+      }
+
       const request: UpdateUserRequest = {
         email: formValue.email,
         isWardLevelUser: formValue.isWardLevelUser,
-        wardNumber: formValue.isWardLevelUser ? formValue.wardNumber : null,
+        wardNumber: formValue.isWardLevelUser ? wardNumber : null,
       };
 
       this.store.dispatch(

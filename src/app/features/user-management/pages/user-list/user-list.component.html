@@ -63,12 +63,11 @@
 <!-- Templates -->
 <ng-template #filterTemplate>
   <div style="padding: 1rem" (click)="$event.stopPropagation()">
-    <div style="padding-bottom: 1rem; color: grey">Filter Options</div>
     <cds-checkbox
-      [checked]="showOnlyApproved"
+      [checked]="showOnlyPending"
       (checkedChange)="toggleApprovalFilter($event)"
     >
-      Approved Users
+      Pending Users
     </cds-checkbox>
   </div>
 </ng-template>

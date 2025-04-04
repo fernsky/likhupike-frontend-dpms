@@ -95,7 +95,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
   currentPage = 1;
   pageSize = 10;
   searchTerm = '';
-  showOnlyApproved = false;
+  showOnlyPending = false;
 
   constructor(
     protected iconService: IconService,
@@ -142,11 +142,11 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
           sortBy: params['sortBy'] || 'createdAt',
           sortDirection: (params['sortDirection'] as 'ASC' | 'DESC') || 'DESC',
           searchTerm: params['searchTerm'] || '',
-          isApproved: params['isApproved'] === 'true' ? true : undefined,
+          isApproved: params['isApproved'] === 'false' ? false : undefined,
         };
 
         this.searchTerm = initialFilter.searchTerm || '';
-        this.showOnlyApproved = initialFilter.isApproved || false;
+        this.showOnlyPending = initialFilter.isApproved === false;
 
         // Dispatch initial filter
         this.store.dispatch(UserActions.loadUsers({ filter: initialFilter }));
@@ -157,7 +157,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.currentPage = filter.page || 1;
       this.pageSize = filter.size || 10;
       this.searchTerm = filter.searchTerm || '';
-      this.showOnlyApproved = filter.isApproved || false;
+      this.showOnlyPending = filter.isApproved === false;
 
       // Update URL query params
       this.updateQueryParams(filter);
@@ -361,12 +361,12 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  toggleApprovalFilter(showApproved: boolean) {
-    this.showOnlyApproved = showApproved;
+  toggleApprovalFilter(showPending: boolean) {
+    this.showOnlyPending = showPending;
     this.store.dispatch(
       UserActions.filterChange({
         filter: {
-          isApproved: showApproved,
+          isApproved: showPending ? false : undefined,
           page: 1,
         },
       })

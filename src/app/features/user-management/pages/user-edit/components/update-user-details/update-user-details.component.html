@@ -36,6 +36,8 @@
         [helperText]="'user.form.wardHelp' | transloco"
         [invalid]="hasWardNumberError()"
         [invalidText]="'user.form.errors.wardNumberRequired' | transloco"
+        type="single"
+        (selected)="cd.detectChanges()"
       >
         <cds-dropdown-list [items]="wardNumbers"></cds-dropdown-list>
       </cds-dropdown>
