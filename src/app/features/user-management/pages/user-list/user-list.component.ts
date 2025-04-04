@@ -6,6 +6,7 @@ import {
   ViewChild,
   TemplateRef,
   OnDestroy,
+  AfterViewInit,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
@@ -22,11 +23,13 @@ import {
   PaginationModule,
 } from 'carbon-components-angular';
 import { IconService } from '@app/core/services/icon.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as UserSelectors from '../../store/user.selectors';
 import { UserActions } from '../../store/user.actions';
-import { UserResponse } from '../../models/user.interface';
-import { Subscription } from 'rxjs';
+import { UserFilter, UserResponse } from '../../models/user.interface';
+import { BehaviorSubject, Observable, Subject, combineLatest } from 'rxjs';
+import { takeUntil, distinctUntilChanged, map } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
 
 //@ts-expect-error Fixme: No types for carbon icons
 import Add16 from '@carbon/icons/es/add/16';
@@ -50,31 +53,56 @@ import TrashCan16 from '@carbon/icons/es/trash-can/16';
     DialogModule,
     InputModule,
     PaginationModule,
+    CommonModule,
   ],
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss'],
 })
-export class UserListComponent implements OnInit, OnDestroy {
+export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
   private store = inject(Store);
   private router = inject(Router);
-  private subscriptions: Subscription[] = [];
-  private usersData: UserResponse[] = [];
+  private route = inject(ActivatedRoute);
+
+  // Stream control
+  private destroy$ = new Subject<void>();
+  private filtersSubject = new BehaviorSubject<UserFilter>({});
+  filters$ = this.filtersSubject
+    .asObservable()
+    .pipe(
+      distinctUntilChanged(
+        (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
+      )
+    );
 
   // Reference the templates from the HTML
   @ViewChild('statusTemplate') statusTemplate!: TemplateRef<any>;
   @ViewChild('actionTemplate') actionTemplate!: TemplateRef<any>;
 
+  // Table model
   model = new TableModel();
   size: TableRowSize = 'md';
-  skeleton = true; // Start with skeleton loading
+  skeleton = true;
 
   // Store selectors
   users$ = this.store.select(UserSelectors.selectUsers);
   loading$ = this.store.select(UserSelectors.selectUserLoading);
   pagination$ = this.store.select(UserSelectors.selectPagination);
   currentFilter$ = this.store.select(UserSelectors.selectCurrentFilter);
+  totalUsers$ = this.store.select(UserSelectors.selectTotalUsers);
+  hasError$ = this.store
+    .select(UserSelectors.selectUserErrors)
+    .pipe(map((errors) => errors !== null));
 
-  constructor(protected iconService: IconService) {
+  // Current state
+  currentPage = 1;
+  pageSize = 10;
+  searchTerm = '';
+  showOnlyApproved = false;
+
+  constructor(
+    protected iconService: IconService,
+    private activatedRoute: ActivatedRoute
+  ) {
     this.iconService.registerAll([
       Settings16,
       Add16,
@@ -86,65 +114,166 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Load initial data
-    this.store.dispatch(
-      UserActions.loadUsers({
-        filter: {
-          page: 1,
-          size: 10,
-          sortBy: 'createdAt',
-          sortDirection: 'DESC',
-        },
-      })
-    );
+    // Read query parameters from URL to sync state
+    this.activatedRoute.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params) => {
+        const initialFilter: UserFilter = {
+          page: params['page'] ? parseInt(params['page']) : 1,
+          size: params['size'] ? parseInt(params['size']) : 10,
+          sortBy: params['sortBy'] || 'createdAt',
+          sortDirection: (params['sortDirection'] as 'ASC' | 'DESC') || 'DESC',
+          searchTerm: params['searchTerm'] || '',
+          isApproved: params['isApproved'] === 'true' ? true : undefined,
+        };
 
-    // Subscribe to users and store the data
-    this.subscriptions.push(
-      this.users$.subscribe((users) => {
-        this.usersData = users;
-        // If templates are already available, update the table
-        // if (this.statusTemplate && this.actionTemplate) {
-        this.updateTableData(users);
-        //}
-      })
-    );
+        this.searchTerm = initialFilter.searchTerm || '';
+        this.showOnlyApproved = initialFilter.isApproved || false;
+
+        // Dispatch initial filter
+        this.store.dispatch(UserActions.loadUsers({ filter: initialFilter }));
+      });
+
+    // Subscribe to current filter changes
+    this.currentFilter$.pipe(takeUntil(this.destroy$)).subscribe((filter) => {
+      this.currentPage = filter.page || 1;
+      this.pageSize = filter.size || 10;
+      this.searchTerm = filter.searchTerm || '';
+      this.showOnlyApproved = filter.isApproved || false;
+
+      // Update URL query params
+      this.updateQueryParams(filter);
+    });
 
     // Subscribe to loading state
-    this.subscriptions.push(
-      this.loading$.subscribe((loading) => {
-        this.skeleton = loading;
-      })
-    );
+    this.loading$.pipe(takeUntil(this.destroy$)).subscribe((loading) => {
+      this.skeleton = loading;
+    });
+
+    // Subscribe to pagination changes
+    this.pagination$.pipe(takeUntil(this.destroy$)).subscribe((pagination) => {
+      if (pagination) {
+        this.model.pageLength = pagination.pageSize;
+        this.model.totalDataLength = pagination.totalElements;
+        this.model.currentPage = pagination.currentPage;
+      }
+    });
+
+    // Listen for changes in users and update table when templates are available
+    combineLatest([
+      this.users$,
+      new Observable<boolean>((observer) => {
+        if (this.statusTemplate && this.actionTemplate) {
+          observer.next(true);
+        }
+
+        // Set up MutationObserver to detect when templates become available
+        const interval = setInterval(() => {
+          if (this.statusTemplate && this.actionTemplate) {
+            observer.next(true);
+            clearInterval(interval);
+          }
+        }, 100);
+
+        return () => clearInterval(interval);
+      }),
+    ])
+      .pipe(
+        takeUntil(this.destroy$),
+        distinctUntilChanged((prev, curr) => {
+          // Only update if users array changes
+          return JSON.stringify(prev[0]) === JSON.stringify(curr[0]);
+        })
+      )
+      .subscribe(([users, templatesReady]) => {
+        if (templatesReady && users) {
+          this.updateTableData(users);
+        }
+      });
+  }
+
+  ngAfterViewInit() {
+    // After view init, check if we have users data and update table
+    setTimeout(() => {
+      this.users$.pipe(takeUntil(this.destroy$)).subscribe((users) => {
+        if (users?.length && this.statusTemplate && this.actionTemplate) {
+          this.updateTableData(users);
+        }
+      });
+    });
   }
 
   ngOnDestroy() {
-    // Clean up subscriptions to prevent memory leaks
-    this.subscriptions.forEach((sub) => sub.unsubscribe());
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private initializeTable() {
     this.model.header = [
-      new TableHeaderItem({ data: 'Email' }),
-      new TableHeaderItem({ data: 'Ward' }),
-      new TableHeaderItem({ data: 'Status' }),
+      new TableHeaderItem({
+        data: 'Email',
+        sortable: true,
+      }),
+      new TableHeaderItem({
+        data: 'Ward',
+        sortable: true,
+      }),
+      new TableHeaderItem({
+        data: 'Status',
+        sortable: true,
+      }),
       new TableHeaderItem({ data: 'Actions' }),
     ];
+
+    // Enable pagination
+    this.model.pageLength = 10;
+    this.model.totalDataLength = 0;
   }
 
   private updateTableData(users: UserResponse[]) {
+    if (!this.statusTemplate || !this.actionTemplate) {
+      return;
+    }
+
     this.model.data = users.map((user) => [
-      new TableItem({ data: user.email }),
-      new TableItem({ data: user.wardNumber || 'N/A' }),
+      new TableItem({
+        data: user.email,
+        title: user.email,
+      }),
+      new TableItem({
+        data: user.wardNumber || 'N/A',
+        title: user.wardNumber ? `Ward ${user.wardNumber}` : 'N/A',
+      }),
       new TableItem({
         data: user.isApproved ? 'Approved' : 'Pending',
         template: this.statusTemplate,
       }),
-
       new TableItem({
         data: user,
         template: this.actionTemplate,
       }),
     ]);
+  }
+
+  private updateQueryParams(filter: UserFilter) {
+    // Update URL without navigation
+    const queryParams: any = {};
+
+    if (filter.page && filter.page !== 1) queryParams.page = filter.page;
+    if (filter.size && filter.size !== 10) queryParams.size = filter.size;
+    if (filter.sortBy && filter.sortBy !== 'createdAt')
+      queryParams.sortBy = filter.sortBy;
+    if (filter.sortDirection && filter.sortDirection !== 'DESC')
+      queryParams.sortDirection = filter.sortDirection;
+    if (filter.searchTerm) queryParams.searchTerm = filter.searchTerm;
+    if (filter.isApproved !== undefined)
+      queryParams.isApproved = filter.isApproved;
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams,
+      queryParamsHandling: 'merge',
+    });
   }
 
   // Event handlers
@@ -165,12 +294,13 @@ export class UserListComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       UserActions.setPage({
         pageIndex: page,
-        pageSize: this.model.pageLength,
+        pageSize: this.model.pageLength || 10,
       })
     );
   }
 
   filterUsers(searchString: string) {
+    this.searchTerm = searchString;
     this.store.dispatch(
       UserActions.filterChange({
         filter: {
@@ -182,11 +312,44 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   toggleApprovalFilter(showApproved: boolean) {
+    this.showOnlyApproved = showApproved;
     this.store.dispatch(
       UserActions.filterChange({
         filter: {
           isApproved: showApproved,
           page: 1,
+        },
+      })
+    );
+  }
+
+  sortTable(index: number) {
+    // Get column name based on index
+    let sortField: string;
+    switch (index) {
+      case 0:
+        sortField = 'email';
+        break;
+      case 1:
+        sortField = 'wardNumber';
+        break;
+      case 2:
+        sortField = 'isApproved';
+        break;
+      default:
+        sortField = 'createdAt';
+    }
+
+    // Toggle sort direction
+    const currentHeader = this.model.header[index] as TableHeaderItem;
+    const sortDirection = currentHeader.ascending ? 'ASC' : 'DESC';
+
+    this.store.dispatch(
+      UserActions.filterChange({
+        filter: {
+          sortBy: sortField,
+          sortDirection: sortDirection,
+          // Don't reset page on sort change
         },
       })
     );

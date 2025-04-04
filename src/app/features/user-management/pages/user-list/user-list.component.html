@@ -10,6 +10,7 @@
     <cds-table-toolbar-content>
       <cds-table-toolbar-search
         [expandable]="true"
+        [value]="searchTerm"
         (valueChange)="filterUsers($event)"
         (clear)="filterUsers('')"
       >
@@ -41,14 +42,16 @@
     [size]="size"
     [skeleton]="skeleton"
     [sortable]="true"
+    [striped]="false"
     [stickyHeader]="true"
-    [striped]="true"
+    (sort)="sortTable($event)"
   >
   </cds-table>
 
   <cds-pagination
     [model]="model"
     (selectPage)="selectPage($event)"
+    [disabled]="skeleton"
     [pageInputDisabled]="false"
   >
   </cds-pagination>
@@ -58,25 +61,41 @@
 <ng-template #filterTemplate>
   <div style="padding: 1rem" (click)="$event.stopPropagation()">
     <div style="padding-bottom: 1rem; color: grey">Filter Options</div>
-    <cds-checkbox (checkedChange)="toggleApprovalFilter($event)">
-      Show only approved users
+    <cds-checkbox
+      [checked]="!showOnlyApproved"
+      (checkedChange)="toggleApprovalFilter($event)"
+    >
+      Approved Users
     </cds-checkbox>
   </div>
 </ng-template>
 
 <ng-template #statusTemplate let-data="data">
-  {{ data }}
+  <div
+    [ngClass]="{
+      'status-approved': data === 'Approved',
+      'status-pending': data === 'Pending',
+    }"
+  >
+    {{ data }}
+  </div>
 </ng-template>
 
 <ng-template #actionTemplate let-data="data">
-  <cds-overflow-menu>
-    <cds-overflow-menu-option (click)="onEditUser(data.id)">
-      Edit
-    </cds-overflow-menu-option>
-    <cds-overflow-menu-option (click)="onDeleteUser(data.id)">
-      Delete
-    </cds-overflow-menu-option>
-  </cds-overflow-menu>
+  <div class="action-buttons">
+    <cds-overflow-menu>
+      <cds-overflow-menu-option (click)="onEditUser(data.id)">
+        <div class="overflow-option">
+          <svg cdsIcon="edit" size="16"></svg> Edit
+        </div>
+      </cds-overflow-menu-option>
+      <cds-overflow-menu-option (click)="onDeleteUser(data.id)">
+        <div class="overflow-option">
+          <svg cdsIcon="trash-can" size="16"></svg> Delete
+        </div>
+      </cds-overflow-menu-option>
+    </cds-overflow-menu>
+  </div>
 </ng-template>
 
 <ng-template #paginationTableItemTemplate let-data="data">
