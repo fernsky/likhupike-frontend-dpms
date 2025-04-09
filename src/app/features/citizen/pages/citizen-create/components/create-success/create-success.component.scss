@@ -1,0 +1,32 @@
+.success-dialog {
+  padding: 16px;
+  text-align: center;
+
+  .success-icon {
+    margin: 0 auto 24px;
+
+    mat-icon {
+      font-size: 64px;
+      height: 64px;
+      width: 64px;
+      color: #4caf50;
+    }
+  }
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  p {
+    margin-bottom: 24px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .dialog-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  }
+}

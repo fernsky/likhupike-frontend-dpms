@@ -1,0 +1,233 @@
+<div [formGroup]="addressForm" class="address-form">
+  <h2>{{ "citizen.create.addressInfo.title" | transloco }}</h2>
+  <p>{{ "citizen.create.addressInfo.subtitle" | transloco }}</p>
+
+  <!-- Permanent Address Section -->
+  <div class="form-section" formGroupName="permanentAddress">
+    <h3>{{ "citizen.fields.permanentAddress" | transloco }} *</h3>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ "citizen.fields.province" | transloco }} *</mat-label>
+        <mat-select formControlName="provinceCode" required>
+          <mat-option
+            *ngFor="let province of provinces$ | async"
+            [value]="province.code"
+          >
+            {{ province.name }} ({{ province.nameNepali }})
+          </mat-option>
+        </mat-select>
+        <mat-error>{{
+          "citizen.validation.provinceRequired" | transloco
+        }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ "citizen.fields.district" | transloco }} *</mat-label>
+        <mat-select
+          formControlName="districtCode"
+          required
+          [disabled]="!addressForm.get('permanentAddress.provinceCode')?.value"
+        >
+          <mat-option
+            *ngFor="let district of permanentDistricts$ | async"
+            [value]="district.code"
+          >
+            {{ district.name }} ({{ district.nameNepali }})
+          </mat-option>
+        </mat-select>
+        <mat-error>{{
+          "citizen.validation.districtRequired" | transloco
+        }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ "citizen.fields.municipality" | transloco }} *</mat-label>
+        <mat-select
+          formControlName="municipalityCode"
+          required
+          [disabled]="!addressForm.get('permanentAddress.districtCode')?.value"
+        >
+          <mat-option
+            *ngFor="let municipality of permanentMunicipalities$ | async"
+            [value]="municipality.code"
+          >
+            {{ municipality.name }} {{ municipality.type }}
+            <span *ngIf="municipality.nameNepali"
+              >({{ municipality.nameNepali }})</span
+            >
+          </mat-option>
+        </mat-select>
+        <mat-error>{{
+          "citizen.validation.municipalityRequired" | transloco
+        }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row two-column">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "citizen.fields.wardNumber" | transloco }} *</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="wardNumber"
+          min="1"
+          max="33"
+          required
+        />
+        <mat-error
+          *ngIf="
+            addressForm.get('permanentAddress.wardNumber')?.hasError('required')
+          "
+        >
+          {{ "citizen.validation.wardRequired" | transloco }}
+        </mat-error>
+        <mat-error
+          *ngIf="
+            addressForm.get('permanentAddress.wardNumber')?.hasError('min') ||
+            addressForm.get('permanentAddress.wardNumber')?.hasError('max')
+          "
+        >
+          {{ "citizen.validation.wardInvalid" | transloco }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "citizen.fields.streetAddress" | transloco }}</mat-label>
+        <input
+          matInput
+          formControlName="streetAddress"
+          placeholder="{{ 'citizen.placeholders.streetAddress' | transloco }}"
+        />
+        <mat-error
+          *ngIf="
+            addressForm
+              .get('permanentAddress.streetAddress')
+              ?.hasError('maxlength')
+          "
+        >
+          {{ "citizen.validation.streetAddressTooLong" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Temporary Address Section -->
+  <div class="form-section">
+    <div class="address-header">
+      <h3>{{ "citizen.fields.temporaryAddress" | transloco }}</h3>
+      <mat-checkbox formControlName="tempSameAsPermanent" color="primary">
+        {{ "citizen.create.addressInfo.sameAsPermanent" | transloco }}
+      </mat-checkbox>
+    </div>
+
+    <div *ngIf="!tempSameAsPermanent" formGroupName="temporaryAddress">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ "citizen.fields.province" | transloco }}</mat-label>
+          <mat-select formControlName="provinceCode">
+            <mat-option
+              *ngFor="let province of provinces$ | async"
+              [value]="province.code"
+            >
+              {{ province.name }} ({{ province.nameNepali }})
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ "citizen.fields.district" | transloco }}</mat-label>
+          <mat-select
+            formControlName="districtCode"
+            [disabled]="
+              !addressForm.get('temporaryAddress.provinceCode')?.value
+            "
+          >
+            <mat-option
+              *ngFor="let district of temporaryDistricts$ | async"
+              [value]="district.code"
+            >
+              {{ district.name }} ({{ district.nameNepali }})
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ "citizen.fields.municipality" | transloco }}</mat-label>
+          <mat-select
+            formControlName="municipalityCode"
+            [disabled]="
+              !addressForm.get('temporaryAddress.districtCode')?.value
+            "
+          >
+            <mat-option
+              *ngFor="let municipality of temporaryMunicipalities$ | async"
+              [value]="municipality.code"
+            >
+              {{ municipality.name }} {{ municipality.type }}
+              <span *ngIf="municipality.nameNepali"
+                >({{ municipality.nameNepali }})</span
+              >
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row two-column">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "citizen.fields.wardNumber" | transloco }}</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="wardNumber"
+            min="1"
+            max="33"
+          />
+          <mat-error
+            *ngIf="
+              addressForm.get('temporaryAddress.wardNumber')?.hasError('min') ||
+              addressForm.get('temporaryAddress.wardNumber')?.hasError('max')
+            "
+          >
+            {{ "citizen.validation.wardInvalid" | transloco }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{
+            "citizen.fields.streetAddress" | transloco
+          }}</mat-label>
+          <input
+            matInput
+            formControlName="streetAddress"
+            placeholder="{{ 'citizen.placeholders.streetAddress' | transloco }}"
+          />
+          <mat-error
+            *ngIf="
+              addressForm
+                .get('temporaryAddress.streetAddress')
+                ?.hasError('maxlength')
+            "
+          >
+            {{ "citizen.validation.streetAddressTooLong" | transloco }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div *ngIf="tempSameAsPermanent" class="same-address-message">
+      <mat-icon color="primary">info</mat-icon>
+      <span>{{
+        "citizen.create.addressInfo.usingPermanentAddress" | transloco
+      }}</span>
+    </div>
+  </div>
+</div>

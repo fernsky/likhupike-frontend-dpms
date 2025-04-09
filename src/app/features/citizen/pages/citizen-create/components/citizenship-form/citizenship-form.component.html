@@ -1,0 +1,71 @@
+<div [formGroup]="parentForm" class="citizenship-form">
+  <h2>{{ "citizen.create.citizenshipInfo.title" | transloco }}</h2>
+  <p>{{ "citizen.create.citizenshipInfo.subtitle" | transloco }}</p>
+
+  <div class="form-section">
+    <h3>{{ "citizen.create.citizenshipInfo.documentInfo" | transloco }}</h3>
+    <p class="section-description">
+      {{ "citizen.create.citizenshipInfo.documentInfoDesc" | transloco }}
+    </p>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{
+          "citizen.fields.citizenshipNumber" | transloco
+        }}</mat-label>
+        <input
+          matInput
+          formControlName="citizenshipNumber"
+          placeholder="{{
+            'citizen.placeholders.citizenshipNumber' | transloco
+          }}"
+        />
+        <mat-error *ngIf="citizenshipNumberControl?.hasError('maxlength')">
+          {{ "citizen.validation.citizenshipNumberTooLong" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row two-column">
+      <mat-form-field appearance="outline">
+        <mat-label>{{
+          "citizen.fields.citizenshipIssuedDate" | transloco
+        }}</mat-label>
+        <input
+          matInput
+          [matDatepicker]="issuedDatePicker"
+          formControlName="citizenshipIssuedDate"
+          [max]="maxDate"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="issuedDatePicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #issuedDatePicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{
+          "citizen.fields.citizenshipIssuedOffice" | transloco
+        }}</mat-label>
+        <input
+          matInput
+          formControlName="citizenshipIssuedOffice"
+          placeholder="{{
+            'citizen.placeholders.citizenshipIssuedOffice' | transloco
+          }}"
+        />
+        <mat-error
+          *ngIf="citizenshipIssuedOfficeControl?.hasError('maxlength')"
+        >
+          {{ "citizen.validation.officeTooLong" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="form-note">
+    <mat-icon color="primary">info</mat-icon>
+    <span>{{ "citizen.create.citizenshipInfo.note" | transloco }}</span>
+  </div>
+</div>

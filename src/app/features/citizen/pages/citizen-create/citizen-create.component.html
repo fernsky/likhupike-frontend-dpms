@@ -1,0 +1,255 @@
+<div class="citizen-create-page">
+  <div class="header-section">
+    <div class="title-container">
+      <button
+        mat-icon-button
+        color="primary"
+        (click)="onCancel()"
+        aria-label="Back"
+      >
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1 class="mat-headline-4">{{ "citizen.create.title" | transloco }}</h1>
+    </div>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      <ng-container *ngIf="(creating$ | async) !== true; else loading">
+        <mat-stepper #stepper linear>
+          <!-- Personal Information Step -->
+          <mat-step
+            [stepControl]="personalInfoForm"
+            label="{{ 'citizen.create.steps.personalInfo' | transloco }}"
+          >
+            <app-personal-info-form
+              [parentForm]="personalInfoForm"
+            ></app-personal-info-form>
+            <div class="step-actions">
+              <button mat-button (click)="onCancel()">
+                {{ "common.actions.cancel" | transloco }}
+              </button>
+              <button mat-raised-button color="primary" matStepperNext>
+                {{ "common.actions.next" | transloco }}
+              </button>
+            </div>
+          </mat-step>
+
+          <!-- Citizenship Information Step -->
+          <mat-step
+            [stepControl]="citizenshipForm"
+            label="{{ 'citizen.create.steps.citizenshipInfo' | transloco }}"
+          >
+            <app-citizenship-form
+              [parentForm]="citizenshipForm"
+            ></app-citizenship-form>
+            <div class="step-actions">
+              <button mat-button matStepperPrevious>
+                {{ "common.actions.back" | transloco }}
+              </button>
+              <button mat-raised-button color="primary" matStepperNext>
+                {{ "common.actions.next" | transloco }}
+              </button>
+            </div>
+          </mat-step>
+
+          <!-- Address Information Step -->
+          <mat-step
+            [stepControl]="addressForm"
+            label="{{ 'citizen.create.steps.addressInfo' | transloco }}"
+          >
+            <app-address-form [addressForm]="addressForm"></app-address-form>
+            <div class="step-actions">
+              <button mat-button matStepperPrevious>
+                {{ "common.actions.back" | transloco }}
+              </button>
+              <button mat-raised-button color="primary" matStepperNext>
+                {{ "common.actions.next" | transloco }}
+              </button>
+            </div>
+          </mat-step>
+
+          <!-- Summary Step -->
+          <mat-step
+            [stepControl]="summaryForm"
+            label="{{ 'citizen.create.steps.summary' | transloco }}"
+          >
+            <div class="summary-container">
+              <h2>{{ "citizen.create.summary.title" | transloco }}</h2>
+              <p>{{ "citizen.create.summary.description" | transloco }}</p>
+
+              <!-- Personal Information Summary -->
+              <div class="summary-section">
+                <h3>{{ "citizen.create.summary.personalInfo" | transloco }}</h3>
+                <div class="summary-item">
+                  <span class="label"
+                    >{{ "citizen.fields.name" | transloco }}:</span
+                  >
+                  <span class="value">{{
+                    personalInfoForm.get("name")?.value || "-"
+                  }}</span>
+                </div>
+                <div
+                  class="summary-item"
+                  *ngIf="personalInfoForm.get('nameDevnagari')?.value"
+                >
+                  <span class="label"
+                    >{{ "citizen.fields.nameDevnagari" | transloco }}:</span
+                  >
+                  <span class="value">{{
+                    personalInfoForm.get("nameDevnagari")?.value
+                  }}</span>
+                </div>
+                <div
+                  class="summary-item"
+                  *ngIf="personalInfoForm.get('email')?.value"
+                >
+                  <span class="label"
+                    >{{ "citizen.fields.email" | transloco }}:</span
+                  >
+                  <span class="value">{{
+                    personalInfoForm.get("email")?.value
+                  }}</span>
+                </div>
+                <div
+                  class="summary-item"
+                  *ngIf="personalInfoForm.get('phoneNumber')?.value"
+                >
+                  <span class="label"
+                    >{{ "citizen.fields.phoneNumber" | transloco }}:</span
+                  >
+                  <span class="value">{{
+                    personalInfoForm.get("phoneNumber")?.value
+                  }}</span>
+                </div>
+              </div>
+
+              <!-- Citizenship Information Summary -->
+              <div
+                class="summary-section"
+                *ngIf="citizenshipForm.get('citizenshipNumber')?.value"
+              >
+                <h3>
+                  {{ "citizen.create.summary.citizenshipInfo" | transloco }}
+                </h3>
+                <div class="summary-item">
+                  <span class="label"
+                    >{{ "citizen.fields.citizenshipNumber" | transloco }}:</span
+                  >
+                  <span class="value">{{
+                    citizenshipForm.get("citizenshipNumber")?.value
+                  }}</span>
+                </div>
+                <div
+                  class="summary-item"
+                  *ngIf="citizenshipForm.get('citizenshipIssuedDate')?.value"
+                >
+                  <span class="label"
+                    >{{
+                      "citizen.fields.citizenshipIssuedDate" | transloco
+                    }}:</span
+                  >
+                  <span class="value">{{
+                    citizenshipForm.get("citizenshipIssuedDate")?.value | date
+                  }}</span>
+                </div>
+                <div
+                  class="summary-item"
+                  *ngIf="citizenshipForm.get('citizenshipIssuedOffice')?.value"
+                >
+                  <span class="label"
+                    >{{
+                      "citizen.fields.citizenshipIssuedOffice" | transloco
+                    }}:</span
+                  >
+                  <span class="value">{{
+                    citizenshipForm.get("citizenshipIssuedOffice")?.value
+                  }}</span>
+                </div>
+              </div>
+
+              <!-- Family Information Summary -->
+              <div
+                class="summary-section"
+                *ngIf="
+                  personalInfoForm.get('fatherName')?.value ||
+                  personalInfoForm.get('grandfatherName')?.value ||
+                  personalInfoForm.get('spouseName')?.value
+                "
+              >
+                <h3>{{ "citizen.create.summary.familyInfo" | transloco }}</h3>
+                <div
+                  class="summary-item"
+                  *ngIf="personalInfoForm.get('fatherName')?.value"
+                >
+                  <span class="label"
+                    >{{ "citizen.fields.fatherName" | transloco }}:</span
+                  >
+                  <span class="value">{{
+                    personalInfoForm.get("fatherName")?.value
+                  }}</span>
+                </div>
+                <div
+                  class="summary-item"
+                  *ngIf="personalInfoForm.get('grandfatherName')?.value"
+                >
+                  <span class="label"
+                    >{{ "citizen.fields.grandfatherName" | transloco }}:</span
+                  >
+                  <span class="value">{{
+                    personalInfoForm.get("grandfatherName")?.value
+                  }}</span>
+                </div>
+                <div
+                  class="summary-item"
+                  *ngIf="personalInfoForm.get('spouseName')?.value"
+                >
+                  <span class="label"
+                    >{{ "citizen.fields.spouseName" | transloco }}:</span
+                  >
+                  <span class="value">{{
+                    personalInfoForm.get("spouseName")?.value
+                  }}</span>
+                </div>
+              </div>
+
+              <!-- Approval Option -->
+              <mat-checkbox
+                [formControl]="getFormControl(summaryForm, 'isApproved')"
+                color="primary"
+              >
+                {{ "citizen.create.approveImmediately" | transloco }}
+              </mat-checkbox>
+
+              <!-- Validation Error Display -->
+              <div class="error-container" *ngIf="errors$ | async as errors">
+                <mat-error>{{ errors.message }}</mat-error>
+                <div *ngIf="errors.errors">
+                  <mat-error *ngFor="let error of errors.errors">
+                    {{ error.field }}: {{ error.message }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+
+            <div class="step-actions">
+              <button mat-button matStepperPrevious>
+                {{ "common.actions.back" | transloco }}
+              </button>
+              <button mat-raised-button color="primary" (click)="onSubmit()">
+                {{ "citizen.create.submitButton" | transloco }}
+              </button>
+            </div>
+          </mat-step>
+        </mat-stepper>
+      </ng-container>
+
+      <ng-template #loading>
+        <div class="loading-container">
+          <mat-spinner diameter="50"></mat-spinner>
+          <p>{{ "citizen.create.creating" | transloco }}</p>
+        </div>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
+</div>

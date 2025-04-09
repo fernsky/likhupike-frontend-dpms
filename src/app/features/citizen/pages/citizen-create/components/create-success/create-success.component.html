@@ -1,0 +1,17 @@
+<div class="success-dialog">
+  <div class="success-icon">
+    <mat-icon color="primary">check_circle</mat-icon>
+  </div>
+
+  <h2>{{ "citizen.create.success.title" | transloco }}</h2>
+  <p>{{ "citizen.create.success.message" | transloco }}</p>
+
+  <div class="dialog-actions">
+    <button mat-stroked-button (click)="onReturnToList()">
+      {{ "citizen.create.success.returnToList" | transloco }}
+    </button>
+    <button mat-raised-button color="primary" (click)="onCreateAnother()">
+      {{ "citizen.create.success.createAnother" | transloco }}
+    </button>
+  </div>
+</div>

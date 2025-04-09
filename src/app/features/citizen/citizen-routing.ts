@@ -34,18 +34,24 @@ export const CITIZEN_MANAGEMENT_ROUTES: Routes = [
           }),
         ],
       },
-      //   {
-      //     path: 'create',
-      //     loadChildren: () =>
-      //       import('./pages/citizen-create/citizen-create.module').then(
-      //         (m) => m.CitizenCreateModule
-      //       ),
-      //     canActivate: [AuthGuard, PermissionGuard],
-      //     canDeactivate: [UnsavedChangesGuard],
-      //     data: {
-      //       permissions: ['CREATE_CITIZEN'],
-      //     },
-      //   },
+      {
+        path: 'create',
+        loadChildren: () =>
+          import('./pages/citizen-create/citizen-create.module').then(
+            (m) => m.CitizenCreateModule
+          ),
+        canActivate: [authGuard, PermissionGuard],
+        // canDeactivate: [UnsavedChangesGuard],
+        data: {
+          permissions: ['CREATE_CITIZEN'],
+        },
+        providers: [
+          provideTranslocoScope({
+            scope: 'citizen-create',
+            alias: 'citizen',
+          }),
+        ],
+      },
       //   {
       //     path: 'edit/:id',
       //     loadChildren: () =>
@@ -58,17 +64,23 @@ export const CITIZEN_MANAGEMENT_ROUTES: Routes = [
       //       permissions: ['EDIT_CITIZEN'],
       //     },
       //   },
-      //   {
-      //     path: 'view/:id',
-      //     loadChildren: () =>
-      //       import('./pages/citizen-view/citizen-view.module').then(
-      //         (m) => m.CitizenViewModule
-      //       ),
-      //     canActivate: [AuthGuard, PermissionGuard],
-      //     data: {
-      //       permissions: ['VIEW_CITIZEN'],
-      //     },
-      //   },
+      {
+        path: 'view/:id',
+        loadChildren: () =>
+          import('./pages/citizen-view/citizen-view.module').then(
+            (m) => m.CitizenViewModule
+          ),
+        canActivate: [authGuard, PermissionGuard],
+        data: {
+          permissions: ['VIEW_CITIZEN'],
+        },
+        providers: [
+          provideTranslocoScope({
+            scope: 'citizen-view',
+            alias: 'citizen',
+          }),
+        ],
+      },
     ],
   },
 ];

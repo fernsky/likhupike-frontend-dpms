@@ -1,0 +1,100 @@
+{
+  "create": {
+    "title": "Create New Citizen",
+    "submitButton": "Create Citizen",
+    "creating": "Creating citizen...",
+    "approveImmediately": "Approve this citizen immediately",
+    "steps": {
+      "personalInfo": "Personal Information",
+      "citizenshipInfo": "Citizenship Information",
+      "addressInfo": "Address Information",
+      "summary": "Summary"
+    },
+    "personalInfo": {
+      "title": "Personal Information",
+      "subtitle": "Enter the citizen's basic personal information. Only the name is required.",
+      "basicInfo": "Basic Information",
+      "contactInfo": "Contact Information",
+      "familyInfo": "Family Information",
+      "familyInfoDesc": "Optional information about the citizen's family members"
+    },
+    "citizenshipInfo": {
+      "title": "Citizenship Information",
+      "subtitle": "Enter the citizen's citizenship details if available. These details can also be added later.",
+      "documentInfo": "Citizenship Document Details",
+      "documentInfoDesc": "Information about the citizen's citizenship certificate",
+      "note": "Note: You will be able to upload citizenship document images after the citizen is created."
+    },
+    "addressInfo": {
+      "title": "Address Information",
+      "subtitle": "Enter the citizen's address information. Permanent address is required.",
+      "sameAsPermanent": "Same as permanent address",
+      "usingPermanentAddress": "Using the permanent address as the temporary address"
+    },
+    "summary": {
+      "title": "Review and Create",
+      "description": "Please review the information before creating the citizen record.",
+      "personalInfo": "Personal Information",
+      "citizenshipInfo": "Citizenship Information",
+      "familyInfo": "Family Information"
+    },
+    "success": {
+      "title": "Citizen Created Successfully",
+      "message": "The citizen record has been created in the system.",
+      "returnToList": "Return to List",
+      "createAnother": "Create Another Citizen"
+    }
+  },
+  "fields": {
+    "name": "Full Name",
+    "nameDevnagari": "Name in Devnagari",
+    "email": "Email Address",
+    "phoneNumber": "Phone Number",
+    "fatherName": "Father's Name",
+    "grandfatherName": "Grandfather's Name",
+    "spouseName": "Spouse's Name",
+    "citizenshipNumber": "Citizenship Number",
+    "citizenshipIssuedDate": "Issued Date",
+    "citizenshipIssuedOffice": "Issued Office",
+    "permanentAddress": "Permanent Address",
+    "temporaryAddress": "Temporary Address",
+    "province": "Province",
+    "district": "District",
+    "municipality": "Municipality/VDC",
+    "wardNumber": "Ward Number",
+    "streetAddress": "Street Address/Tole"
+  },
+  "placeholders": {
+    "name": "Enter citizen's full name",
+    "nameDevnagari": "Enter name in Devnagari script",
+    "email": "Enter email address",
+    "phoneNumber": "Enter phone number",
+    "fatherName": "Enter father's name",
+    "grandfatherName": "Enter grandfather's name",
+    "spouseName": "Enter spouse's name",
+    "citizenshipNumber": "Enter citizenship number",
+    "citizenshipIssuedOffice": "Enter the office that issued the citizenship",
+    "streetAddress": "Enter street address or tole"
+  },
+  "validation": {
+    "nameRequired": "Name is required",
+    "nameTooLong": "Name cannot exceed 100 characters",
+    "emailInvalid": "Please enter a valid email address",
+    "emailTooLong": "Email cannot exceed 100 characters",
+    "phoneNumberTooLong": "Phone number cannot exceed 20 characters",
+    "citizenshipNumberTooLong": "Citizenship number cannot exceed 50 characters",
+    "officeTooLong": "Office name cannot exceed 100 characters",
+    "provinceRequired": "Province is required",
+    "districtRequired": "District is required",
+    "municipalityRequired": "Municipality is required",
+    "wardRequired": "Ward number is required",
+    "wardInvalid": "Ward number must be between 1 and 33",
+    "streetAddressTooLong": "Street address cannot exceed 200 characters"
+  },
+  "messages": {
+    "createSuccess": "Citizen created successfully",
+    "createError": "Failed to create citizen",
+    "validationError": "Please correct the errors in the form",
+    "networkError": "Network error. Please try again later"
+  }
+}

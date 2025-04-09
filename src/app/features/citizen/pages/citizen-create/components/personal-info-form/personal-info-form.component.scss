@@ -1,0 +1,54 @@
+.personal-info-form {
+  padding: 16px 0;
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+
+  p {
+    margin-bottom: 24px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .form-section {
+    margin-bottom: 32px;
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: rgba(0, 0, 0, 0.87);
+      font-size: 1.1rem;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      padding-bottom: 8px;
+    }
+
+    .section-description {
+      margin-top: -8px;
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  .form-row {
+    margin-bottom: 16px;
+
+    &.two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .full-width {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .form-row.two-column {
+    grid-template-columns: 1fr !important;
+  }
+}
