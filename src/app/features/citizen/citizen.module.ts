@@ -8,6 +8,7 @@ import { TranslocoModule } from '@jsverse/transloco';
 // Store
 import { citizenReducer } from './store/citizen.reducer';
 import { CitizenEffects } from './store/citizen.effects';
+import { CitizenFacade } from './store/citizen.facade';
 
 // Services
 import { CitizenService } from './services/citizen.service';
@@ -23,6 +24,11 @@ import { CitizenUrlParamsService } from './services/citizen-url-params.service';
     StoreModule.forFeature('citizen', citizenReducer),
     EffectsModule.forFeature([CitizenEffects]),
   ],
-  providers: [CitizenService, LocationService, CitizenUrlParamsService],
+  providers: [
+    CitizenService,
+    LocationService,
+    CitizenUrlParamsService,
+    CitizenFacade,
+  ],
 })
 export class CitizenModule {}
