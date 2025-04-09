@@ -1,10 +1,11 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { CitizenState } from './citizen.state';
 import { DocumentType } from '../types';
+import { CITIZEN_FEATURE_KEY } from './citizen.reducer';
 
 // Feature selector
 export const selectCitizenState =
-  createFeatureSelector<CitizenState>('citizen');
+  createFeatureSelector<CitizenState>(CITIZEN_FEATURE_KEY);
 
 // List view selectors
 export const selectCitizens = createSelector(

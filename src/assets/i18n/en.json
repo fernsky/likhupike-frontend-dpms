@@ -1,5 +1,7 @@
 {
   "common": {
+    "any": "Any",
+    "all": "All",
     "actions": {
       "select": "Select",
       "cancel": "Cancel",
@@ -9,7 +11,10 @@
       "edit": "Edit",
       "delete": "Delete",
       "confirm": "Confirm",
-      "back": "Back"
+      "back": "Back",
+      "title": "Actions",
+      "resetFilters": "Reset Filters",
+      "view": "View"
     },
     "pagination": {
       "itemsPerPage": "Items per page",

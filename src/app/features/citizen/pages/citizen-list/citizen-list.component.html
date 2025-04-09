@@ -1,0 +1,61 @@
+<div class="citizen-list-page">
+  <div class="header-section">
+    <h1 class="mat-headline-4">{{ "citizen.list.title" | transloco }}</h1>
+    <div class="actions">
+      <button mat-raised-button color="primary" (click)="onCreateCitizen()">
+        <mat-icon>add</mat-icon>
+        {{ "citizen.actions.createNew" | transloco }}
+      </button>
+      <button
+        mat-icon-button
+        (click)="onRefresh()"
+        matTooltip="{{ 'common.actions.refresh' | transloco }}"
+        aria-label="Refresh"
+      >
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <mat-card class="filter-card">
+    <mat-card-content>
+      <app-citizen-filter
+        [currentFilter]="currentFilter$ | async"
+        (filterChange)="onFilterChange($event)"
+        (resetFilters)="onResetFilters()"
+      ></app-citizen-filter>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="table-container">
+    <ng-container *ngIf="(loading$ | async) === false; else loading">
+      <app-citizen-table
+        [citizens]="citizens$ | async"
+        [totalItems]="totalItems$ | async"
+        [currentPage]="currentPage$ | async"
+        [pageSize]="pageSize$ | async"
+        (pageChange)="onPageChange($event)"
+        (viewCitizen)="onViewCitizen($event)"
+        (editCitizen)="onEditCitizen($event)"
+      ></app-citizen-table>
+    </ng-container>
+
+    <ng-template #loading>
+      <div class="loading-container">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>{{ "common.messages.loading" | transloco }}</p>
+      </div>
+    </ng-template>
+
+    <div
+      class="no-data"
+      *ngIf="(citizens$ | async)?.length === 0 && (loading$ | async) === false"
+    >
+      <mat-icon>person_off</mat-icon>
+      <p>{{ "citizen.list.noData" | transloco }}</p>
+      <button mat-stroked-button color="primary" (click)="onResetFilters()">
+        {{ "citizen.actions.clearFilters" | transloco }}
+      </button>
+    </div>
+  </div>
+</div>

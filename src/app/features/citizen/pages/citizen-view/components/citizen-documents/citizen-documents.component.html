@@ -1,0 +1,168 @@
+<mat-card class="documents-card">
+  <mat-card-content>
+    <ng-container *ngIf="hasAnyDocument(); else noDocuments">
+      <div class="documents-grid">
+        <!-- Citizen Photo -->
+        <div class="document-item" *ngIf="documents?.photo">
+          <div class="document-header">
+            <h3>{{ "citizen.documentTypes.CITIZEN_PHOTO" | transloco }}</h3>
+            <app-document-status-chip
+              [state]="documents.photo?.state"
+            ></app-document-status-chip>
+          </div>
+
+          <div class="document-content">
+            <div class="document-image" *ngIf="documents.photo?.url">
+              <img
+                [src]="documents.photo?.url"
+                alt="Citizen Photo"
+                (click)="openDocument(documents.photo?.url)"
+              />
+            </div>
+            <div class="document-not-available" *ngIf="!documents.photo?.url">
+              <mat-icon>photo</mat-icon>
+              <p>{{ "citizen.documents.noPhotoAvailable" | transloco }}</p>
+            </div>
+          </div>
+
+          <div
+            class="document-details"
+            *ngIf="documents.photo?.uploadedAt || documents.photo?.note"
+          >
+            <div class="detail-row" *ngIf="documents.photo?.uploadedAt">
+              <span class="detail-label"
+                >{{ "citizen.fields.uploadedAt" | transloco }}:</span
+              >
+              <span class="detail-value">{{
+                formatDate(documents.photo?.uploadedAt)
+              }}</span>
+            </div>
+            <div class="detail-row" *ngIf="documents.photo?.note">
+              <span class="detail-label"
+                >{{ "citizen.fields.note" | transloco }}:</span
+              >
+              <span class="detail-value">{{ documents.photo?.note }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Citizenship Front -->
+        <div class="document-item" *ngIf="documents?.citizenshipFront">
+          <div class="document-header">
+            <h3>{{ "citizen.documentTypes.CITIZENSHIP_FRONT" | transloco }}</h3>
+            <app-document-status-chip
+              [state]="documents.citizenshipFront?.state"
+            ></app-document-status-chip>
+          </div>
+
+          <div class="document-content">
+            <div class="document-image" *ngIf="documents.citizenshipFront?.url">
+              <img
+                [src]="documents.citizenshipFront?.url"
+                alt="Citizenship Front"
+                (click)="openDocument(documents.citizenshipFront?.url)"
+              />
+            </div>
+            <div
+              class="document-not-available"
+              *ngIf="!documents.citizenshipFront?.url"
+            >
+              <mat-icon>description</mat-icon>
+              <p>{{ "citizen.documents.noDocumentAvailable" | transloco }}</p>
+            </div>
+          </div>
+
+          <div
+            class="document-details"
+            *ngIf="
+              documents.citizenshipFront?.uploadedAt ||
+              documents.citizenshipFront?.note
+            "
+          >
+            <div
+              class="detail-row"
+              *ngIf="documents.citizenshipFront?.uploadedAt"
+            >
+              <span class="detail-label"
+                >{{ "citizen.fields.uploadedAt" | transloco }}:</span
+              >
+              <span class="detail-value">{{
+                formatDate(documents.citizenshipFront?.uploadedAt)
+              }}</span>
+            </div>
+            <div class="detail-row" *ngIf="documents.citizenshipFront?.note">
+              <span class="detail-label"
+                >{{ "citizen.fields.note" | transloco }}:</span
+              >
+              <span class="detail-value">{{
+                documents.citizenshipFront?.note
+              }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Citizenship Back -->
+        <div class="document-item" *ngIf="documents?.citizenshipBack">
+          <div class="document-header">
+            <h3>{{ "citizen.documentTypes.CITIZENSHIP_BACK" | transloco }}</h3>
+            <app-document-status-chip
+              [state]="documents.citizenshipBack?.state"
+            ></app-document-status-chip>
+          </div>
+
+          <div class="document-content">
+            <div class="document-image" *ngIf="documents.citizenshipBack?.url">
+              <img
+                [src]="documents.citizenshipBack?.url"
+                alt="Citizenship Back"
+                (click)="openDocument(documents.citizenshipBack?.url)"
+              />
+            </div>
+            <div
+              class="document-not-available"
+              *ngIf="!documents.citizenshipBack?.url"
+            >
+              <mat-icon>description</mat-icon>
+              <p>{{ "citizen.documents.noDocumentAvailable" | transloco }}</p>
+            </div>
+          </div>
+
+          <div
+            class="document-details"
+            *ngIf="
+              documents.citizenshipBack?.uploadedAt ||
+              documents.citizenshipBack?.note
+            "
+          >
+            <div
+              class="detail-row"
+              *ngIf="documents.citizenshipBack?.uploadedAt"
+            >
+              <span class="detail-label"
+                >{{ "citizen.fields.uploadedAt" | transloco }}:</span
+              >
+              <span class="detail-value">{{
+                formatDate(documents.citizenshipBack?.uploadedAt)
+              }}</span>
+            </div>
+            <div class="detail-row" *ngIf="documents.citizenshipBack?.note">
+              <span class="detail-label"
+                >{{ "citizen.fields.note" | transloco }}:</span
+              >
+              <span class="detail-value">{{
+                documents.citizenshipBack?.note
+              }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #noDocuments>
+      <div class="no-documents">
+        <mat-icon>folder_off</mat-icon>
+        <p>{{ "citizen.documents.noDocumentsAvailable" | transloco }}</p>
+      </div>
+    </ng-template>
+  </mat-card-content>
+</mat-card>

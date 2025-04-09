@@ -1,0 +1,149 @@
+<mat-card class="address-card">
+  <mat-card-content>
+    <div class="address-container">
+      <!-- Permanent Address -->
+      <div class="address-section">
+        <h3 class="section-title">
+          {{ "citizen.fields.permanentAddress" | transloco }}
+        </h3>
+
+        <div
+          class="address-content"
+          *ngIf="permanentAddress; else noPermAddress"
+        >
+          <div class="address-row">
+            <div class="address-label">
+              {{ "citizen.fields.province" | transloco }}
+            </div>
+            <div class="address-value">
+              {{ permanentAddress.provinceName }} ({{
+                permanentAddress.provinceNameNepali
+              }})
+            </div>
+          </div>
+
+          <div class="address-row">
+            <div class="address-label">
+              {{ "citizen.fields.district" | transloco }}
+            </div>
+            <div class="address-value">
+              {{ permanentAddress.districtName }} ({{
+                permanentAddress.districtNameNepali
+              }})
+            </div>
+          </div>
+
+          <div class="address-row">
+            <div class="address-label">
+              {{ "citizen.fields.municipality" | transloco }}
+            </div>
+            <div class="address-value">
+              {{ permanentAddress.municipalityName }}
+              {{ permanentAddress.municipalityType }}
+              <span *ngIf="permanentAddress.municipalityNameNepali"
+                >({{ permanentAddress.municipalityNameNepali }})</span
+              >
+            </div>
+          </div>
+
+          <div class="address-row">
+            <div class="address-label">
+              {{ "citizen.fields.wardNumber" | transloco }}
+            </div>
+            <div class="address-value">{{ permanentAddress.wardNumber }}</div>
+          </div>
+
+          <div class="address-row" *ngIf="permanentAddress.streetAddress">
+            <div class="address-label">
+              {{ "citizen.fields.streetAddress" | transloco }}
+            </div>
+            <div class="address-value">
+              {{ permanentAddress.streetAddress }}
+            </div>
+          </div>
+        </div>
+
+        <ng-template #noPermAddress>
+          <div class="no-address">
+            <mat-icon>location_off</mat-icon>
+            <p>{{ "citizen.address.noPermanentAddress" | transloco }}</p>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Temporary Address -->
+      <div class="address-section">
+        <h3 class="section-title">
+          {{ "citizen.fields.temporaryAddress" | transloco }}
+        </h3>
+
+        <div
+          class="address-content"
+          *ngIf="temporaryAddress; else noTempAddress"
+        >
+          <div class="address-row">
+            <div class="address-label">
+              {{ "citizen.fields.province" | transloco }}
+            </div>
+            <div class="address-value">
+              {{ temporaryAddress.provinceName || "-" }}
+              <span *ngIf="temporaryAddress.provinceNameNepali"
+                >({{ temporaryAddress.provinceNameNepali }})</span
+              >
+            </div>
+          </div>
+
+          <div class="address-row">
+            <div class="address-label">
+              {{ "citizen.fields.district" | transloco }}
+            </div>
+            <div class="address-value">
+              {{ temporaryAddress.districtName || "-" }}
+              <span *ngIf="temporaryAddress.districtNameNepali"
+                >({{ temporaryAddress.districtNameNepali }})</span
+              >
+            </div>
+          </div>
+
+          <div class="address-row">
+            <div class="address-label">
+              {{ "citizen.fields.municipality" | transloco }}
+            </div>
+            <div class="address-value">
+              {{ temporaryAddress.municipalityName || "-" }}
+              {{ temporaryAddress.municipalityType }}
+              <span *ngIf="temporaryAddress.municipalityNameNepali"
+                >({{ temporaryAddress.municipalityNameNepali }})</span
+              >
+            </div>
+          </div>
+
+          <div class="address-row">
+            <div class="address-label">
+              {{ "citizen.fields.wardNumber" | transloco }}
+            </div>
+            <div class="address-value">
+              {{ temporaryAddress.wardNumber || "-" }}
+            </div>
+          </div>
+
+          <div class="address-row" *ngIf="temporaryAddress.streetAddress">
+            <div class="address-label">
+              {{ "citizen.fields.streetAddress" | transloco }}
+            </div>
+            <div class="address-value">
+              {{ temporaryAddress.streetAddress }}
+            </div>
+          </div>
+        </div>
+
+        <ng-template #noTempAddress>
+          <div class="no-address">
+            <mat-icon>location_off</mat-icon>
+            <p>{{ "citizen.address.noTemporaryAddress" | transloco }}</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

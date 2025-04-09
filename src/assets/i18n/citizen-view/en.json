@@ -1,0 +1,73 @@
+{
+  "view": {
+    "title": "Citizen Details",
+    "personalInfo": "Personal Information",
+    "citizenshipInfo": "Citizenship Information",
+    "familyInfo": "Family Information",
+    "systemInfo": "System Information",
+    "status": "Citizen Status",
+    "approval": "Approval Status",
+    "noCitizen": "Citizen not found or has been deleted",
+    "tabs": {
+      "basicInfo": "Basic Information",
+      "documents": "Documents",
+      "address": "Address"
+    }
+  },
+  "documents": {
+    "noDocumentsAvailable": "No documents are available for this citizen",
+    "noPhotoAvailable": "No photo uploaded",
+    "noDocumentAvailable": "No document uploaded",
+    "clickToView": "Click to view"
+  },
+  "address": {
+    "noPermanentAddress": "No permanent address provided",
+    "noTemporaryAddress": "No temporary address provided"
+  },
+  "approval": {
+    "approved": "Approved",
+    "notApproved": "Not Approved"
+  },
+  "document": {
+    "rejection": {
+      "blurry": "Blurry",
+      "inconsistent": "Inconsistent",
+      "mismatch": "Mismatch",
+      "unsuitable": "Unsuitable"
+    }
+  },
+  "fields": {
+    "uploadedAt": "Uploaded At",
+    "note": "Note",
+    "stateNote": "Note",
+    "stateUpdatedAt": "Status Last Updated",
+    "streetAddress": "Street Address"
+  },
+  "actions": {
+    "approve": "Approve Citizen",
+    "changeState": "Change Status"
+  },
+  "dialogs": {
+    "approve": {
+      "title": "Approve Citizen",
+      "message": "Are you sure you want to approve this citizen? This action cannot be undone.",
+      "confirmButton": "Approve"
+    },
+    "delete": {
+      "title": "Delete Citizen",
+      "message": "Are you sure you want to delete this citizen? This action cannot be undone.",
+      "confirmButton": "Delete"
+    },
+    "changeState": {
+      "title": "Change Citizen Status",
+      "noteHint": "Provide a reason for the status change (optional)",
+      "confirmButton": "Save Changes"
+    }
+  },
+  "validation": {
+    "stateRequired": "Status is required"
+  },
+  "errors": {
+    "idNotProvided": "Citizen ID is missing"
+  }
+}

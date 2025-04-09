@@ -1,0 +1,113 @@
+<div class="citizen-view-page">
+  <div class="header-section">
+    <div class="title-container">
+      <button
+        mat-icon-button
+        color="primary"
+        (click)="onBack()"
+        aria-label="Back"
+      >
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1 class="mat-headline-4">{{ "citizen.view.title" | transloco }}</h1>
+    </div>
+    <div class="actions">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="onEdit()"
+        [disabled]="(processing$ | async) === true"
+      >
+        <mat-icon>edit</mat-icon>
+        {{ "common.actions.edit" | transloco }}
+      </button>
+      <button
+        mat-raised-button
+        color="accent"
+        (click)="onApproveCitizen()"
+        [disabled]="
+          (approving$ | async) === true ||
+          (loading$ | async) === true ||
+          (citizen$ | async)?.isApproved === true
+        "
+        *ngIf="(citizen$ | async)?.isApproved !== true"
+      >
+        <mat-icon>check_circle</mat-icon>
+        <span *ngIf="(approving$ | async) !== true">{{
+          "citizen.actions.approve" | transloco
+        }}</span>
+        <span *ngIf="(approving$ | async) === true">{{
+          "common.actions.processing" | transloco
+        }}</span>
+      </button>
+      <button
+        mat-raised-button
+        color="warn"
+        (click)="onDeleteCitizen()"
+        [disabled]="(deleting$ | async) === true || (loading$ | async) === true"
+      >
+        <mat-icon>delete</mat-icon>
+        <span *ngIf="(deleting$ | async) !== true">{{
+          "common.actions.delete" | transloco
+        }}</span>
+        <span *ngIf="(deleting$ | async) === true">{{
+          "common.actions.processing" | transloco
+        }}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="content-container">
+    <ng-container *ngIf="(loading$ | async) !== true; else loading">
+      <ng-container *ngIf="citizen$ | async as citizen; else noCitizen">
+        <!-- Status Card -->
+        <app-citizen-status
+          [citizen]="citizen"
+          (changeState)="onChangeState($event.state, $event.note)"
+        ></app-citizen-status>
+
+        <mat-divider class="section-divider"></mat-divider>
+
+        <!-- Main Content Tabs -->
+        <mat-tab-group animationDuration="0ms" class="citizen-tabs">
+          <!-- Basic Information Tab -->
+          <mat-tab [label]="'citizen.view.tabs.basicInfo' | transloco">
+            <app-citizen-info [citizen]="citizen"></app-citizen-info>
+          </mat-tab>
+
+          <!-- Documents Tab -->
+          <mat-tab [label]="'citizen.view.tabs.documents' | transloco">
+            <app-citizen-documents
+              [documents]="citizen.documents"
+            ></app-citizen-documents>
+          </mat-tab>
+
+          <!-- Address Tab -->
+          <mat-tab [label]="'citizen.view.tabs.address' | transloco">
+            <app-citizen-address
+              [permanentAddress]="citizen.permanentAddress"
+              [temporaryAddress]="citizen.temporaryAddress"
+            ></app-citizen-address>
+          </mat-tab>
+        </mat-tab-group>
+      </ng-container>
+
+      <ng-template #noCitizen>
+        <div class="no-citizen">
+          <mat-icon color="warn">error</mat-icon>
+          <p>{{ "citizen.view.noCitizen" | transloco }}</p>
+          <button mat-stroked-button color="primary" (click)="onBack()">
+            {{ "common.actions.backToList" | transloco }}
+          </button>
+        </div>
+      </ng-template>
+    </ng-container>
+
+    <ng-template #loading>
+      <div class="loading-container">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>{{ "common.messages.loading" | transloco }}</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

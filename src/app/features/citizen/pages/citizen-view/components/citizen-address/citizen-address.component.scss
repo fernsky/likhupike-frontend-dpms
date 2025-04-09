@@ -1,0 +1,77 @@
+/* filepath: c:\Users\trilo\Documents\remote\digital-profile\likhupike\development\frontend\src\app\features\citizen\pages\citizen-view\components\citizen-address\citizen-address.component.scss */
+.address-card {
+  margin-top: 16px;
+
+  .address-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .address-section {
+    .section-title {
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: rgba(0, 0, 0, 0.87);
+      font-size: 1.1rem;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      padding-bottom: 8px;
+    }
+
+    .address-content {
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .address-row {
+      margin-bottom: 12px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .address-label {
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.6);
+        margin-bottom: 4px;
+      }
+
+      .address-value {
+        word-break: break-word;
+      }
+    }
+
+    .no-address {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 150px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      padding: 16px;
+      color: rgba(0, 0, 0, 0.5);
+
+      mat-icon {
+        font-size: 36px;
+        height: 36px;
+        width: 36px;
+        margin-bottom: 8px;
+        opacity: 0.6;
+      }
+
+      p {
+        margin: 0;
+        text-align: center;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .address-container {
+    grid-template-columns: 1fr !important;
+  }
+}

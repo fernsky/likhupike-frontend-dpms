@@ -1,0 +1,83 @@
+/* filepath: c:\Users\trilo\Documents\remote\digital-profile\likhupike\development\frontend\src\app\features\citizen\pages\citizen-view\components\citizen-status\citizen-status.component.scss */
+.status-card {
+  margin-top: 16px;
+
+  .status-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .status-section,
+  .approval-section {
+    .status-header,
+    .approval-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+
+      h3 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 500;
+      }
+    }
+
+    .status-content,
+    .approval-content {
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      padding: 16px;
+
+      .status-chip-container {
+        margin-bottom: 16px;
+      }
+
+      .status-details,
+      .approval-details {
+        .detail-row {
+          margin-bottom: 8px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          .detail-label {
+            font-weight: 500;
+            margin-right: 8px;
+            color: rgba(0, 0, 0, 0.6);
+          }
+        }
+      }
+
+      .approval-status {
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+        padding: 8px 16px;
+        border-radius: 4px;
+
+        mat-icon {
+          margin-right: 8px;
+        }
+
+        &.approved {
+          background-color: rgba(76, 175, 80, 0.1);
+          color: #2e7d32;
+        }
+
+        &.not-approved {
+          background-color: rgba(244, 67, 54, 0.1);
+          color: #d32f2f;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .status-container {
+    grid-template-columns: 1fr !important;
+  }
+}

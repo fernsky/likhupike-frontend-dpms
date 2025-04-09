@@ -1,0 +1,6 @@
+<div class="status-chip" [ngClass]="getStatusClass()">
+  <mat-icon class="status-icon">{{ getStatusIcon() }}</mat-icon>
+  <span class="status-text">{{
+    "citizen.states." + (state || "UNKNOWN") | transloco
+  }}</span>
+</div>

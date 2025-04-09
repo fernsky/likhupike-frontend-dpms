@@ -1,0 +1,254 @@
+<div class="filter-container">
+  <form [formGroup]="filterForm">
+    <div class="basic-filters">
+      <div class="filter-row">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>{{ "citizen.fields.name" | transloco }}</mat-label>
+          <input
+            matInput
+            formControlName="name"
+            placeholder="{{ 'citizen.placeholders.name' | transloco }}"
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>{{
+            "citizen.fields.nameDevnagari" | transloco
+          }}</mat-label>
+          <input
+            matInput
+            formControlName="nameDevnagari"
+            placeholder="{{ 'citizen.placeholders.nameDevnagari' | transloco }}"
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>{{
+            "citizen.fields.citizenshipNumber" | transloco
+          }}</mat-label>
+          <input
+            matInput
+            formControlName="citizenshipNumber"
+            placeholder="{{
+              'citizen.placeholders.citizenshipNumber' | transloco
+            }}"
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>{{ "citizen.fields.state" | transloco }}</mat-label>
+          <mat-select formControlName="state">
+            <mat-option [value]="null">{{
+              "common.any" | transloco
+            }}</mat-option>
+            <mat-option *ngFor="let state of citizenStates" [value]="state">
+              {{ "citizen.states." + state | transloco }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <mat-expansion-panel [expanded]="isAdvancedFiltersOpen">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ "citizen.filters.advancedFilters" | transloco }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="advanced-filters">
+        <div class="filter-row">
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>{{ "citizen.fields.email" | transloco }}</mat-label>
+            <input
+              matInput
+              formControlName="email"
+              placeholder="{{ 'citizen.placeholders.email' | transloco }}"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>{{
+              "citizen.fields.phoneNumber" | transloco
+            }}</mat-label>
+            <input
+              matInput
+              formControlName="phoneNumber"
+              placeholder="{{ 'citizen.placeholders.phoneNumber' | transloco }}"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>{{ "citizen.fields.isApproved" | transloco }}</mat-label>
+            <mat-select formControlName="isApproved">
+              <mat-option [value]="null">{{
+                "common.any" | transloco
+              }}</mat-option>
+              <mat-option [value]="true">{{
+                "common.yes" | transloco
+              }}</mat-option>
+              <mat-option [value]="false">{{
+                "common.no" | transloco
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="filter-row">
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>{{
+              "citizen.fields.citizenshipIssuedDateStart" | transloco
+            }}</mat-label>
+            <input
+              matInput
+              [matDatepicker]="startPicker"
+              formControlName="citizenshipIssuedDateStart"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="startPicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>{{
+              "citizen.fields.citizenshipIssuedDateEnd" | transloco
+            }}</mat-label>
+            <input
+              matInput
+              [matDatepicker]="endPicker"
+              formControlName="citizenshipIssuedDateEnd"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="endPicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>{{
+              "citizen.fields.citizenshipIssuedOffice" | transloco
+            }}</mat-label>
+            <input
+              matInput
+              formControlName="citizenshipIssuedOffice"
+              placeholder="{{
+                'citizen.placeholders.citizenshipIssuedOffice' | transloco
+              }}"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="filter-row">
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>{{
+              "citizen.fields.documentState" | transloco
+            }}</mat-label>
+            <mat-select formControlName="documentStates" multiple>
+              <mat-option *ngFor="let state of documentStates" [value]="state">
+                {{ "citizen.documentStates." + state | transloco }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>{{
+              "citizen.fields.notesSearch" | transloco
+            }}</mat-label>
+            <input
+              matInput
+              formControlName="notesSearch"
+              placeholder="{{ 'citizen.placeholders.notesSearch' | transloco }}"
+            />
+          </mat-form-field>
+        </div>
+
+        <h4>{{ "citizen.fields.permanentAddress" | transloco }}</h4>
+        <div class="filter-row">
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>{{ "citizen.fields.province" | transloco }}</mat-label>
+            <mat-select formControlName="permanentProvinceCode">
+              <mat-option [value]="null">{{
+                "common.any" | transloco
+              }}</mat-option>
+              <mat-option
+                *ngFor="let province of provinces$ | async"
+                [value]="province.code"
+              >
+                {{ province.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>{{ "citizen.fields.district" | transloco }}</mat-label>
+            <mat-select
+              formControlName="permanentDistrictCode"
+              [disabled]="!filterForm.get('permanentProvinceCode')?.value"
+            >
+              <mat-option [value]="null">{{
+                "common.any" | transloco
+              }}</mat-option>
+              <mat-option
+                *ngFor="let district of districts$ | async"
+                [value]="district.code"
+              >
+                {{ district.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>{{
+              "citizen.fields.municipality" | transloco
+            }}</mat-label>
+            <mat-select
+              formControlName="permanentMunicipalityCode"
+              [disabled]="!filterForm.get('permanentDistrictCode')?.value"
+            >
+              <mat-option [value]="null">{{
+                "common.any" | transloco
+              }}</mat-option>
+              <mat-option
+                *ngFor="let municipality of municipalities$ | async"
+                [value]="municipality.code"
+              >
+                {{ municipality.name }} ({{ municipality.type }})
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>{{ "citizen.fields.wardNumber" | transloco }}</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="permanentWardNumber"
+              placeholder="{{ 'citizen.placeholders.wardNumber' | transloco }}"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <div class="filter-actions">
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="toggleAdvancedFilters()"
+      >
+        <span *ngIf="!isAdvancedFiltersOpen">{{
+          "citizen.filters.showAdvanced" | transloco
+        }}</span>
+        <span *ngIf="isAdvancedFiltersOpen">{{
+          "citizen.filters.hideAdvanced" | transloco
+        }}</span>
+      </button>
+      <button mat-raised-button color="warn" type="button" (click)="onReset()">
+        {{ "common.actions.resetFilters" | transloco }}
+      </button>
+    </div>
+  </form>
+</div>

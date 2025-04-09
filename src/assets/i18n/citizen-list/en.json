@@ -1,0 +1,71 @@
+{
+  "list": {
+    "title": "Citizens Management",
+    "noData": "No citizens found matching your filters"
+  },
+  "actions": {
+    "createNew": "Create New Citizen",
+    "clearFilters": "Clear Filters"
+  },
+  "fields": {
+    "name": "Name",
+    "nameDevnagari": "Name in Devnagari",
+    "citizenshipNumber": "Citizenship Number",
+    "citizenshipIssuedOffice": "Citizenship Issued Office",
+    "citizenshipIssuedDateStart": "Citizenship Issued Date (From)",
+    "citizenshipIssuedDateEnd": "Citizenship Issued Date (To)",
+    "email": "Email",
+    "phoneNumber": "Phone Number",
+    "state": "Status",
+    "isApproved": "Approved",
+    "photoState": "Photo Status",
+    "citizenshipFrontState": "Citizenship Front Status",
+    "citizenshipBackState": "Citizenship Back Status",
+    "documentState": "Document Status",
+    "documentsStatus": "Documents",
+    "notesSearch": "Notes Search",
+    "permanentAddress": "Permanent Address",
+    "province": "Province",
+    "district": "District",
+    "municipality": "Municipality",
+    "wardNumber": "Ward Number",
+    "createdAt": "Created At"
+  },
+  "placeholders": {
+    "name": "Enter citizen's name",
+    "nameDevnagari": "Enter name in Devnagari",
+    "citizenshipNumber": "Enter citizenship number",
+    "citizenshipIssuedOffice": "Enter issuing office",
+    "email": "Enter email address",
+    "phoneNumber": "Enter phone number",
+    "notesSearch": "Search in notes",
+    "wardNumber": "Enter ward number"
+  },
+  "states": {
+    "APPROVED": "Approved",
+    "PENDING_REGISTRATION": "Pending Registration",
+    "UNDER_REVIEW": "Under Review",
+    "ACTION_REQUIRED": "Action Required",
+    "REJECTED": "Rejected",
+    "UNKNOWN": "Unknown"
+  },
+  "documentStates": {
+    "APPROVED": "Approved",
+    "AWAITING_REVIEW": "Awaiting Review",
+    "NOT_UPLOADED": "Not Uploaded",
+    "REJECTED_BLURRY": "Rejected (Blurry)",
+    "REJECTED_INCONSISTENT": "Rejected (Inconsistent)",
+    "REJECTED_MISMATCH": "Rejected (Mismatch)",
+    "REJECTED_UNSUITABLE": "Rejected (Unsuitable)"
+  },
+  "documentTypes": {
+    "CITIZEN_PHOTO": "Photo",
+    "CITIZENSHIP_FRONT": "Citizenship Front",
+    "CITIZENSHIP_BACK": "Citizenship Back"
+  },
+  "filters": {
+    "advancedFilters": "Advanced Filters",
+    "showAdvanced": "Show Advanced Filters",
+    "hideAdvanced": "Hide Advanced Filters"
+  }
+}

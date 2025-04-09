@@ -1,0 +1,73 @@
+{
+  "view": {
+    "title": "नागरिक विवरण",
+    "personalInfo": "व्यक्तिगत जानकारी",
+    "citizenshipInfo": "नागरिकता जानकारी",
+    "familyInfo": "पारिवारिक जानकारी",
+    "systemInfo": "प्रणाली जानकारी",
+    "status": "नागरिक स्थिति",
+    "approval": "स्वीकृति स्थिति",
+    "noCitizen": "नागरिक फेला परेन वा मेटाइएको छ",
+    "tabs": {
+      "basicInfo": "आधारभूत जानकारी",
+      "documents": "कागजातहरू",
+      "address": "ठेगाना"
+    }
+  },
+  "documents": {
+    "noDocumentsAvailable": "यस नागरिकको लागि कुनै कागजात उपलब्ध छैन",
+    "noPhotoAvailable": "कुनै फोटो अपलोड गरिएको छैन",
+    "noDocumentAvailable": "कुनै कागजात अपलोड गरिएको छैन",
+    "clickToView": "हेर्न क्लिक गर्नुहोस्"
+  },
+  "address": {
+    "noPermanentAddress": "कुनै स्थायी ठेगाना प्रदान गरिएको छैन",
+    "noTemporaryAddress": "कुनै अस्थायी ठेगाना प्रदान गरिएको छैन"
+  },
+  "approval": {
+    "approved": "स्वीकृत",
+    "notApproved": "स्वीकृत छैन"
+  },
+  "document": {
+    "rejection": {
+      "blurry": "धमिलो",
+      "inconsistent": "असङ्गत",
+      "mismatch": "मिलेन",
+      "unsuitable": "अनुपयुक्त"
+    }
+  },
+  "fields": {
+    "uploadedAt": "अपलोड गरिएको मिति",
+    "note": "टिप्पणी",
+    "stateNote": "टिप्पणी",
+    "stateUpdatedAt": "स्थिति अन्तिम अपडेट गरिएको",
+    "streetAddress": "सडक ठेगाना"
+  },
+  "actions": {
+    "approve": "नागरिक स्वीकृत गर्नुहोस्",
+    "changeState": "स्थिति परिवर्तन गर्नुहोस्"
+  },
+  "dialogs": {
+    "approve": {
+      "title": "नागरिक स्वीकृत गर्नुहोस्",
+      "message": "के तपाईं यस नागरिकलाई स्वीकृत गर्न निश्चित हुनुहुन्छ? यो कार्य पूर्ववत गर्न सकिँदैन।",
+      "confirmButton": "स्वीकृत गर्नुहोस्"
+    },
+    "delete": {
+      "title": "नागरिक मेट्नुहोस्",
+      "message": "के तपाईं यस नागरिकलाई मेट्न निश्चित हुनुहुन्छ? यो कार्य पूर्ववत गर्न सकिँदैन।",
+      "confirmButton": "मेट्नुहोस्"
+    },
+    "changeState": {
+      "title": "नागरिक स्थिति परिवर्तन गर्नुहोस्",
+      "noteHint": "स्थिति परिवर्तनको कारण प्रदान गर्नुहोस् (वैकल्पिक)",
+      "confirmButton": "परिवर्तनहरू बचत गर्नुहोस्"
+    }
+  },
+  "validation": {
+    "stateRequired": "स्थिति आवश्यक छ"
+  },
+  "errors": {
+    "idNotProvided": "नागरिक आईडी उपलब्ध छैन"
+  }
+}

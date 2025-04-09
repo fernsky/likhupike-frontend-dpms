@@ -1,0 +1,71 @@
+{
+  "list": {
+    "title": "नागरिक व्यवस्थापन",
+    "noData": "तपाईंको फिल्टरहरूसँग मिल्दो कुनै नागरिक फेला परेन"
+  },
+  "actions": {
+    "createNew": "नयाँ नागरिक सिर्जना गर्नुहोस्",
+    "clearFilters": "फिल्टरहरू खाली गर्नुहोस्"
+  },
+  "fields": {
+    "name": "नाम",
+    "nameDevnagari": "देवनागरीमा नाम",
+    "citizenshipNumber": "नागरिकता नम्बर",
+    "citizenshipIssuedOffice": "नागरिकता जारी कार्यालय",
+    "citizenshipIssuedDateStart": "नागरिकता जारी मिति (देखि)",
+    "citizenshipIssuedDateEnd": "नागरिकता जारी मिति (सम्म)",
+    "email": "इमेल",
+    "phoneNumber": "फोन नम्बर",
+    "state": "स्थिति",
+    "isApproved": "स्वीकृत",
+    "photoState": "फोटो स्थिति",
+    "citizenshipFrontState": "नागरिकता अगाडि स्थिति",
+    "citizenshipBackState": "नागरिकता पछाडि स्थिति",
+    "documentState": "कागजात स्थिति",
+    "documentsStatus": "कागजातहरू",
+    "notesSearch": "टिप्पणीहरूमा खोज्नुहोस्",
+    "permanentAddress": "स्थायी ठेगाना",
+    "province": "प्रदेश",
+    "district": "जिल्ला",
+    "municipality": "नगरपालिका",
+    "wardNumber": "वडा नम्बर",
+    "createdAt": "सिर्जना गरिएको"
+  },
+  "placeholders": {
+    "name": "नागरिकको नाम प्रविष्ट गर्नुहोस्",
+    "nameDevnagari": "देवनागरीमा नाम प्रविष्ट गर्नुहोस्",
+    "citizenshipNumber": "नागरिकता नम्बर प्रविष्ट गर्नुहोस्",
+    "citizenshipIssuedOffice": "जारी कार्यालय प्रविष्ट गर्नुहोस्",
+    "email": "इमेल ठेगाना प्रविष्ट गर्नुहोस्",
+    "phoneNumber": "फोन नम्बर प्रविष्ट गर्नुहोस्",
+    "notesSearch": "टिप्पणीहरूमा खोज्नुहोस्",
+    "wardNumber": "वडा नम्बर प्रविष्ट गर्नुहोस्"
+  },
+  "states": {
+    "APPROVED": "स्वीकृत",
+    "PENDING_REGISTRATION": "दर्ता प्रक्रियामा",
+    "UNDER_REVIEW": "समीक्षा अन्तर्गत",
+    "ACTION_REQUIRED": "कार्य आवश्यक",
+    "REJECTED": "अस्वीकृत",
+    "UNKNOWN": "अज्ञात"
+  },
+  "documentStates": {
+    "APPROVED": "स्वीकृत",
+    "AWAITING_REVIEW": "समीक्षाको प्रतीक्षामा",
+    "NOT_UPLOADED": "अपलोड गरिएको छैन",
+    "REJECTED_BLURRY": "अस्वीकृत (धमिलो)",
+    "REJECTED_INCONSISTENT": "अस्वीकृत (असंगत)",
+    "REJECTED_MISMATCH": "अस्वीकृत (मेल खाँदैन)",
+    "REJECTED_UNSUITABLE": "अस्वीकृत (अनुपयुक्त)"
+  },
+  "documentTypes": {
+    "CITIZEN_PHOTO": "फोटो",
+    "CITIZENSHIP_FRONT": "नागरिकता अगाडि",
+    "CITIZENSHIP_BACK": "नागरिकता पछाडि"
+  },
+  "filters": {
+    "advancedFilters": "उन्नत फिल्टरहरू",
+    "showAdvanced": "उन्नत फिल्टरहरू देखाउनुहोस्",
+    "hideAdvanced": "उन्नत फिल्टरहरू लुकाउनुहोस्"
+  }
+}

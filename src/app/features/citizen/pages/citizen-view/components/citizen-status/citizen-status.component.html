@@ -1,0 +1,87 @@
+<mat-card class="status-card">
+  <mat-card-content>
+    <div class="status-container">
+      <div class="status-section">
+        <div class="status-header">
+          <h3>{{ "citizen.view.status" | transloco }}</h3>
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="onOpenChangeStateDialog()"
+          >
+            <mat-icon>edit</mat-icon>
+            {{ "citizen.actions.changeState" | transloco }}
+          </button>
+        </div>
+
+        <div class="status-content">
+          <div class="status-chip-container">
+            <app-citizen-status-chip
+              [state]="citizen.state"
+            ></app-citizen-status-chip>
+          </div>
+
+          <div
+            class="status-details"
+            *ngIf="citizen.stateNote || citizen.stateUpdatedAt"
+          >
+            <div class="detail-row" *ngIf="citizen.stateNote">
+              <span class="detail-label"
+                >{{ "citizen.fields.stateNote" | transloco }}:</span
+              >
+              <span class="detail-value">{{ citizen.stateNote }}</span>
+            </div>
+
+            <div class="detail-row" *ngIf="citizen.stateUpdatedAt">
+              <span class="detail-label"
+                >{{ "citizen.fields.stateUpdatedAt" | transloco }}:</span
+              >
+              <span class="detail-value">{{
+                formatDate(citizen.stateUpdatedAt)
+              }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="approval-section">
+        <div class="approval-header">
+          <h3>{{ "citizen.view.approval" | transloco }}</h3>
+        </div>
+
+        <div class="approval-content">
+          <div
+            class="approval-status"
+            [ngClass]="{
+              approved: citizen.isApproved,
+              'not-approved': !citizen.isApproved,
+            }"
+          >
+            <mat-icon>{{
+              citizen.isApproved ? "check_circle" : "cancel"
+            }}</mat-icon>
+            <span>{{
+              citizen.isApproved
+                ? ("citizen.approval.approved" | transloco)
+                : ("citizen.approval.notApproved" | transloco)
+            }}</span>
+          </div>
+
+          <div
+            class="approval-details"
+            *ngIf="citizen.isApproved && citizen.approvedAt"
+          >
+            <div class="detail-row">
+              <span class="detail-label"
+                >{{ "citizen.fields.approvedAt" | transloco }}:</span
+              >
+              <span class="detail-value">{{
+                formatDate(citizen.approvedAt)
+              }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

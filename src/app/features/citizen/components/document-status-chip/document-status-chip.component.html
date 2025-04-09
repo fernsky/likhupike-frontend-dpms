@@ -1,0 +1,9 @@
+<div class="document-status-chip" [ngClass]="getStatusClass()">
+  <mat-icon class="status-icon">{{ getStatusIcon() }}</mat-icon>
+  <span class="status-text">{{
+    "citizen.documentStates." + (state || "NOT_UPLOADED") | transloco
+  }}</span>
+  <span *ngIf="getRejectionReason()" class="rejection-reason">
+    ({{ getRejectionReason() | transloco }})
+  </span>
+</div>

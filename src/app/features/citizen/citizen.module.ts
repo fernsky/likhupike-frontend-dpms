@@ -5,6 +5,8 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { TranslocoModule } from '@jsverse/transloco';
 
+// Routing
+
 // Store
 import { citizenReducer } from './store/citizen.reducer';
 import { CitizenEffects } from './store/citizen.effects';

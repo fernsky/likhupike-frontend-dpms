@@ -1,0 +1,124 @@
+<mat-card class="citizen-info-card">
+  <mat-card-content>
+    <div class="info-grid">
+      <!-- Name Section -->
+      <div class="info-section">
+        <h3 class="section-title">
+          {{ "citizen.view.personalInfo" | transloco }}
+        </h3>
+
+        <div class="info-row">
+          <div class="info-label">{{ "citizen.fields.name" | transloco }}</div>
+          <div class="info-value">{{ citizen.name || "-" }}</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">
+            {{ "citizen.fields.nameDevnagari" | transloco }}
+          </div>
+          <div class="info-value">{{ citizen.nameDevnagari || "-" }}</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">{{ "citizen.fields.email" | transloco }}</div>
+          <div class="info-value">{{ citizen.email || "-" }}</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">
+            {{ "citizen.fields.phoneNumber" | transloco }}
+          </div>
+          <div class="info-value">{{ citizen.phoneNumber || "-" }}</div>
+        </div>
+      </div>
+
+      <!-- Citizenship Section -->
+      <div class="info-section">
+        <h3 class="section-title">
+          {{ "citizen.view.citizenshipInfo" | transloco }}
+        </h3>
+
+        <div class="info-row">
+          <div class="info-label">
+            {{ "citizen.fields.citizenshipNumber" | transloco }}
+          </div>
+          <div class="info-value">{{ citizen.citizenshipNumber || "-" }}</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">
+            {{ "citizen.fields.citizenshipIssuedDate" | transloco }}
+          </div>
+          <div class="info-value">
+            {{ formatDate(citizen.citizenshipIssuedDate) }}
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">
+            {{ "citizen.fields.citizenshipIssuedOffice" | transloco }}
+          </div>
+          <div class="info-value">
+            {{ citizen.citizenshipIssuedOffice || "-" }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Family Information -->
+      <div class="info-section">
+        <h3 class="section-title">
+          {{ "citizen.view.familyInfo" | transloco }}
+        </h3>
+
+        <div class="info-row">
+          <div class="info-label">
+            {{ "citizen.fields.fatherName" | transloco }}
+          </div>
+          <div class="info-value">{{ citizen.fatherName || "-" }}</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">
+            {{ "citizen.fields.grandfatherName" | transloco }}
+          </div>
+          <div class="info-value">{{ citizen.grandfatherName || "-" }}</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">
+            {{ "citizen.fields.spouseName" | transloco }}
+          </div>
+          <div class="info-value">{{ citizen.spouseName || "-" }}</div>
+        </div>
+      </div>
+
+      <!-- System Information -->
+      <div class="info-section">
+        <h3 class="section-title">
+          {{ "citizen.view.systemInfo" | transloco }}
+        </h3>
+
+        <div class="info-row">
+          <div class="info-label">
+            {{ "citizen.fields.createdAt" | transloco }}
+          </div>
+          <div class="info-value">{{ formatDate(citizen.createdAt) }}</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">
+            {{ "citizen.fields.updatedAt" | transloco }}
+          </div>
+          <div class="info-value">{{ formatDate(citizen.updatedAt) }}</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">
+            {{ "citizen.fields.approvedAt" | transloco }}
+          </div>
+          <div class="info-value">{{ formatDate(citizen.approvedAt) }}</div>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

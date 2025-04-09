@@ -21,8 +21,8 @@ import { ApiResponse } from '@app/features/user-management/models/api.interface'
   providedIn: 'root',
 })
 export class CitizenService {
-  private readonly apiUrl = `${environment.apiUrl}/api/v1/admin/citizens`;
-  private readonly stateApiUrl = `${environment.apiUrl}/api/v1/admin/citizen-state`;
+  private readonly apiUrl = `${environment.apiUrl}/admin/citizens`;
+  private readonly stateApiUrl = `${environment.apiUrl}/admin/citizen-state`;
 
   constructor(private http: HttpClient) {}
 

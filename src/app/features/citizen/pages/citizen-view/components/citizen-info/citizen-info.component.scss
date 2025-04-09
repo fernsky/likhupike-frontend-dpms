@@ -1,0 +1,44 @@
+.citizen-info-card {
+  margin-top: 16px;
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  .info-section {
+    .section-title {
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: rgba(0, 0, 0, 0.87);
+      font-size: 1.1rem;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      padding-bottom: 8px;
+    }
+
+    .info-row {
+      display: flex;
+      margin-bottom: 12px;
+
+      .info-label {
+        min-width: 140px;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.6);
+        margin-right: 16px;
+      }
+
+      .info-value {
+        flex: 1;
+        word-break: break-word;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .info-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

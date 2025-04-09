@@ -3,6 +3,8 @@ import { CitizenActions } from './citizen.actions';
 import { initialCitizenState, CitizenState } from './citizen.state';
 import { CitizenSearchFilters, DocumentType } from '../types';
 
+export const CITIZEN_FEATURE_KEY = 'citizenManagement';
+
 export const citizenReducer = createReducer(
   initialCitizenState,
 

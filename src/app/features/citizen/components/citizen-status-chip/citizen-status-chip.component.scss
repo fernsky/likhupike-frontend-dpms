@@ -1,0 +1,48 @@
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 16px;
+  font-size: 0.85em;
+
+  &.approved {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: #2e7d32;
+  }
+
+  &.pending {
+    background-color: rgba(33, 150, 243, 0.1);
+    color: #1565c0;
+  }
+
+  &.under-review {
+    background-color: rgba(156, 39, 176, 0.1);
+    color: #7b1fa2;
+  }
+
+  &.action-required {
+    background-color: rgba(255, 152, 0, 0.1);
+    color: #ef6c00;
+  }
+
+  &.rejected {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: #d32f2f;
+  }
+
+  &.unknown {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .status-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+    margin-right: 4px;
+  }
+
+  .status-text {
+    white-space: nowrap;
+  }
+}

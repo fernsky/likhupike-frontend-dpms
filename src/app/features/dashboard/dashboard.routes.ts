@@ -28,6 +28,20 @@ export const DASHBOARD_ROUTES: Routes = [
             (m) => m.USER_MANAGEMENT_ROUTES
           ),
       },
+      {
+        path: 'citizens',
+        data: {
+          breadcrumb: {
+            translationKey: 'citizens',
+            icon: 'group',
+            path: '/dashboard/citizens',
+          },
+        },
+        loadChildren: () =>
+          import('../citizen/citizen-routing').then(
+            (m) => m.CITIZEN_MANAGEMENT_ROUTES
+          ),
+      },
     ],
   },
 ];
