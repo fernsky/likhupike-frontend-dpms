@@ -287,3 +287,14 @@ export interface LocationApiResponse<T> {
   success: boolean;
   data: T[];
 }
+
+export interface DocumentUploadResponse {
+  storageKey: string;
+  originalFilename: string;
+  contentType: string;
+  size: number;
+  url: string;
+  uploadedAt: string;
+  state?: DocumentState;
+  documentType?: DocumentType;
+}
