@@ -14,7 +14,8 @@
       "back": "Back",
       "title": "Actions",
       "resetFilters": "Reset Filters",
-      "view": "View"
+      "view": "View",
+      "next": "Next"
     },
     "pagination": {
       "itemsPerPage": "Items per page",

@@ -52,7 +52,7 @@
           type="email"
         />
         <mat-error *ngIf="emailControl?.hasError('email')">
-          {{ "citizen.validation.invalidEmail" | transloco }}
+          {{ "citizen.validation.emailInvalid" | transloco }}
         </mat-error>
         <mat-error *ngIf="emailControl?.hasError('maxlength')">
           {{ "citizen.validation.emailTooLong" | transloco }}
