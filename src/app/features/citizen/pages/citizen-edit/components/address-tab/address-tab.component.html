@@ -1,0 +1,45 @@
+<div [formGroup]="addressForm" class="address-form-container">
+  <mat-card class="address-card">
+    <mat-card-content>
+      <!-- Permanent Address Section -->
+      <div class="address-section">
+        <h3>{{ "citizen.fields.permanentAddress" | transloco }}</h3>
+
+        <app-address-form
+          [parentForm]="addressForm"
+          controlName="permanentAddress"
+          [address]="citizen.permanentAddress"
+          [required]="true"
+        ></app-address-form>
+      </div>
+
+      <!-- Same Address Toggle -->
+      <div class="same-address-toggle">
+        <mat-checkbox
+          [checked]="useSameAddress"
+          (change)="onSameAddressChange($event.checked)"
+        >
+          {{ "citizen.edit.sameAsPermanent" | transloco }}
+        </mat-checkbox>
+      </div>
+
+      <!-- Temporary Address Section -->
+      <div class="address-section">
+        <h3>{{ "citizen.fields.temporaryAddress" | transloco }}</h3>
+
+        <div class="using-permanent-notice" *ngIf="useSameAddress">
+          <mat-icon>info</mat-icon>
+          <span>{{ "citizen.edit.usingPermanentAddress" | transloco }}</span>
+        </div>
+
+        <app-address-form
+          [parentForm]="addressForm"
+          controlName="temporaryAddress"
+          [address]="citizen.temporaryAddress"
+          [required]="false"
+          [disabled]="useSameAddress"
+        ></app-address-form>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

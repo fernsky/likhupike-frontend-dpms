@@ -1,0 +1,39 @@
+.address-form-container {
+  .address-card {
+    margin-bottom: 24px;
+  }
+
+  .address-section {
+    margin-bottom: 24px;
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 16px;
+      color: rgba(0, 0, 0, 0.87);
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  .same-address-toggle {
+    margin: 16px 0 24px;
+    padding: 8px 0;
+    border-top: 1px dashed rgba(0, 0, 0, 0.12);
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.12);
+  }
+
+  .using-permanent-notice {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 8px 16px;
+    background-color: rgba(33, 150, 243, 0.1);
+    border-radius: 4px;
+    color: #0277bd;
+
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+}
