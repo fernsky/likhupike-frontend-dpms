@@ -1,0 +1,89 @@
+<div [formGroup]="form" class="address-form">
+  <div class="form-row two-column">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ "citizen.fields.province" | transloco }}</mat-label>
+      <mat-select formControlName="provinceCode">
+        <mat-option *ngFor="let province of provinces" [value]="province.code">
+          {{ province.name }} ({{ province.nameNepali }})
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('provinceCode')?.hasError('required')">
+        {{ "citizen.validation.provinceRequired" | transloco }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ "citizen.fields.district" | transloco }}</mat-label>
+      <mat-select
+        formControlName="districtCode"
+        [disabled]="!form.get('provinceCode')?.value"
+      >
+        <mat-option *ngFor="let district of districts" [value]="district.code">
+          {{ district.name }} ({{ district.nameNepali }})
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('districtCode')?.hasError('required')">
+        {{ "citizen.validation.districtRequired" | transloco }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="form-row two-column">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ "citizen.fields.municipality" | transloco }}</mat-label>
+      <mat-select
+        formControlName="municipalityCode"
+        [disabled]="!form.get('districtCode')?.value"
+      >
+        <mat-option
+          *ngFor="let municipality of municipalities"
+          [value]="municipality.code"
+        >
+          {{ municipality.name }} {{ municipality.type }}
+          <span *ngIf="municipality.nameNepali"
+            >({{ municipality.nameNepali }})</span
+          >
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('municipalityCode')?.hasError('required')">
+        {{ "citizen.validation.municipalityRequired" | transloco }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ "citizen.fields.wardNumber" | transloco }}</mat-label>
+      <input
+        matInput
+        type="number"
+        min="1"
+        max="33"
+        formControlName="wardNumber"
+      />
+      <mat-error *ngIf="form.get('wardNumber')?.hasError('required')">
+        {{ "citizen.validation.wardRequired" | transloco }}
+      </mat-error>
+      <mat-error
+        *ngIf="
+          form.get('wardNumber')?.hasError('min') ||
+          form.get('wardNumber')?.hasError('max')
+        "
+      >
+        {{ "citizen.validation.wardInvalid" | transloco }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ "citizen.fields.streetAddress" | transloco }}</mat-label>
+      <input
+        matInput
+        formControlName="streetAddress"
+        placeholder="{{ 'citizen.placeholders.streetAddress' | transloco }}"
+      />
+      <mat-error *ngIf="form.get('streetAddress')?.hasError('maxlength')">
+        {{ "citizen.validation.streetAddressTooLong" | transloco }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+</div>
