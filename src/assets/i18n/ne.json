@@ -18,6 +18,10 @@
       "next": "अर्को",
       "refresh": "रिफ्रेस गर्नुहोस्"
     },
+    "messages": {
+      "loading": "लोड हुँदैछ...",
+      "noData": "कुनै डाटा उपलब्ध छैन"
+    },
     "pagination": {
       "itemsPerPage": "प्रति पृष्ठ वस्तुहरू",
       "showing": "देखाउँदै",

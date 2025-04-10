@@ -9,7 +9,6 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
   const modifiedReq = req.clone({
     setHeaders: {
       'Accept-Language': lang,
-      'Content-Type': 'application/json',
     },
   });
 
