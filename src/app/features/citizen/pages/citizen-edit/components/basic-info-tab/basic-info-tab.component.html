@@ -1,0 +1,209 @@
+<div [formGroup]="basicInfoForm" class="basic-info-form">
+  <mat-card class="form-card">
+    <mat-card-content>
+      <!-- Personal Information Section -->
+      <div class="form-section">
+        <h3>{{ "citizen.edit.personalInfo" | transloco }}</h3>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ "citizen.fields.name" | transloco }} *</mat-label>
+            <input
+              matInput
+              formControlName="name"
+              placeholder="{{ 'citizen.placeholders.name' | transloco }}"
+            />
+            <mat-error *ngIf="basicInfoForm.get('name')?.hasError('required')">
+              {{ "citizen.validation.nameRequired" | transloco }}
+            </mat-error>
+            <mat-error *ngIf="basicInfoForm.get('name')?.hasError('maxlength')">
+              {{ "citizen.validation.nameTooLong" | transloco }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{
+              "citizen.fields.nameDevnagari" | transloco
+            }}</mat-label>
+            <input
+              matInput
+              formControlName="nameDevnagari"
+              placeholder="{{
+                'citizen.placeholders.nameDevnagari' | transloco
+              }}"
+            />
+            <mat-error
+              *ngIf="basicInfoForm.get('nameDevnagari')?.hasError('maxlength')"
+            >
+              {{ "citizen.validation.nameTooLong" | transloco }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row two-column">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ "citizen.fields.email" | transloco }}</mat-label>
+            <input
+              matInput
+              formControlName="email"
+              type="email"
+              placeholder="{{ 'citizen.placeholders.email' | transloco }}"
+            />
+            <mat-error *ngIf="basicInfoForm.get('email')?.hasError('email')">
+              {{ "citizen.validation.emailInvalid" | transloco }}
+            </mat-error>
+            <mat-error
+              *ngIf="basicInfoForm.get('email')?.hasError('maxlength')"
+            >
+              {{ "citizen.validation.emailTooLong" | transloco }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{
+              "citizen.fields.phoneNumber" | transloco
+            }}</mat-label>
+            <input
+              matInput
+              formControlName="phoneNumber"
+              placeholder="{{ 'citizen.placeholders.phoneNumber' | transloco }}"
+            />
+            <mat-error
+              *ngIf="basicInfoForm.get('phoneNumber')?.hasError('maxlength')"
+            >
+              {{ "citizen.validation.phoneNumberTooLong" | transloco }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Family Information Section -->
+      <div class="form-section">
+        <h3>{{ "citizen.edit.familyInfo" | transloco }}</h3>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ "citizen.fields.fatherName" | transloco }}</mat-label>
+            <input
+              matInput
+              formControlName="fatherName"
+              placeholder="{{ 'citizen.placeholders.fatherName' | transloco }}"
+            />
+            <mat-error
+              *ngIf="basicInfoForm.get('fatherName')?.hasError('maxlength')"
+            >
+              {{ "citizen.validation.nameTooLong" | transloco }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{
+              "citizen.fields.grandfatherName" | transloco
+            }}</mat-label>
+            <input
+              matInput
+              formControlName="grandfatherName"
+              placeholder="{{
+                'citizen.placeholders.grandfatherName' | transloco
+              }}"
+            />
+            <mat-error
+              *ngIf="
+                basicInfoForm.get('grandfatherName')?.hasError('maxlength')
+              "
+            >
+              {{ "citizen.validation.nameTooLong" | transloco }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ "citizen.fields.spouseName" | transloco }}</mat-label>
+            <input
+              matInput
+              formControlName="spouseName"
+              placeholder="{{ 'citizen.placeholders.spouseName' | transloco }}"
+            />
+            <mat-error
+              *ngIf="basicInfoForm.get('spouseName')?.hasError('maxlength')"
+            >
+              {{ "citizen.validation.nameTooLong" | transloco }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Citizenship Information Section -->
+      <div class="form-section">
+        <h3>{{ "citizen.edit.citizenshipInfo" | transloco }}</h3>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{
+              "citizen.fields.citizenshipNumber" | transloco
+            }}</mat-label>
+            <input
+              matInput
+              formControlName="citizenshipNumber"
+              placeholder="{{
+                'citizen.placeholders.citizenshipNumber' | transloco
+              }}"
+            />
+            <mat-error
+              *ngIf="
+                basicInfoForm.get('citizenshipNumber')?.hasError('maxlength')
+              "
+            >
+              {{ "citizen.validation.citizenshipNumberTooLong" | transloco }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row two-column">
+          <mat-form-field appearance="outline">
+            <mat-label>{{
+              "citizen.fields.citizenshipIssuedDate" | transloco
+            }}</mat-label>
+            <input
+              matInput
+              [matDatepicker]="issuedDatePicker"
+              formControlName="citizenshipIssuedDate"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="issuedDatePicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #issuedDatePicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{
+              "citizen.fields.citizenshipIssuedOffice" | transloco
+            }}</mat-label>
+            <input
+              matInput
+              formControlName="citizenshipIssuedOffice"
+              placeholder="{{
+                'citizen.placeholders.citizenshipIssuedOffice' | transloco
+              }}"
+            />
+            <mat-error
+              *ngIf="
+                basicInfoForm
+                  .get('citizenshipIssuedOffice')
+                  ?.hasError('maxlength')
+              "
+            >
+              {{ "citizen.validation.officeTooLong" | transloco }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
