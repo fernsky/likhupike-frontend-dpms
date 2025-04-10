@@ -1,0 +1,58 @@
+{
+  "edit": {
+    "title": "Edit Citizen",
+    "saving": "Saving changes...",
+    "tabs": {
+      "basicInfo": "Basic Information",
+      "address": "Address",
+      "documents": "Documents"
+    },
+    "personalInfo": "Personal Information",
+    "contactInfo": "Contact Information",
+    "familyInfo": "Family Information",
+    "citizenshipInfo": "Citizenship Information",
+    "citizenDocuments": "Citizen Documents",
+    "documentUploadInstructions": "Upload the citizen's documents. Only JPG, PNG images are accepted for the photo. JPG, PNG, and PDF files are accepted for citizenship documents.",
+    "sameAsPermanent": "Same as permanent address",
+    "usingPermanentAddress": "Using the permanent address as the temporary address",
+    "noCitizen": "Citizen not found or has been deleted"
+  },
+  "documents": {
+    "uploadAction": "Upload Document",
+    "replaceAction": "Replace Document",
+    "uploading": "Uploading...",
+    "fileTooLarge": "File is too large. Maximum allowed size is {{size}}MB.",
+    "invalidFileType": "Invalid file type. Please select a valid file format.",
+    "noPhotoAvailable": "No photo uploaded",
+    "noCitizenshipFrontAvailable": "No citizenship front document uploaded",
+    "noCitizenshipBackAvailable": "No citizenship back document uploaded",
+    "replace": {
+      "title": "Replace Document",
+      "message": "This will replace the existing document. Are you sure you want to continue?",
+      "confirmButton": "Replace"
+    }
+  },
+  "validation": {
+    "nameRequired": "Name is required",
+    "nameTooLong": "Name cannot exceed 100 characters",
+    "emailInvalid": "Please enter a valid email address",
+    "emailTooLong": "Email cannot exceed 100 characters",
+    "phoneNumberTooLong": "Phone number cannot exceed 20 characters",
+    "citizenshipNumberTooLong": "Citizenship number cannot exceed 50 characters",
+    "officeTooLong": "Office name cannot exceed 100 characters",
+    "provinceRequired": "Province is required",
+    "districtRequired": "District is required",
+    "municipalityRequired": "Municipality is required",
+    "wardRequired": "Ward number is required",
+    "wardInvalid": "Ward number must be between 1 and 33",
+    "streetAddressTooLong": "Street address cannot exceed 200 characters"
+  },
+  "messages": {
+    "updateSuccess": "Citizen updated successfully",
+    "updateError": "Failed to update citizen",
+    "validationError": "Please correct the errors in the form",
+    "networkError": "Network error. Please try again later",
+    "uploadSuccess": "Document uploaded successfully",
+    "uploadError": "Failed to upload document"
+  }
+}
