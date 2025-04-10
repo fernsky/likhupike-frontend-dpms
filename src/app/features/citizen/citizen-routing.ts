@@ -6,8 +6,7 @@ import { provideState } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { CitizenEffects } from './store/citizen.effects';
 import { provideTranslocoScope } from '@jsverse/transloco';
-
-// import { UnsavedChangesGuard } from '@app/core/guards/unsaved-changes.guard';
+import { unsavedChangesGuard } from '@app/core/guards/unsaved-changes.guard';
 
 export const CITIZEN_MANAGEMENT_ROUTES: Routes = [
   {
@@ -41,7 +40,7 @@ export const CITIZEN_MANAGEMENT_ROUTES: Routes = [
             (m) => m.CitizenCreateModule
           ),
         canActivate: [authGuard, PermissionGuard],
-        // canDeactivate: [UnsavedChangesGuard],
+        canDeactivate: [unsavedChangesGuard],
         data: {
           permissions: ['CREATE_CITIZEN'],
         },
@@ -52,18 +51,24 @@ export const CITIZEN_MANAGEMENT_ROUTES: Routes = [
           }),
         ],
       },
-      //   {
-      //     path: 'edit/:id',
-      //     loadChildren: () =>
-      //       import('./pages/citizen-edit/citizen-edit.module').then(
-      //         (m) => m.CitizenEditModule
-      //       ),
-      //     canActivate: [AuthGuard, PermissionGuard],
-      //     canDeactivate: [UnsavedChangesGuard],
-      //     data: {
-      //       permissions: ['EDIT_CITIZEN'],
-      //     },
-      //   },
+      {
+        path: 'edit/:id',
+        loadChildren: () =>
+          import('./pages/citizen-edit/citizen-edit.module').then(
+            (m) => m.CitizenEditModule
+          ),
+        canActivate: [authGuard, PermissionGuard],
+        canDeactivate: [unsavedChangesGuard],
+        data: {
+          permissions: ['EDIT_CITIZEN'],
+        },
+        providers: [
+          provideTranslocoScope({
+            scope: 'citizen-edit',
+            alias: 'citizen',
+          }),
+        ],
+      },
       {
         path: 'view/:id',
         loadChildren: () =>
