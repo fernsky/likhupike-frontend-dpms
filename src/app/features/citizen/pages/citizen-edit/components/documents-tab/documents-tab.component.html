@@ -1,0 +1,55 @@
+<div class="documents-tab">
+  <h3 class="documents-title">
+    {{ "citizen.edit.citizenDocuments" | transloco }}
+  </h3>
+  <p class="documents-subtitle">
+    {{ "citizen.edit.documentUploadInstructions" | transloco }}
+  </p>
+
+  <div class="documents-container">
+    <!-- Citizen Photo -->
+    <app-document-upload
+      [documentType]="DocumentType.CITIZEN_PHOTO"
+      [documentState]="citizen.documents.photo?.state"
+      [documentUrl]="citizen.documents.photo?.url"
+      [uploadingDocument$]="uploadingPhoto$"
+      [canUpload]="canUpload(citizen.documents.photo?.state)"
+      [label]="'citizen.documentTypes.CITIZEN_PHOTO' | transloco"
+      [accept]="'image/jpeg,image/png'"
+      [note]="citizen.documents.photo?.note"
+      [uploadedAt]="citizen.documents.photo?.uploadedAt"
+      (fileSelected)="onPhotoSelected($event)"
+      (viewDocument)="openDocument($event)"
+    ></app-document-upload>
+
+    <!-- Citizenship Front -->
+    <app-document-upload
+      [documentType]="DocumentType.CITIZENSHIP_FRONT"
+      [documentState]="citizen.documents.citizenshipFront?.state"
+      [documentUrl]="citizen.documents.citizenshipFront?.url"
+      [uploadingDocument$]="uploadingCitizenshipFront$"
+      [canUpload]="canUpload(citizen.documents.citizenshipFront?.state)"
+      [label]="'citizen.documentTypes.CITIZENSHIP_FRONT' | transloco"
+      [accept]="'image/jpeg,image/png,application/pdf'"
+      [note]="citizen.documents.citizenshipFront?.note"
+      [uploadedAt]="citizen.documents.citizenshipFront?.uploadedAt"
+      (fileSelected)="onCitizenshipFrontSelected($event)"
+      (viewDocument)="openDocument($event)"
+    ></app-document-upload>
+
+    <!-- Citizenship Back -->
+    <app-document-upload
+      [documentType]="DocumentType.CITIZENSHIP_BACK"
+      [documentState]="citizen.documents.citizenshipBack?.state"
+      [documentUrl]="citizen.documents.citizenshipBack?.url"
+      [uploadingDocument$]="uploadingCitizenshipBack$"
+      [canUpload]="canUpload(citizen.documents.citizenshipBack?.state)"
+      [label]="'citizen.documentTypes.CITIZENSHIP_BACK' | transloco"
+      [accept]="'image/jpeg,image/png,application/pdf'"
+      [note]="citizen.documents.citizenshipBack?.note"
+      [uploadedAt]="citizen.documents.citizenshipBack?.uploadedAt"
+      (fileSelected)="onCitizenshipBackSelected($event)"
+      (viewDocument)="openDocument($event)"
+    ></app-document-upload>
+  </div>
+</div>

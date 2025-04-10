@@ -1,0 +1,161 @@
+.documents-tab {
+  padding: 16px 0;
+
+  .documents-title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .documents-subtitle {
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 24px;
+  }
+
+  .documents-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  .document-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    mat-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+
+      mat-card-title {
+        margin: 0;
+        font-size: 1rem;
+      }
+
+      .document-status {
+        font-size: 0.85rem;
+        padding: 4px 12px;
+        border-radius: 16px;
+
+        &.approved {
+          background-color: rgba(76, 175, 80, 0.1);
+          color: #2e7d32;
+        }
+
+        &.awaiting {
+          background-color: rgba(255, 152, 0, 0.1);
+          color: #ef6c00;
+        }
+
+        &.rejected {
+          background-color: rgba(244, 67, 54, 0.1);
+          color: #d32f2f;
+        }
+
+        &.not-uploaded {
+          background-color: rgba(0, 0, 0, 0.05);
+          color: rgba(0, 0, 0, 0.6);
+        }
+      }
+    }
+
+    mat-card-content {
+      flex: 1;
+      padding: 0;
+
+      .document-preview {
+        height: 240px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #fafafa;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+        .document-image {
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
+
+          &.clickable {
+            cursor: pointer;
+            transition: transform 0.2s;
+
+            &:hover {
+              transform: scale(1.05);
+            }
+          }
+        }
+
+        .no-document {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          color: rgba(0, 0, 0, 0.5);
+          text-align: center;
+          padding: 16px;
+
+          mat-icon {
+            font-size: 48px;
+            height: 48px;
+            width: 48px;
+            margin-bottom: 8px;
+            opacity: 0.6;
+          }
+
+          p {
+            margin: 0;
+          }
+        }
+      }
+
+      .document-info {
+        padding: 16px;
+
+        .info-row {
+          margin-bottom: 8px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          .info-label {
+            font-weight: 500;
+            margin-right: 8px;
+            color: rgba(0, 0, 0, 0.6);
+          }
+        }
+      }
+    }
+
+    mat-card-actions {
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+
+      .action-container {
+        width: 100%;
+
+        button {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .spinner-in-button {
+            margin-right: 8px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .documents-container {
+    grid-template-columns: 1fr !important;
+  }
+}
