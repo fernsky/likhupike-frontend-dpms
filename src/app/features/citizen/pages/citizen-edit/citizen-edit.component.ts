@@ -89,6 +89,10 @@ export class CitizenEditComponent
       )
       .subscribe();
 
+    // Initialize the form
+    this.editForm = this.fb.group({});
+    this.formInitialized = true;
+
     // Handle update success
     this.updateSuccess$
       .pipe(
@@ -102,7 +106,8 @@ export class CitizenEditComponent
   }
 
   canDeactivate(): Observable<boolean> | boolean {
-    const hasUnsavedChanges = this.editForm.dirty;
+    // Check if the form has been initialized and is dirty
+    const hasUnsavedChanges = this.formInitialized && this.editForm.dirty;
 
     if (!hasUnsavedChanges) {
       return true;

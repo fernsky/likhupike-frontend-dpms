@@ -11,13 +11,13 @@ export interface CanComponentDeactivate {
 }
 
 export const unsavedChangesGuard = (
-  component: CanComponentDeactivate,
+  component: CanComponentDeactivate | null,
   currentRoute: ActivatedRouteSnapshot,
   currentState: RouterStateSnapshot,
   nextState?: RouterStateSnapshot
 ): Observable<boolean> | Promise<boolean> | boolean => {
-  // If the component doesn't implement CanComponentDeactivate, allow navigation
-  if (!component.canDeactivate) {
+  // If the component is null or doesn't implement CanComponentDeactivate, allow navigation
+  if (!component || !component.canDeactivate) {
     return true;
   }
 

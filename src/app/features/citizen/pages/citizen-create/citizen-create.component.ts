@@ -28,6 +28,8 @@ import { CreateSuccessComponent } from './components/create-success/create-succe
 import { PersonalInfoFormComponent } from './components/personal-info-form/personal-info-form.component';
 import { CitizenshipFormComponent } from './components/citizenship-form/citizenship-form.component';
 import { AddressFormComponent } from './components/address-form/address-form.component';
+import { CanComponentDeactivate } from '@app/core/guards/unsaved-changes.guard';
+import { ConfirmDialogComponent } from '@app/shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-citizen-create',
@@ -56,7 +58,9 @@ import { AddressFormComponent } from './components/address-form/address-form.com
     }),
   ],
 })
-export class CitizenCreateComponent implements OnInit, OnDestroy {
+export class CitizenCreateComponent
+  implements OnInit, OnDestroy, CanComponentDeactivate
+{
   @ViewChild('stepper') stepper!: MatStepper;
 
   creating$: Observable<boolean> = this.citizenFacade.creating$;
@@ -70,6 +74,7 @@ export class CitizenCreateComponent implements OnInit, OnDestroy {
   summaryForm!: FormGroup;
 
   private destroy$ = new Subject<void>();
+  private isSubmitting = false;
 
   constructor(
     private fb: FormBuilder,
@@ -85,12 +90,49 @@ export class CitizenCreateComponent implements OnInit, OnDestroy {
     // Listen for creation success and show dialog
     this.createSuccess$.pipe(takeUntil(this.destroy$)).subscribe((success) => {
       if (success) {
+        this.isSubmitting = true;
         this.showSuccessDialog();
       }
     });
 
     // Reset status when component initializes
     this.citizenFacade.resetCreateStatus();
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+    // If submitting or succeeded, allow navigation
+    if (this.isSubmitting) {
+      return true;
+    }
+
+    // Check if any of the forms are dirty
+    const hasUnsavedChanges =
+      this.personalInfoForm.dirty ||
+      this.citizenshipForm.dirty ||
+      this.addressForm.dirty ||
+      this.summaryForm.dirty;
+
+    if (!hasUnsavedChanges) {
+      return true;
+    }
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: this.transloco.translate('common.dialogs.unsavedChanges.title'),
+        message: this.transloco.translate(
+          'common.dialogs.unsavedChanges.message'
+        ),
+        confirmButton: this.transloco.translate(
+          'common.dialogs.unsavedChanges.confirmButton'
+        ),
+        cancelButton: this.transloco.translate(
+          'common.dialogs.unsavedChanges.cancelButton'
+        ),
+      },
+    });
+
+    return dialogRef.afterClosed();
   }
 
   private initForms(): void {
@@ -165,6 +207,7 @@ export class CitizenCreateComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.isSubmitting = true;
     const createData: CreateCitizenDto = this.prepareCreateData();
     this.citizenFacade.createCitizen(createData);
   }
