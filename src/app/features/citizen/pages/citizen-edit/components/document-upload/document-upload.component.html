@@ -1,0 +1,73 @@
+<div class="document-upload-container">
+  <div class="document-header">
+    <h3 class="document-title">{{ label }}</h3>
+    <div class="document-status" [ngClass]="getDocumentStateClass()">
+      {{ getDocumentStateLabel() }}
+    </div>
+  </div>
+
+  <div class="document-preview">
+    <ng-container *ngIf="documentUrl; else noDocument">
+      <img
+        [src]="documentUrl"
+        alt="Document Preview"
+        class="document-image clickable"
+        (click)="onViewDocument()"
+      />
+    </ng-container>
+
+    <ng-template #noDocument>
+      <div class="no-document">
+        <mat-icon>{{
+          documentType === documentTypeEnum.CITIZEN_PHOTO
+            ? "account_circle"
+            : "description"
+        }}</mat-icon>
+        <p>No document uploaded</p>
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="document-info" *ngIf="uploadedAt || note">
+    <div class="info-row" *ngIf="uploadedAt">
+      <span class="info-label">Uploaded At:</span>
+      <span class="info-value">{{ formatDate(uploadedAt) }}</span>
+    </div>
+
+    <div class="info-row" *ngIf="note">
+      <span class="info-label">Note:</span>
+      <span class="info-value note-text">{{ note }}</span>
+    </div>
+  </div>
+
+  <div class="document-actions">
+    <input
+      type="file"
+      hidden
+      #fileInput
+      [accept]="accept"
+      (change)="onFileSelected($event)"
+    />
+
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="(uploadingDocument$ | async) === true || !canUpload"
+      (click)="fileInput.click()"
+    >
+      <mat-icon *ngIf="(uploadingDocument$ | async) !== true"
+        >upload_file</mat-icon
+      >
+      <mat-spinner
+        *ngIf="(uploadingDocument$ | async) === true"
+        diameter="20"
+        class="spinner-in-button"
+      ></mat-spinner>
+
+      <span *ngIf="(uploadingDocument$ | async) !== true">
+        {{ !documentUrl ? "Upload Document" : "Replace Document" }}
+      </span>
+      <span *ngIf="(uploadingDocument$ | async) === true"> Uploading... </span>
+    </button>
+  </div>
+</div>
