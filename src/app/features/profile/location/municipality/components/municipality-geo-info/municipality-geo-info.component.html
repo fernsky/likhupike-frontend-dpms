@@ -1,11 +1,10 @@
 <div class="geo-info-container">
  
-  
   <form [formGroup]="geoInfoForm" (ngSubmit)="onSubmit()" class="geo-info-form">
     <div class="form-content">
       <!-- Coordinates Section -->
-      <div class="form-section">
-        <h3>{{ "municipality.geoInfo.coordinates" | transloco }}</h3>
+      <div class="geo-subsection">
+        <h3 class="subsection-title">{{ "municipality.geoInfo.coordinates" | transloco }}</h3>
         
         <div class="two-columns">
           <!-- Rightmost Latitude -->
@@ -61,8 +60,8 @@
       </div>
       
       <!-- Altitude Section -->
-      <div class="form-section">
-        <h3>{{ "municipality.geoInfo.altitude" | transloco }}</h3>
+      <div class="geo-subsection">
+        <h3 class="subsection-title">{{ "municipality.geoInfo.altitude" | transloco }}</h3>
         
         <div class="two-columns">
           <!-- Lowest Altitude -->
@@ -88,8 +87,8 @@
       </div>
       
       <!-- Area Section -->
-      <div class="form-section">
-        <h3>{{ "municipality.geoInfo.area" | transloco }}</h3>
+      <div class="geo-subsection">
+        <h3 class="subsection-title">{{ "municipality.geoInfo.area" | transloco }}</h3>
         
         <mat-form-field appearance="outline" class="area-field">
           <mat-label>{{ "municipality.fields.areaInSquareKilometers" | transloco }} (km²)</mat-label>
@@ -106,27 +105,27 @@
     
     <!-- Form Actions -->
     <div class="form-actions">
-      <button
-        type="button"
-        mat-stroked-button
-        color="warn"
+      <app-base-button
+        *ngIf="geoInfoForm.dirty"
+        variant="secondary"
+        icon="refresh"
+        size="large"
         (click)="onReset()"
         [disabled]="!geoInfoForm.dirty || updating"
       >
-        <mat-icon>refresh</mat-icon>
         {{ "common.actions.reset" | transloco }}
-      </button>
+      </app-base-button>
       
-      <button
+      <app-base-button
+        variant="primary"
+        icon="save"
         type="submit"
-        mat-raised-button
-        color="primary"
+        size="large"
+        [loading]="updating"
         [disabled]="!geoInfoForm.dirty || !geoInfoForm.valid || updating"
       >
-        <mat-spinner *ngIf="updating" diameter="20" class="button-spinner"></mat-spinner>
-        <mat-icon *ngIf="!updating">save</mat-icon>
-        {{ updating ? ("common.actions.saving" | transloco) : ("common.actions.save" | transloco) }}
-      </button>
+        {{ "common.actions.save" | transloco }}
+      </app-base-button>
     </div>
   </form>
 </div>

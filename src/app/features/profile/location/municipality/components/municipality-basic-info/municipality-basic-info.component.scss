@@ -38,6 +38,14 @@
         grid-template-columns: 1fr 1fr;
         gap: 1rem;
       }
+
+      ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+        padding-left: 0;
+      }
+      
+      ::ng-deep .mdc-text-field--outlined {
+        --mdc-outlined-text-field-container-shape: 8px;
+      }
     }
     
     .form-actions {
@@ -48,6 +56,7 @@
       button {
         min-width: 120px;
         height: 42px;
+        border-radius: 21px;
         
         mat-icon {
           margin-right: 8px;
@@ -58,6 +67,7 @@
           margin-right: 8px;
           vertical-align: middle;
         }
+        
       }
     }
   }
@@ -69,6 +79,8 @@
     
     .basic-info-form {
       .form-content {
+        gap: 1rem;
+        
         .two-columns {
           grid-template-columns: 1fr;
         }

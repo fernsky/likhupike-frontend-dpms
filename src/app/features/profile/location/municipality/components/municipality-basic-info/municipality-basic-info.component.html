@@ -1,6 +1,5 @@
 <div class="basic-info-container">
  
-  
   <form [formGroup]="basicInfoForm" (ngSubmit)="onSubmit()" class="basic-info-form">
     <div class="form-content">
       <!-- Municipality Name -->
@@ -44,27 +43,27 @@
     
     <!-- Form Actions -->
     <div class="form-actions">
-      <button
-        type="button"
-        mat-stroked-button
-        color="warn"
+      <app-base-button
+        *ngIf="basicInfoForm.dirty"
+        variant="secondary"
+        icon="refresh"
+        size="large"
         (click)="onReset()"
         [disabled]="!basicInfoForm.dirty || updating"
       >
-        <mat-icon>refresh</mat-icon>
         {{ "common.actions.reset" | transloco }}
-      </button>
+      </app-base-button>
       
-      <button
+      <app-base-button
+        variant="primary"
+        icon="save"
         type="submit"
-        mat-raised-button
-        color="primary"
+        size="large"
+        [loading]="updating"
         [disabled]="!basicInfoForm.dirty || !basicInfoForm.valid || updating"
       >
-        <mat-spinner *ngIf="updating" diameter="20" class="button-spinner"></mat-spinner>
-        <mat-icon *ngIf="!updating">save</mat-icon>
-        {{ updating ? ("common.actions.saving" | transloco) : ("common.actions.save" | transloco) }}
-      </button>
+        {{ "common.actions.save" | transloco }}
+      </app-base-button>
     </div>
   </form>
 </div>

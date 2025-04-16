@@ -14,6 +14,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { MunicipalityResponse, UpdateMunicipalityInfoDto } from '../../types';
 import { MunicipalityFacade } from '../../store/municipality.facade';
+import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
 
 @Component({
   selector: 'app-municipality-basic-info',
@@ -28,7 +29,8 @@ import { MunicipalityFacade } from '../../store/municipality.facade';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    BaseButtonComponent
   ]
 })
 export class MunicipalityBasicInfoComponent implements OnInit, OnChanges, OnDestroy {
