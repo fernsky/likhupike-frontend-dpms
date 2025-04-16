@@ -1,0 +1,97 @@
+<div class="municipality-profile-container">
+  <!-- Title and breadcrumb section -->
+  <app-page-title
+    titleTranslationKey="municipality.profile.title"
+    descriptionTranslationKey="municipality.profile.description"
+    icon="location_city"
+  ></app-page-title>
+  
+  <!-- Loading indicator -->
+  <mat-progress-bar
+    *ngIf="isProcessing$ | async"
+    mode="indeterminate"
+    class="page-loading-bar"
+  ></mat-progress-bar>
+
+  <!-- Main content container -->
+  <div class="content-container">
+    <ng-container *ngIf="(loading$ | async) === false; else loadingTemplate">
+      <ng-container *ngIf="hasMunicipality$ | async; else noMunicipalityTemplate">
+        <!-- Municipality data display -->
+        <div class="profile-content">
+          <div class="stats-cards">
+            <mat-card class="stat-card">
+              <mat-card-content>
+                <div class="stat-value">{{ wardsCount$ | async }}</div>
+                <div class="stat-label">{{ "municipality.stats.wardsCount" | transloco }}</div>
+              </mat-card-content>
+            </mat-card>
+            
+            <mat-card class="stat-card" *ngIf="(municipality$ | async)?.areaInSquareKilometers">
+              <mat-card-content>
+                <div class="stat-value">{{ (municipality$ | async)?.areaInSquareKilometers }} km²</div>
+                <div class="stat-label">{{ "municipality.stats.area" | transloco }}</div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+
+          <!-- Tab navigation for different information sections -->
+          <mat-tab-group (selectedIndexChange)="onTabChanged($event)" [selectedIndex]="selectedTabIndex" animationDuration="0ms">
+            <!-- Basic Information Tab -->
+            <mat-tab [label]="'municipality.tabs.basicInfo' | transloco">
+              <app-municipality-basic-info
+                [municipality]="municipality$ | async"
+                [updating]="(isProcessing$ | async) === true"
+              ></app-municipality-basic-info>
+            </mat-tab>
+            
+            <!-- Geographical Information Tab -->
+            <mat-tab [label]="'municipality.tabs.geoInfo' | transloco">
+              <app-municipality-geo-info
+                [municipality]="municipality$ | async"
+                [updating]="(isProcessing$ | async) === true"
+              ></app-municipality-geo-info>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>
+
+<!-- Loading template -->
+<ng-template #loadingTemplate>
+  <div class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>{{ "common.messages.loading" | transloco }}</p>
+  </div>
+</ng-template>
+
+<!-- Template for when municipality doesn't exist -->
+<ng-template #noMunicipalityTemplate>
+  <div class="no-municipality-container">
+    <mat-card>
+      <mat-card-content>
+        <div class="empty-state">
+          <mat-icon class="empty-icon">location_city</mat-icon>
+          <h2>{{ "municipality.noMunicipality.title" | transloco }}</h2>
+          <p>{{ "municipality.noMunicipality.description" | transloco }}</p>
+          <button 
+            mat-raised-button 
+            color="primary" 
+            (click)="showCreateMunicipalityDialog()"
+            [disabled]="(creating$ | async) === true"
+          >
+            <mat-spinner *ngIf="creating$ | async" diameter="20" class="button-spinner"></mat-spinner>
+            <span *ngIf="(creating$ | async) !== true">
+              {{ "municipality.noMunicipality.createButton" | transloco }}
+            </span>
+            <span *ngIf="creating$ | async">
+              {{ "municipality.noMunicipality.creating" | transloco }}
+            </span>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</ng-template>
