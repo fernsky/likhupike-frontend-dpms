@@ -4,24 +4,27 @@ import { provideEffects } from '@ngrx/effects';
 import { MUNICIPALITY_FEATURE_KEY, municipalityReducer } from './municipality/store/municipality.reducer';
 import { MunicipalityEffects } from './municipality/store/municipality.effects';
 import { provideTranslocoScope } from '@jsverse/transloco';
+import { MunicipalityProfileComponent } from './municipality/pages/municipality-profile/municipality-profile.component';
+import { authGuard } from '@app/core/guards/auth.guard';
+import { PermissionGuard } from '@app/core/guards/permission.guard';
+import { unsavedChangesGuard } from '@app/core/guards/unsaved-changes.guard';
 
 export const LOCATION_ROUTES: Routes = [
-    
   {
     path: 'municipality',
-     providers: [
-          provideState(MUNICIPALITY_FEATURE_KEY, municipalityReducer),
-          provideEffects(MunicipalityEffects),
-          provideTranslocoScope({
-            scope: 'municipality-profile',
-            alias: 'municipality',
-          })
-        ],
-    loadChildren: () =>
-      import('./municipality/municipality-routing').then(
-        (m) => m.MUNICIPALITY_ROUTES
-      ),
+    providers: [
+      provideState(MUNICIPALITY_FEATURE_KEY, municipalityReducer),
+      provideEffects(MunicipalityEffects),
+      provideTranslocoScope({
+        scope: 'municipality-profile',
+        alias: 'municipality',
+      })
+    ],
+    component: MunicipalityProfileComponent,
+    canActivate: [authGuard, PermissionGuard],
+    canDeactivate: [unsavedChangesGuard],
     data: {
+      permissions: ['MANAGE_PROFILE'],
       breadcrumb: 'municipality.profile.breadcrumb'
     }
   },
