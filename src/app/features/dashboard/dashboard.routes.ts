@@ -42,6 +42,20 @@ export const DASHBOARD_ROUTES: Routes = [
             (m) => m.CITIZEN_MANAGEMENT_ROUTES
           ),
       },
+      {
+        path: 'profile',
+        data: {
+          breadcrumb: {
+            translationKey: 'profile',
+            icon: 'location_city',
+            path: '/dashboard/profile',
+          },
+        },
+        loadChildren: () =>
+          import('../profile/profile-routing').then(
+            (m) => m.PROFILE_ROUTES
+          ),
+      },
     ],
   },
 ];
