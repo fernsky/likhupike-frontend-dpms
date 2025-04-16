@@ -19,22 +19,6 @@
       <ng-container *ngIf="hasMunicipality$ | async; else noMunicipalityTemplate">
         <!-- Municipality data display -->
         <div class="profile-content">
-          <div class="stats-cards">
-            <mat-card class="stat-card">
-              <mat-card-content>
-                <div class="stat-value">{{ wardsCount$ | async }}</div>
-                <div class="stat-label">{{ "municipality.stats.wardsCount" | transloco }}</div>
-              </mat-card-content>
-            </mat-card>
-            
-            <mat-card class="stat-card" *ngIf="(municipality$ | async)?.areaInSquareKilometers">
-              <mat-card-content>
-                <div class="stat-value">{{ (municipality$ | async)?.areaInSquareKilometers }} km²</div>
-                <div class="stat-label">{{ "municipality.stats.area" | transloco }}</div>
-              </mat-card-content>
-            </mat-card>
-          </div>
-
           <!-- Tab navigation for different information sections -->
           <mat-tab-group (selectedIndexChange)="onTabChanged($event)" [selectedIndex]="selectedTabIndex" animationDuration="0ms">
             <!-- Basic Information Tab -->

@@ -16,7 +16,8 @@
       "resetFilters": "Reset Filters",
       "view": "View",
       "next": "Next",
-      "refresh": "Refresh"
+      "refresh": "Refresh",
+      "reset": "Reset"
     },
     "messages": {
       "loading": "Loading...",

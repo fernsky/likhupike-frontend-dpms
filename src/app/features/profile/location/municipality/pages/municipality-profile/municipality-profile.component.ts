@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subject } from 'rxjs';
-import { filter, take, takeUntil } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { TranslocoModule, TranslocoService, provideTranslocoScope } from '@jsverse/transloco';
 
 // Material imports
@@ -76,16 +76,7 @@ export class MunicipalityProfileComponent implements OnInit, OnDestroy, CanCompo
     // Load municipality data
     this.municipalityFacade.loadMunicipality();
     
-    // Check if municipality exists, if not, prompt to create
-    this.hasMunicipality$
-      .pipe(
-        takeUntil(this.destroy$),
-        filter(exists => !exists),
-        take(1)
-      )
-      .subscribe(() => {
-        this.showCreateMunicipalityDialog();
-      });
+    // Removed the auto-popup dialog code that was here
   }
 
   canDeactivate(): Observable<boolean> | boolean {
@@ -121,36 +112,21 @@ export class MunicipalityProfileComponent implements OnInit, OnDestroy, CanCompo
   }
   
   showCreateMunicipalityDialog(): void {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
-      disableClose: true,
-      data: {
-        title: this.transloco.translate('municipality.create.dialog.title'),
-        message: this.transloco.translate('municipality.create.dialog.message'),
-        confirmButton: this.transloco.translate('municipality.create.dialog.confirmButton'),
-        cancelButton: this.transloco.translate('municipality.create.dialog.cancelButton'),
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // Create empty municipality with default values
-        const defaultMunicipality: CreateMunicipalityDto = {
-          name: this.transloco.translate('municipality.defaults.name'),
-          province: this.transloco.translate('municipality.defaults.province'),
-          district: this.transloco.translate('municipality.defaults.district'),
-          rightmostLatitude: 85.4,
-          leftmostLatitude: 85.1,
-          bottommostLongitude: 27.1,
-          topmostLongitude: 27.4,
-          lowestAltitude: 1000,
-          highestAltitude: 2000,
-          areaInSquareKilometers: 150
-        };
-        
-        this.municipalityFacade.createMunicipality(defaultMunicipality);
-      }
-    });
+    // Create municipality directly with default values without asking
+    const defaultMunicipality: CreateMunicipalityDto = {
+      name: this.transloco.translate('municipality.defaults.name'),
+      province: this.transloco.translate('municipality.defaults.province'),
+      district: this.transloco.translate('municipality.defaults.district'),
+      rightmostLatitude: 85.4,
+      leftmostLatitude: 85.1,
+      bottommostLongitude: 27.1,
+      topmostLongitude: 27.4,
+      lowestAltitude: 1000,
+      highestAltitude: 2000,
+      areaInSquareKilometers: 150
+    };
+    
+    this.municipalityFacade.createMunicipality(defaultMunicipality);
   }
 
   ngOnDestroy(): void {
