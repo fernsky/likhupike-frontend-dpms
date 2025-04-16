@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { map, catchError, switchMap, exhaustMap,  } from 'rxjs/operators';
+import { map, catchError, switchMap, exhaustMap, } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslocoService } from '@jsverse/transloco';
 
@@ -29,7 +29,9 @@ export class MunicipalityEffects {
             MunicipalityActions.loadMunicipalitySuccess({ response })
           ),
           catchError((error) => {
-            this.showError(error.message || 'municipality.messages.loadError');
+            this.showError(
+              error.message || 'municipality.messages.loadError'
+            );
             return of(MunicipalityActions.loadMunicipalityFailure({ error }));
           })
         )
@@ -44,11 +46,17 @@ export class MunicipalityEffects {
       exhaustMap(({ request }) =>
         this.municipalityService.createMunicipality(request).pipe(
           map((response) => {
-            this.showSuccess('municipality.messages.createSuccess');
+            this.showSuccess(
+              'message' in response
+                ? response.message
+                : 'municipality.messages.createSuccess'
+            );
             return MunicipalityActions.createMunicipalitySuccess({ response });
           }),
           catchError((error) => {
-            this.showError(error.message || 'municipality.messages.createError');
+            this.showError(
+              error.message || 'municipality.messages.createError'
+            );
             return of(MunicipalityActions.createMunicipalityFailure({ error }));
           })
         )
@@ -63,13 +71,19 @@ export class MunicipalityEffects {
       exhaustMap(({ request }) =>
         this.municipalityService.updateMunicipalityInfo(request).pipe(
           map((response) => {
-            this.showSuccess('municipality.messages.updateSuccess');
+            this.showSuccess(
+              'message' in response
+                ? response.message
+                : 'municipality.messages.updateSuccess'
+            );
             return MunicipalityActions.updateMunicipalityInfoSuccess({
               response,
             });
           }),
           catchError((error) => {
-            this.showError(error.message || 'municipality.messages.updateError');
+            this.showError(
+              error.message || 'municipality.messages.updateError'
+            );
             return of(
               MunicipalityActions.updateMunicipalityInfoFailure({ error })
             );
@@ -86,7 +100,11 @@ export class MunicipalityEffects {
       exhaustMap(({ request }) =>
         this.municipalityService.updateMunicipalityGeoLocation(request).pipe(
           map((response) => {
-            this.showSuccess('municipality.messages.updateGeoSuccess');
+            this.showSuccess(
+              'message' in response 
+                ? response.message
+                : 'municipality.messages.updateGeoSuccess'
+            );
             return MunicipalityActions.updateMunicipalityGeoLocationSuccess({
               response,
             });
