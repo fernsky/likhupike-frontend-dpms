@@ -1,0 +1,83 @@
+{
+  "profile": {
+    "title": "Municipality Profile",
+    "description": "Manage your municipality information and geographical data",
+    "breadcrumb": "Municipality Profile"
+  },
+  "tabs": {
+    "basicInfo": "Basic Information",
+    "geoInfo": "Geographical Information"
+  },
+  "stats": {
+    "wardsCount": "Wards",
+    "area": "Total Area",
+    "lastUpdated": "Last Updated"
+  },
+  "basicInfo": {
+    "title": "Basic Information"
+  },
+  "geoInfo": {
+    "title": "Geographical Information",
+    "coordinates": "Coordinates",
+    "altitude": "Altitude Information",
+    "area": "Area Information"
+  },
+  "fields": {
+    "name": "Municipality Name",
+    "province": "Province",
+    "district": "District",
+    "rightmostLatitude": "Rightmost Latitude",
+    "leftmostLatitude": "Leftmost Latitude",
+    "bottommostLongitude": "Bottommost Longitude",
+    "topmostLongitude": "Topmost Longitude",
+    "lowestAltitude": "Lowest Altitude",
+    "highestAltitude": "Highest Altitude",
+    "areaInSquareKilometers": "Area"
+  },
+  "errors": {
+    "nameRequired": "Municipality name is required",
+    "nameTooLong": "Municipality name cannot exceed 100 characters",
+    "provinceRequired": "Province is required",
+    "provinceTooLong": "Province name cannot exceed 100 characters",
+    "districtRequired": "District is required",
+    "districtTooLong": "District name cannot exceed 100 characters",
+    "coordinateRequired": "This coordinate is required",
+    "latitudeRange": "Latitude must be between -90 and 90 degrees",
+    "longitudeRange": "Longitude must be between -180 and 180 degrees",
+    "altitudeMin": "Altitude cannot be negative",
+    "areaRequired": "Area is required",
+    "areaMin": "Area must be greater than 0.1 km²"
+  },
+  "hints": {
+    "optional": "Optional"
+  },
+  "noMunicipality": {
+    "title": "No Municipality Profile Found",
+    "description": "Your municipality profile hasn't been set up yet. Create a profile to manage your municipality information.",
+    "createButton": "Create Municipality Profile",
+    "creating": "Creating Profile..."
+  },
+  "create": {
+    "dialog": {
+      "title": "Create Municipality Profile",
+      "message": "You need to set up your municipality profile. Would you like to create a basic profile now?",
+      "confirmButton": "Create Profile",
+      "cancelButton": "Cancel"
+    }
+  },
+  "defaults": {
+    "name": "New Municipality",
+    "province": "Province 1",
+    "district": "Default District"
+  },
+  "messages": {
+    "loadError": "Failed to load municipality profile",
+    "createSuccess": "Municipality profile created successfully",
+    "createError": "Failed to create municipality profile",
+    "updateSuccess": "Basic information updated successfully",
+    "updateError": "Failed to update basic information",
+    "updateGeoSuccess": "Geographic information updated successfully",
+    "updateGeoError": "Failed to update geographic information",
+    "loading": "Loading municipality profile..."
+  }
+}
