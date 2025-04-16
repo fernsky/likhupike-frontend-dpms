@@ -1,0 +1,112 @@
+.geo-info-container {
+  padding: 1rem;
+  
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    
+    mat-icon {
+      color: var(--primary-color);
+    }
+    
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 500;
+      margin: 0;
+      color: var(--text-primary);
+    }
+  }
+  
+  .geo-info-form {
+    display: flex;
+    flex-direction: column;
+    
+    .form-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      
+      .form-section {
+        background: #f8fafb;
+        border-radius: 8px;
+        padding: 1.5rem;
+        
+        h3 {
+          font-size: 1rem;
+          font-weight: 500;
+          margin: 0 0 1rem 0;
+          color: var(--text-primary);
+        }
+        
+        .two-columns {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+          margin-bottom: 1rem;
+          
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+        
+        .area-field {
+          max-width: 300px;
+        }
+      }
+    }
+    
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      
+      button {
+        min-width: 120px;
+        height: 42px;
+        
+        mat-icon {
+          margin-right: 8px;
+        }
+        
+        .button-spinner {
+          display: inline-block;
+          margin-right: 8px;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+}
+
+// Responsive styles for smaller screens
+@media (max-width: 768px) {
+  .geo-info-container {
+    padding: 0.75rem;
+    
+    .geo-info-form {
+      .form-content {
+        gap: 1rem;
+        
+        .form-section {
+          padding: 1rem;
+          
+          .two-columns {
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+          }
+        }
+      }
+      
+      .form-actions {
+        flex-direction: column-reverse;
+        
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

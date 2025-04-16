@@ -1,0 +1,73 @@
+<div class="basic-info-container">
+  <div class="section-header">
+    <mat-icon>info</mat-icon>
+    <h2>{{ "municipality.basicInfo.title" | transloco }}</h2>
+  </div>
+  
+  <form [formGroup]="basicInfoForm" (ngSubmit)="onSubmit()" class="basic-info-form">
+    <div class="form-content">
+      <!-- Municipality Name -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ "municipality.fields.name" | transloco }}</mat-label>
+        <input matInput formControlName="name" type="text">
+        <mat-error *ngIf="basicInfoForm.get('name')?.errors?.['required']">
+          {{ "municipality.errors.nameRequired" | transloco }}
+        </mat-error>
+        <mat-error *ngIf="basicInfoForm.get('name')?.errors?.['maxlength']">
+          {{ "municipality.errors.nameTooLong" | transloco }}
+        </mat-error>
+      </mat-form-field>
+      
+      <div class="two-columns">
+        <!-- Province -->
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "municipality.fields.province" | transloco }}</mat-label>
+          <input matInput formControlName="province" type="text">
+          <mat-error *ngIf="basicInfoForm.get('province')?.errors?.['required']">
+            {{ "municipality.errors.provinceRequired" | transloco }}
+          </mat-error>
+          <mat-error *ngIf="basicInfoForm.get('province')?.errors?.['maxlength']">
+            {{ "municipality.errors.provinceTooLong" | transloco }}
+          </mat-error>
+        </mat-form-field>
+        
+        <!-- District -->
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "municipality.fields.district" | transloco }}</mat-label>
+          <input matInput formControlName="district" type="text">
+          <mat-error *ngIf="basicInfoForm.get('district')?.errors?.['required']">
+            {{ "municipality.errors.districtRequired" | transloco }}
+          </mat-error>
+          <mat-error *ngIf="basicInfoForm.get('district')?.errors?.['maxlength']">
+            {{ "municipality.errors.districtTooLong" | transloco }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button
+        type="button"
+        mat-stroked-button
+        color="warn"
+        (click)="onReset()"
+        [disabled]="!basicInfoForm.dirty || updating"
+      >
+        <mat-icon>refresh</mat-icon>
+        {{ "common.actions.reset" | transloco }}
+      </button>
+      
+      <button
+        type="submit"
+        mat-raised-button
+        color="primary"
+        [disabled]="!basicInfoForm.dirty || !basicInfoForm.valid || updating"
+      >
+        <mat-spinner *ngIf="updating" diameter="20" class="button-spinner"></mat-spinner>
+        <mat-icon *ngIf="!updating">save</mat-icon>
+        {{ updating ? ("common.actions.saving" | transloco) : ("common.actions.save" | transloco) }}
+      </button>
+    </div>
+  </form>
+</div>

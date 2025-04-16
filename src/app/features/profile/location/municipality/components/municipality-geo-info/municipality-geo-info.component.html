@@ -1,0 +1,135 @@
+<div class="geo-info-container">
+  <div class="section-header">
+    <mat-icon>public</mat-icon>
+    <h2>{{ "municipality.geoInfo.title" | transloco }}</h2>
+  </div>
+  
+  <form [formGroup]="geoInfoForm" (ngSubmit)="onSubmit()" class="geo-info-form">
+    <div class="form-content">
+      <!-- Coordinates Section -->
+      <div class="form-section">
+        <h3>{{ "municipality.geoInfo.coordinates" | transloco }}</h3>
+        
+        <div class="two-columns">
+          <!-- Rightmost Latitude -->
+          <mat-form-field appearance="outline">
+            <mat-label>{{ "municipality.fields.rightmostLatitude" | transloco }}</mat-label>
+            <input matInput formControlName="rightmostLatitude" type="number" step="0.1">
+            <mat-error *ngIf="geoInfoForm.get('rightmostLatitude')?.errors?.['required']">
+              {{ "municipality.errors.coordinateRequired" | transloco }}
+            </mat-error>
+            <mat-error *ngIf="geoInfoForm.get('rightmostLatitude')?.errors?.['min'] || geoInfoForm.get('rightmostLatitude')?.errors?.['max']">
+              {{ "municipality.errors.latitudeRange" | transloco }}
+            </mat-error>
+          </mat-form-field>
+          
+          <!-- Leftmost Latitude -->
+          <mat-form-field appearance="outline">
+            <mat-label>{{ "municipality.fields.leftmostLatitude" | transloco }}</mat-label>
+            <input matInput formControlName="leftmostLatitude" type="number" step="0.1">
+            <mat-error *ngIf="geoInfoForm.get('leftmostLatitude')?.errors?.['required']">
+              {{ "municipality.errors.coordinateRequired" | transloco }}
+            </mat-error>
+            <mat-error *ngIf="geoInfoForm.get('leftmostLatitude')?.errors?.['min'] || geoInfoForm.get('leftmostLatitude')?.errors?.['max']">
+              {{ "municipality.errors.latitudeRange" | transloco }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div class="two-columns">
+          <!-- Bottommost Longitude -->
+          <mat-form-field appearance="outline">
+            <mat-label>{{ "municipality.fields.bottommostLongitude" | transloco }}</mat-label>
+            <input matInput formControlName="bottommostLongitude" type="number" step="0.1">
+            <mat-error *ngIf="geoInfoForm.get('bottommostLongitude')?.errors?.['required']">
+              {{ "municipality.errors.coordinateRequired" | transloco }}
+            </mat-error>
+            <mat-error *ngIf="geoInfoForm.get('bottommostLongitude')?.errors?.['min'] || geoInfoForm.get('bottommostLongitude')?.errors?.['max']">
+              {{ "municipality.errors.longitudeRange" | transloco }}
+            </mat-error>
+          </mat-form-field>
+          
+          <!-- Topmost Longitude -->
+          <mat-form-field appearance="outline">
+            <mat-label>{{ "municipality.fields.topmostLongitude" | transloco }}</mat-label>
+            <input matInput formControlName="topmostLongitude" type="number" step="0.1">
+            <mat-error *ngIf="geoInfoForm.get('topmostLongitude')?.errors?.['required']">
+              {{ "municipality.errors.coordinateRequired" | transloco }}
+            </mat-error>
+            <mat-error *ngIf="geoInfoForm.get('topmostLongitude')?.errors?.['min'] || geoInfoForm.get('topmostLongitude')?.errors?.['max']">
+              {{ "municipality.errors.longitudeRange" | transloco }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      
+      <!-- Altitude Section -->
+      <div class="form-section">
+        <h3>{{ "municipality.geoInfo.altitude" | transloco }}</h3>
+        
+        <div class="two-columns">
+          <!-- Lowest Altitude -->
+          <mat-form-field appearance="outline">
+            <mat-label>{{ "municipality.fields.lowestAltitude" | transloco }} (m)</mat-label>
+            <input matInput formControlName="lowestAltitude" type="number" step="1">
+            <mat-hint>{{ "municipality.hints.optional" | transloco }}</mat-hint>
+            <mat-error *ngIf="geoInfoForm.get('lowestAltitude')?.errors?.['min']">
+              {{ "municipality.errors.altitudeMin" | transloco }}
+            </mat-error>
+          </mat-form-field>
+          
+          <!-- Highest Altitude -->
+          <mat-form-field appearance="outline">
+            <mat-label>{{ "municipality.fields.highestAltitude" | transloco }} (m)</mat-label>
+            <input matInput formControlName="highestAltitude" type="number" step="1">
+            <mat-hint>{{ "municipality.hints.optional" | transloco }}</mat-hint>
+            <mat-error *ngIf="geoInfoForm.get('highestAltitude')?.errors?.['min']">
+              {{ "municipality.errors.altitudeMin" | transloco }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      
+      <!-- Area Section -->
+      <div class="form-section">
+        <h3>{{ "municipality.geoInfo.area" | transloco }}</h3>
+        
+        <mat-form-field appearance="outline" class="area-field">
+          <mat-label>{{ "municipality.fields.areaInSquareKilometers" | transloco }} (km²)</mat-label>
+          <input matInput formControlName="areaInSquareKilometers" type="number" step="0.1">
+          <mat-error *ngIf="geoInfoForm.get('areaInSquareKilometers')?.errors?.['required']">
+            {{ "municipality.errors.areaRequired" | transloco }}
+          </mat-error>
+          <mat-error *ngIf="geoInfoForm.get('areaInSquareKilometers')?.errors?.['min']">
+            {{ "municipality.errors.areaMin" | transloco }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button
+        type="button"
+        mat-stroked-button
+        color="warn"
+        (click)="onReset()"
+        [disabled]="!geoInfoForm.dirty || updating"
+      >
+        <mat-icon>refresh</mat-icon>
+        {{ "common.actions.reset" | transloco }}
+      </button>
+      
+      <button
+        type="submit"
+        mat-raised-button
+        color="primary"
+        [disabled]="!geoInfoForm.dirty || !geoInfoForm.valid || updating"
+      >
+        <mat-spinner *ngIf="updating" diameter="20" class="button-spinner"></mat-spinner>
+        <mat-icon *ngIf="!updating">save</mat-icon>
+        {{ updating ? ("common.actions.saving" | transloco) : ("common.actions.save" | transloco) }}
+      </button>
+    </div>
+  </form>
+</div>
