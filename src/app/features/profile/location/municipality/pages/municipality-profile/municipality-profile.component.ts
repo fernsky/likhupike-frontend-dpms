@@ -22,6 +22,7 @@ import { ConfirmDialogComponent } from '@app/shared/components/confirm-dialog/co
 import { PageTitleComponent } from '@app/shared/components/page-title/page-title.component';
 import { MunicipalityBasicInfoComponent } from '../../components/municipality-basic-info/municipality-basic-info.component';
 import { MunicipalityGeoInfoComponent } from '../../components/municipality-geo-info/municipality-geo-info.component';
+import { FormSectionComponent } from '@app/shared/components/form-section/form-section.component';
 
 @Component({
   selector: 'app-municipality-profile',
@@ -43,6 +44,7 @@ import { MunicipalityGeoInfoComponent } from '../../components/municipality-geo-
     PageTitleComponent,
     MunicipalityBasicInfoComponent,
     MunicipalityGeoInfoComponent,
+    FormSectionComponent,
   ],
   providers: [
     provideTranslocoScope({

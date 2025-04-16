@@ -4,7 +4,9 @@
     titleTranslationKey="municipality.profile.title"
     descriptionTranslationKey="municipality.profile.description"
     icon="location_city"
-  ></app-page-title>
+  >
+    <!-- Optional action buttons go here -->
+  </app-page-title>
   
   <!-- Loading indicator -->
   <mat-progress-bar
@@ -18,25 +20,28 @@
     <ng-container *ngIf="(loading$ | async) === false; else loadingTemplate">
       <ng-container *ngIf="hasMunicipality$ | async; else noMunicipalityTemplate">
         <!-- Municipality data display -->
-        <div class="profile-content">
-          <!-- Tab navigation for different information sections -->
-          <mat-tab-group (selectedIndexChange)="onTabChanged($event)" [selectedIndex]="selectedTabIndex" animationDuration="0ms">
-            <!-- Basic Information Tab -->
-            <mat-tab [label]="'municipality.tabs.basicInfo' | transloco">
-              <app-municipality-basic-info
-                [municipality]="municipality$ | async"
-                [updating]="(isProcessing$ | async) === true"
-              ></app-municipality-basic-info>
-            </mat-tab>
-            
-            <!-- Geographical Information Tab -->
-            <mat-tab [label]="'municipality.tabs.geoInfo' | transloco">
-              <app-municipality-geo-info
-                [municipality]="municipality$ | async"
-                [updating]="(isProcessing$ | async) === true"
-              ></app-municipality-geo-info>
-            </mat-tab>
-          </mat-tab-group>
+        <div class="sections-container">
+          <!-- Basic Information Section -->
+          <app-form-section
+            icon="info"
+            [title]="'municipality.tabs.basicInfo' | transloco"
+          >
+            <app-municipality-basic-info
+              [municipality]="municipality$ | async"
+              [updating]="(isProcessing$ | async) === true"
+            ></app-municipality-basic-info>
+          </app-form-section>
+          
+          <!-- Geographic Information Section -->
+          <app-form-section
+            icon="public"
+            [title]="'municipality.tabs.geoInfo' | transloco"
+          >
+            <app-municipality-geo-info
+              [municipality]="municipality$ | async"
+              [updating]="(isProcessing$ | async) === true"
+            ></app-municipality-geo-info>
+          </app-form-section>
         </div>
       </ng-container>
     </ng-container>
@@ -54,28 +59,27 @@
 <!-- Template for when municipality doesn't exist -->
 <ng-template #noMunicipalityTemplate>
   <div class="no-municipality-container">
-    <mat-card>
-      <mat-card-content>
-        <div class="empty-state">
-          <mat-icon class="empty-icon">location_city</mat-icon>
-          <h2>{{ "municipality.noMunicipality.title" | transloco }}</h2>
-          <p>{{ "municipality.noMunicipality.description" | transloco }}</p>
-          <button 
-            mat-raised-button 
-            color="primary" 
-            (click)="showCreateMunicipalityDialog()"
-            [disabled]="(creating$ | async) === true"
-          >
-            <mat-spinner *ngIf="creating$ | async" diameter="20" class="button-spinner"></mat-spinner>
-            <span *ngIf="(creating$ | async) !== true">
-              {{ "municipality.noMunicipality.createButton" | transloco }}
-            </span>
-            <span *ngIf="creating$ | async">
-              {{ "municipality.noMunicipality.creating" | transloco }}
-            </span>
-          </button>
-        </div>
-      </mat-card-content>
-    </mat-card>
+    <app-form-section
+      icon="error_outline"
+      [title]="'municipality.noMunicipality.title' | transloco"
+      [subtitle]="'municipality.noMunicipality.description' | transloco"
+    >
+      <div class="empty-state">
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="showCreateMunicipalityDialog()"
+          [disabled]="(creating$ | async) === true"
+        >
+          <mat-spinner *ngIf="creating$ | async" diameter="20" class="button-spinner"></mat-spinner>
+          <span *ngIf="(creating$ | async) !== true">
+            {{ "municipality.noMunicipality.createButton" | transloco }}
+          </span>
+          <span *ngIf="creating$ | async">
+            {{ "municipality.noMunicipality.creating" | transloco }}
+          </span>
+        </button>
+      </div>
+    </app-form-section>
   </div>
 </ng-template>
