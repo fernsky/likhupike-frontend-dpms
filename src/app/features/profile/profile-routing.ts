@@ -5,18 +5,16 @@ export const PROFILE_ROUTES: Routes = [
   {
     path: 'location',
     loadChildren: () =>
-      import('./location/location-routing').then(
-        (m) => m.LOCATION_ROUTES
-      ),
+      import('./location/location-routing').then((m) => m.LOCATION_ROUTES),
     canActivate: [authGuard],
     data: {
-      breadcrumb: 'common.location'
-    }
+      breadcrumb: 'common.location',
+    },
   },
   // Add more profile sections as needed (e.g., demographics, resources, etc.)
   {
     path: '',
     redirectTo: 'location',
-    pathMatch: 'full'
-  }
+    pathMatch: 'full',
+  },
 ];
