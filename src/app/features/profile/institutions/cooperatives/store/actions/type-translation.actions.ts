@@ -34,7 +34,7 @@ export const CooperativeTypeTranslationActions = createActionGroup({
 
     // Get By Type And Locale
     'Get Type Translation By Type And Locale': props<{
-      type: CooperativeType;
+      cooperativeType: CooperativeType;
       locale: string;
     }>(),
     'Get By Type And Locale Success': props<{
@@ -45,9 +45,9 @@ export const CooperativeTypeTranslationActions = createActionGroup({
     }>(),
 
     // Get All Translations For Type
-    'Get All For Type': props<{ type: CooperativeType }>(),
+    'Get All For Type': props<{ cooperativeType: CooperativeType }>(),
     'Get All For Type Success': props<{
-      type: CooperativeType;
+      cooperativeType: CooperativeType;
       response: ApiResponse<CooperativeTypeTranslationResponse[]>;
     }>(),
     'Get All For Type Failure': props<{ error: CooperativeValidationError }>(),
@@ -62,11 +62,11 @@ export const CooperativeTypeTranslationActions = createActionGroup({
 
     // Delete Type Translation
     'Delete Type Translation': props<{
-      type: CooperativeType;
+      cooperativeType: CooperativeType;
       locale: string;
     }>(),
     'Delete Type Translation Success': props<{
-      type: CooperativeType;
+      cooperativeType: CooperativeType;
       locale: string;
       response: ApiResponse<void>;
     }>(),

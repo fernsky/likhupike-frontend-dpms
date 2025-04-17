@@ -28,12 +28,12 @@ export const CooperativeSearchActions = createActionGroup({
 
     // Get Cooperatives By Type
     'Get By Type': props<{
-      type: CooperativeType;
+      cooperativeType: CooperativeType;
       page: number;
       size: number;
     }>(),
     'Get By Type Success': props<{
-      type: CooperativeType;
+      cooperativeType: CooperativeType;
       response: ApiResponse<PageResponse<CooperativeResponse>>;
     }>(),
     'Get By Type Failure': props<{ error: CooperativeValidationError }>(),

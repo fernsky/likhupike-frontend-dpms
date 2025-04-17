@@ -25,7 +25,7 @@ export const CooperativeMediaActions = createActionGroup({
     }>(),
     'Load Media By Type': props<{
       cooperativeId: string;
-      type: CooperativeMediaType;
+      mediaType: CooperativeMediaType;
       page: number;
       size: number;
     }>(),
