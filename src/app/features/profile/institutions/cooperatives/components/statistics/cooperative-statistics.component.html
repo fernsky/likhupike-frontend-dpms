@@ -1,0 +1,78 @@
+<div class="statistics-container">
+  <h2 class="stats-header">{{ 'cooperative.statistics.title' | transloco }}</h2>
+  
+  <!-- Loading indicator -->
+  <div *ngIf="loading$ | async" class="stats-loading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+  
+  <div class="stats-content" *ngIf="!(loading$ | async)">
+    <!-- Summary stats -->
+    <div class="stats-summary-card">
+      <h3>{{ 'cooperative.statistics.summary' | transloco }}</h3>
+      
+      <div class="summary-count">
+        <div class="count-badge">{{ getStatisticsTotalCount() | async }}</div>
+        <div class="count-label">{{ 'cooperative.statistics.totalCooperatives' | transloco }}</div>
+      </div>
+      
+      <div class="quick-stats">
+        <div *ngFor="let type of cooperativeTypes | slice:0:4" class="quick-stat-item" (click)="onTypeClick(type)">
+          <div class="stat-label">{{ 'cooperative.types.' + type.toLowerCase() | transloco }}</div>
+          <div class="stat-value">{{ getTypeCount(type) | async }}</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Charts section -->
+    <div class="charts-container">
+      <!-- Type distribution chart -->
+      <div class="chart-card">
+        <h3>{{ 'cooperative.statistics.byType' | transloco }}</h3>
+        <div class="chart-wrapper">
+          <!-- This is a placeholder for actual chart library integration -->
+          <div class="chart-placeholder">
+            <div *ngFor="let type of cooperativeTypes; let i = index" 
+                class="chart-bar" 
+                [style.height.%]="(getTypeCount(type) | async) * 4"
+                [style.left.%]="i * (100 / cooperativeTypes.length)"
+                [style.width.%]="(100 / cooperativeTypes.length) - 2"
+                (click)="onTypeClick(type)">
+              <div class="bar-value">{{ getTypeCount(type) | async }}</div>
+              <div class="bar-label">{{ type }}</div>
+            </div>
+          </div>
+          
+          <!-- Actual chart would be implemented with a library like Chart.js -->
+          <!-- 
+            <canvas baseChart
+              [data]="typeChartData"
+              [type]="'doughnut'"
+              [options]="chartOptions">
+            </canvas>
+          -->
+        </div>
+      </div>
+      
+      <!-- Ward distribution chart -->
+      <div class="chart-card">
+        <h3>{{ 'cooperative.statistics.byWard' | transloco }}</h3>
+        <div class="chart-wrapper">
+          <!-- This is a placeholder for actual chart library integration -->
+          <div class="chart-placeholder ward-chart">
+            <!-- Visualization would be implemented with a real chart library -->
+          </div>
+          
+          <!-- Actual chart would be implemented with a library like Chart.js -->
+          <!-- 
+            <canvas baseChart
+              [data]="wardChartData"
+              [type]="'bar'"
+              [options]="chartOptions">
+            </canvas>
+          -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>{{ dialogData.title }}</h1>
+<div mat-dialog-content>
+  <mat-icon color="warn" class="warning-icon">warning</mat-icon>
+  <p>{{ dialogData.message }}</p>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">
+    {{ dialogData.cancelButton }}
+  </button>
+  <button 
+    mat-button 
+    color="warn" 
+    (click)="onDiscard()">
+    {{ dialogData.discardButton }}
+  </button>
+  <button 
+    *ngIf="dialogData.showSaveOption"
+    mat-raised-button 
+    color="primary" 
+    (click)="onSave()">
+    {{ dialogData.saveButton }}
+  </button>
+</div>

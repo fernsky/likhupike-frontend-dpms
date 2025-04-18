@@ -1,0 +1,36 @@
+<form [formGroup]="searchForm" class="search-form" (ngSubmit)="onSearch()">
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>{{ 'cooperative.search.searchPlaceholder' | transloco }}</mat-label>
+    <input 
+      matInput 
+      formControlName="searchTerm" 
+      type="text"
+      [placeholder]="'cooperative.search.searchPlaceholder' | transloco">
+    <mat-icon matPrefix>search</mat-icon>
+    <button 
+      *ngIf="searchForm.get('searchTerm')?.value"
+      matSuffix 
+      mat-icon-button 
+      type="button"
+      aria-label="Clear" 
+      (click)="onResetSearch()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+  
+  <button 
+    mat-raised-button 
+    color="primary" 
+    type="submit"
+    [disabled]="!searchForm.get('searchTerm')?.value">
+    {{ 'cooperative.search.searchButton' | transloco }}
+  </button>
+  
+  <button 
+    mat-button 
+    type="button"
+    *ngIf="searchForm.get('searchTerm')?.value"
+    (click)="onResetSearch()">
+    {{ 'cooperative.search.resetButton' | transloco }}
+  </button>
+</form>

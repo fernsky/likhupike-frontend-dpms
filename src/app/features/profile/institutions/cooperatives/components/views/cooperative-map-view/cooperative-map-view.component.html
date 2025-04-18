@@ -1,0 +1,82 @@
+<div class="map-container">
+  <!-- Location statistics -->
+  <div class="map-stats">
+    <div class="marker-count">
+      <mat-icon>place</mat-icon>
+      {{ 'cooperative.map.markersShown' | transloco: { count: markers.length } }}
+    </div>
+    <div *ngIf="noCoordinatesCount > 0" class="no-location-count">
+      <mat-icon>not_listed_location</mat-icon>
+      {{ 'cooperative.map.noCoordinates' | transloco: { count: noCoordinatesCount } }}
+    </div>
+  </div>
+  
+  <!-- Map implementation -->
+  <div class="map-area">
+    <!-- This is a placeholder for the actual map implementation -->
+    <!-- You would replace this with your actual map library integration -->
+    <!-- For example, using Google Maps or Leaflet -->
+    <div class="map-placeholder">
+      <div *ngFor="let marker of markers" 
+           class="map-marker" 
+           [class.selected]="marker.id === selectedMarkerId"
+           [style.left]="((marker.position.lng - center.lng) * 500 + 50) + '%'"
+           [style.top]="((marker.position.lat - center.lat) * -500 + 50) + '%'"
+           (click)="onMarkerClick(marker.id)">
+        <mat-icon color="warn">place</mat-icon>
+        <div class="marker-info" *ngIf="marker.id === selectedMarkerId">
+          <h4>{{ marker.title }}</h4>
+          <div class="marker-type">{{ marker.type }}</div>
+          <button 
+            mat-button 
+            color="primary" 
+            (click)="viewCooperative(marker.id)">
+            {{ 'common.actions.viewDetails' | transloco }}
+          </button>
+        </div>
+      </div>
+      
+      <div class="map-overlay-text" *ngIf="markers.length === 0 && !loading">
+        <mat-icon>location_off</mat-icon>
+        <p>{{ 'cooperative.map.noLocationsAvailable' | transloco }}</p>
+      </div>
+      
+      <div class="map-loading" *ngIf="loading">
+        <mat-spinner [diameter]="40"></mat-spinner>
+      </div>
+    </div>
+    
+    <!-- Actual map implementation would go here -->
+    <!-- For example with Google Maps: -->
+    <!-- 
+    <google-map 
+      [center]="center" 
+      [zoom]="zoom"
+      [options]="{
+        mapTypeId: 'roadmap',
+        zoomControl: true,
+        scrollwheel: true,
+        disableDoubleClickZoom: true,
+        maxZoom: 18,
+        minZoom: 6
+      }">
+      <map-marker 
+        *ngFor="let marker of markers"
+        [position]="marker.position"
+        [title]="marker.title"
+        [options]="marker.options"
+        (mapClick)="onMarkerClick(marker.id)">
+        <map-info-window>
+          <div [innerHTML]="marker.infoContent"></div>
+        </map-info-window>
+      </map-marker>
+    </google-map>
+    -->
+  </div>
+  
+  <!-- No markers message -->
+  <div *ngIf="markers.length === 0 && !loading" class="no-locations-message">
+    <mat-icon>info</mat-icon>
+    <p>{{ 'cooperative.map.addLocationInfo' | transloco }}</p>
+  </div>
+</div>

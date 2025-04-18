@@ -1,0 +1,95 @@
+<div class="cooperative-list-container">
+  <div class="page-header">
+    <h1 class="page-title">{{ 'cooperative.titles.manageCooperatives' | transloco }}</h1>
+    
+    <div class="page-actions">
+      <button mat-raised-button color="primary" (click)="onCreateCooperative()">
+        <mat-icon>add</mat-icon>
+        {{ 'cooperative.actions.createNew' | transloco }}
+      </button>
+    </div>
+  </div>
+  
+  <mat-card class="search-card">
+    <mat-card-content>
+      <app-cooperative-search 
+        (search)="onSearch($event)"
+        (resetSearch)="resetSearch()">
+      </app-cooperative-search>
+      
+      <div class="display-mode-toggle">
+        <mat-button-toggle-group [value]="currentDisplayMode">
+          <mat-button-toggle value="table" (click)="changeDisplayMode('table')">
+            <mat-icon>view_list</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle value="grid" (click)="changeDisplayMode('grid')">
+            <mat-icon>grid_view</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle value="map" (click)="changeDisplayMode('map')">
+            <mat-icon>map</mat-icon>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Quick filters section -->
+  <div class="quick-filters">
+    <app-cooperative-type-filter
+      (filterChange)="onFilterByType($event)"
+      [activeSearchMethod]="activeSearchMethod$ | async">
+    </app-cooperative-type-filter>
+    
+    <app-cooperative-status-filter
+      (filterChange)="onFilterByStatus($event)"
+      [activeSearchMethod]="activeSearchMethod$ | async">
+    </app-cooperative-status-filter>
+  </div>
+
+  <!-- Loading indicator -->
+  <div *ngIf="loading$ | async" class="loading-spinner">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <!-- No results message -->
+  <mat-card *ngIf="(cooperatives$ | async)?.length === 0 && !(loading$ | async)" class="no-results">
+    <mat-icon>search_off</mat-icon>
+    <p>{{ 'cooperative.messages.noCooperativesFound' | transloco }}</p>
+    <button mat-button color="primary" (click)="resetSearch()">
+      {{ 'cooperative.actions.resetSearch' | transloco }}
+    </button>
+  </mat-card>
+
+  <!-- Results display based on mode -->
+  <ng-container [ngSwitch]="currentDisplayMode">
+    <!-- Table view -->
+    <app-cooperative-table-view 
+      *ngSwitchCase="'table'"
+      [cooperatives]="cooperatives$ | async"
+      [loading]="loading$ | async">
+    </app-cooperative-table-view>
+    
+    <!-- Grid view -->
+    <app-cooperative-grid-view 
+      *ngSwitchCase="'grid'"
+      [cooperatives]="cooperatives$ | async"
+      [loading]="loading$ | async">
+    </app-cooperative-grid-view>
+    
+    <!-- Map view -->
+    <app-cooperative-map-view 
+      *ngSwitchCase="'map'"
+      [cooperatives]="cooperatives$ | async"
+      [loading]="loading$ | async">
+    </app-cooperative-map-view>
+  </ng-container>
+
+  <!-- Pagination -->
+  <mat-paginator 
+    [length]="totalItems$ | async"
+    [pageIndex]="currentPage$ | async"
+    [pageSize]="pageSize$ | async"
+    [pageSizeOptions]="[5, 10, 25, 50]"
+    (page)="onPageChange($event)">
+  </mat-paginator>
+</div>

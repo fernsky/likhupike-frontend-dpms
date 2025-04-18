@@ -1,0 +1,184 @@
+<h2 mat-dialog-title>{{ 'cooperative.media.uploadTitle' | transloco }}</h2>
+
+<mat-dialog-content>
+  <div class="upload-container">
+    <!-- File Upload Area -->
+    <div class="file-upload-area">
+      <input 
+        type="file" 
+        #fileInput 
+        style="display: none" 
+        (change)="onFileSelected($event)">
+      
+      <div 
+        class="drop-zone" 
+        (click)="triggerFileInput()"
+        [class.has-file]="selectedFile">
+        
+        <div *ngIf="!selectedFile" class="upload-prompt">
+          <mat-icon>cloud_upload</mat-icon>
+          <p>{{ 'cooperative.media.dropFileHere' | transloco }}</p>
+          <button mat-raised-button color="primary" type="button">
+            {{ 'cooperative.media.browseFiles' | transloco }}
+          </button>
+        </div>
+        
+        <div *ngIf="selectedFile" class="file-preview">
+          <!-- Image preview -->
+          <img *ngIf="isImage && previewUrl" [src]="previewUrl" alt="Preview">
+          
+          <!-- Video preview -->
+          <video 
+            *ngIf="isVideo && previewUrl" 
+            [src]="previewUrl" 
+            controls 
+            style="max-width: 100%; max-height: 200px;">
+          </video>
+          
+          <!-- PDF preview -->
+          <div *ngIf="isPdf" class="pdf-preview">
+            <mat-icon>picture_as_pdf</mat-icon>
+            <p>{{ selectedFile.name }}</p>
+          </div>
+          
+          <!-- Other file preview -->
+          <div *ngIf="!isImage && !isVideo && !isPdf" class="generic-preview">
+            <mat-icon>insert_drive_file</mat-icon>
+            <p>{{ selectedFile.name }}</p>
+          </div>
+          
+          <!-- Selected file info -->
+          <div class="file-info">
+            <span class="file-name">{{ selectedFile.name }}</span>
+            <span class="file-size">{{ getFileSize() }}</span>
+            <span class="file-type">{{ selectedFile.type || 'Unknown type' }}</span>
+          </div>
+          
+          <button mat-button color="warn" (click)="triggerFileInput()">
+            {{ 'cooperative.media.changeFile' | transloco }}
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Form for media metadata -->
+    <form [formGroup]="uploadForm">
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cooperative.fields.mediaType' | transloco }}</mat-label>
+          <mat-select formControlName="type">
+            <mat-option *ngFor="let type of mediaTypes" [value]="type">
+              {{ 'cooperative.mediaTypes.' + type.toLowerCase() | transloco }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="uploadForm.get('type')?.hasError('required')">
+            {{ 'cooperative.errors.mediaTypeRequired' | transloco }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'cooperative.fields.title' | transloco }}</mat-label>
+          <input matInput formControlName="title">
+          <mat-error *ngIf="uploadForm.get('title')?.hasError('required')">
+            {{ 'cooperative.errors.titleRequired' | transloco }}
+          </mat-error>
+          <mat-error *ngIf="uploadForm.get('title')?.hasError('maxlength')">
+            {{ 'cooperative.errors.titleTooLong' | transloco }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'cooperative.fields.description' | transloco }}</mat-label>
+          <textarea matInput formControlName="description" rows="3"></textarea>
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'cooperative.fields.altText' | transloco }}</mat-label>
+          <input matInput formControlName="altText">
+          <mat-hint>{{ 'cooperative.hints.altText' | transloco }}</mat-hint>
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cooperative.fields.locale' | transloco }}</mat-label>
+          <input matInput formControlName="locale" placeholder="en, ne">
+          <mat-hint>{{ 'cooperative.hints.mediaLocale' | transloco }}</mat-hint>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cooperative.fields.visibility' | transloco }}</mat-label>
+          <mat-select formControlName="visibilityStatus">
+            <mat-option *ngFor="let option of visibilityOptions" [value]="option">
+              {{ 'cooperative.visibilityStatus.' + option.toLowerCase() | transloco }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'cooperative.fields.tags' | transloco }}</mat-label>
+          <input matInput formControlName="tags" placeholder="tag1, tag2, tag3">
+          <mat-hint>{{ 'cooperative.hints.tags' | transloco }}</mat-hint>
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cooperative.fields.license' | transloco }}</mat-label>
+          <input matInput formControlName="license">
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cooperative.fields.attribution' | transloco }}</mat-label>
+          <input matInput formControlName="attribution">
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row checkbox-row">
+        <mat-checkbox formControlName="isPrimary">
+          {{ 'cooperative.fields.isPrimary' | transloco }}
+        </mat-checkbox>
+        
+        <mat-checkbox formControlName="isFeatured">
+          {{ 'cooperative.fields.isFeatured' | transloco }}
+        </mat-checkbox>
+      </div>
+    </form>
+    
+    <!-- Upload Progress -->
+    <div *ngIf="uploading" class="upload-progress">
+      <mat-progress-bar 
+        [mode]="uploadProgress > 0 ? 'determinate' : 'indeterminate'" 
+        [value]="uploadProgress">
+      </mat-progress-bar>
+      <span>{{ uploadProgress }}%</span>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button 
+    mat-button 
+    type="button" 
+    [disabled]="uploading"
+    (click)="onCancel()">
+    {{ 'common.actions.cancel' | transloco }}
+  </button>
+  
+  <button 
+    mat-raised-button 
+    color="primary" 
+    [disabled]="uploadForm.invalid || !selectedFile || uploading"
+    (click)="onSubmit()">
+    <mat-icon>cloud_upload</mat-icon>
+    {{ 'cooperative.media.upload' | transloco }}
+  </button>
+</mat-dialog-actions>

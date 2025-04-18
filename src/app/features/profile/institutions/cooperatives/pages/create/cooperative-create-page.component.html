@@ -1,0 +1,396 @@
+<div class="create-page-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <h1>{{ 'cooperative.titles.createCooperative' | transloco }}</h1>
+      </mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <!-- Stepper navigation -->
+      <mat-horizontal-stepper [linear]="true" [selectedIndex]="activeStep" #stepper>
+        <mat-step *ngFor="let step of steps; let i = index" [completed]="step.completed">
+          <ng-template matStepLabel>{{ getStepLabel(step.title) | transloco }}</ng-template>
+        </mat-step>
+      </mat-horizontal-stepper>
+      
+      <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+        <!-- Step 1: Basic Information -->
+        <div *ngIf="activeStep === 0" class="step-content">
+          <h2>{{ 'cooperative.sections.basicInfo' | transloco }}</h2>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'cooperative.fields.code' | transloco }}</mat-label>
+              <input matInput formControlName="code" placeholder="e.g. dairy-coop-123">
+              <mat-hint>{{ 'cooperative.hints.code' | transloco }}</mat-hint>
+              <mat-error *ngIf="createForm.get('code')?.hasError('required')">
+                {{ 'cooperative.errors.codeRequired' | transloco }}
+              </mat-error>
+              <mat-error *ngIf="createForm.get('code')?.hasError('pattern')">
+                {{ 'cooperative.errors.codePattern' | transloco }}
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'cooperative.fields.defaultLocale' | transloco }}</mat-label>
+              <mat-select formControlName="defaultLocale">
+                <mat-option *ngFor="let locale of availableLocales" [value]="locale">
+                  {{ locale === 'en' ? 'English' : 'Nepali' }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="createForm.get('defaultLocale')?.hasError('required')">
+                {{ 'cooperative.errors.localeRequired' | transloco }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'cooperative.fields.type' | transloco }}</mat-label>
+              <mat-select formControlName="type">
+                <mat-option *ngFor="let type of cooperativeTypes" [value]="type">
+                  {{ 'cooperative.types.' + type.toLowerCase() | transloco }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="createForm.get('type')?.hasError('required')">
+                {{ 'cooperative.errors.typeRequired' | transloco }}
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'cooperative.fields.status' | transloco }}</mat-label>
+              <mat-select formControlName="status">
+                <mat-option *ngFor="let status of cooperativeStatuses" [value]="status">
+                  {{ 'cooperative.statuses.' + status.toLowerCase() | transloco }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'cooperative.fields.establishedDate' | transloco }}</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="establishedDate">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'cooperative.fields.registrationNumber' | transloco }}</mat-label>
+              <input matInput formControlName="registrationNumber">
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'cooperative.fields.contactEmail' | transloco }}</mat-label>
+              <input matInput formControlName="contactEmail" type="email">
+              <mat-error *ngIf="createForm.get('contactEmail')?.hasError('email')">
+                {{ 'cooperative.errors.emailInvalid' | transloco }}
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'cooperative.fields.contactPhone' | transloco }}</mat-label>
+              <input matInput formControlName="contactPhone">
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'cooperative.fields.websiteUrl' | transloco }}</mat-label>
+              <input matInput formControlName="websiteUrl" placeholder="https://example.com">
+              <mat-error *ngIf="createForm.get('websiteUrl')?.hasError('pattern')">
+                {{ 'cooperative.errors.urlInvalid' | transloco }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="step-actions">
+            <button type="button" mat-button (click)="cancelCreation()">
+              {{ 'common.actions.cancel' | transloco }}
+            </button>
+            <button type="button" mat-raised-button color="primary" (click)="nextStep()">
+              {{ 'common.actions.next' | transloco }}
+            </button>
+          </div>
+        </div>
+        
+        <!-- Step 2: Translation -->
+        <div *ngIf="activeStep === 1" class="step-content" formGroupName="translation">
+          <h2>{{ 'cooperative.sections.translation' | transloco }}</h2>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'cooperative.fields.locale' | transloco }}</mat-label>
+              <input matInput formControlName="locale" readonly>
+              <mat-hint>{{ 'cooperative.hints.defaultLocaleTranslation' | transloco }}</mat-hint>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'cooperative.fields.name' | transloco }}</mat-label>
+              <input matInput formControlName="name">
+              <mat-error *ngIf="createForm.get('translation.name')?.hasError('required')">
+                {{ 'cooperative.errors.nameRequired' | transloco }}
+              </mat-error>
+              <mat-error *ngIf="createForm.get('translation.name')?.hasError('maxlength')">
+                {{ 'cooperative.errors.nameTooLong' | transloco }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'cooperative.fields.description' | transloco }}</mat-label>
+              <textarea matInput formControlName="description" rows="4"></textarea>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'cooperative.fields.location' | transloco }}</mat-label>
+              <textarea matInput formControlName="location" rows="2"></textarea>
+            </mat-form-field>
+          </div>
+          
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{ 'cooperative.sections.additionalInfo' | transloco }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ 'cooperative.fields.services' | transloco }}</mat-label>
+                  <textarea matInput formControlName="services" rows="3"></textarea>
+                </mat-form-field>
+              </div>
+              
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ 'cooperative.fields.achievements' | transloco }}</mat-label>
+                  <textarea matInput formControlName="achievements" rows="3"></textarea>
+                </mat-form-field>
+              </div>
+              
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ 'cooperative.fields.operatingHours' | transloco }}</mat-label>
+                  <textarea matInput formControlName="operatingHours" rows="2"></textarea>
+                </mat-form-field>
+              </div>
+            </mat-expansion-panel>
+            
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{ 'cooperative.sections.seo' | transloco }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'cooperative.fields.seoTitle' | transloco }}</mat-label>
+                  <input matInput formControlName="seoTitle">
+                  <mat-hint align="end">{{ createForm.get('translation.seoTitle')?.value?.length || 0 }}/60</mat-hint>
+                </mat-form-field>
+                
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'cooperative.fields.status' | transloco }}</mat-label>
+                  <mat-select formControlName="status">
+                    <mat-option *ngFor="let status of contentStatuses" [value]="status">
+                      {{ 'cooperative.contentStatus.' + status.toLowerCase() | transloco }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ 'cooperative.fields.seoDescription' | transloco }}</mat-label>
+                  <textarea matInput formControlName="seoDescription" rows="2"></textarea>
+                  <mat-hint align="end">{{ createForm.get('translation.seoDescription')?.value?.length || 0 }}/160</mat-hint>
+                </mat-form-field>
+              </div>
+              
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'cooperative.fields.seoKeywords' | transloco }}</mat-label>
+                  <input matInput formControlName="seoKeywords">
+                  <mat-hint>{{ 'cooperative.hints.keywords' | transloco }}</mat-hint>
+                </mat-form-field>
+                
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'cooperative.fields.slugUrl' | transloco }}</mat-label>
+                  <input matInput formControlName="slugUrl">
+                  <mat-hint>{{ 'cooperative.hints.slug' | transloco }}</mat-hint>
+                </mat-form-field>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+          
+          <div class="step-actions">
+            <button type="button" mat-button (click)="previousStep()">
+              {{ 'common.actions.previous' | transloco }}
+            </button>
+            <button type="button" mat-raised-button color="primary" (click)="nextStep()">
+              {{ 'common.actions.next' | transloco }}
+            </button>
+          </div>
+        </div>
+        
+        <!-- Step 3: Location -->
+        <div *ngIf="activeStep === 2" class="step-content">
+          <h2>{{ 'cooperative.sections.location' | transloco }}</h2>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'cooperative.fields.ward' | transloco }}</mat-label>
+              <input matInput type="number" formControlName="ward" min="1" max="50">
+              <mat-error *ngIf="createForm.get('ward')?.hasError('required')">
+                {{ 'cooperative.errors.wardRequired' | transloco }}
+              </mat-error>
+            </mat-form-field>
+            
+            <button 
+              type="button" 
+              mat-raised-button 
+              color="primary" 
+              (click)="useCurrentLocation()">
+              <mat-icon>my_location</mat-icon>
+              {{ 'cooperative.location.useCurrentLocation' | transloco }}
+            </button>
+          </div>
+          
+          <div class="form-row" formGroupName="point">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'cooperative.fields.latitude' | transloco }}</mat-label>
+              <input matInput type="number" formControlName="latitude" step="0.000001">
+              <mat-error *ngIf="createForm.get('point.latitude')?.hasError('min') || createForm.get('point.latitude')?.hasError('max')">
+                {{ 'cooperative.errors.invalidLatitude' | transloco }}
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'cooperative.fields.longitude' | transloco }}</mat-label>
+              <input matInput type="number" formControlName="longitude" step="0.000001">
+              <mat-error *ngIf="createForm.get('point.longitude')?.hasError('min') || createForm.get('point.longitude')?.hasError('max')">
+                {{ 'cooperative.errors.invalidLongitude' | transloco }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="map-placeholder">
+            <!-- Here would go actual map component -->
+            <div class="map-instructions">
+              <mat-icon>map</mat-icon>
+              <p>{{ 'cooperative.location.mapInstructions' | transloco }}</p>
+            </div>
+          </div>
+          
+          <div class="step-actions">
+            <button type="button" mat-button (click)="previousStep()">
+              {{ 'common.actions.previous' | transloco }}
+            </button>
+            <button type="button" mat-raised-button color="primary" (click)="nextStep()">
+              {{ 'common.actions.next' | transloco }}
+            </button>
+          </div>
+        </div>
+        
+        <!-- Step 4: Review -->
+        <div *ngIf="activeStep === 3" class="step-content">
+          <h2>{{ 'cooperative.sections.review' | transloco }}</h2>
+          
+          <div class="review-section">
+            <h3>{{ 'cooperative.sections.basicInfo' | transloco }}</h3>
+            <table class="review-table">
+              <tr>
+                <td>{{ 'cooperative.fields.code' | transloco }}:</td>
+                <td>{{ createForm.get('code')?.value }}</td>
+              </tr>
+              <tr>
+                <td>{{ 'cooperative.fields.type' | transloco }}:</td>
+                <td>{{ 'cooperative.types.' + createForm.get('type')?.value?.toLowerCase() | transloco }}</td>
+              </tr>
+              <tr>
+                <td>{{ 'cooperative.fields.establishedDate' | transloco }}:</td>
+                <td>{{ createForm.get('establishedDate')?.value | date }}</td>
+              </tr>
+              <tr>
+                <td>{{ 'cooperative.fields.status' | transloco }}:</td>
+                <td>{{ 'cooperative.statuses.' + createForm.get('status')?.value?.toLowerCase() | transloco }}</td>
+              </tr>
+              <tr>
+                <td>{{ 'cooperative.fields.defaultLocale' | transloco }}:</td>
+                <td>{{ createForm.get('defaultLocale')?.value === 'en' ? 'English' : 'Nepali' }}</td>
+              </tr>
+            </table>
+          </div>
+          
+          <div class="review-section">
+            <h3>{{ 'cooperative.sections.translation' | transloco }}</h3>
+            <table class="review-table">
+              <tr>
+                <td>{{ 'cooperative.fields.name' | transloco }}:</td>
+                <td>{{ createForm.get('translation.name')?.value }}</td>
+              </tr>
+              <tr>
+                <td>{{ 'cooperative.fields.description' | transloco }}:</td>
+                <td>{{ createForm.get('translation.description')?.value }}</td>
+              </tr>
+            </table>
+          </div>
+          
+          <div class="review-section">
+            <h3>{{ 'cooperative.sections.location' | transloco }}</h3>
+            <table class="review-table">
+              <tr>
+                <td>{{ 'cooperative.fields.ward' | transloco }}:</td>
+                <td>{{ createForm.get('ward')?.value }}</td>
+              </tr>
+              <tr>
+                <td>{{ 'cooperative.fields.coordinates' | transloco }}:</td>
+                <td>
+                  <ng-container *ngIf="createForm.get('point.latitude')?.value && createForm.get('point.longitude')?.value">
+                    {{ createForm.get('point.latitude')?.value }}, {{ createForm.get('point.longitude')?.value }}
+                  </ng-container>
+                  <ng-container *ngIf="!createForm.get('point.latitude')?.value || !createForm.get('point.longitude')?.value">
+                    {{ 'cooperative.messages.noCoordinates' | transloco }}
+                  </ng-container>
+                </td>
+              </tr>
+            </table>
+          </div>
+          
+          <div class="form-feedback" *ngIf="createForm.invalid">
+            <mat-icon color="warn">warning</mat-icon>
+            <p class="error-text">{{ 'cooperative.messages.formHasErrors' | transloco }}</p>
+          </div>
+          
+          <div class="step-actions final-actions">
+            <button type="button" mat-button (click)="previousStep()">
+              {{ 'common.actions.previous' | transloco }}
+            </button>
+            <button type="button" mat-button (click)="cancelCreation()">
+              {{ 'common.actions.cancel' | transloco }}
+            </button>
+            <button type="submit" mat-raised-button color="primary" [disabled]="createForm.invalid">
+              {{ 'cooperative.actions.createCooperative' | transloco }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  
+  <div class="loading-overlay" *ngIf="loading$ | async">
+    <mat-spinner [diameter]="50"></mat-spinner>
+    <p>{{ 'cooperative.messages.creating' | transloco }}</p>
+  </div>
+</div>

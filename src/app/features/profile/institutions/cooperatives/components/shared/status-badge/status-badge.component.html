@@ -1,0 +1,6 @@
+<div class="status-badge" [ngClass]="statusColor">
+  <mat-icon class="status-icon">{{ statusIcon }}</mat-icon>
+  <span class="status-text">
+    {{ status ? ('cooperative.statuses.' + status.toLowerCase() | transloco) : 'Unknown' }}
+  </span>
+</div>

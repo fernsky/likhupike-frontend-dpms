@@ -1,0 +1,87 @@
+<div class="grid-view-container">
+  <div class="grid-wrapper">
+    <mat-card 
+      *ngFor="let cooperative of displayedCooperatives" 
+      class="cooperative-card"
+      (click)="viewCooperative(cooperative)">
+      
+      <div class="card-image">
+        <img [src]="getPrimaryImageUrl(cooperative)" [alt]="getCooperativeName(cooperative)">
+      </div>
+      
+      <mat-card-content>
+        <div class="card-header">
+          <h3 class="card-title">{{ getCooperativeName(cooperative) }}</h3>
+          <div class="card-badges">
+            <app-type-badge [type]="cooperative.type"></app-type-badge>
+            <app-status-badge [status]="cooperative.status"></app-status-badge>
+          </div>
+        </div>
+        
+        <p class="card-description" *ngIf="getCooperativeDescription(cooperative)">
+          {{ getCooperativeDescription(cooperative) }}
+        </p>
+        
+        <div class="card-details">
+          <div *ngIf="cooperative.establishedDate" class="detail-item">
+            <mat-icon>event</mat-icon>
+            <span>{{ cooperative.establishedDate | date }}</span>
+          </div>
+          <div *ngIf="cooperative.ward" class="detail-item">
+            <mat-icon>location_on</mat-icon>
+            <span>{{ 'cooperative.location.wardNumber' | transloco: { ward: cooperative.ward } }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+      
+      <mat-card-actions>
+        <button 
+          mat-button color="primary" 
+          (click)="viewCooperative(cooperative)"
+          aria-label="View cooperative">
+          <mat-icon>visibility</mat-icon>
+          {{ 'common.actions.view' | transloco }}
+        </button>
+        
+        <button 
+          mat-button color="accent" 
+          (click)="editCooperative(cooperative, $event)"
+          aria-label="Edit cooperative">
+          <mat-icon>edit</mat-icon>
+          {{ 'common.actions.edit' | transloco }}
+        </button>
+        
+        <button 
+          mat-button color="warn" 
+          (click)="deleteCooperative(cooperative, $event)"
+          aria-label="Delete cooperative">
+          <mat-icon>delete</mat-icon>
+          {{ 'common.actions.delete' | transloco }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  
+  <!-- Loading skeleton -->
+  <div *ngIf="loading" class="grid-wrapper loading">
+    <mat-card class="cooperative-card skeleton" *ngFor="let i of [1,2,3,4,5,6]">
+      <div class="card-image skeleton-image"></div>
+      <mat-card-content>
+        <div class="skeleton-title"></div>
+        <div class="skeleton-badges">
+          <div class="skeleton-badge"></div>
+          <div class="skeleton-badge"></div>
+        </div>
+        <div class="skeleton-text"></div>
+        <div class="skeleton-text"></div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  
+  <!-- Empty state -->
+  <div *ngIf="!loading && (!displayedCooperatives || displayedCooperatives.length === 0)" 
+      class="empty-state">
+    <mat-icon>business</mat-icon>
+    <p>{{ 'cooperative.messages.noCooperativesAvailable' | transloco }}</p>
+  </div>
+</div>

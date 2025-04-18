@@ -1,0 +1,228 @@
+.type-filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  .filter-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #546e7a;
+    margin-bottom: 0.5rem;
+  }
+
+  .types-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.75rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    @media (max-width: 480px) {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+  }
+
+  .type-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+    background-color: #f8fafb;
+    color: #64748b;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 36px;
+    overflow: hidden;
+    position: relative;
+
+    &:hover {
+      border-color: #cbd5e1;
+      background-color: #f1f5f9;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    &.selected {
+      border-color: #3f51b5;
+      background-color: rgba(63, 81, 181, 0.08);
+      color: #3f51b5;
+      box-shadow: 0 2px 4px rgba(63, 81, 181, 0.15);
+
+      .type-icon {
+        color: #3f51b5;
+      }
+    }
+
+    .type-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: #64748b;
+    }
+
+    .type-name {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .type-count {
+      background-color: rgba(0, 0, 0, 0.08);
+      border-radius: 12px;
+      padding: 0 8px;
+      font-size: 0.75rem;
+      height: 20px;
+      line-height: 20px;
+      min-width: 24px;
+      text-align: center;
+
+      &.has-items {
+        background-color: rgba(63, 81, 181, 0.12);
+      }
+    }
+  }
+
+  // List view styles
+  .types-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    .type-chip-small {
+      height: 28px;
+      padding: 0 0.75rem;
+      border-radius: 14px;
+      font-size: 0.75rem;
+      border: 1px solid #e2e8f0;
+      background-color: #f8fafb;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        border-color: #cbd5e1;
+        background-color: #f1f5f9;
+      }
+
+      &.selected {
+        border-color: #3f51b5;
+        background-color: rgba(63, 81, 181, 0.08);
+        color: #3f51b5;
+      }
+
+      .type-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+
+      .type-count {
+        background-color: rgba(0, 0, 0, 0.08);
+        border-radius: 10px;
+        padding: 0 6px;
+        font-size: 0.7rem;
+        height: 16px;
+        line-height: 16px;
+        min-width: 16px;
+        text-align: center;
+
+        &.has-items {
+          background-color: rgba(63, 81, 181, 0.12);
+        }
+      }
+    }
+  }
+
+  .section-divider {
+    height: 1px;
+    background-color: #e2e8f0;
+    margin: 0.75rem 0;
+    width: 100%;
+  }
+
+  // View toggle
+  .view-toggle {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.5rem;
+
+    button {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      padding: 4px;
+      transition: color 0.2s ease;
+
+      &:hover,
+      &.active {
+        color: #3f51b5;
+      }
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .type-filter-container {
+    .types-grid {
+      gap: 0.5rem;
+    }
+
+    .type-chip {
+      padding: 0.375rem 0.75rem;
+      height: 32px;
+      font-size: 0.8125rem;
+
+      .type-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .type-filter-container {
+    .filter-label {
+      font-size: 0.8125rem;
+    }
+
+    .type-chip {
+      padding: 0.25rem 0.5rem;
+      height: 28px;
+      font-size: 0.75rem;
+
+      .type-icon {
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
+      }
+
+      .type-count {
+        font-size: 0.6875rem;
+        min-width: 20px;
+        height: 18px;
+        line-height: 18px;
+      }
+    }
+  }
+}

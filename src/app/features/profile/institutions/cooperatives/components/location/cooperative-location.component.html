@@ -1,0 +1,137 @@
+<div class="location-container">
+  <div class="section-header">
+    <h2>{{ 'cooperative.location.title' | transloco }}</h2>
+    
+    <div class="header-actions">
+      <button 
+        mat-raised-button 
+        color="primary"
+        (click)="onSaveLocation()">
+        <mat-icon>save</mat-icon>
+        {{ 'cooperative.location.saveLocation' | transloco }}
+      </button>
+    </div>
+  </div>
+  
+  <div class="location-form-container">
+    <form [formGroup]="locationForm" class="location-form">
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cooperative.fields.ward' | transloco }}</mat-label>
+          <mat-select formControlName="ward">
+            <mat-option *ngFor="let ward of wards" [value]="ward">
+              {{ 'cooperative.location.wardNumber' | transloco: { ward: ward } }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="locationForm.get('ward')?.hasError('required')">
+            {{ 'cooperative.errors.wardRequired' | transloco }}
+          </mat-error>
+        </mat-form-field>
+        
+        <div class="location-actions">
+          <button 
+            mat-stroked-button 
+            color="primary" 
+            type="button"
+            (click)="useCurrentLocation()">
+            <mat-icon>my_location</mat-icon>
+            {{ 'cooperative.location.useCurrentLocation' | transloco }}
+          </button>
+          
+          <button 
+            mat-stroked-button 
+            color="warn" 
+            type="button"
+            (click)="clearLocation()">
+            <mat-icon>clear</mat-icon>
+            {{ 'cooperative.location.clearLocation' | transloco }}
+          </button>
+        </div>
+      </div>
+      
+      <div formGroupName="point" class="coordinates-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cooperative.fields.latitude' | transloco }}</mat-label>
+          <input 
+            matInput 
+            type="number" 
+            formControlName="latitude"
+            step="0.000001" 
+            placeholder="27.7172">
+          <mat-error *ngIf="locationForm.get('point.latitude')?.hasError('min') || locationForm.get('point.latitude')?.hasError('max')">
+            {{ 'cooperative.errors.invalidLatitude' | transloco }}
+          </mat-error>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cooperative.fields.longitude' | transloco }}</mat-label>
+          <input 
+            matInput 
+            type="number" 
+            formControlName="longitude"
+            step="0.000001" 
+            placeholder="85.3240">
+          <mat-error *ngIf="locationForm.get('point.longitude')?.hasError('min') || locationForm.get('point.longitude')?.hasError('max')">
+            {{ 'cooperative.errors.invalidLongitude' | transloco }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      
+      <div class="map-help-text">
+        <mat-icon>info</mat-icon>
+        <span>{{ 'cooperative.location.mapInstructions' | transloco }}</span>
+      </div>
+    </form>
+    
+    <div class="map-container">
+      <!-- Replace with your preferred map component -->
+      <!-- This is a placeholder for Google Maps or other map component -->
+      <div class="map-placeholder" (click)="onMapClick($event)">
+        <div *ngFor="let marker of markers" class="map-marker" 
+          [style.left]="((marker.position.lng - mapCenter.lng) * 100 + 50) + '%'"
+          [style.top]="((marker.position.lat - mapCenter.lat) * -100 + 50) + '%'">
+          <mat-icon color="warn">place</mat-icon>
+          <div class="marker-info">{{ marker.title }}</div>
+        </div>
+        
+        <!-- Add your actual map component integration here -->
+        <!-- 
+        <google-map
+          [center]="mapCenter"
+          [zoom]="mapZoom"
+          (mapClick)="onMapClick($event)">
+          <map-marker
+            *ngFor="let marker of markers"
+            [position]="marker.position"
+            [title]="marker.title"
+            [options]="marker.options">
+          </map-marker>
+        </google-map>
+        -->
+      </div>
+    </div>
+  </div>
+  
+  <div class="location-info">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ 'cooperative.location.addressInformation' | transloco }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      
+      <div *ngFor="let translation of cooperative.translations" class="address-translation">
+        <h4>{{ translation.locale }} {{ 'cooperative.location.address' | transloco }}</h4>
+        <p *ngIf="translation.location; else noAddress">{{ translation.location }}</p>
+        <ng-template #noAddress>
+          <p class="no-address">{{ 'cooperative.location.noAddressProvided' | transloco }}</p>
+        </ng-template>
+      </div>
+      
+      <div class="add-address-note">
+        <mat-icon>lightbulb</mat-icon>
+        <p>{{ 'cooperative.location.addressNote' | transloco }}</p>
+      </div>
+    </mat-expansion-panel>
+  </div>
+</div>

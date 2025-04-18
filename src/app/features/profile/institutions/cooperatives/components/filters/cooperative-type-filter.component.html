@@ -1,0 +1,45 @@
+<div class="type-filter-container">
+  <div class="filter-label">{{ 'cooperative.filters.filterByType' | transloco }}</div>
+  
+  <div class="view-toggle">
+    <button type="button" mat-icon-button [class.active]="viewMode === 'grid'" (click)="viewMode = 'grid'">
+      <mat-icon>grid_view</mat-icon>
+    </button>
+    <button type="button" mat-icon-button [class.active]="viewMode === 'list'" (click)="viewMode = 'list'">
+      <mat-icon>view_list</mat-icon>
+    </button>
+  </div>
+  
+  <div class="types-grid" *ngIf="viewMode === 'grid'">
+    <div 
+      *ngFor="let type of cooperativeTypes" 
+      class="type-chip"
+      [class.selected]="isSelected(type)"
+      (click)="onFilterByType(type)"
+      matRipple
+      [matTooltip]="'cooperative.types.' + type.toLowerCase() + '.description' | transloco">
+      <mat-icon class="type-icon">{{ getTypeIcon(type) }}</mat-icon>
+      <span class="type-name">{{ 'cooperative.types.' + type.toLowerCase() | transloco }}</span>
+      <span class="type-count" [class.has-items]="((getTypeCount(type) | async) ?? 0) > 0">
+        {{ getTypeCount(type) | async }}
+      </span>
+    </div>
+  </div>
+  
+  <div class="types-list" *ngIf="viewMode === 'list'">
+    <div 
+      *ngFor="let type of cooperativeTypes" 
+      class="type-chip-small"
+      [class.selected]="isSelected(type)"
+      (click)="onFilterByType(type)"
+      matRipple>
+      <mat-icon class="type-icon">{{ getTypeIcon(type) }}</mat-icon>
+      <span class="type-name">{{ 'cooperative.types.' + type.toLowerCase() | transloco }}</span>
+      <span class="type-count" [class.has-items]="((getTypeCount(type) | async) ?? 0) > 0">
+        {{ getTypeCount(type) | async }}
+      </span>
+    </div>
+  </div>
+  
+  <div class="section-divider"></div>
+</div>

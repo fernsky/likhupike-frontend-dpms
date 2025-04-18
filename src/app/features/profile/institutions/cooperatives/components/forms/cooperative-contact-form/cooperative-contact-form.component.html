@@ -1,0 +1,85 @@
+<div class="contact-form-container">
+  <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+    <div class="form-section">
+      <h3>{{ 'cooperative.sections.contactInfo' | transloco }}</h3>
+      
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cooperative.fields.contactEmail' | transloco }}</mat-label>
+          <input matInput formControlName="contactEmail" type="email">
+          <mat-icon matPrefix>email</mat-icon>
+          <mat-error *ngIf="contactForm.get('contactEmail')?.hasError('email')">
+            {{ 'cooperative.errors.emailInvalid' | transloco }}
+          </mat-error>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cooperative.fields.contactPhone' | transloco }}</mat-label>
+          <input matInput formControlName="contactPhone">
+          <mat-icon matPrefix>phone</mat-icon>
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'cooperative.fields.websiteUrl' | transloco }}</mat-label>
+          <input matInput formControlName="websiteUrl" placeholder="https://example.com">
+          <mat-icon matPrefix>language</mat-icon>
+          <mat-error *ngIf="contactForm.get('websiteUrl')?.hasError('pattern')">
+            {{ 'cooperative.errors.urlInvalid' | transloco }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    
+    <div class="form-section" formGroupName="socialLinks">
+      <h3>{{ 'cooperative.sections.socialLinks' | transloco }}</h3>
+      
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cooperative.fields.facebook' | transloco }}</mat-label>
+          <input matInput formControlName="facebook" placeholder="https://facebook.com/...">
+          <mat-icon matPrefix svgIcon="facebook"></mat-icon>
+          <mat-error *ngIf="contactForm.get('socialLinks.facebook')?.hasError('pattern')">
+            {{ 'cooperative.errors.urlInvalid' | transloco }}
+          </mat-error>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cooperative.fields.twitter' | transloco }}</mat-label>
+          <input matInput formControlName="twitter" placeholder="https://twitter.com/...">
+          <mat-icon matPrefix svgIcon="twitter"></mat-icon>
+          <mat-error *ngIf="contactForm.get('socialLinks.twitter')?.hasError('pattern')">
+            {{ 'cooperative.errors.urlInvalid' | transloco }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cooperative.fields.instagram' | transloco }}</mat-label>
+          <input matInput formControlName="instagram" placeholder="https://instagram.com/...">
+          <mat-icon matPrefix svgIcon="instagram"></mat-icon>
+          <mat-error *ngIf="contactForm.get('socialLinks.instagram')?.hasError('pattern')">
+            {{ 'cooperative.errors.urlInvalid' | transloco }}
+          </mat-error>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cooperative.fields.linkedin' | transloco }}</mat-label>
+          <input matInput formControlName="linkedin" placeholder="https://linkedin.com/in/...">
+          <mat-icon matPrefix svgIcon="linkedin"></mat-icon>
+          <mat-error *ngIf="contactForm.get('socialLinks.linkedin')?.hasError('pattern')">
+            {{ 'cooperative.errors.urlInvalid' | transloco }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    
+    <div class="form-actions">
+      <button mat-raised-button color="primary" type="submit" [disabled]="contactForm.invalid">
+        {{ 'common.actions.save' | transloco }}
+      </button>
+    </div>
+  </form>
+</div>

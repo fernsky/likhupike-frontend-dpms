@@ -1,0 +1,141 @@
+:host {
+  display: block;
+}
+
+.dialog-content {
+  min-height: 400px;
+  max-height: 70vh;
+  width: 100%;
+  padding-top: 1rem;
+  
+  ::ng-deep .mat-mdc-tab-body-wrapper {
+    padding-top: 1.5rem;
+  }
+  
+  ::ng-deep .mat-mdc-tab-header {
+    margin-bottom: 1rem;
+  }
+}
+
+.form-row {
+  margin-bottom: 1.25rem;
+  
+  mat-form-field {
+    width: 100%;
+    
+    &.full-width {
+      width: 100%;
+    }
+  }
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.selected-locale {
+  display: flex;
+  align-items: center;
+  background: #f8fafb;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(18, 55, 114, 0.1);
+  
+  .locale-label {
+    font-weight: 500;
+    color: #546e7a;
+    margin-right: 0.5rem;
+  }
+  
+  .locale-value {
+    color: #123772;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    background-color: rgba(18, 55, 114, 0.05);
+    border-radius: 1rem;
+  }
+}
+
+// Style overrides for the dialog
+::ng-deep .mat-mdc-dialog-container {
+  .mdc-dialog__title {
+    color: #123772;
+    font-size: 1.25rem;
+    font-weight: 500;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 0;
+  }
+  
+  .mat-mdc-dialog-actions {
+    padding: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 0;
+    gap: 0.75rem;
+  }
+  
+  // Improve form field spacing and appearance
+  .mat-mdc-form-field-subscript-wrapper {
+    padding-left: 0;
+  }
+  
+  .mat-mdc-form-field-hint {
+    font-size: 0.75rem;
+    color: rgba(0, 0, 0, 0.6);
+  }
+  
+  // Tab styling
+  .mat-mdc-tab {
+    min-width: 120px;
+    
+    &.mdc-tab--active {
+      .mdc-tab__text-label {
+        color: #123772;
+        font-weight: 500;
+      }
+    }
+  }
+  
+  // Textarea improvements
+  textarea.mat-mdc-input-element {
+    resize: vertical;
+    min-height: 80px;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .dialog-content {
+    max-height: 65vh;
+    padding: 0.5rem 0;
+  }
+  
+  ::ng-deep .mat-mdc-dialog-container {
+    .mdc-dialog__title {
+      font-size: 1.125rem;
+      padding: 1rem;
+    }
+    
+    .mat-mdc-dialog-content {
+      padding: 0.5rem;
+    }
+    
+    .mat-mdc-dialog-actions {
+      padding: 0.75rem;
+      flex-direction: column-reverse;
+      
+      button {
+        width: 100%;
+        margin-left: 0 !important;
+      }
+    }
+  }
+  
+  ::ng-deep .mat-mdc-tab-header {
+    .mat-mdc-tab {
+      min-width: auto;
+      padding: 0 1rem;
+    }
+  }
+}

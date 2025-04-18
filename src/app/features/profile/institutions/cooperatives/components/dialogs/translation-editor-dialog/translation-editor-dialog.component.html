@@ -1,0 +1,218 @@
+<h2 mat-dialog-title>{{ dialogTitle | transloco }}</h2>
+
+<form [formGroup]="translationForm" (ngSubmit)="onSubmit()">
+  <mat-dialog-content class="dialog-content">
+    <mat-tab-group 
+      [(selectedIndex)]="activeTab"
+      (selectedIndexChange)="onTabChanged($event)">
+      
+      <!-- Basic Information Tab -->
+      <mat-tab [label]="'cooperative.tabs.basicTranslationInfo' | transloco">
+        <!-- Locale Selection -->
+        <div class="form-row" *ngIf="isNew">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'cooperative.fields.locale' | transloco }}</mat-label>
+            <mat-select formControlName="locale">
+              <mat-option *ngFor="let locale of availableLocales" [value]="locale">
+                {{ getLocaleName(locale) }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="translationForm.get('locale')?.hasError('required')">
+              {{ 'cooperative.errors.localeRequired' | transloco }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Display selected locale when editing -->
+        <div class="selected-locale" *ngIf="!isNew">
+          <span class="locale-label">{{ 'cooperative.fields.locale' | transloco }}:</span>
+          <span class="locale-value">{{ getLocaleName(translationForm.get('locale')?.value) }}</span>
+        </div>
+
+        <!-- Name -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'cooperative.fields.name' | transloco }}</mat-label>
+            <input matInput formControlName="name">
+            <mat-error *ngIf="translationForm.get('name')?.hasError('required')">
+              {{ 'cooperative.errors.nameRequired' | transloco }}
+            </mat-error>
+            <mat-error *ngIf="translationForm.get('name')?.hasError('maxlength')">
+              {{ 'cooperative.errors.maxlength' | transloco: { length: 100 } }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Description -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'cooperative.fields.description' | transloco }}</mat-label>
+            <textarea matInput formControlName="description" rows="5"></textarea>
+          </mat-form-field>
+        </div>
+
+        <!-- Location -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'cooperative.fields.location' | transloco }}</mat-label>
+            <textarea matInput formControlName="location" rows="3"></textarea>
+          </mat-form-field>
+        </div>
+
+        <!-- Services -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'cooperative.fields.services' | transloco }}</mat-label>
+            <textarea matInput formControlName="services" rows="3"></textarea>
+          </mat-form-field>
+        </div>
+
+        <!-- Achievements -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'cooperative.fields.achievements' | transloco }}</mat-label>
+            <textarea matInput formControlName="achievements" rows="3"></textarea>
+          </mat-form-field>
+        </div>
+
+        <!-- Operating Hours -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'cooperative.fields.operatingHours' | transloco }}</mat-label>
+            <textarea matInput formControlName="operatingHours" rows="2"></textarea>
+          </mat-form-field>
+        </div>
+      </mat-tab>
+      
+      <!-- SEO Tab -->
+      <mat-tab [label]="'cooperative.tabs.seo' | transloco">
+        <!-- Content Status -->
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'cooperative.fields.status' | transloco }}</mat-label>
+            <mat-select formControlName="status">
+              <mat-option *ngFor="let status of contentStatuses" [value]="status">
+                {{ 'cooperative.contentStatus.' + status.toLowerCase() | transloco }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- SEO Title -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'cooperative.fields.seoTitle' | transloco }}</mat-label>
+            <input matInput formControlName="seoTitle">
+            <mat-hint>{{ 'cooperative.hints.seoTitle' | transloco }}</mat-hint>
+            <mat-hint align="end">{{translationForm.get('seoTitle')?.value?.length || 0}}/60</mat-hint>
+            <mat-error *ngIf="translationForm.get('seoTitle')?.hasError('maxlength')">
+              {{ 'cooperative.errors.seoTitleLength' | transloco }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- SEO Description -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'cooperative.fields.seoDescription' | transloco }}</mat-label>
+            <textarea matInput formControlName="seoDescription" rows="2"></textarea>
+            <mat-hint>{{ 'cooperative.hints.seoDescription' | transloco }}</mat-hint>
+            <mat-hint align="end">{{translationForm.get('seoDescription')?.value?.length || 0}}/160</mat-hint>
+            <mat-error *ngIf="translationForm.get('seoDescription')?.hasError('maxlength')">
+              {{ 'cooperative.errors.seoDescriptionLength' | transloco }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- SEO Keywords -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'cooperative.fields.seoKeywords' | transloco }}</mat-label>
+            <input matInput formControlName="seoKeywords">
+            <mat-hint>{{ 'cooperative.hints.seoKeywords' | transloco }}</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <!-- Slug URL -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'cooperative.fields.slugUrl' | transloco }}</mat-label>
+            <input matInput formControlName="slugUrl">
+            <mat-hint>{{ 'cooperative.hints.slugUrl' | transloco }}</mat-hint>
+          </mat-form-field>
+        </div>
+      </mat-tab>
+
+      <!-- Advanced SEO Tab -->
+      <mat-tab [label]="'cooperative.tabs.advancedSeo' | transloco">
+        <!-- Meta Robots -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'cooperative.fields.metaRobots' | transloco }}</mat-label>
+            <input matInput formControlName="metaRobots" placeholder="index, follow">
+            <mat-hint>{{ 'cooperative.hints.metaRobots' | transloco }}</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <!-- Canonical URL -->
+        <div class="form-row" *ngIf="!isNew">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'cooperative.fields.canonicalUrl' | transloco }}</mat-label>
+            <input matInput formControlName="canonicalUrl">
+            <mat-hint>{{ 'cooperative.hints.canonicalUrl' | transloco }}</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <!-- Hreflang Tags -->
+        <div class="form-row" *ngIf="!isNew">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'cooperative.fields.hreflangTags' | transloco }}</mat-label>
+            <textarea matInput formControlName="hreflangTags" rows="2"></textarea>
+            <mat-hint>{{ 'cooperative.hints.hreflangTags' | transloco }}</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <!-- Breadcrumb Structure -->
+        <div class="form-row" *ngIf="!isNew">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'cooperative.fields.breadcrumbStructure' | transloco }}</mat-label>
+            <textarea matInput formControlName="breadcrumbStructure" rows="3"></textarea>
+            <mat-hint>{{ 'cooperative.hints.breadcrumbStructure' | transloco }}</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <!-- Structured Data -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'cooperative.fields.structuredData' | transloco }}</mat-label>
+            <textarea matInput formControlName="structuredData" rows="4"></textarea>
+            <mat-hint>{{ 'cooperative.hints.structuredData' | transloco }}</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <!-- FAQ Items -->
+        <div class="form-row" *ngIf="!isNew">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'cooperative.fields.faqItems' | transloco }}</mat-label>
+            <textarea matInput formControlName="faqItems" rows="4"></textarea>
+            <mat-hint>{{ 'cooperative.hints.faqItems' | transloco }}</mat-hint>
+          </mat-form-field>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-dialog-content>
+  
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()">
+      {{ 'common.actions.cancel' | transloco }}
+    </button>
+    
+    <button 
+      mat-raised-button 
+      color="primary" 
+      type="submit"
+      [disabled]="translationForm.invalid">
+      {{ 'common.actions.save' | transloco }}
+    </button>
+  </mat-dialog-actions>
+</form>
