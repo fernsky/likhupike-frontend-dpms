@@ -1,14 +1,14 @@
 import { createAction, props } from '@ngrx/store';
 import {
+  ApiResponse,
   CooperativeResponse,
   CooperativeStatus,
   CooperativeType,
   PageResponse,
 } from '../../types';
-import { CooperativeFilter, CooperativeValidationError } from '../state';
-import { ApiResponse } from '@app/core/api/types/api-response.type';
+import { CooperativeFilter, CooperativeValidationError, SearchMethod } from '../state';
 
-// Search Cooperatives By Name
+// Search Cooperatives By Name - Independent search method
 export const searchByName = createAction(
   '[Cooperative Search] Search By Name',
   props<{
@@ -30,7 +30,7 @@ export const searchByNameFailure = createAction(
   props<{ error: CooperativeValidationError }>()
 );
 
-// Get Cooperatives By Type
+// Get Cooperatives By Type - Independent search method
 export const getByType = createAction(
   '[Cooperative Search] Get By Type',
   props<{
@@ -53,7 +53,7 @@ export const getByTypeFailure = createAction(
   props<{ error: CooperativeValidationError }>()
 );
 
-// Get Cooperatives By Status
+// Get Cooperatives By Status - Independent search method
 export const getByStatus = createAction(
   '[Cooperative Search] Get By Status',
   props<{
@@ -76,7 +76,7 @@ export const getByStatusFailure = createAction(
   props<{ error: CooperativeValidationError }>()
 );
 
-// Get Cooperatives By Ward
+// Get Cooperatives By Ward - Independent search method
 export const getByWard = createAction(
   '[Cooperative Search] Get By Ward',
   props<{ ward: number; page: number; size: number }>()
@@ -95,7 +95,7 @@ export const getByWardFailure = createAction(
   props<{ error: CooperativeValidationError }>()
 );
 
-// Find Cooperatives Near Location
+// Find Cooperatives Near Location - Independent search method
 export const findNear = createAction(
   '[Cooperative Search] Find Near',
   props<{
@@ -156,12 +156,32 @@ export const getStatisticsByWardFailure = createAction(
   }>()
 );
 
-// Filter state management
+// Filter state management - modified to set active search method
 export const filterChange = createAction(
   '[Cooperative Search] Filter Change',
-  props<{ filter: CooperativeFilter }>()
+  props<{ 
+    filter: CooperativeFilter, 
+    searchMethod: SearchMethod 
+  }>()
 );
 
+export const setSearchMethod = createAction(
+  '[Cooperative Search] Set Search Method',
+  props<{ searchMethod: SearchMethod }>()
+);
+
+// Pagination changes - shared across search methods
+export const setSearchPage = createAction(
+  '[Cooperative Search] Set Search Page',
+  props<{ page: number }>()
+);
+
+export const setSearchPageSize = createAction(
+  '[Cooperative Search] Set Search Page Size',
+  props<{ size: number }>()
+);
+
+// Reset filters
 export const resetFilters = createAction(
   '[Cooperative Search] Reset Filters'
 );

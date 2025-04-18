@@ -3,9 +3,10 @@ import { CooperativeValidationError } from './index';
 
 /**
  * Interface for search filters - aligned with CooperativeSearchService capabilities
+ * Each search method has its own parameters except for pagination
  */
 export interface CooperativeFilter {
-  // Basic search params
+  // Individual search parameters - only one should be active at a time
   nameQuery?: string;
   type?: CooperativeType;
   status?: CooperativeStatus;
@@ -16,9 +17,21 @@ export interface CooperativeFilter {
   latitude?: number;
   distanceInMeters?: number;
 
-  // Pagination params
+  // Pagination params - shared across all search methods
   page?: number;
   size?: number;
+}
+
+/**
+ * Tracks which search method is currently active
+ */
+export enum SearchMethod {
+  None = 'none',
+  ByName = 'byName',
+  ByType = 'byType',
+  ByStatus = 'byStatus',
+  ByWard = 'byWard',
+  NearLocation = 'nearLocation'
 }
 
 /**
@@ -27,6 +40,9 @@ export interface CooperativeFilter {
 export interface CooperativeSearchState {
   // Search results
   results: string[];
+
+  // Active search method
+  activeSearchMethod: SearchMethod;
 
   // Search statistics
   statisticsByType: { [type in CooperativeType]?: number };
@@ -47,6 +63,8 @@ export interface CooperativeSearchState {
  */
 export const initialSearchState: CooperativeSearchState = {
   results: [],
+  
+  activeSearchMethod: SearchMethod.None,
 
   statisticsByType: {},
   statisticsByWard: {},

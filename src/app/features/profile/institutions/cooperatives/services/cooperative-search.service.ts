@@ -3,12 +3,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '@env/environment';
 import {
+  ApiResponse,
   CooperativeResponse,
   CooperativeStatus,
   CooperativeType,
   PageResponse,
 } from '../types';
-import { ApiResponse } from '@app/core/api/types/api-response.type';
 
 /**
  * Service for searching and filtering cooperatives

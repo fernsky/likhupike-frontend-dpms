@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import * as CooperativeSearchActions from '../actions/search.actions';
-import { initialSearchState } from '../state';
+import { initialSearchState, SearchMethod } from '../state';
 import { CooperativeResponse } from '../../types';
 
 /**
@@ -9,14 +9,28 @@ import { CooperativeResponse } from '../../types';
 export const searchReducer = createReducer(
   initialSearchState,
 
-  // Search by name
-  on(CooperativeSearchActions.searchByName, (state) => ({
+  // Search by name - Sets activeSearchMethod to ByName
+  on(CooperativeSearchActions.searchByName, (state, { nameQuery, page, size }) => ({
     ...state,
     loading: true,
     errors: null,
+    filters: {
+      ...state.filters,
+      nameQuery,
+      page,
+      size,
+      // Clear other search parameters
+      type: undefined,
+      status: undefined,
+      ward: undefined,
+      longitude: undefined,
+      latitude: undefined,
+      distanceInMeters: undefined
+    },
+    activeSearchMethod: SearchMethod.ByName
   })),
   on(CooperativeSearchActions.searchByNameSuccess, (state, { response }) => {
-    if (!('data' in response) || !response.data) return state;
+    if (!response.data) return state;
 
     const { content, totalElements } = response.data;
 
@@ -39,14 +53,28 @@ export const searchReducer = createReducer(
     errors: error,
   })),
 
-  // Get by type
-  on(CooperativeSearchActions.getByType, (state) => ({
+  // Get by type - Sets activeSearchMethod to ByType
+  on(CooperativeSearchActions.getByType, (state, { cooperativeType, page, size }) => ({
     ...state,
     loading: true,
     errors: null,
+    filters: {
+      ...state.filters,
+      type: cooperativeType,
+      page,
+      size,
+      // Clear other search parameters
+      nameQuery: undefined,
+      status: undefined,
+      ward: undefined,
+      longitude: undefined,
+      latitude: undefined,
+      distanceInMeters: undefined
+    },
+    activeSearchMethod: SearchMethod.ByType
   })),
-  on(CooperativeSearchActions.getByTypeSuccess, (state, { cooperativeType, response }) => {
-    if (!('data' in response) || !response.data) return state;
+  on(CooperativeSearchActions.getByTypeSuccess, (state, {  response }) => {
+    if (!response.data) return state;
 
     const { content, totalElements } = response.data;
 
@@ -60,10 +88,6 @@ export const searchReducer = createReducer(
       loading: false,
       results,
       totalResults: totalElements,
-      filters: {
-        ...state.filters,
-        type: cooperativeType,
-      },
       lastUpdated: new Date(),
     };
   }),
@@ -73,16 +97,30 @@ export const searchReducer = createReducer(
     errors: error,
   })),
 
-  // Get by status
-  on(CooperativeSearchActions.getByStatus, (state) => ({
+  // Get by status - Sets activeSearchMethod to ByStatus
+  on(CooperativeSearchActions.getByStatus, (state, { status, page, size }) => ({
     ...state,
     loading: true,
     errors: null,
+    filters: {
+      ...state.filters,
+      status,
+      page,
+      size,
+      // Clear other search parameters
+      nameQuery: undefined,
+      type: undefined,
+      ward: undefined,
+      longitude: undefined,
+      latitude: undefined,
+      distanceInMeters: undefined
+    },
+    activeSearchMethod: SearchMethod.ByStatus
   })),
   on(
     CooperativeSearchActions.getByStatusSuccess,
-    (state, { status, response }) => {
-      if (!('data' in response) || !response.data) return state;
+    (state, { response }) => {
+      if (!response.data) return state;
 
       const { content, totalElements } = response.data;
 
@@ -96,10 +134,6 @@ export const searchReducer = createReducer(
         loading: false,
         results,
         totalResults: totalElements,
-        filters: {
-          ...state.filters,
-          status,
-        },
         lastUpdated: new Date(),
       };
     }
@@ -110,14 +144,28 @@ export const searchReducer = createReducer(
     errors: error,
   })),
 
-  // Get by ward
-  on(CooperativeSearchActions.getByWard, (state) => ({
+  // Get by ward - Sets activeSearchMethod to ByWard
+  on(CooperativeSearchActions.getByWard, (state, { ward, page, size }) => ({
     ...state,
     loading: true,
     errors: null,
+    filters: {
+      ...state.filters,
+      ward,
+      page,
+      size,
+      // Clear other search parameters
+      nameQuery: undefined,
+      type: undefined,
+      status: undefined,
+      longitude: undefined,
+      latitude: undefined,
+      distanceInMeters: undefined
+    },
+    activeSearchMethod: SearchMethod.ByWard
   })),
-  on(CooperativeSearchActions.getByWardSuccess, (state, { ward, response }) => {
-    if (!('data' in response) || !response.data) return state;
+  on(CooperativeSearchActions.getByWardSuccess, (state, {  response }) => {
+    if (!response.data) return state;
 
     const { content, totalElements } = response.data;
 
@@ -131,27 +179,38 @@ export const searchReducer = createReducer(
       loading: false,
       results,
       totalResults: totalElements,
-      filters: {
-        ...state.filters,
-        ward,
-      },
       lastUpdated: new Date(),
     };
   }),
+
   on(CooperativeSearchActions.getByWardFailure, (state, { error }) => ({
     ...state,
     loading: false,
     errors: error,
   })),
 
-  // Find cooperatives near location
-  on(CooperativeSearchActions.findNear, (state) => ({
+  // Find cooperatives near location - Sets activeSearchMethod to NearLocation
+  on(CooperativeSearchActions.findNear, (state, { longitude, latitude, distanceInMeters, page, size }) => ({
     ...state,
     loading: true,
     errors: null,
+    filters: {
+      ...state.filters,
+      longitude,
+      latitude,
+      distanceInMeters,
+      page,
+      size,
+      // Clear other search parameters
+      nameQuery: undefined,
+      type: undefined,
+      status: undefined,
+      ward: undefined
+    },
+    activeSearchMethod: SearchMethod.NearLocation
   })),
   on(CooperativeSearchActions.findNearSuccess, (state, { response }) => {
-    if (!('data' in response) || !response.data) return state;
+    if (!response.data) return state;
 
     const { content, totalElements } = response.data;
 
@@ -231,11 +290,35 @@ export const searchReducer = createReducer(
   ),
 
   // Filter change
-  on(CooperativeSearchActions.filterChange, (state, { filter }) => ({
+  on(CooperativeSearchActions.filterChange, (state, { filter, searchMethod }) => ({
     ...state,
     filters: {
       ...state.filters,
       ...filter,
+    },
+    activeSearchMethod: searchMethod,
+  })),
+
+  // Set search method
+  on(CooperativeSearchActions.setSearchMethod, (state, { searchMethod }) => ({
+    ...state,
+    activeSearchMethod: searchMethod,
+  })),
+
+  // Pagination
+  on(CooperativeSearchActions.setSearchPage, (state, { page }) => ({
+    ...state,
+    filters: {
+      ...state.filters,
+      page,
+    },
+  })),
+  
+  on(CooperativeSearchActions.setSearchPageSize, (state, { size }) => ({
+    ...state,
+    filters: {
+      ...state.filters,
+      size,
     },
   })),
 
@@ -246,6 +329,7 @@ export const searchReducer = createReducer(
       page: 0,
       size: 10,
     },
+    activeSearchMethod: SearchMethod.None,
   })),
 
   // Clear errors

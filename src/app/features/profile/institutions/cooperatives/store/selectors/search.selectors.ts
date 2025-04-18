@@ -1,6 +1,7 @@
 import { createSelector } from '@ngrx/store';
 import { selectCooperativesFeature } from './cooperative.selectors';
 import { CooperativeType } from '../../types';
+import { SearchMethod } from '../state';
 
 // Search state selector
 export const selectSearchState = createSelector(
@@ -17,6 +18,12 @@ export const selectSearchResults = createSelector(
 export const selectSearchTotalResults = createSelector(
   selectSearchState,
   (state) => state.totalResults
+);
+
+// Active search method
+export const selectActiveSearchMethod = createSelector(
+  selectSearchState,
+  (state) => state.activeSearchMethod
 );
 
 // Search filters selectors
@@ -103,4 +110,10 @@ export const selectSearchErrors = createSelector(
 export const selectSearchLastUpdated = createSelector(
   selectSearchState,
   (state) => state.lastUpdated
+);
+
+// Convenience selector - determines if any search is active
+export const selectIsSearchActive = createSelector(
+  selectActiveSearchMethod,
+  (method) => method !== SearchMethod.None
 );
