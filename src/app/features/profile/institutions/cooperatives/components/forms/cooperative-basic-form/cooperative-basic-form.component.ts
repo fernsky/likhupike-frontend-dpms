@@ -30,8 +30,8 @@ import {
   CooperativeStatus,
   CooperativeType,
   UpdateCooperativeDto,
-} from '../../types';
-import { CooperativeActions } from '../../store/actions';
+} from '../../../types';
+import { CooperativeActions } from '../../../store/actions';
 
 @Component({
   selector: 'app-cooperative-basic-form',

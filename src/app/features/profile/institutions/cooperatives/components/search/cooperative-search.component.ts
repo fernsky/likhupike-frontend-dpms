@@ -69,7 +69,7 @@ export class CooperativeSearchComponent implements OnInit, OnDestroy {
       )
       .subscribe((term) => {
         if (term && term.trim().length > 2) {
-          this.search.emit(term);
+          this.searchTerm.emit(term);
         } else if (!term) {
           this.onResetSearch();
         }
@@ -84,7 +84,7 @@ export class CooperativeSearchComponent implements OnInit, OnDestroy {
   onSearch(): void {
     const term = this.searchForm.get('searchTerm')?.value;
     if (term) {
-      this.search.emit(term);
+      this.searchTerm.emit(term);
     }
   }
 

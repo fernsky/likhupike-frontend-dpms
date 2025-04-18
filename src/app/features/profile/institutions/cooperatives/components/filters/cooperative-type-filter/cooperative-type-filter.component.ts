@@ -9,9 +9,9 @@ import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import { CooperativeType } from '../../types';
-import { SearchMethod } from '../../store/state';
-import * as fromCooperatives from '../../store/selectors';
+import { CooperativeType } from '../../../types';
+import { SearchMethod } from '../../../store/state';
+import * as fromCooperatives from '../../../store/selectors';
 
 @Component({
   selector: 'app-cooperative-type-filter',
@@ -25,26 +25,28 @@ import * as fromCooperatives from '../../store/selectors';
     MatBadgeModule,
     MatRippleModule,
     MatTooltipModule,
-    TranslocoModule
+    TranslocoModule,
   ],
   providers: [
     provideTranslocoScope({
       scope: 'cooperatives',
-      alias: 'cooperative'
-    })
-  ]
+      alias: 'cooperative',
+    }),
+  ],
 })
 export class CooperativeTypeFilterComponent implements OnInit {
   @Input() activeSearchMethod: SearchMethod | null = SearchMethod.None;
   @Output() filterChange = new EventEmitter<CooperativeType>();
-  
+
   cooperativeTypes = Object.values(CooperativeType);
   typeStatistics$: Observable<{ [key in CooperativeType]?: number }>;
   selectedType: CooperativeType | null = null;
   viewMode: 'grid' | 'list' = 'grid';
-  
+
   constructor(private store: Store) {
-    this.typeStatistics$ = this.store.select(fromCooperatives.selectStatisticsByType);
+    this.typeStatistics$ = this.store.select(
+      fromCooperatives.selectStatisticsByType
+    );
   }
 
   ngOnInit(): void {
@@ -63,17 +65,19 @@ export class CooperativeTypeFilterComponent implements OnInit {
       this.filterChange.emit(type);
     }
   }
-  
+
   isSelected(type: CooperativeType): boolean {
-    return this.selectedType === type || 
-      (this.activeSearchMethod === SearchMethod.ByType && 
-       this.selectedType === type);
+    return (
+      this.selectedType === type ||
+      (this.activeSearchMethod === SearchMethod.ByType &&
+        this.selectedType === type)
+    );
   }
-  
+
   getTypeCount(type: CooperativeType): Observable<number> {
     return this.store.select(fromCooperatives.selectStatisticsForType(type));
   }
-  
+
   getTypeIcon(type: CooperativeType): string {
     switch (type) {
       case CooperativeType.AGRICULTURE:

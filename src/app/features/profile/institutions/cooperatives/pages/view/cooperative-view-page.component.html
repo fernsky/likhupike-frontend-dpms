@@ -2,30 +2,40 @@
   <!-- Loading state -->
   <div *ngIf="loading$ | async" class="loading-container">
     <mat-spinner [diameter]="50"></mat-spinner>
-    <p>{{ 'cooperative.messages.loading' | transloco }}</p>
+    <p>{{ "cooperative.messages.loading" | transloco }}</p>
   </div>
 
   <!-- Error state -->
-  <div *ngIf="!(loading$ | async) && !(cooperative$ | async)" class="error-state">
+  <div
+    *ngIf="(loading$ | async) === false && (cooperative$ | async) === null"
+    class="error-state"
+  >
     <mat-icon class="error-icon">error_outline</mat-icon>
-    <h2>{{ 'cooperative.messages.notFound' | transloco }}</h2>
-    <p>{{ 'cooperative.messages.cooperativeNotFound' | transloco }}</p>
+    <h2>{{ "cooperative.messages.notFound" | transloco }}</h2>
+    <p>{{ "cooperative.messages.cooperativeNotFound" | transloco }}</p>
     <button mat-raised-button color="primary" routerLink="/cooperatives">
-      {{ 'common.actions.backToList' | transloco }}
+      {{ "common.actions.backToList" | transloco }}
     </button>
   </div>
 
   <!-- Cooperative details -->
   <ng-container *ngIf="cooperative$ | async as cooperative">
     <!-- Hero section -->
-    <div 
+    <div
       class="hero-section"
-      [ngStyle]="{'background-image': 'url(' + getHeaderImage(cooperative) + ')'}">
+      [ngStyle]="{
+        'background-image': 'url(' + getHeaderImage(cooperative) + ')',
+      }"
+    >
       <div class="hero-overlay"></div>
       <div class="hero-content">
         <!-- Logo -->
         <div class="logo-container" *ngIf="getLogo(cooperative)">
-          <img [src]="getLogo(cooperative)" alt="Logo" class="cooperative-logo">
+          <img
+            [src]="getLogo(cooperative)"
+            alt="Logo"
+            class="cooperative-logo"
+          />
         </div>
 
         <h1 class="cooperative-name">{{ getCooperativeName(cooperative) }}</h1>
@@ -36,7 +46,7 @@
         </div>
 
         <!-- Language selector -->
-        <div class="language-selector" *ngIf="cooperative.translations && cooperative.translations.length > 1">
+        <div class="language-selector" *ngIf="availableLocales.length > 1">
           <button mat-button [matMenuTriggerFor]="languageMenu">
             <mat-icon>translate</mat-icon>
             {{ currentLocale | uppercase }}
@@ -44,12 +54,13 @@
           </button>
 
           <mat-menu #languageMenu="matMenu">
-            <button 
-              mat-menu-item 
-              *ngFor="let translation of cooperative.translations"
-              [class.active]="currentLocale === translation.locale"
-              (click)="changeLocale(translation.locale)">
-              {{ translation.locale | uppercase }}
+            <button
+              mat-menu-item
+              *ngFor="let locale of availableLocales"
+              [class.active]="currentLocale === locale"
+              (click)="changeLocale(locale)"
+            >
+              {{ getLocaleName(locale) }}
             </button>
           </mat-menu>
         </div>
@@ -60,55 +71,77 @@
     <div class="action-buttons">
       <button mat-stroked-button color="primary" routerLink="/cooperatives">
         <mat-icon>arrow_back</mat-icon>
-        {{ 'common.actions.back' | transloco }}
+        {{ "common.actions.back" | transloco }}
       </button>
 
-      <button mat-raised-button color="accent" (click)="editCooperative(cooperative)">
+      <button
+        mat-raised-button
+        color="accent"
+        (click)="editCooperative(cooperative)"
+      >
         <mat-icon>edit</mat-icon>
-        {{ 'common.actions.edit' | transloco }}
+        {{ "common.actions.edit" | transloco }}
       </button>
     </div>
 
     <!-- Main content -->
     <div class="main-content-container">
       <!-- Tab navigation -->
-      <mat-tab-group [selectedIndex]="activeTab" (selectedIndexChange)="onTabChange($event)">
+      <mat-tab-group
+        [selectedIndex]="activeTab"
+        (selectedIndexChange)="onTabChange($event)"
+      >
         <!-- Overview tab -->
         <mat-tab [label]="'cooperative.tabs.overview' | transloco">
           <div class="tab-content">
             <div class="overview-container">
-              <section class="overview-section" *ngIf="getTranslation(cooperative) as translation">
-                <h2>{{ 'cooperative.sections.about' | transloco }}</h2>
-                
+              <section
+                class="overview-section"
+                *ngIf="getTranslation(cooperative) as translation"
+              >
+                <h2>{{ "cooperative.sections.about" | transloco }}</h2>
+
                 <div class="description" *ngIf="translation.description">
                   <p>{{ translation.description }}</p>
                 </div>
-                
+
                 <div class="cooperative-details">
                   <div class="detail-card">
                     <div class="detail-card-header">
                       <mat-icon>event</mat-icon>
-                      <h3>{{ 'cooperative.fields.establishedDate' | transloco }}</h3>
+                      <h3>
+                        {{ "cooperative.fields.establishedDate" | transloco }}
+                      </h3>
                     </div>
                     <div class="detail-card-content">
-                      {{ cooperative.establishedDate | date:'mediumDate' }}
+                      {{ cooperative.establishedDate | date: "mediumDate" }}
                     </div>
                   </div>
-                  
+
                   <div class="detail-card" *ngIf="cooperative.ward">
                     <div class="detail-card-header">
                       <mat-icon>location_on</mat-icon>
-                      <h3>{{ 'cooperative.fields.ward' | transloco }}</h3>
+                      <h3>{{ "cooperative.fields.ward" | transloco }}</h3>
                     </div>
                     <div class="detail-card-content">
-                      {{ 'cooperative.location.wardNumber' | transloco: { ward: cooperative.ward } }}
+                      {{
+                        "cooperative.location.wardNumber"
+                          | transloco: { ward: cooperative.ward }
+                      }}
                     </div>
                   </div>
-                  
-                  <div class="detail-card" *ngIf="cooperative.registrationNumber">
+
+                  <div
+                    class="detail-card"
+                    *ngIf="cooperative.registrationNumber"
+                  >
                     <div class="detail-card-header">
                       <mat-icon>confirmation_number</mat-icon>
-                      <h3>{{ 'cooperative.fields.registrationNumber' | transloco }}</h3>
+                      <h3>
+                        {{
+                          "cooperative.fields.registrationNumber" | transloco
+                        }}
+                      </h3>
                     </div>
                     <div class="detail-card-content">
                       {{ cooperative.registrationNumber }}
@@ -116,119 +149,159 @@
                   </div>
                 </div>
               </section>
-              
+
               <!-- Services section -->
-              <section class="services-section" *ngIf="getTranslation(cooperative)?.services">
-                <h2>{{ 'cooperative.sections.services' | transloco }}</h2>
+              <section
+                class="services-section"
+                *ngIf="getCooperativeServices(cooperative)"
+              >
+                <h2>{{ "cooperative.sections.services" | transloco }}</h2>
                 <div class="services-content">
-                  <p>{{ getTranslation(cooperative).services }}</p>
+                  <p>{{ getCooperativeServices(cooperative) }}</p>
                 </div>
               </section>
-              
+
               <!-- Achievements section -->
-              <section class="achievements-section" *ngIf="getTranslation(cooperative)?.achievements">
-                <h2>{{ 'cooperative.sections.achievements' | transloco }}</h2>
+              <section
+                class="achievements-section"
+                *ngIf="getCooperativeAchievements(cooperative)"
+              >
+                <h2>{{ "cooperative.sections.achievements" | transloco }}</h2>
                 <div class="achievements-content">
-                  <p>{{ getTranslation(cooperative).achievements }}</p>
+                  <p>{{ getCooperativeAchievements(cooperative) }}</p>
                 </div>
               </section>
-              
+
               <!-- Contact section -->
               <section class="contact-section">
-                <h2>{{ 'cooperative.sections.contactInfo' | transloco }}</h2>
+                <h2>{{ "cooperative.sections.contactInfo" | transloco }}</h2>
                 <div class="contact-details">
                   <div class="contact-item" *ngIf="cooperative.contactEmail">
                     <mat-icon>email</mat-icon>
-                    <a [href]="'mailto:' + cooperative.contactEmail">{{ cooperative.contactEmail }}</a>
+                    <a [href]="'mailto:' + cooperative.contactEmail">{{
+                      cooperative.contactEmail
+                    }}</a>
                   </div>
-                  
+
                   <div class="contact-item" *ngIf="cooperative.contactPhone">
                     <mat-icon>phone</mat-icon>
-                    <a [href]="'tel:' + cooperative.contactPhone">{{ cooperative.contactPhone }}</a>
+                    <a [href]="'tel:' + cooperative.contactPhone">{{
+                      cooperative.contactPhone
+                    }}</a>
                   </div>
-                  
+
                   <div class="contact-item" *ngIf="cooperative.websiteUrl">
                     <mat-icon>language</mat-icon>
-                    <a [href]="cooperative.websiteUrl" target="_blank" rel="noopener noreferrer">
+                    <a
+                      [href]="cooperative.websiteUrl"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       {{ cooperative.websiteUrl }}
                     </a>
                   </div>
-                  
-                  <div class="contact-item" *ngIf="getTranslation(cooperative)?.location">
+
+                  <div
+                    class="contact-item"
+                    *ngIf="getCooperativeLocation(cooperative)"
+                  >
                     <mat-icon>location_on</mat-icon>
-                    <span>{{ getTranslation(cooperative).location }}</span>
+                    <span>{{ getCooperativeLocation(cooperative) }}</span>
                   </div>
-                  
-                  <div class="contact-item" *ngIf="getTranslation(cooperative)?.operatingHours">
+
+                  <div
+                    class="contact-item"
+                    *ngIf="getOperatingHours(cooperative)"
+                  >
                     <mat-icon>access_time</mat-icon>
-                    <span>{{ getTranslation(cooperative).operatingHours }}</span>
+                    <span>{{ getOperatingHours(cooperative) }}</span>
                   </div>
                 </div>
               </section>
             </div>
           </div>
         </mat-tab>
-        
+
         <!-- Gallery tab -->
         <mat-tab [label]="'cooperative.tabs.gallery' | transloco">
           <div class="tab-content">
             <div class="gallery-container">
-              <h2>{{ 'cooperative.sections.gallery' | transloco }}</h2>
-              
+              <h2>{{ "cooperative.sections.gallery" | transloco }}</h2>
+
               <!-- Gallery loading state -->
-              <div *ngIf="(galleryImages$ | async)?.length === 0" class="no-images">
+              <div
+                *ngIf="(galleryImages$ | async)?.length === 0"
+                class="no-images"
+              >
                 <mat-icon>photo_library</mat-icon>
-                <p>{{ 'cooperative.gallery.noImages' | transloco }}</p>
+                <p>{{ "cooperative.gallery.noImages" | transloco }}</p>
               </div>
-              
+
               <!-- Image gallery -->
               <div class="image-grid">
-                <div *ngFor="let image of galleryImages$ | async" class="gallery-item">
-                  <img [src]="image.fileUrl" [alt]="image.altText || image.title" (click)="openGalleryView(image)">
+                <div
+                  *ngFor="let image of galleryImages$ | async"
+                  class="gallery-item"
+                >
+                  <img
+                    [src]="image.thumbnailUrl || image.fileUrl"
+                    [alt]="image.altText || image.title"
+                    (click)="openGalleryView(image)"
+                  />
                   <div class="image-caption">{{ image.title }}</div>
                 </div>
               </div>
             </div>
           </div>
         </mat-tab>
-        
+
         <!-- Location tab -->
         <mat-tab [label]="'cooperative.tabs.location' | transloco">
           <div class="tab-content">
             <div class="location-container">
-              <h2>{{ 'cooperative.sections.location' | transloco }}</h2>
-              
-              <div *ngIf="cooperative.point?.latitude && cooperative.point?.longitude; else noLocation">
-                <div class="map-placeholder">
-                  <!-- This would be replaced with actual map component -->
-                  <div class="map-marker">
-                    <mat-icon>place</mat-icon>
-                    <div class="marker-info">
-                      <h4>{{ getCooperativeName(cooperative) }}</h4>
-                      <div *ngIf="getTranslation(cooperative)?.location">
-                        {{ getTranslation(cooperative).location }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
+              <h2>{{ "cooperative.sections.location" | transloco }}</h2>
+
+              <div
+                *ngIf="hasCoordinates(cooperative); else noLocation"
+                class="map-container"
+              >
+                <iframe
+                  [src]="getMapUrl(cooperative)"
+                  width="100%"
+                  height="450"
+                  style="border: 0"
+                  allowfullscreen=""
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                >
+                </iframe>
+
                 <div class="location-details">
                   <div class="coordinates">
-                    <span>{{ 'cooperative.fields.latitude' | transloco }}: {{ cooperative.point.latitude }}</span>
-                    <span>{{ 'cooperative.fields.longitude' | transloco }}: {{ cooperative.point.longitude }}</span>
+                    <span
+                      >{{ "cooperative.fields.latitude" | transloco }}:
+                      {{ cooperative.point?.latitude }}</span
+                    >
+                    <span
+                      >{{ "cooperative.fields.longitude" | transloco }}:
+                      {{ cooperative.point?.longitude }}</span
+                    >
                   </div>
-                  
-                  <div *ngIf="getTranslation(cooperative)?.location" class="address">
-                    <h3>{{ 'cooperative.fields.address' | transloco }}</h3>
-                    <p>{{ getTranslation(cooperative).location }}</p>
+
+                  <div
+                    *ngIf="getCooperativeLocation(cooperative)"
+                    class="address"
+                  >
+                    <h3>{{ "cooperative.fields.address" | transloco }}</h3>
+                    <p>{{ getCooperativeLocation(cooperative) }}</p>
                   </div>
                 </div>
               </div>
-              
+
               <ng-template #noLocation>
                 <div class="no-location">
                   <mat-icon>location_off</mat-icon>
-                  <p>{{ 'cooperative.location.noCoordinates' | transloco }}</p>
+                  <p>{{ "cooperative.location.noCoordinates" | transloco }}</p>
                 </div>
               </ng-template>
             </div>
