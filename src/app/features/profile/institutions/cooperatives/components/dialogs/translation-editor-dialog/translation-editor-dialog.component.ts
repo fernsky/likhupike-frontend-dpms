@@ -1,6 +1,18 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
+
 import { 
   CooperativeResponse, 
   CooperativeTranslationResponse, 
@@ -19,7 +31,30 @@ interface TranslationDialogData {
 @Component({
   selector: 'app-translation-editor-dialog',
   templateUrl: './translation-editor-dialog.component.html',
-  styleUrls: ['./translation-editor-dialog.component.scss']
+  styleUrls: ['./translation-editor-dialog.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatTabsModule,
+    MatIconModule,
+    MatDividerModule,
+    MatChipsModule,
+    MatTooltipModule,
+    TranslocoModule
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'cooperatives',
+      alias: 'cooperative'
+    })
+  ]
 })
 export class TranslationEditorDialogComponent implements OnInit {
   translationForm!: FormGroup;

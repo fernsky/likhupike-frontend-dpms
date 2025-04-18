@@ -1,5 +1,14 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatIconModule } from '@angular/material/icon';
+import { MatNativeDateModule } from '@angular/material/core';
+import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -10,9 +19,28 @@ import { CooperativeActions } from '../../store/actions';
 @Component({
   selector: 'app-cooperative-basic-form',
   templateUrl: './cooperative-basic-form.component.html',
-  styleUrls: ['./cooperative-basic-form.component.scss']
+  styleUrls: ['./cooperative-basic-form.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatIconModule,
+    MatNativeDateModule,
+    TranslocoModule
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'cooperatives',
+      alias: 'cooperative'
+    })
+  ]
 })
-export class CooperativeBasicFormComponent implements OnInit, OnChanges {
+export class CooperativeBasicFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cooperative!: CooperativeResponse;
   
   cooperativeForm!: FormGroup;
@@ -74,7 +102,7 @@ export class CooperativeBasicFormComponent implements OnInit, OnChanges {
     });
   }
   
-  private updateFormValues(): void {
+  protected updateFormValues(): void {
     this.cooperativeForm.patchValue({
       code: this.cooperative.code,
       defaultLocale: this.cooperative.defaultLocale,

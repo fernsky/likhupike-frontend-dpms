@@ -1,5 +1,13 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -10,7 +18,25 @@ import { CooperativeActions } from '../../../store/actions';
 @Component({
   selector: 'app-cooperative-contact-form',
   templateUrl: './cooperative-contact-form.component.html',
-  styleUrls: ['./cooperative-contact-form.component.scss']
+  styleUrls: ['./cooperative-contact-form.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    MatDividerModule,
+    MatTooltipModule,
+    TranslocoModule
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'cooperatives',
+      alias: 'cooperative'
+    })
+  ]
 })
 export class CooperativeContactFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cooperative!: CooperativeResponse;

@@ -1,6 +1,15 @@
 import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -21,7 +30,28 @@ interface MediaUploadDialogData {
 @Component({
   selector: 'app-media-upload-dialog',
   templateUrl: './media-upload-dialog.component.html',
-  styleUrls: ['./media-upload-dialog.component.scss']
+  styleUrls: ['./media-upload-dialog.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatProgressBarModule,
+    TranslocoModule
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'cooperatives',
+      alias: 'cooperative'
+    })
+  ]
 })
 export class MediaUploadDialogComponent implements OnInit, OnDestroy {
   @ViewChild('fileInput') fileInput!: ElementRef;
