@@ -1,7 +1,7 @@
 <div class="media-container">
   <div class="section-header">
-    <h2>{{ 'cooperative.media.title' | transloco }}</h2>
-    
+    <h2>{{ "cooperative.media.title" | transloco }}</h2>
+
     <div class="header-actions">
       <div class="display-mode-toggle">
         <mat-button-toggle-group [value]="currentDisplayMode">
@@ -13,234 +13,295 @@
           </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
-      
-      <button 
-        mat-raised-button 
-        color="primary"
-        (click)="openUploadDialog()">
+
+      <button mat-raised-button color="primary" (click)="openUploadDialog()">
         <mat-icon>upload</mat-icon>
-        {{ 'cooperative.media.uploadMedia' | transloco }}
+        {{ "cooperative.media.uploadMedia" | transloco }}
       </button>
     </div>
   </div>
-  
+
   <!-- Media type filters -->
   <div class="media-filters">
-    <mat-chip-list>
-      <mat-chip 
-        [selected]="selectedMediaType === null"
-        (click)="filterByType(null)">
-        {{ 'cooperative.media.allTypes' | transloco }}
+    <mat-chip-set role="listbox">
+      <mat-chip
+        [class.selected]="selectedMediaType === null"
+        (click)="filterByType(null)"
+        color="primary"
+        [highlighted]="selectedMediaType === null"
+      >
+        {{ "cooperative.media.allTypes" | transloco }}
       </mat-chip>
-      
-      <mat-chip 
-        *ngFor="let type of mediaTypes" 
-        [selected]="selectedMediaType === type"
-        (click)="filterByType(type)">
-        <mat-icon>{{ getMediaTypeIcon(type) }}</mat-icon>
-        {{ 'cooperative.mediaTypes.' + type.toLowerCase() | transloco }}
+
+      <mat-chip
+        *ngFor="let type of mediaTypes"
+        [class.selected]="selectedMediaType === type"
+        (click)="filterByType(type)"
+        color="primary"
+        [highlighted]="selectedMediaType === type"
+      >
+        <mat-icon matChipAvatar>{{ getMediaTypeIcon(type) }}</mat-icon>
+        {{ "cooperative.mediaTypes." + type.toLowerCase() | transloco }}
       </mat-chip>
-    </mat-chip-list>
+    </mat-chip-set>
   </div>
-  
+
   <!-- Loading indicator -->
   <div *ngIf="loading$ | async" class="loading-spinner">
     <mat-spinner diameter="40"></mat-spinner>
   </div>
-  
+
   <!-- No media message -->
-  <div *ngIf="(mediaItems$ | async)?.length === 0 && !(loading$ | async)" class="no-media">
+  <div
+    *ngIf="(mediaItems$ | async)?.length === 0 && (loading$ | async) === false"
+    class="no-media"
+  >
     <mat-icon>image_not_supported</mat-icon>
-    <p>{{ 'cooperative.media.noMediaItems' | transloco }}</p>
+    <p>{{ "cooperative.media.noMediaItems" | transloco }}</p>
     <button mat-raised-button color="primary" (click)="openUploadDialog()">
-      {{ 'cooperative.media.uploadNow' | transloco }}
+      {{ "cooperative.media.uploadNow" | transloco }}
     </button>
   </div>
-  
+
   <!-- Grid view -->
-  <div 
-    *ngIf="currentDisplayMode === 'grid' && (mediaItems$ | async)?.length > 0" 
-    class="media-grid">
-    <mat-card 
-      *ngFor="let media of mediaItems$ | async" 
+  <div
+    *ngIf="
+      currentDisplayMode === 'grid' && ((mediaItems$ | async) ?? []).length > 0
+    "
+    class="media-grid"
+  >
+    <mat-card
+      *ngFor="let media of mediaItems$ | async"
       class="media-card"
       [class.primary-media]="media.isPrimary"
-      (click)="openMediaViewDialog(media)">
-      
+      (click)="openMediaViewDialog(media)"
+    >
       <div class="media-preview">
         <!-- Image preview -->
-        <img 
-          *ngIf="media.mimeType?.startsWith('image/')" 
-          [src]="media.thumbnailUrl || media.fileUrl" 
-          [alt]="media.altText || media.title">
-          
+        <img
+          *ngIf="media.mimeType?.startsWith('image/')"
+          [src]="media.thumbnailUrl || media.fileUrl"
+          [alt]="media.altText || media.title"
+        />
+
         <!-- Document preview -->
-        <div 
-          *ngIf="media.mimeType?.startsWith('application/') || media.mimeType?.startsWith('text/')"
-          class="document-preview">
+        <div
+          *ngIf="
+            media.mimeType?.startsWith('application/') ||
+            media.mimeType?.startsWith('text/')
+          "
+          class="document-preview"
+        >
           <mat-icon>description</mat-icon>
         </div>
-        
+
         <!-- Video preview -->
-        <div 
-          *ngIf="media.mimeType?.startsWith('video/')"
-          class="video-preview">
+        <div *ngIf="media.mimeType?.startsWith('video/')" class="video-preview">
           <mat-icon>play_circle_outline</mat-icon>
         </div>
       </div>
-      
+
       <mat-card-content>
         <h3 class="media-title">{{ media.title }}</h3>
-        <p *ngIf="media.description" class="media-description">{{ media.description }}</p>
+        <p *ngIf="media.description" class="media-description">
+          {{ media.description }}
+        </p>
       </mat-card-content>
-      
+
       <div class="media-badges">
         <span class="media-type-badge">
           <mat-icon>{{ getMediaTypeIcon(media.type) }}</mat-icon>
           {{ getMediaTypeLabel(media.type) }}
         </span>
-        
+
         <span *ngIf="media.isPrimary" class="primary-badge">
           <mat-icon>star</mat-icon>
-          {{ 'cooperative.media.primaryMedia' | transloco }}
+          {{ "cooperative.media.primaryMedia" | transloco }}
         </span>
       </div>
-      
+
       <mat-card-actions>
-        <button 
-          mat-icon-button 
+        <button
+          mat-icon-button
           [color]="media.isPrimary ? 'accent' : ''"
           [disabled]="media.isPrimary"
           (click)="setAsPrimary(media, $event)"
-          [matTooltip]="'cooperative.media.setPrimary' | transloco">
-          <mat-icon>{{ media.isPrimary ? 'star' : 'star_border' }}</mat-icon>
+          [matTooltip]="'cooperative.media.setPrimary' | transloco"
+        >
+          <mat-icon>{{ media.isPrimary ? "star" : "star_border" }}</mat-icon>
         </button>
-        
-        <button 
-          mat-icon-button 
+
+        <button
+          mat-icon-button
           color="warn"
           (click)="confirmDeleteMedia(media, $event)"
-          [matTooltip]="'cooperative.media.delete' | transloco">
+          [matTooltip]="'cooperative.media.delete' | transloco"
+        >
           <mat-icon>delete</mat-icon>
         </button>
       </mat-card-actions>
     </mat-card>
   </div>
-  
+
   <!-- List view -->
-  <div 
-  *ngIf="currentDisplayMode === 'list' && ((mediaItems$ | async)?.length ?? 0) > 0"
-  class="media-list-container">
-    <table mat-table [dataSource]="(mediaItems$ | async) ?? []" class="media-table">
+  <div
+    *ngIf="
+      currentDisplayMode === 'list' && ((mediaItems$ | async)?.length ?? 0) > 0
+    "
+    class="media-list-container"
+  >
+    <table
+      mat-table
+      [dataSource]="(mediaItems$ | async) ?? []"
+      class="media-table"
+    >
       <!-- Preview Column -->
       <ng-container matColumnDef="preview">
-        <th mat-header-cell *matHeaderCellDef>{{ 'cooperative.media.preview' | transloco }}</th>
+        <th mat-header-cell *matHeaderCellDef>
+          {{ "cooperative.media.preview" | transloco }}
+        </th>
         <td mat-cell *matCellDef="let media" class="preview-cell">
           <div class="thumbnail-container" (click)="openMediaViewDialog(media)">
             <!-- Image thumbnail -->
-            <img 
-              *ngIf="media.mimeType?.startsWith('image/')" 
-              [src]="media.thumbnailUrl || media.fileUrl" 
-              [alt]="media.altText || media.title">
-              
+            <img
+              *ngIf="media.mimeType?.startsWith('image/')"
+              [src]="media.thumbnailUrl || media.fileUrl"
+              [alt]="media.altText || media.title"
+            />
+
             <!-- Document icon -->
-            <mat-icon 
-              *ngIf="media.mimeType?.startsWith('application/') || media.mimeType?.startsWith('text/')"
-              class="file-icon">
+            <mat-icon
+              *ngIf="
+                media.mimeType?.startsWith('application/') ||
+                media.mimeType?.startsWith('text/')
+              "
+              class="file-icon"
+            >
               description
             </mat-icon>
-            
+
             <!-- Video icon -->
-            <mat-icon 
+            <mat-icon
               *ngIf="media.mimeType?.startsWith('video/')"
-              class="file-icon">
+              class="file-icon"
+            >
               play_circle_outline
             </mat-icon>
           </div>
         </td>
       </ng-container>
-      
+
       <!-- Title Column -->
       <ng-container matColumnDef="title">
-        <th mat-header-cell *matHeaderCellDef>{{ 'cooperative.fields.title' | transloco }}</th>
+        <th mat-header-cell *matHeaderCellDef>
+          {{ "cooperative.fields.title" | transloco }}
+        </th>
         <td mat-cell *matCellDef="let media">
           {{ media.title }}
           <span *ngIf="media.isPrimary" class="primary-indicator">
             <mat-icon>star</mat-icon>
-            {{ 'cooperative.media.primary' | transloco }}
+            {{ "cooperative.media.primary" | transloco }}
           </span>
         </td>
       </ng-container>
-      
+
       <!-- Type Column -->
       <ng-container matColumnDef="type">
-        <th mat-header-cell *matHeaderCellDef>{{ 'cooperative.fields.type' | transloco }}</th>
+        <th mat-header-cell *matHeaderCellDef>
+          {{ "cooperative.fields.type" | transloco }}
+        </th>
         <td mat-cell *matCellDef="let media">
           <div class="media-type-chip">
             <mat-icon>{{ getMediaTypeIcon(media.type) }}</mat-icon>
-            {{ 'cooperative.mediaTypes.' + media.type.toLowerCase() | transloco }}
+            {{
+              "cooperative.mediaTypes." + media.type.toLowerCase() | transloco
+            }}
           </div>
         </td>
       </ng-container>
-      
+
       <!-- Visibility Column -->
       <ng-container matColumnDef="visibility">
-        <th mat-header-cell *matHeaderCellDef>{{ 'cooperative.fields.visibility' | transloco }}</th>
+        <th mat-header-cell *matHeaderCellDef>
+          {{ "cooperative.fields.visibility" | transloco }}
+        </th>
         <td mat-cell *matCellDef="let media">
-          <mat-select 
-            [value]="media.visibilityStatus" 
-            (selectionChange)="updateVisibility(media, $event.value)" 
-            class="visibility-select">
-            <mat-option *ngFor="let option of visibilityOptions" [value]="option">
-              {{ 'cooperative.visibilityStatus.' + option.toLowerCase() | transloco }}
+          <mat-select
+            [value]="media.visibilityStatus"
+            (selectionChange)="updateVisibility(media, $event.value)"
+            class="visibility-select"
+          >
+            <mat-option
+              *ngFor="let option of visibilityOptions"
+              [value]="option"
+            >
+              {{
+                "cooperative.visibilityStatus." + option.toLowerCase()
+                  | transloco
+              }}
             </mat-option>
           </mat-select>
         </td>
       </ng-container>
-      
+
       <!-- Actions Column -->
       <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>{{ 'common.actions.actions' | transloco }}</th>
+        <th mat-header-cell *matHeaderCellDef>
+          {{ "common.actions.actions" | transloco }}
+        </th>
         <td mat-cell *matCellDef="let media" class="action-buttons">
-          <button 
-            mat-icon-button 
+          <button
+            mat-icon-button
             color="primary"
             (click)="openMediaViewDialog(media)"
-            [matTooltip]="'cooperative.media.view' | transloco">
+            [matTooltip]="'cooperative.media.view' | transloco"
+          >
             <mat-icon>visibility</mat-icon>
           </button>
-          
-          <button 
+
+          <button
             mat-icon-button
             [color]="media.isPrimary ? 'accent' : ''"
             [disabled]="media.isPrimary"
             (click)="setAsPrimary(media, $event)"
-            [matTooltip]="'cooperative.media.setPrimary' | transloco">
-            <mat-icon>{{ media.isPrimary ? 'star' : 'star_border' }}</mat-icon>
+            [matTooltip]="'cooperative.media.setPrimary' | transloco"
+          >
+            <mat-icon>{{ media.isPrimary ? "star" : "star_border" }}</mat-icon>
           </button>
-          
-          <button 
-            mat-icon-button 
+
+          <button
+            mat-icon-button
             color="warn"
             (click)="confirmDeleteMedia(media, $event)"
-            [matTooltip]="'cooperative.media.delete' | transloco">
+            [matTooltip]="'cooperative.media.delete' | transloco"
+          >
             <mat-icon>delete</mat-icon>
           </button>
         </td>
       </ng-container>
-      
-      <tr mat-header-row *matHeaderRowDef="['preview', 'title', 'type', 'visibility', 'actions']"></tr>
-      <tr mat-row *matRowDef="let row; columns: ['preview', 'title', 'type', 'visibility', 'actions']"></tr>
+
+      <tr
+        mat-header-row
+        *matHeaderRowDef="['preview', 'title', 'type', 'visibility', 'actions']"
+      ></tr>
+      <tr
+        mat-row
+        *matRowDef="
+          let row;
+          columns: ['preview', 'title', 'type', 'visibility', 'actions']
+        "
+      ></tr>
     </table>
   </div>
-  
+
   <!-- Pagination -->
-  <mat-paginator 
+  <mat-paginator
     *ngIf="(mediaItems$ | async)?.length"
     [length]="totalItems$ | async"
     [pageSize]="pageSize$ | async"
     [pageIndex]="currentPage$ | async"
     [pageSizeOptions]="[5, 10, 25, 50]"
-    (page)="onPageChange($event)">
+    (page)="onPageChange($event)"
+  >
   </mat-paginator>
 </div>
