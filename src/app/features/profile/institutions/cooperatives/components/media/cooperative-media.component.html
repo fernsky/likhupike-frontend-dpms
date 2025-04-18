@@ -129,9 +129,9 @@
   
   <!-- List view -->
   <div 
-    *ngIf="currentDisplayMode === 'list' && (mediaItems$ | async)?.length > 0" 
-    class="media-list-container">
-    <table mat-table [dataSource]="mediaItems$ | async" class="media-table">
+  *ngIf="currentDisplayMode === 'list' && ((mediaItems$ | async)?.length ?? 0) > 0"
+  class="media-list-container">
+    <table mat-table [dataSource]="(mediaItems$ | async) ?? []" class="media-table">
       <!-- Preview Column -->
       <ng-container matColumnDef="preview">
         <th mat-header-cell *matHeaderCellDef>{{ 'cooperative.media.preview' | transloco }}</th>

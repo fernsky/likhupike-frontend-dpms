@@ -1,5 +1,13 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -15,13 +23,32 @@ interface MapMarker {
   };
   title: string;
   info?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options?: any;
 }
 
 @Component({
   selector: 'app-cooperative-location',
   templateUrl: './cooperative-location.component.html',
-  styleUrls: ['./cooperative-location.component.scss']
+  styleUrls: ['./cooperative-location.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+    MatExpansionModule,
+    TranslocoModule
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'cooperatives',
+      alias: 'cooperative'
+    })
+  ]
 })
 export class CooperativeLocationComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cooperative!: CooperativeResponse;
@@ -128,6 +155,7 @@ export class CooperativeLocationComponent implements OnInit, OnChanges, OnDestro
     this.mapZoom = 15; // Zoom in when location is set
   }
   
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onMapClick(event: any): void {
     const lat = event.latLng.lat();
     const lng = event.latLng.lng();

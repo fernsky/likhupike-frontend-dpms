@@ -1,11 +1,21 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslocoModule, TranslocoService, provideTranslocoScope } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { TranslocoService } from '@jsverse/transloco';
 
 import { CooperativeMediaActions } from '../../store/actions';
 import * as fromCooperatives from '../../store/selectors';
@@ -21,7 +31,29 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
 @Component({
   selector: 'app-cooperative-media',
   templateUrl: './cooperative-media.component.html',
-  styleUrls: ['./cooperative-media.component.scss']
+  styleUrls: ['./cooperative-media.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatChipsModule,
+    MatSelectModule,
+    MatTooltipModule,
+    MatButtonToggleModule,
+    MatProgressSpinnerModule,
+    TranslocoModule
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'cooperatives',
+      alias: 'cooperative'
+    })
+  ]
 })
 export class CooperativeMediaComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cooperativeId!: string;
