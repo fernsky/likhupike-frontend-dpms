@@ -1,0 +1,186 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+
+.cooperative-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  .mat-mdc-header-row {
+    background-color: #f8fafb;
+    height: 56px;
+  }
+
+  .mat-mdc-header-cell {
+    color: #123772;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .mat-mdc-cell {
+    color: #546e7a;
+    font-size: 0.875rem;
+  }
+
+  .cooperative-row {
+    transition: all 0.2s ease;
+    height: 52px;
+
+    &:hover {
+      background-color: rgba(63, 81, 181, 0.04);
+      cursor: pointer;
+    }
+  }
+
+  .mat-column-name {
+    padding-left: 1rem;
+    min-width: 200px;
+  }
+
+  .mat-column-type {
+    min-width: 150px;
+  }
+
+  .mat-column-status {
+    min-width: 120px;
+  }
+
+  .mat-column-establishedDate {
+    min-width: 120px;
+  }
+
+  .mat-column-contactPhone {
+    min-width: 120px;
+  }
+
+  .mat-column-actions {
+    min-width: 140px;
+    text-align: right;
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.25rem;
+  }
+}
+
+// Empty State styling
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+  text-align: center;
+  background-color: #f8fafb;
+  border-radius: 8px;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+
+  mat-icon {
+    font-size: 3rem;
+    height: 3rem;
+    width: 3rem;
+    margin-bottom: 1rem;
+    color: #94a3b8;
+    opacity: 0.7;
+  }
+
+  p {
+    color: #64748b;
+    font-size: 1rem;
+    margin: 0;
+  }
+}
+
+// Loading skeleton styles
+.skeleton-table {
+  width: 100%;
+
+  .skeleton-row {
+    height: 52px;
+
+    td {
+      padding: 0 16px;
+
+      .skeleton-cell {
+        height: 20px;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+        border-radius: 4px;
+
+        &.skeleton-name {
+          width: 70%;
+        }
+
+        &.skeleton-type,
+        &.skeleton-status,
+        &.skeleton-date,
+        &.skeleton-phone {
+          width: 80%;
+        }
+
+        &.skeleton-actions {
+          width: 100px;
+          margin-left: auto;
+        }
+      }
+    }
+  }
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .table-container {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    width: calc(100% + 2rem);
+
+    .cooperative-table {
+      .mat-column-name {
+        min-width: 150px;
+      }
+
+      .mat-column-type,
+      .mat-column-status,
+      .mat-column-establishedDate,
+      .mat-column-contactPhone {
+        min-width: 100px;
+      }
+
+      .mat-mdc-header-cell,
+      .mat-mdc-cell {
+        padding: 0 8px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .empty-state {
+    padding: 2rem 1rem;
+
+    mat-icon {
+      font-size: 2.5rem;
+      height: 2.5rem;
+      width: 2.5rem;
+    }
+  }
+}

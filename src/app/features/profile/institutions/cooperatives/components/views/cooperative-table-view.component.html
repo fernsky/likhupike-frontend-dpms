@@ -1,9 +1,16 @@
 <div class="table-container">
-  <table mat-table [dataSource]="dataSource" matSort class="cooperative-table mat-elevation-z2">
+  <!-- Actual data table -->
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    matSort
+    class="cooperative-table mat-elevation-z2"
+    *ngIf="!loading"
+  >
     <!-- Name Column -->
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'cooperative.fields.name' | transloco }}
+        {{ "cooperative.fields.name" | transloco }}
       </th>
       <td mat-cell *matCellDef="let cooperative">
         {{ getCooperativeName(cooperative) }}
@@ -13,27 +20,30 @@
     <!-- Type Column -->
     <ng-container matColumnDef="type">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'cooperative.fields.type' | transloco }}
+        {{ "cooperative.fields.type" | transloco }}
       </th>
       <td mat-cell *matCellDef="let cooperative">
-        <app-type-badge [type]="cooperative.type"></app-type-badge>
+        <app-type-badge [type]="cooperative.type" size="small"></app-type-badge>
       </td>
     </ng-container>
 
     <!-- Status Column -->
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'cooperative.fields.status' | transloco }}
+        {{ "cooperative.fields.status" | transloco }}
       </th>
       <td mat-cell *matCellDef="let cooperative">
-        <app-status-badge [status]="cooperative.status"></app-status-badge>
+        <app-status-badge
+          [status]="cooperative.status"
+          size="small"
+        ></app-status-badge>
       </td>
     </ng-container>
 
     <!-- Established Date Column -->
     <ng-container matColumnDef="establishedDate">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'cooperative.fields.establishedDate' | transloco }}
+        {{ "cooperative.fields.establishedDate" | transloco }}
       </th>
       <td mat-cell *matCellDef="let cooperative">
         {{ cooperative.establishedDate | date }}
@@ -43,32 +53,44 @@
     <!-- Contact Phone Column -->
     <ng-container matColumnDef="contactPhone">
       <th mat-header-cell *matHeaderCellDef>
-        {{ 'cooperative.fields.contactPhone' | transloco }}
+        {{ "cooperative.fields.contactPhone" | transloco }}
       </th>
       <td mat-cell *matCellDef="let cooperative">
-        {{ cooperative.contactPhone || '-' }}
+        {{ cooperative.contactPhone || "-" }}
       </td>
     </ng-container>
 
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>
-        {{ 'common.actions.actions' | transloco }}
+        {{ "common.actions.actions" | transloco }}
       </th>
       <td mat-cell *matCellDef="let cooperative">
         <div class="action-buttons">
-          <button mat-icon-button color="primary" (click)="viewCooperative(cooperative)"
-            matTooltip="{{ 'common.actions.view' | transloco }}">
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="viewCooperative(cooperative); $event.stopPropagation()"
+            matTooltip="{{ 'common.actions.view' | transloco }}"
+          >
             <mat-icon>visibility</mat-icon>
           </button>
-          
-          <button mat-icon-button color="accent" (click)="editCooperative(cooperative)"
-            matTooltip="{{ 'common.actions.edit' | transloco }}">
+
+          <button
+            mat-icon-button
+            color="accent"
+            (click)="editCooperative(cooperative, $event)"
+            matTooltip="{{ 'common.actions.edit' | transloco }}"
+          >
             <mat-icon>edit</mat-icon>
           </button>
-          
-          <button mat-icon-button color="warn" (click)="deleteCooperative(cooperative, $event)"
-            matTooltip="{{ 'common.actions.delete' | transloco }}">
+
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="deleteCooperative(cooperative, $event)"
+            matTooltip="{{ 'common.actions.delete' | transloco }}"
+          >
             <mat-icon>delete</mat-icon>
           </button>
         </div>
@@ -77,14 +99,46 @@
 
     <!-- Row Definitions -->
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let cooperative; columns: displayedColumns;"
+    <tr
+      mat-row
+      *matRowDef="let cooperative; columns: displayedColumns"
       (click)="viewCooperative(cooperative)"
-      class="cooperative-row"></tr>
+      class="cooperative-row"
+    ></tr>
   </table>
-  
+
+  <!-- Loading skeleton -->
+  <table *ngIf="loading" class="skeleton-table">
+    <tbody>
+      <tr class="skeleton-row" *ngFor="let i of [1, 2, 3, 4, 5]">
+        <td style="width: 30%">
+          <div class="skeleton-cell skeleton-name"></div>
+        </td>
+        <td style="width: 15%">
+          <div class="skeleton-cell skeleton-type"></div>
+        </td>
+        <td style="width: 15%">
+          <div class="skeleton-cell skeleton-status"></div>
+        </td>
+        <td style="width: 15%">
+          <div class="skeleton-cell skeleton-date"></div>
+        </td>
+        <td style="width: 15%">
+          <div class="skeleton-cell skeleton-phone"></div>
+        </td>
+        <td style="width: 10%">
+          <div class="skeleton-cell skeleton-actions"></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
   <!-- Empty State -->
-  <div *ngIf="!loading && (!dataSource.data || dataSource.data.length === 0)" class="empty-state">
+  <div
+    *ngIf="!loading && (!dataSource.data || dataSource.data.length === 0)"
+    class="empty-state"
+  >
     <mat-icon>business</mat-icon>
-    <p>{{ 'cooperative.messages.noCooperativesAvailable' | transloco }}</p>
+    <p>{{ "cooperative.messages.noCooperativesAvailable" | transloco }}</p>
   </div>
 </div>

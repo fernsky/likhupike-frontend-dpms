@@ -1,0 +1,283 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.map-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.map-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background-color: #f8fafb;
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+
+  .marker-count, .no-location-count {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #546e7a;
+    font-size: 0.875rem;
+
+    mat-icon {
+      color: #3f51b5;
+      font-size: 1.25rem;
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+
+  .no-location-count mat-icon {
+    color: #f57c00;
+  }
+}
+
+.map-area {
+  width: 100%;
+  height: 500px;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  // Placeholder styling (for when actual map is not implemented)
+  .map-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: #e0e0e0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.5) 2px, transparent 2px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.5) 2px, transparent 2px);
+    background-size: 50px 50px;
+    position: relative;
+
+    .map-marker {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      mat-icon {
+        font-size: 2rem;
+        height: 2rem;
+        width: 2rem;
+        filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3));
+      }
+
+      &.selected mat-icon {
+        font-size: 2.5rem;
+        height: 2.5rem;
+        width: 2.5rem;
+        color: #e53935;
+      }
+
+      .marker-info {
+        position: absolute;
+        top: -5px;
+        left: 50%;
+        transform: translate(-50%, -100%);
+        width: 200px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        padding: 0.75rem;
+        z-index: 20;
+
+        &:after {
+          content: '';
+          position: absolute;
+          bottom: -8px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 0;
+          height: 0;
+          border-left: 8px solid transparent;
+          border-right: 8px solid transparent;
+          border-top: 8px solid white;
+        }
+
+        h4 {
+          margin: 0 0 0.5rem;
+          color: #123772;
+          font-size: 1rem;
+          font-weight: 500;
+        }
+
+        .marker-type {
+          color: #546e7a;
+          font-size: 0.875rem;
+          margin-bottom: 0.75rem;
+        }
+
+        button {
+          width: 100%;
+          margin: 0;
+        }
+      }
+    }
+
+    .map-overlay-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+
+      mat-icon {
+        font-size: 3rem;
+        height: 3rem;
+        width: 3rem;
+        color: #9e9e9e;
+        margin-bottom: 1rem;
+      }
+
+      p {
+        color: #616161;
+        font-size: 1.125rem;
+        margin: 0;
+      }
+    }
+
+    .map-loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 30;
+    }
+  }
+}
+
+.no-locations-message {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: rgba(63, 81, 181, 0.08);
+  border-left: 4px solid #3f51b5;
+  padding: 1rem;
+  border-radius: 0 4px 4px 0;
+
+  mat-icon {
+    color: #3f51b5;
+    font-size: 1.5rem;
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+
+  p {
+    color: #546e7a;
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+}
+
+// Google Maps custom styling (when actual map is implemented)
+::ng-deep {
+  .gm-style-iw {
+    padding: 0 !important;
+
+    .map-info-window {
+      padding: 1rem;
+
+      h3 {
+        margin: 0 0 0.5rem;
+        color: #123772;
+        font-size: 1.125rem;
+        font-weight: 500;
+      }
+
+      p {
+        color: #546e7a;
+        font-size: 0.875rem;
+        margin: 0 0 0.75rem;
+      }
+
+      .info-details {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        color: #64748b;
+        font-size: 0.875rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .view-link {
+        display: inline-block;
+        color: #3f51b5;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 0.25rem 0;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .map-area {
+    height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .map-stats {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .marker-count, .no-location-count {
+      width: 100%;
+    }
+  }
+
+  .map-area {
+    height: 350px;
+
+    .map-placeholder {
+      .map-marker {
+        .marker-info {
+          width: 180px;
+
+          h4 {
+            font-size: 0.875rem;
+          }
+
+          .marker-type {
+            font-size: 0.75rem;
+          }
+        }
+      }
+    }
+  }
+
+  .no-locations-message {
+    flex-direction: column;
+    align-items: flex-start;
+
+    mat-icon {
+      margin-bottom: 0.5rem;
+    }
+  }
+}

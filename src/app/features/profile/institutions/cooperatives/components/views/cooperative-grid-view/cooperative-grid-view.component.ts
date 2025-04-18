@@ -1,21 +1,49 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import {
+  TranslocoModule,
+  provideTranslocoScope,
+  TranslocoService,
+} from '@jsverse/transloco';
+
 import { CooperativeResponse } from '../../../types';
 import { CooperativeActions } from '../../../store/actions';
-import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
-import { TranslocoService } from '@jsverse/transloco';
+import { TypeBadgeComponent } from '../../shared/type-badge/type-badge.component';
+import { StatusBadgeComponent } from '../../shared/status-badge/status-badge.component';
 
 @Component({
   selector: 'app-cooperative-grid-view',
   templateUrl: './cooperative-grid-view.component.html',
-  styleUrls: ['./cooperative-grid-view.component.scss']
+  styleUrls: ['./cooperative-grid-view.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    TranslocoModule,
+    TypeBadgeComponent,
+    StatusBadgeComponent,
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'cooperatives',
+      alias: 'cooperative',
+    }),
+  ],
 })
 export class CooperativeGridViewComponent implements OnChanges {
   @Input() cooperatives: CooperativeResponse[] | null = [];
   @Input() loading = false;
-  
+
   displayedCooperatives: CooperativeResponse[] = [];
 
   constructor(
@@ -23,7 +51,7 @@ export class CooperativeGridViewComponent implements OnChanges {
     private store: Store,
     private dialog: MatDialog,
     private transloco: TranslocoService
-  ) { }
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['cooperatives'] && this.cooperatives) {
@@ -37,37 +65,41 @@ export class CooperativeGridViewComponent implements OnChanges {
 
   editCooperative(cooperative: CooperativeResponse, event: Event): void {
     event.stopPropagation();
-    this.store.dispatch(CooperativeActions.selectCooperative({ id: cooperative.id }));
+    this.store.dispatch(
+      CooperativeActions.selectCooperative({ id: cooperative.id })
+    );
     this.router.navigate(['/cooperatives/edit', cooperative.id]);
   }
-  
+
   deleteCooperative(cooperative: CooperativeResponse, event: Event): void {
     event.stopPropagation();
-    
+
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: this.transloco.translate('cooperative.dialogs.deleteTitle'),
-        message: this.transloco.translate('cooperative.dialogs.deleteMessage', { 
-          name: this.getCooperativeName(cooperative) 
+        message: this.transloco.translate('cooperative.dialogs.deleteMessage', {
+          name: this.getCooperativeName(cooperative),
         }),
         confirmButton: this.transloco.translate('common.actions.delete'),
         cancelButton: this.transloco.translate('common.actions.cancel'),
-        isDestructive: true
-      }
+        isDestructive: true,
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
-        this.store.dispatch(CooperativeActions.deleteCooperative({ id: cooperative.id }));
+        this.store.dispatch(
+          CooperativeActions.deleteCooperative({ id: cooperative.id })
+        );
       }
     });
   }
-  
+
   getPrimaryImageUrl(cooperative: CooperativeResponse): string {
     // Check if there's any primary media
     const primaryMedia = cooperative.primaryMedia;
     if (!primaryMedia) return 'assets/images/cooperative-placeholder.jpg';
-    
+
     // Try to find primary image in this order: LOGO, HERO_IMAGE, GALLERY_IMAGE
     for (const mediaType of ['LOGO', 'HERO_IMAGE', 'GALLERY_IMAGE']) {
       if (primaryMedia[mediaType] && primaryMedia[mediaType].thumbnailUrl) {
@@ -76,48 +108,54 @@ export class CooperativeGridViewComponent implements OnChanges {
         return primaryMedia[mediaType].fileUrl;
       }
     }
-    
+
     return 'assets/images/cooperative-placeholder.jpg';
   }
-  
+
   getCooperativeName(cooperative: CooperativeResponse): string {
     if (!cooperative.translations || cooperative.translations.length === 0) {
       return 'Unnamed Cooperative';
     }
-    
+
     // First try to find translation in default locale
     const defaultTranslation = cooperative.translations.find(
-      t => t.locale === cooperative.defaultLocale
+      (t) => t.locale === cooperative.defaultLocale
     );
-    
+
     if (defaultTranslation) {
       return defaultTranslation.name;
     }
-    
+
     // Fall back to first available translation
     return cooperative.translations[0].name;
   }
-  
+
   getCooperativeDescription(cooperative: CooperativeResponse): string {
     if (!cooperative.translations || cooperative.translations.length === 0) {
       return '';
     }
-    
+
     // First try to find translation in default locale
     const defaultTranslation = cooperative.translations.find(
-      t => t.locale === cooperative.defaultLocale
+      (t) => t.locale === cooperative.defaultLocale
     );
-    
+
     if (defaultTranslation && defaultTranslation.description) {
       return this.truncateDescription(defaultTranslation.description);
     }
-    
+
     // Fall back to first available translation with description
-    const translationWithDesc = cooperative.translations.find(t => t.description);
-    return translationWithDesc ? this.truncateDescription(translationWithDesc.description || '') : '';
+    const translationWithDesc = cooperative.translations.find(
+      (t) => t.description
+    );
+    return translationWithDesc
+      ? this.truncateDescription(translationWithDesc.description || '')
+      : '';
   }
-  
+
   private truncateDescription(description: string): string {
-    return description.length > 120 ? description.substring(0, 120) + '...' : description;
+    return description.length > 120
+      ? description.substring(0, 120) + '...'
+      : description;
   }
 }

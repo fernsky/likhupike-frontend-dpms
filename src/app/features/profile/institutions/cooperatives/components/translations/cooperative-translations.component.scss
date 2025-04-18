@@ -1,0 +1,260 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.translations-container {
+  padding: 1rem 0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  h2 {
+    margin: 0;
+    color: #123772;
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+}
+
+.translations-info {
+  background-color: rgba(63, 81, 181, 0.05);
+  border-left: 4px solid #3f51b5;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0 4px 4px 0;
+
+  p {
+    margin: 0;
+    color: #546e7a;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.translations-list {
+  margin-bottom: 1.5rem;
+
+  mat-accordion {
+    .mat-expansion-panel {
+      margin-bottom: 0.75rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      ::ng-deep {
+        .mat-expansion-panel-header {
+          padding: 0 1.5rem;
+          height: 64px;
+
+          .mat-expansion-panel-header-title {
+            color: #123772;
+            font-weight: 500;
+          }
+
+          .mat-expansion-panel-header-description {
+            justify-content: space-between;
+            align-items: center;
+            margin-right: 0;
+
+            .translation-header-details {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              width: 100%;
+
+              .translation-name {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 200px;
+                font-size: 0.875rem;
+                color: #546e7a;
+              }
+
+              .mat-chip-list {
+                flex-shrink: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.translation-details {
+  padding: 0.75rem 0;
+
+  .detail-row {
+    display: flex;
+    margin-bottom: 0.75rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .detail-label {
+      flex: 0 0 150px;
+      font-weight: 500;
+      color: #546e7a;
+      margin-right: 1rem;
+    }
+
+    .detail-value {
+      color: #333;
+      flex: 1;
+
+      &.description {
+        white-space: pre-line;
+      }
+    }
+  }
+}
+
+.seo-section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+  h4 {
+    color: #123772;
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0 0 0.75rem 0;
+  }
+}
+
+.translation-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+  button {
+    margin-right: 0.5rem;
+
+    mat-icon {
+      margin-right: 0.375rem;
+    }
+  }
+
+  mat-form-field {
+    width: 180px;
+    margin-left: auto;
+
+    ::ng-deep {
+      .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+      }
+    }
+  }
+
+  mat-chip {
+    margin-left: auto;
+  }
+}
+
+.no-translations {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  background-color: #f8fafb;
+  border-radius: 8px;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+
+  mat-icon {
+    font-size: 3rem;
+    height: 3rem;
+    width: 3rem;
+    color: #94a3b8;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+  }
+
+  p {
+    color: #64748b;
+    font-size: 1rem;
+    margin: 0;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 992px) {
+  .translation-details {
+    .detail-row {
+      flex-direction: column;
+
+      .detail-label {
+        flex: 0 0 auto;
+        margin-bottom: 0.25rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  mat-accordion {
+    ::ng-deep {
+      .mat-expansion-panel-header-description {
+        .translation-header-details {
+          flex-direction: column;
+          align-items: flex-start;
+
+          .translation-name {
+            max-width: none;
+            margin-bottom: 0.375rem;
+          }
+        }
+      }
+    }
+  }
+
+  .translation-actions {
+    flex-direction: column;
+    align-items: flex-start;
+
+    button {
+      width: 100%;
+      margin-right: 0;
+    }
+
+    mat-form-field {
+      width: 100%;
+      margin-left: 0;
+    }
+
+    mat-chip {
+      margin-left: 0;
+      align-self: flex-start;
+    }
+  }
+}

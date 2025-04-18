@@ -34,8 +34,23 @@ export class CooperativeStatisticsComponent implements OnInit {
   cooperativeTypes = Object.values(CooperativeType);
 
   // For the charts
-  typeChartData: any[] = [];
-  wardChartData: any[] = [];
+  typeChartData: {
+    labels: string[];
+    datasets: { data: number[]; backgroundColor: string[] }[];
+  } = {
+    labels: [],
+    datasets: [],
+  };
+  wardChartData: {
+    labels: string[];
+    datasets: {
+      label: string;
+      data: number[];
+      backgroundColor: string;
+      borderColor: string;
+      borderWidth: number;
+    }[];
+  } = { labels: [], datasets: [] };
 
   // Chart options
   chartOptions = {
@@ -87,7 +102,16 @@ export class CooperativeStatisticsComponent implements OnInit {
     this.statisticsByType$
       .pipe(
         map((stats) => {
-          if (!stats) return [];
+          if (!stats)
+            return {
+              labels: [],
+              datasets: [
+                {
+                  data: [],
+                  backgroundColor: [],
+                },
+              ],
+            };
 
           const datasets = [
             {
@@ -128,7 +152,19 @@ export class CooperativeStatisticsComponent implements OnInit {
     this.statisticsByWard$
       .pipe(
         map((stats) => {
-          if (!stats) return [];
+          if (!stats)
+            return {
+              labels: [],
+              datasets: [
+                {
+                  label: 'Cooperatives by Ward',
+                  data: [],
+                  backgroundColor: '#4CAF50',
+                  borderColor: '#2E7D32',
+                  borderWidth: 1,
+                },
+              ],
+            };
 
           const wards = Object.keys(stats)
             .map(Number)

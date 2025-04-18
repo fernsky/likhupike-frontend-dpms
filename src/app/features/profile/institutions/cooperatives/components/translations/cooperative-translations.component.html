@@ -1,28 +1,29 @@
 <div class="translations-container">
   <div class="section-header">
-    <h2>{{ 'cooperative.translations.title' | transloco }}</h2>
-    
-    <button 
-      mat-raised-button 
+    <h2>{{ "cooperative.translations.title" | transloco }}</h2>
+
+    <button
+      mat-raised-button
       color="primary"
       [disabled]="getAvailableLocales().length === 0"
-      (click)="openCreateTranslationDialog()">
+      (click)="openCreateTranslationDialog()"
+    >
       <mat-icon>add</mat-icon>
-      {{ 'cooperative.translations.addTranslation' | transloco }}
+      {{ "cooperative.translations.addTranslation" | transloco }}
     </button>
   </div>
-  
+
   <div class="translations-info">
-    <p>{{ 'cooperative.translations.info' | transloco }}</p>
+    <p>{{ "cooperative.translations.info" | transloco }}</p>
   </div>
-  
+
   <!-- Loading spinner -->
   <div *ngIf="loading$ | async" class="loading-spinner">
     <mat-spinner diameter="40"></mat-spinner>
   </div>
 
   <!-- Translations list -->
-  <div class="translations-list" *ngIf="!(loading$ | async)">
+  <div class="translations-list" *ngIf="(loading$ | async) === false">
     <ng-container *ngIf="(translations$ | async)?.length; else noTranslations">
       <mat-accordion>
         <mat-expansion-panel *ngFor="let translation of translations$ | async">
@@ -33,108 +34,149 @@
             <mat-panel-description>
               <div class="translation-header-details">
                 <span class="translation-name">{{ translation.name }}</span>
-                <mat-chip-list>
-                  <mat-chip [color]="getStatusColor(translation.status)" selected>
-                    {{ 'cooperative.contentStatus.' + translation.status.toLowerCase() | transloco }}
+                <mat-chip-set>
+                  <mat-chip
+                    [color]="getStatusColor(translation.status)"
+                    selected
+                  >
+                    {{
+                      "cooperative.contentStatus." +
+                        translation.status.toLowerCase() | transloco
+                    }}
                   </mat-chip>
-                </mat-chip-list>
+                </mat-chip-set>
               </div>
             </mat-panel-description>
           </mat-expansion-panel-header>
-          
+
           <!-- Translation details -->
           <div class="translation-details">
             <div class="detail-row">
-              <span class="detail-label">{{ 'cooperative.fields.name' | transloco }}:</span>
+              <span class="detail-label"
+                >{{ "cooperative.fields.name" | transloco }}:</span
+              >
               <span class="detail-value">{{ translation.name }}</span>
             </div>
-            
+
             <div class="detail-row" *ngIf="translation.description">
-              <span class="detail-label">{{ 'cooperative.fields.description' | transloco }}:</span>
-              <span class="detail-value description">{{ translation.description }}</span>
+              <span class="detail-label"
+                >{{ "cooperative.fields.description" | transloco }}:</span
+              >
+              <span class="detail-value description">{{
+                translation.description
+              }}</span>
             </div>
-            
+
             <div class="detail-row" *ngIf="translation.location">
-              <span class="detail-label">{{ 'cooperative.fields.location' | transloco }}:</span>
+              <span class="detail-label"
+                >{{ "cooperative.fields.location" | transloco }}:</span
+              >
               <span class="detail-value">{{ translation.location }}</span>
             </div>
-            
+
             <div class="detail-row" *ngIf="translation.services">
-              <span class="detail-label">{{ 'cooperative.fields.services' | transloco }}:</span>
+              <span class="detail-label"
+                >{{ "cooperative.fields.services" | transloco }}:</span
+              >
               <span class="detail-value">{{ translation.services }}</span>
             </div>
-            
+
             <div class="detail-row" *ngIf="translation.achievements">
-              <span class="detail-label">{{ 'cooperative.fields.achievements' | transloco }}:</span>
+              <span class="detail-label"
+                >{{ "cooperative.fields.achievements" | transloco }}:</span
+              >
               <span class="detail-value">{{ translation.achievements }}</span>
             </div>
           </div>
-          
+
           <!-- SEO section -->
-          <div class="seo-section" *ngIf="translation.seoTitle || translation.seoDescription">
-            <h4>{{ 'cooperative.sections.seo' | transloco }}</h4>
-            
+          <div
+            class="seo-section"
+            *ngIf="translation.seoTitle || translation.seoDescription"
+          >
+            <h4>{{ "cooperative.sections.seo" | transloco }}</h4>
+
             <div class="detail-row" *ngIf="translation.seoTitle">
-              <span class="detail-label">{{ 'cooperative.fields.seoTitle' | transloco }}:</span>
+              <span class="detail-label"
+                >{{ "cooperative.fields.seoTitle" | transloco }}:</span
+              >
               <span class="detail-value">{{ translation.seoTitle }}</span>
             </div>
-            
+
             <div class="detail-row" *ngIf="translation.seoDescription">
-              <span class="detail-label">{{ 'cooperative.fields.seoDescription' | transloco }}:</span>
+              <span class="detail-label"
+                >{{ "cooperative.fields.seoDescription" | transloco }}:</span
+              >
               <span class="detail-value">{{ translation.seoDescription }}</span>
             </div>
-            
+
             <div class="detail-row" *ngIf="translation.seoKeywords">
-              <span class="detail-label">{{ 'cooperative.fields.seoKeywords' | transloco }}:</span>
+              <span class="detail-label"
+                >{{ "cooperative.fields.seoKeywords" | transloco }}:</span
+              >
               <span class="detail-value">{{ translation.seoKeywords }}</span>
             </div>
           </div>
-          
+
           <!-- Translation actions -->
           <div class="translation-actions">
-            <button 
-              mat-button 
-              color="primary" 
-              (click)="openEditTranslationDialog(translation)">
+            <button
+              mat-button
+              color="primary"
+              (click)="openEditTranslationDialog(translation)"
+            >
               <mat-icon>edit</mat-icon>
-              {{ 'cooperative.translations.edit' | transloco }}
+              {{ "cooperative.translations.edit" | transloco }}
             </button>
-            
-            <button 
-              mat-button 
-              color="warn" 
+
+            <button
+              mat-button
+              color="warn"
               [disabled]="translation.locale === cooperative.defaultLocale"
-              (click)="confirmDeleteTranslation(translation)">
+              (click)="confirmDeleteTranslation(translation)"
+            >
               <mat-icon>delete</mat-icon>
-              {{ 'cooperative.translations.delete' | transloco }}
+              {{ "cooperative.translations.delete" | transloco }}
             </button>
-            
+
             <mat-form-field>
-              <mat-label>{{ 'cooperative.translations.status' | transloco }}</mat-label>
-              <mat-select 
-                [value]="translation.status" 
-                (selectionChange)="updateTranslationStatus(translation, $event.value)">
-                <mat-option *ngFor="let status of contentStatuses" [value]="status">
-                  {{ 'cooperative.contentStatus.' + status.toLowerCase() | transloco }}
+              <mat-label>{{
+                "cooperative.translations.status" | transloco
+              }}</mat-label>
+              <mat-select
+                [value]="translation.status"
+                (selectionChange)="
+                  updateTranslationStatus(translation, $event.value)
+                "
+              >
+                <mat-option
+                  *ngFor="let status of contentStatuses"
+                  [value]="status"
+                >
+                  {{
+                    "cooperative.contentStatus." + status.toLowerCase()
+                      | transloco
+                  }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            
-            <mat-chip 
-              *ngIf="cooperative.defaultLocale === translation.locale" 
-              color="primary" 
-              selected>
-              {{ 'cooperative.translations.defaultLanguage' | transloco }}
+
+            <mat-chip
+              *ngIf="cooperative.defaultLocale === translation.locale"
+              color="primary"
+              selected
+            >
+              {{ "cooperative.translations.defaultLanguage" | transloco }}
             </mat-chip>
           </div>
         </mat-expansion-panel>
       </mat-accordion>
     </ng-container>
-    
+
     <ng-template #noTranslations>
       <div class="no-translations">
         <mat-icon>translate</mat-icon>
-        <p>{{ 'cooperative.translations.noTranslations' | transloco }}</p>
+        <p>{{ "cooperative.translations.noTranslations" | transloco }}</p>
       </div>
     </ng-template>
   </div>

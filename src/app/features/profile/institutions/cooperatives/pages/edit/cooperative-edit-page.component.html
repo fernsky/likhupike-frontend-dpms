@@ -3,104 +3,109 @@
     <div class="page-header">
       <div class="header-content">
         <h1 class="page-title">
-          {{ 'cooperative.titles.editCooperative' | transloco }}:
+          {{ "cooperative.titles.editCooperative" | transloco }}:
           {{ getCooperativeName(cooperative) }}
         </h1>
-        
+
         <div class="cooperative-meta">
           <app-type-badge [type]="cooperative.type"></app-type-badge>
           <app-status-badge [status]="cooperative.status"></app-status-badge>
         </div>
       </div>
-      
+
       <div class="page-actions">
         <button mat-button (click)="router.navigate(['/cooperatives'])">
-          {{ 'common.actions.back' | transloco }}
+          {{ "common.actions.back" | transloco }}
         </button>
-        
-        <button 
+
+        <button
           mat-raised-button
           color="primary"
-          [disabled]="!(hasUnsavedChanges$ | async)"
-          (click)="onSaveChanges()">
+          [disabled]="(hasUnsavedChanges$ | async) === false"
+          (click)="onSaveChanges()"
+        >
           <mat-icon>save</mat-icon>
-          {{ 'common.actions.save' | transloco }}
+          {{ "common.actions.save" | transloco }}
         </button>
-        
-        <button 
-          mat-icon-button 
-          color="warn" 
+
+        <button
+          mat-icon-button
+          color="warn"
           [matTooltip]="'common.actions.delete' | transloco"
-          (click)="onDeleteCooperative()">
+          (click)="onDeleteCooperative()"
+        >
           <mat-icon>delete</mat-icon>
         </button>
       </div>
     </div>
-    
+
     <!-- Unsaved changes warning -->
     <div *ngIf="hasUnsavedChanges$ | async" class="unsaved-changes-warning">
       <mat-icon>warning</mat-icon>
-      {{ 'cooperative.messages.unsavedChanges' | transloco }}
+      {{ "cooperative.messages.unsavedChanges" | transloco }}
     </div>
-    
+
     <!-- Main content with tabs -->
-    <mat-tab-group 
-      [(selectedIndex)]="activeTabIndex" 
+    <mat-tab-group
+      [(selectedIndex)]="activeTabIndex"
       (selectedIndexChange)="onTabChanged($event)"
-      animationDuration="200ms">
-      
+      animationDuration="200ms"
+    >
       <!-- Basic Information Tab -->
       <mat-tab [label]="'cooperative.tabs.basicInfo' | transloco">
         <div class="tab-content">
-          <app-cooperative-basic-form 
-            [cooperative]="cooperative">
+          <app-cooperative-basic-form [cooperative]="cooperative">
           </app-cooperative-basic-form>
         </div>
       </mat-tab>
-      
+
       <!-- Translations Tab -->
       <mat-tab [label]="'cooperative.tabs.translations' | transloco">
         <div class="tab-content">
-          <app-cooperative-translations 
-            [cooperative]="cooperative">
+          <app-cooperative-translations [cooperative]="cooperative">
           </app-cooperative-translations>
         </div>
       </mat-tab>
-      
+
       <!-- Media Tab -->
       <mat-tab [label]="'cooperative.tabs.media' | transloco">
         <div class="tab-content">
-          <app-cooperative-media
-            [cooperativeId]="cooperative.id">
+          <app-cooperative-media [cooperativeId]="cooperative.id">
           </app-cooperative-media>
         </div>
       </mat-tab>
-      
+
       <!-- Location Tab -->
       <mat-tab [label]="'cooperative.tabs.location' | transloco">
         <div class="tab-content">
-          <app-cooperative-location
-            [cooperative]="cooperative">
+          <app-cooperative-location [cooperative]="cooperative">
           </app-cooperative-location>
         </div>
       </mat-tab>
     </mat-tab-group>
   </ng-container>
-  
+
   <!-- Loading state -->
   <ng-template #loading>
     <div class="loading-container" *ngIf="loading$ | async">
       <mat-spinner [diameter]="50"></mat-spinner>
-      <p>{{ 'cooperative.messages.loading' | transloco }}</p>
+      <p>{{ "cooperative.messages.loading" | transloco }}</p>
     </div>
-    
+
     <!-- Error state when not loading but no cooperative found -->
-    <div class="error-container" *ngIf="!(loading$ | async) && !(cooperative$ | async)">
+    <div
+      class="error-container"
+      *ngIf="(loading$ | async) === false && (cooperative$ | async) === null"
+    >
       <mat-icon color="warn">error</mat-icon>
-      <h2>{{ 'cooperative.messages.notFound' | transloco }}</h2>
-      <p>{{ 'cooperative.messages.notFoundDetails' | transloco }}</p>
-      <button mat-raised-button color="primary" [routerLink]="['/cooperatives']">
-        {{ 'common.actions.backToList' | transloco }}
+      <h2>{{ "cooperative.messages.notFound" | transloco }}</h2>
+      <p>{{ "cooperative.messages.notFoundDetails" | transloco }}</p>
+      <button
+        mat-raised-button
+        color="primary"
+        [routerLink]="['/cooperatives']"
+      >
+        {{ "common.actions.backToList" | transloco }}
       </button>
     </div>
   </ng-template>
