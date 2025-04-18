@@ -199,6 +199,7 @@ export class CooperativeEffects {
         this.store.select(CooperativeSelectors.selectCurrentPage),
         this.store.select(CooperativeSelectors.selectPageSize)
       ),
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       map(([_, page, size]) =>
         CooperativeActions.loadCooperatives({ page, size })
       )

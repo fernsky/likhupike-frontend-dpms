@@ -1,4 +1,4 @@
-import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 import {
   CooperativeResponse,
   CooperativeStatus,
@@ -8,91 +8,165 @@ import {
 import { CooperativeFilter, CooperativeValidationError } from '../state';
 import { ApiResponse } from '@app/core/api/types/api-response.type';
 
-/**
- * Actions for cooperative search functionality
- * Strictly aligned with CooperativeSearchService capabilities
- */
-export const CooperativeSearchActions = createActionGroup({
-  source: 'Cooperative Search',
-  events: {
-    // Search Cooperatives By Name
-    'Search By Name': props<{
-      nameQuery: string;
-      page: number;
-      size: number;
-    }>(),
-    'Search By Name Success': props<{
-      response: ApiResponse<PageResponse<CooperativeResponse>>;
-    }>(),
-    'Search By Name Failure': props<{ error: CooperativeValidationError }>(),
+// Search Cooperatives By Name
+export const searchByName = createAction(
+  '[Cooperative Search] Search By Name',
+  props<{
+    nameQuery: string;
+    page: number;
+    size: number;
+  }>()
+);
 
-    // Get Cooperatives By Type
-    'Get By Type': props<{
-      cooperativeType: CooperativeType;
-      page: number;
-      size: number;
-    }>(),
-    'Get By Type Success': props<{
-      cooperativeType: CooperativeType;
-      response: ApiResponse<PageResponse<CooperativeResponse>>;
-    }>(),
-    'Get By Type Failure': props<{ error: CooperativeValidationError }>(),
+export const searchByNameSuccess = createAction(
+  '[Cooperative Search] Search By Name Success',
+  props<{
+    response: ApiResponse<PageResponse<CooperativeResponse>>;
+  }>()
+);
 
-    // Get Cooperatives By Status
-    'Get By Status': props<{
-      status: CooperativeStatus;
-      page: number;
-      size: number;
-    }>(),
-    'Get By Status Success': props<{
-      status: CooperativeStatus;
-      response: ApiResponse<PageResponse<CooperativeResponse>>;
-    }>(),
-    'Get By Status Failure': props<{ error: CooperativeValidationError }>(),
+export const searchByNameFailure = createAction(
+  '[Cooperative Search] Search By Name Failure',
+  props<{ error: CooperativeValidationError }>()
+);
 
-    // Get Cooperatives By Ward
-    'Get By Ward': props<{ ward: number; page: number; size: number }>(),
-    'Get By Ward Success': props<{
-      ward: number;
-      response: ApiResponse<PageResponse<CooperativeResponse>>;
-    }>(),
-    'Get By Ward Failure': props<{ error: CooperativeValidationError }>(),
+// Get Cooperatives By Type
+export const getByType = createAction(
+  '[Cooperative Search] Get By Type',
+  props<{
+    cooperativeType: CooperativeType;
+    page: number;
+    size: number;
+  }>()
+);
 
-    // Find Cooperatives Near Location
-    'Find Near': props<{
-      longitude: number;
-      latitude: number;
-      distanceInMeters: number;
-      page: number;
-      size: number;
-    }>(),
-    'Find Near Success': props<{
-      response: ApiResponse<PageResponse<CooperativeResponse>>;
-    }>(),
-    'Find Near Failure': props<{ error: CooperativeValidationError }>(),
+export const getByTypeSuccess = createAction(
+  '[Cooperative Search] Get By Type Success',
+  props<{
+    cooperativeType: CooperativeType;
+    response: ApiResponse<PageResponse<CooperativeResponse>>;
+  }>()
+);
 
-    // Get Cooperative Statistics
-    'Get Statistics By Type': emptyProps(),
-    'Get Statistics By Type Success': props<{
-      response: ApiResponse<Record<CooperativeType, number>>;
-    }>(),
-    'Get Statistics By Type Failure': props<{
-      error: CooperativeValidationError;
-    }>(),
+export const getByTypeFailure = createAction(
+  '[Cooperative Search] Get By Type Failure',
+  props<{ error: CooperativeValidationError }>()
+);
 
-    'Get Statistics By Ward': emptyProps(),
-    'Get Statistics By Ward Success': props<{
-      response: ApiResponse<Record<number, number>>;
-    }>(),
-    'Get Statistics By Ward Failure': props<{
-      error: CooperativeValidationError;
-    }>(),
+// Get Cooperatives By Status
+export const getByStatus = createAction(
+  '[Cooperative Search] Get By Status',
+  props<{
+    status: CooperativeStatus;
+    page: number;
+    size: number;
+  }>()
+);
 
-    // Filter state management
-    'Filter Change': props<{ filter: CooperativeFilter }>(),
-    'Reset Filters': emptyProps(),
+export const getByStatusSuccess = createAction(
+  '[Cooperative Search] Get By Status Success',
+  props<{
+    status: CooperativeStatus;
+    response: ApiResponse<PageResponse<CooperativeResponse>>;
+  }>()
+);
 
-    // Clear Errors
-    'Clear Errors': emptyProps(),
-  },
-});
+export const getByStatusFailure = createAction(
+  '[Cooperative Search] Get By Status Failure',
+  props<{ error: CooperativeValidationError }>()
+);
+
+// Get Cooperatives By Ward
+export const getByWard = createAction(
+  '[Cooperative Search] Get By Ward',
+  props<{ ward: number; page: number; size: number }>()
+);
+
+export const getByWardSuccess = createAction(
+  '[Cooperative Search] Get By Ward Success',
+  props<{
+    ward: number;
+    response: ApiResponse<PageResponse<CooperativeResponse>>;
+  }>()
+);
+
+export const getByWardFailure = createAction(
+  '[Cooperative Search] Get By Ward Failure',
+  props<{ error: CooperativeValidationError }>()
+);
+
+// Find Cooperatives Near Location
+export const findNear = createAction(
+  '[Cooperative Search] Find Near',
+  props<{
+    longitude: number;
+    latitude: number;
+    distanceInMeters: number;
+    page: number;
+    size: number;
+  }>()
+);
+
+export const findNearSuccess = createAction(
+  '[Cooperative Search] Find Near Success',
+  props<{
+    response: ApiResponse<PageResponse<CooperativeResponse>>;
+  }>()
+);
+
+export const findNearFailure = createAction(
+  '[Cooperative Search] Find Near Failure',
+  props<{ error: CooperativeValidationError }>()
+);
+
+// Get Cooperative Statistics
+export const getStatisticsByType = createAction(
+  '[Cooperative Search] Get Statistics By Type'
+);
+
+export const getStatisticsByTypeSuccess = createAction(
+  '[Cooperative Search] Get Statistics By Type Success',
+  props<{
+    response: ApiResponse<Record<CooperativeType, number>>;
+  }>()
+);
+
+export const getStatisticsByTypeFailure = createAction(
+  '[Cooperative Search] Get Statistics By Type Failure',
+  props<{
+    error: CooperativeValidationError;
+  }>()
+);
+
+export const getStatisticsByWard = createAction(
+  '[Cooperative Search] Get Statistics By Ward'
+);
+
+export const getStatisticsByWardSuccess = createAction(
+  '[Cooperative Search] Get Statistics By Ward Success',
+  props<{
+    response: ApiResponse<Record<number, number>>;
+  }>()
+);
+
+export const getStatisticsByWardFailure = createAction(
+  '[Cooperative Search] Get Statistics By Ward Failure',
+  props<{
+    error: CooperativeValidationError;
+  }>()
+);
+
+// Filter state management
+export const filterChange = createAction(
+  '[Cooperative Search] Filter Change',
+  props<{ filter: CooperativeFilter }>()
+);
+
+export const resetFilters = createAction(
+  '[Cooperative Search] Reset Filters'
+);
+
+// Clear Errors
+export const clearErrors = createAction(
+  '[Cooperative Search] Clear Errors'
+);

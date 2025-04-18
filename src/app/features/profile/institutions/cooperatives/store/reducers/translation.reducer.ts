@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { CooperativeTranslationActions } from '../actions';
+import * as CooperativeTranslationActions from '../actions/translation.actions';
 import { initialTranslationState } from '../state';
 import { CooperativeTranslationResponse } from '../../types';
 

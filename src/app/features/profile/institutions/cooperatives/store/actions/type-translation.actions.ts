@@ -1,4 +1,4 @@
-import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 import {
   ApiResponse,
   CooperativeType,
@@ -8,85 +8,146 @@ import {
 } from '../../types';
 import { CooperativeValidationError } from '../state';
 
-/**
- * Actions for managing cooperative type translations
- */
-export const CooperativeTypeTranslationActions = createActionGroup({
-  source: 'Cooperative Type Translations',
-  events: {
-    // Create or Update Type Translation
-    'Create Or Update Type Translation': props<{
-      translation: CooperativeTypeTranslationDto;
-    }>(),
-    'Create Or Update Success': props<{
-      response: ApiResponse<CooperativeTypeTranslationResponse>;
-    }>(),
-    'Create Or Update Failure': props<{ error: CooperativeValidationError }>(),
+// Create or Update Type Translation
+export const createOrUpdateTypeTranslation = createAction(
+  '[Cooperative Type Translations] Create Or Update Type Translation',
+  props<{
+    translation: CooperativeTypeTranslationDto;
+  }>()
+);
 
-    // Get Type Translation By ID
-    'Get Type Translation': props<{ id: string }>(),
-    'Get Type Translation Success': props<{
-      response: ApiResponse<CooperativeTypeTranslationResponse>;
-    }>(),
-    'Get Type Translation Failure': props<{
-      error: CooperativeValidationError;
-    }>(),
+export const createOrUpdateSuccess = createAction(
+  '[Cooperative Type Translations] Create Or Update Success',
+  props<{
+    response: ApiResponse<CooperativeTypeTranslationResponse>;
+  }>()
+);
 
-    // Get By Type And Locale
-    'Get Type Translation By Type And Locale': props<{
-      cooperativeType: CooperativeType;
-      locale: string;
-    }>(),
-    'Get By Type And Locale Success': props<{
-      response: ApiResponse<CooperativeTypeTranslationResponse>;
-    }>(),
-    'Get By Type And Locale Failure': props<{
-      error: CooperativeValidationError;
-    }>(),
+export const createOrUpdateFailure = createAction(
+  '[Cooperative Type Translations] Create Or Update Failure',
+  props<{ error: CooperativeValidationError }>()
+);
 
-    // Get All Translations For Type
-    'Get All For Type': props<{ cooperativeType: CooperativeType }>(),
-    'Get All For Type Success': props<{
-      cooperativeType: CooperativeType;
-      response: ApiResponse<CooperativeTypeTranslationResponse[]>;
-    }>(),
-    'Get All For Type Failure': props<{ error: CooperativeValidationError }>(),
+// Get Type Translation By ID
+export const getTypeTranslation = createAction(
+  '[Cooperative Type Translations] Get Type Translation',
+  props<{ id: string }>()
+);
 
-    // Get Translations By Locale
-    'Get By Locale': props<{ locale: string; page: number; size: number }>(),
-    'Get By Locale Success': props<{
-      locale: string;
-      response: ApiResponse<PageResponse<CooperativeTypeTranslationResponse>>;
-    }>(),
-    'Get By Locale Failure': props<{ error: CooperativeValidationError }>(),
+export const getTypeTranslationSuccess = createAction(
+  '[Cooperative Type Translations] Get Type Translation Success',
+  props<{
+    response: ApiResponse<CooperativeTypeTranslationResponse>;
+  }>()
+);
 
-    // Delete Type Translation
-    'Delete Type Translation': props<{
-      cooperativeType: CooperativeType;
-      locale: string;
-    }>(),
-    'Delete Type Translation Success': props<{
-      cooperativeType: CooperativeType;
-      locale: string;
-      response: ApiResponse<void>;
-    }>(),
-    'Delete Type Translation Failure': props<{
-      error: CooperativeValidationError;
-    }>(),
+export const getTypeTranslationFailure = createAction(
+  '[Cooperative Type Translations] Get Type Translation Failure',
+  props<{ error: CooperativeValidationError }>()
+);
 
-    // Get All Types With Translations For Locale
-    'Get All Types For Locale': props<{ locale: string }>(),
-    'Get All Types For Locale Success': props<{
-      locale: string;
-      response: ApiResponse<
-        Record<CooperativeType, CooperativeTypeTranslationResponse>
-      >;
-    }>(),
-    'Get All Types For Locale Failure': props<{
-      error: CooperativeValidationError;
-    }>(),
+// Get By Type And Locale
+export const getTypeTranslationByTypeAndLocale = createAction(
+  '[Cooperative Type Translations] Get Type Translation By Type And Locale',
+  props<{
+    cooperativeType: CooperativeType;
+    locale: string;
+  }>()
+);
 
-    // Clear Errors
-    'Clear Errors': emptyProps(),
-  },
-});
+export const getByTypeAndLocaleSuccess = createAction(
+  '[Cooperative Type Translations] Get By Type And Locale Success',
+  props<{
+    response: ApiResponse<CooperativeTypeTranslationResponse>;
+  }>()
+);
+
+export const getByTypeAndLocaleFailure = createAction(
+  '[Cooperative Type Translations] Get By Type And Locale Failure',
+  props<{ error: CooperativeValidationError }>()
+);
+
+// Get All Translations For Type
+export const getAllForType = createAction(
+  '[Cooperative Type Translations] Get All For Type',
+  props<{ cooperativeType: CooperativeType }>()
+);
+
+export const getAllForTypeSuccess = createAction(
+  '[Cooperative Type Translations] Get All For Type Success',
+  props<{
+    cooperativeType: CooperativeType;
+    response: ApiResponse<CooperativeTypeTranslationResponse[]>;
+  }>()
+);
+
+export const getAllForTypeFailure = createAction(
+  '[Cooperative Type Translations] Get All For Type Failure',
+  props<{ error: CooperativeValidationError }>()
+);
+
+// Get Translations By Locale
+export const getByLocale = createAction(
+  '[Cooperative Type Translations] Get By Locale',
+  props<{ locale: string; page: number; size: number }>()
+);
+
+export const getByLocaleSuccess = createAction(
+  '[Cooperative Type Translations] Get By Locale Success',
+  props<{
+    locale: string;
+    response: ApiResponse<PageResponse<CooperativeTypeTranslationResponse>>;
+  }>()
+);
+
+export const getByLocaleFailure = createAction(
+  '[Cooperative Type Translations] Get By Locale Failure',
+  props<{ error: CooperativeValidationError }>()
+);
+
+// Delete Type Translation
+export const deleteTypeTranslation = createAction(
+  '[Cooperative Type Translations] Delete Type Translation',
+  props<{
+    cooperativeType: CooperativeType;
+    locale: string;
+  }>()
+);
+
+export const deleteTypeTranslationSuccess = createAction(
+  '[Cooperative Type Translations] Delete Type Translation Success',
+  props<{
+    cooperativeType: CooperativeType;
+    locale: string;
+    response: ApiResponse<void>;
+  }>()
+);
+
+export const deleteTypeTranslationFailure = createAction(
+  '[Cooperative Type Translations] Delete Type Translation Failure',
+  props<{ error: CooperativeValidationError }>()
+);
+
+// Get All Types For Locale
+export const getAllTypesForLocale = createAction(
+  '[Cooperative Type Translations] Get All Types For Locale',
+  props<{ locale: string }>()
+);
+
+export const getAllTypesForLocaleSuccess = createAction(
+  '[Cooperative Type Translations] Get All Types For Locale Success',
+  props<{
+    locale: string;
+    response: ApiResponse<Record<CooperativeType, CooperativeTypeTranslationResponse>>;
+  }>()
+);
+
+export const getAllTypesForLocaleFailure = createAction(
+  '[Cooperative Type Translations] Get All Types For Locale Failure',
+  props<{ error: CooperativeValidationError }>()
+);
+
+// Clear Errors
+export const clearErrors = createAction(
+  '[Cooperative Type Translations] Clear Errors'
+);

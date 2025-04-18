@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { CooperativeMediaActions } from '../actions';
+import * as CooperativeMediaActions from '../actions/media.actions';
 import { initialMediaState } from '../state';
 import { CooperativeMediaResponse, CooperativeMediaType } from '../../types';
 

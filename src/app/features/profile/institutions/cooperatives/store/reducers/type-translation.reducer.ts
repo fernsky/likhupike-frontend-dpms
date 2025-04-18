@@ -372,9 +372,9 @@ export const typeTranslationReducer = createReducer(
   })),
   on(
     CooperativeTypeTranslationActions.deleteTypeTranslationSuccess,
-    (state, { type, locale }: { type: CooperativeType; locale: string }) => {
+    (state, { cooperativeType, locale }: { cooperativeType: CooperativeType; locale: string }) => {
       // First we need to find the ID of the translation to delete
-      const translationId = state.typeTranslationMap[type]?.[locale];
+      const translationId = state.typeTranslationMap[cooperativeType]?.[locale];
 
       if (!translationId) {
         return {
@@ -391,8 +391,8 @@ export const typeTranslationReducer = createReducer(
 
       // Remove from by-type index
       const translationsByType = { ...state.translationsByType };
-      if (translationsByType[type]) {
-        translationsByType[type] = translationsByType[type]!.filter(
+      if (translationsByType[cooperativeType]) {
+        translationsByType[cooperativeType] = translationsByType[cooperativeType]!.filter(
           (id) => id !== translationId
         );
       }
@@ -407,8 +407,8 @@ export const typeTranslationReducer = createReducer(
 
       // Remove from type-locale map
       const typeTranslationMap = { ...state.typeTranslationMap };
-      if (typeTranslationMap[type] && typeTranslationMap[type]![locale]) {
-        delete typeTranslationMap[type]![locale];
+      if (typeTranslationMap[cooperativeType] && typeTranslationMap[cooperativeType]![locale]) {
+        delete typeTranslationMap[cooperativeType]![locale];
       }
 
       return {

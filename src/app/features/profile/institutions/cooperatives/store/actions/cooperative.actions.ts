@@ -1,4 +1,4 @@
-import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 import {
   ApiResponse,
   CooperativeResponse,
@@ -9,86 +9,186 @@ import {
 } from '../../types';
 import { CooperativeValidationError } from '../state';
 
-/**
- * Actions for managing cooperative entities
- */
-export const CooperativeActions = createActionGroup({
-  source: 'Cooperatives',
-  events: {
-    // Load All Cooperatives
-    'Load Cooperatives': props<{ page: number; size: number }>(),
-    'Load Cooperatives Success': props<{
-      response: ApiResponse<PageResponse<CooperativeResponse>>;
-    }>(),
-    'Load Cooperatives Failure': props<{ error: CooperativeValidationError }>(),
+// Load All Cooperatives
+export const loadCooperatives = createAction(
+  '[Cooperatives] Load Cooperatives',
+  props<{ page: number; size: number }>()
+);
 
-    // Load Single Cooperative
-    'Load Cooperative': props<{ id: string }>(),
-    'Load Cooperative By Code': props<{ code: string }>(),
-    'Load Cooperative Success': props<{
-      response: ApiResponse<CooperativeResponse>;
-    }>(),
-    'Load Cooperative Failure': props<{ error: CooperativeValidationError }>(),
+export const loadCooperativesSuccess = createAction(
+  '[Cooperatives] Load Cooperatives Success',
+  props<{
+    response: ApiResponse<PageResponse<CooperativeResponse>>;
+  }>()
+);
 
-    // Create Cooperative
-    'Create Cooperative': props<{ cooperative: CreateCooperativeDto }>(),
-    'Create Cooperative Success': props<{
-      response: ApiResponse<CooperativeResponse>;
-    }>(),
-    'Create Cooperative Failure': props<{
-      error: CooperativeValidationError;
-    }>(),
-    'Reset Create Status': emptyProps(),
+export const loadCooperativesFailure = createAction(
+  '[Cooperatives] Load Cooperatives Failure',
+  props<{ error: CooperativeValidationError }>()
+);
 
-    // Update Cooperative
-    'Update Cooperative': props<{
-      id: string;
-      cooperative: UpdateCooperativeDto;
-    }>(),
-    'Update Cooperative Success': props<{
-      response: ApiResponse<CooperativeResponse>;
-    }>(),
-    'Update Cooperative Failure': props<{
-      error: CooperativeValidationError;
-    }>(),
-    'Reset Update Status': emptyProps(),
+// Load Single Cooperative
+export const loadCooperative = createAction(
+  '[Cooperatives] Load Cooperative',
+  props<{ id: string }>()
+);
 
-    // Delete Cooperative
-    'Delete Cooperative': props<{ id: string }>(),
-    'Delete Cooperative Success': props<{
-      id: string;
-      response: ApiResponse<void>;
-    }>(),
-    'Delete Cooperative Failure': props<{
-      error: CooperativeValidationError;
-    }>(),
-    'Reset Delete Status': emptyProps(),
+export const loadCooperativeByCode = createAction(
+  '[Cooperatives] Load Cooperative By Code',
+  props<{ code: string }>()
+);
 
-    // Change Cooperative Status
-    'Change Cooperative Status': props<{
-      id: string;
-      status: CooperativeStatus;
-    }>(),
-    'Change Status Success': props<{
-      response: ApiResponse<CooperativeResponse>;
-    }>(),
-    'Change Status Failure': props<{ error: CooperativeValidationError }>(),
-    'Reset Status Change': emptyProps(),
+export const loadCooperativeSuccess = createAction(
+  '[Cooperatives] Load Cooperative Success',
+  props<{
+    response: ApiResponse<CooperativeResponse>;
+  }>()
+);
 
-    // Form State Management
-    'Mark Field Dirty': props<{ fieldName: string }>(),
-    'Clear Dirty Fields': emptyProps(),
-    'Set Unsaved Changes': props<{ hasUnsavedChanges: boolean }>(),
-    'Clear Errors': emptyProps(),
+export const loadCooperativeFailure = createAction(
+  '[Cooperatives] Load Cooperative Failure',
+  props<{ error: CooperativeValidationError }>()
+);
 
-    // Set Selected Cooperative
-    'Select Cooperative': props<{ id: string | null }>(),
+// Create Cooperative
+export const createCooperative = createAction(
+  '[Cooperatives] Create Cooperative',
+  props<{ cooperative: CreateCooperativeDto }>()
+);
 
-    // Change Pagination
-    'Set Page': props<{ page: number }>(),
-    'Set Page Size': props<{ size: number }>(),
+export const createCooperativeSuccess = createAction(
+  '[Cooperatives] Create Cooperative Success',
+  props<{
+    response: ApiResponse<CooperativeResponse>;
+  }>()
+);
 
-    // Change Sorting
-    'Set Sort': props<{ sortBy: string; sortDirection: 'ASC' | 'DESC' }>(),
-  },
-});
+export const createCooperativeFailure = createAction(
+  '[Cooperatives] Create Cooperative Failure',
+  props<{
+    error: CooperativeValidationError;
+  }>()
+);
+
+export const resetCreateStatus = createAction(
+  '[Cooperatives] Reset Create Status'
+);
+
+// Update Cooperative
+export const updateCooperative = createAction(
+  '[Cooperatives] Update Cooperative',
+  props<{
+    id: string;
+    cooperative: UpdateCooperativeDto;
+  }>()
+);
+
+export const updateCooperativeSuccess = createAction(
+  '[Cooperatives] Update Cooperative Success',
+  props<{
+    response: ApiResponse<CooperativeResponse>;
+  }>()
+);
+
+export const updateCooperativeFailure = createAction(
+  '[Cooperatives] Update Cooperative Failure',
+  props<{
+    error: CooperativeValidationError;
+  }>()
+);
+
+export const resetUpdateStatus = createAction(
+  '[Cooperatives] Reset Update Status'
+);
+
+// Delete Cooperative
+export const deleteCooperative = createAction(
+  '[Cooperatives] Delete Cooperative',
+  props<{ id: string }>()
+);
+
+export const deleteCooperativeSuccess = createAction(
+  '[Cooperatives] Delete Cooperative Success',
+  props<{
+    id: string;
+    response: ApiResponse<void>;
+  }>()
+);
+
+export const deleteCooperativeFailure = createAction(
+  '[Cooperatives] Delete Cooperative Failure',
+  props<{
+    error: CooperativeValidationError;
+  }>()
+);
+
+export const resetDeleteStatus = createAction(
+  '[Cooperatives] Reset Delete Status'
+);
+
+// Change Cooperative Status
+export const changeCooperativeStatus = createAction(
+  '[Cooperatives] Change Cooperative Status',
+  props<{
+    id: string;
+    status: CooperativeStatus;
+  }>()
+);
+
+export const changeStatusSuccess = createAction(
+  '[Cooperatives] Change Status Success',
+  props<{
+    response: ApiResponse<CooperativeResponse>;
+  }>()
+);
+
+export const changeStatusFailure = createAction(
+  '[Cooperatives] Change Status Failure',
+  props<{ error: CooperativeValidationError }>()
+);
+
+export const resetStatusChange = createAction(
+  '[Cooperatives] Reset Status Change'
+);
+
+// Form State Management
+export const markFieldDirty = createAction(
+  '[Cooperatives] Mark Field Dirty',
+  props<{ fieldName: string }>()
+);
+
+export const clearDirtyFields = createAction(
+  '[Cooperatives] Clear Dirty Fields'
+);
+
+export const setUnsavedChanges = createAction(
+  '[Cooperatives] Set Unsaved Changes',
+  props<{ hasUnsavedChanges: boolean }>()
+);
+
+export const clearErrors = createAction(
+  '[Cooperatives] Clear Errors'
+);
+
+// Set Selected Cooperative
+export const selectCooperative = createAction(
+  '[Cooperatives] Select Cooperative',
+  props<{ id: string | null }>()
+);
+
+// Change Pagination
+export const setPage = createAction(
+  '[Cooperatives] Set Page',
+  props<{ page: number }>()
+);
+
+export const setPageSize = createAction(
+  '[Cooperatives] Set Page Size',
+  props<{ size: number }>()
+);
+
+// Change Sorting
+export const setSort = createAction(
+  '[Cooperatives] Set Sort',
+  props<{ sortBy: string; sortDirection: 'ASC' | 'DESC' }>()
+);

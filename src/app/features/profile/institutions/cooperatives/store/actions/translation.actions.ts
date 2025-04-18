@@ -1,105 +1,173 @@
-import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 import {
   ApiResponse,
   ContentStatus,
-  CooperativeTranslationResponse,
   CreateCooperativeTranslationDto,
-  UpdateCooperativeTranslationDto,
+  CooperativeTranslationResponse,
+  UpdateCooperativeTranslationDto
 } from '../../types';
 import { CooperativeValidationError } from '../state';
 
-/**
- * Actions for managing cooperative translations
- */
-export const CooperativeTranslationActions = createActionGroup({
-  source: 'Cooperative Translations',
-  events: {
-    // Load Translations
-    'Load Translations': props<{ cooperativeId: string }>(),
-    'Load Translations Success': props<{
-      cooperativeId: string;
-      response: ApiResponse<CooperativeTranslationResponse[]>;
-    }>(),
-    'Load Translations Failure': props<{ error: CooperativeValidationError }>(),
+// Load Cooperative Translations
+export const loadTranslations = createAction(
+  '[CooperativeTranslation] Load Translations',
+  props<{ cooperativeId: string }>()
+);
 
-    // Load Single Translation
-    'Load Translation': props<{
-      cooperativeId: string;
-      translationId: string;
-    }>(),
-    'Load Translation By Locale': props<{
-      cooperativeId: string;
-      locale: string;
-    }>(),
-    'Load Translation Success': props<{
-      response: ApiResponse<CooperativeTranslationResponse>;
-    }>(),
-    'Load Translation Failure': props<{ error: CooperativeValidationError }>(),
+export const loadTranslationsSuccess = createAction(
+  '[CooperativeTranslation] Load Translations Success',
+  props<{
+    cooperativeId: string;
+    response: ApiResponse<CooperativeTranslationResponse[]>;
+  }>()
+);
 
-    // Create Translation
-    'Create Translation': props<{
-      cooperativeId: string;
-      translation: CreateCooperativeTranslationDto;
-    }>(),
-    'Create Translation Success': props<{
-      cooperativeId: string;
-      response: ApiResponse<CooperativeTranslationResponse>;
-    }>(),
-    'Create Translation Failure': props<{
-      error: CooperativeValidationError;
-    }>(),
-    'Reset Create Status': emptyProps(),
+export const loadTranslationsFailure = createAction(
+  '[CooperativeTranslation] Load Translations Failure',
+  props<{ error: CooperativeValidationError }>()
+);
 
-    // Update Translation
-    'Update Translation': props<{
-      cooperativeId: string;
-      translationId: string;
-      translation: UpdateCooperativeTranslationDto;
-    }>(),
-    'Update Translation Success': props<{
-      cooperativeId: string;
-      response: ApiResponse<CooperativeTranslationResponse>;
-    }>(),
-    'Update Translation Failure': props<{
-      error: CooperativeValidationError;
-    }>(),
-    'Reset Update Status': emptyProps(),
+// Load Single Translation
+export const loadTranslation = createAction(
+  '[CooperativeTranslation] Load Translation',
+  props<{ cooperativeId: string; translationId: string }>()
+);
 
-    // Delete Translation
-    'Delete Translation': props<{
-      cooperativeId: string;
-      translationId: string;
-    }>(),
-    'Delete Translation Success': props<{
-      cooperativeId: string;
-      translationId: string;
-      response: ApiResponse<void>;
-    }>(),
-    'Delete Translation Failure': props<{
-      error: CooperativeValidationError;
-    }>(),
-    'Reset Delete Status': emptyProps(),
+export const loadTranslationByLocale = createAction(
+  '[CooperativeTranslation] Load Translation By Locale',
+  props<{ cooperativeId: string; locale: string }>()
+);
 
-    // Update Translation Status
-    'Update Translation Status': props<{
-      cooperativeId: string;
-      translationId: string;
-      status: ContentStatus;
-    }>(),
-    'Update Status Success': props<{
-      cooperativeId: string;
-      response: ApiResponse<CooperativeTranslationResponse>;
-    }>(),
-    'Update Status Failure': props<{ error: CooperativeValidationError }>(),
-    'Reset Status Update': emptyProps(),
+export const loadTranslationSuccess = createAction(
+  '[CooperativeTranslation] Load Translation Success',
+  props<{ response: ApiResponse<CooperativeTranslationResponse> }>()
+);
 
-    // Form State Management
-    'Mark Field Dirty': props<{ fieldName: string }>(),
-    'Clear Dirty Fields': emptyProps(),
-    'Set Unsaved Changes': props<{ hasUnsavedChanges: boolean }>(),
-    'Clear Errors': emptyProps(),
+export const loadTranslationFailure = createAction(
+  '[CooperativeTranslation] Load Translation Failure',
+  props<{ error: CooperativeValidationError }>()
+);
 
-    // Set Selected Translation
-    'Select Translation': props<{ id: string | null }>(),
-  },
-});
+// Create Translation
+export const createTranslation = createAction(
+  '[CooperativeTranslation] Create Translation',
+  props<{
+    cooperativeId: string;
+    translation: CreateCooperativeTranslationDto;
+  }>()
+);
+
+export const createTranslationSuccess = createAction(
+  '[CooperativeTranslation] Create Translation Success',
+  props<{
+    cooperativeId: string;
+    response: ApiResponse<CooperativeTranslationResponse>;
+  }>()
+);
+
+export const createTranslationFailure = createAction(
+  '[CooperativeTranslation] Create Translation Failure',
+  props<{ error: CooperativeValidationError }>()
+);
+
+export const resetCreateStatus = createAction(
+  '[CooperativeTranslation] Reset Create Status'
+);
+
+// Update Translation
+export const updateTranslation = createAction(
+  '[CooperativeTranslation] Update Translation',
+  props<{
+    cooperativeId: string;
+    translationId: string;
+    translation: UpdateCooperativeTranslationDto;
+  }>()
+);
+
+export const updateTranslationSuccess = createAction(
+  '[CooperativeTranslation] Update Translation Success',
+  props<{ response: ApiResponse<CooperativeTranslationResponse> }>()
+);
+
+export const updateTranslationFailure = createAction(
+  '[CooperativeTranslation] Update Translation Failure',
+  props<{ error: CooperativeValidationError }>()
+);
+
+export const resetUpdateStatus = createAction(
+  '[CooperativeTranslation] Reset Update Status'
+);
+
+// Delete Translation
+export const deleteTranslation = createAction(
+  '[CooperativeTranslation] Delete Translation',
+  props<{ cooperativeId: string; translationId: string }>()
+);
+
+export const deleteTranslationSuccess = createAction(
+  '[CooperativeTranslation] Delete Translation Success',
+  props<{
+    cooperativeId: string;
+    translationId: string;
+    response: ApiResponse<void>;
+  }>()
+);
+
+export const deleteTranslationFailure = createAction(
+  '[CooperativeTranslation] Delete Translation Failure',
+  props<{ error: CooperativeValidationError }>()
+);
+
+export const resetDeleteStatus = createAction(
+  '[CooperativeTranslation] Reset Delete Status'
+);
+
+// Update Translation Status
+export const updateTranslationStatus = createAction(
+  '[CooperativeTranslation] Update Translation Status',
+  props<{
+    cooperativeId: string;
+    translationId: string;
+    status: ContentStatus;
+  }>()
+);
+
+export const updateStatusSuccess = createAction(
+  '[CooperativeTranslation] Update Status Success',
+  props<{ response: ApiResponse<CooperativeTranslationResponse> }>()
+);
+
+export const updateStatusFailure = createAction(
+  '[CooperativeTranslation] Update Status Failure',
+  props<{ error: CooperativeValidationError }>()
+);
+
+export const resetStatusUpdate = createAction(
+  '[CooperativeTranslation] Reset Status Update'
+);
+
+// Form State Management
+export const markFieldDirty = createAction(
+  '[CooperativeTranslation] Mark Field Dirty',
+  props<{ fieldName: string }>()
+);
+
+export const clearDirtyFields = createAction(
+  '[CooperativeTranslation] Clear Dirty Fields'
+);
+
+export const setUnsavedChanges = createAction(
+  '[CooperativeTranslation] Set Unsaved Changes',
+  props<{ hasUnsavedChanges: boolean }>()
+);
+
+// Select Translation
+export const selectTranslation = createAction(
+  '[CooperativeTranslation] Select Translation',
+  props<{ id: string | null }>()
+);
+
+// Clear Errors
+export const clearErrors = createAction(
+  '[CooperativeTranslation] Clear Errors'
+);

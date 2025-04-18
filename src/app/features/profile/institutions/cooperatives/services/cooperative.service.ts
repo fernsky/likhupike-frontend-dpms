@@ -8,8 +8,8 @@ import {
   CreateCooperativeDto,
   PageResponse,
   UpdateCooperativeDto,
+  ApiResponse,
 } from '../../cooperatives/types';
-import { ApiResponse } from '@app/core/api/types/api-response.type';
 
 /**
  * Service for managing cooperatives

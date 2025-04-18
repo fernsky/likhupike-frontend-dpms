@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { CooperativeSearchActions } from '../actions';
+import * as CooperativeSearchActions from '../actions/search.actions';
 import { initialSearchState } from '../state';
 import { CooperativeResponse } from '../../types';
 
@@ -16,7 +16,7 @@ export const searchReducer = createReducer(
     errors: null,
   })),
   on(CooperativeSearchActions.searchByNameSuccess, (state, { response }) => {
-    if (!response.data) return state;
+    if (!('data' in response) || !response.data) return state;
 
     const { content, totalElements } = response.data;
 
@@ -45,8 +45,8 @@ export const searchReducer = createReducer(
     loading: true,
     errors: null,
   })),
-  on(CooperativeSearchActions.getByTypeSuccess, (state, { type, response }) => {
-    if (!response.data) return state;
+  on(CooperativeSearchActions.getByTypeSuccess, (state, { cooperativeType, response }) => {
+    if (!('data' in response) || !response.data) return state;
 
     const { content, totalElements } = response.data;
 
@@ -62,7 +62,7 @@ export const searchReducer = createReducer(
       totalResults: totalElements,
       filters: {
         ...state.filters,
-        type,
+        type: cooperativeType,
       },
       lastUpdated: new Date(),
     };
@@ -82,7 +82,7 @@ export const searchReducer = createReducer(
   on(
     CooperativeSearchActions.getByStatusSuccess,
     (state, { status, response }) => {
-      if (!response.data) return state;
+      if (!('data' in response) || !response.data) return state;
 
       const { content, totalElements } = response.data;
 
@@ -117,7 +117,7 @@ export const searchReducer = createReducer(
     errors: null,
   })),
   on(CooperativeSearchActions.getByWardSuccess, (state, { ward, response }) => {
-    if (!response.data) return state;
+    if (!('data' in response) || !response.data) return state;
 
     const { content, totalElements } = response.data;
 
@@ -151,7 +151,7 @@ export const searchReducer = createReducer(
     errors: null,
   })),
   on(CooperativeSearchActions.findNearSuccess, (state, { response }) => {
-    if (!response.data) return state;
+    if (!('data' in response) || !response.data) return state;
 
     const { content, totalElements } = response.data;
 
@@ -183,7 +183,7 @@ export const searchReducer = createReducer(
   on(
     CooperativeSearchActions.getStatisticsByTypeSuccess,
     (state, { response }) => {
-      if (!response.data) return state;
+      if (!('data' in response)) return state;
 
       return {
         ...state,
@@ -211,7 +211,7 @@ export const searchReducer = createReducer(
   on(
     CooperativeSearchActions.getStatisticsByWardSuccess,
     (state, { response }) => {
-      if (!response.data) return state;
+      if (!('data' in response) || !response.data) return state;
 
       return {
         ...state,

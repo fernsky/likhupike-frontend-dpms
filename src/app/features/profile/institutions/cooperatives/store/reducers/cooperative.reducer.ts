@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { CooperativeActions } from '../actions';
+import * as CooperativeActions from '../actions/cooperative.actions';
 import { initialCooperativeState } from '../state';
 import { CooperativeResponse } from '../../types';
 
