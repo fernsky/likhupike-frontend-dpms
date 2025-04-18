@@ -1,0 +1,340 @@
+<h2 mat-dialog-title>{{ data.media.title }}</h2>
+
+<mat-dialog-content>
+  <div class="media-view-container">
+    <!-- Media Preview Area -->
+    <div class="media-preview">
+      <!-- Loading spinner -->
+      <div *ngIf="loading" class="loading-overlay">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+
+      <!-- Image Preview -->
+      <img
+        *ngIf="isImage && mediaUrl"
+        [src]="mediaUrl"
+        [alt]="data.media.altText || data.media.title"
+        (load)="loading = false"
+        (error)="loading = false"
+      />
+
+      <!-- Video Preview -->
+      <video
+        *ngIf="isVideo && mediaUrl"
+        [src]="mediaUrl"
+        controls
+        (loadeddata)="loading = false"
+        (error)="loading = false"
+      ></video>
+
+      <!-- PDF Preview -->
+      <iframe
+        *ngIf="isPdf && mediaUrl"
+        [src]="mediaUrl"
+        frameborder="0"
+        (load)="loading = false"
+        (error)="loading = false"
+      >
+      </iframe>
+
+      <!-- Document Preview -->
+      <div *ngIf="isDocument" class="document-preview">
+        <mat-icon>description</mat-icon>
+        <p>{{ data.media.title }}</p>
+      </div>
+
+      <!-- Generic Preview -->
+      <div
+        *ngIf="!isImage && !isVideo && !isPdf && !isDocument"
+        class="generic-preview"
+      >
+        <mat-icon>insert_drive_file</mat-icon>
+        <p>{{ data.media.title }}</p>
+      </div>
+    </div>
+
+    <!-- Media Information and Actions -->
+    <div class="media-info">
+      <!-- Action buttons -->
+      <div class="media-actions">
+        <div class="action-buttons">
+          <button
+            mat-stroked-button
+            color="primary"
+            [disabled]="editMode"
+            (click)="toggleEditMode()"
+          >
+            <mat-icon>edit</mat-icon>
+            {{ "cooperative.media.editMetadata" | transloco }}
+          </button>
+
+          <button
+            mat-stroked-button
+            [color]="data.media.isPrimary ? 'accent' : ''"
+            [disabled]="data.media.isPrimary || editMode"
+            (click)="setAsPrimary()"
+            [matTooltip]="'cooperative.media.setPrimary' | transloco"
+          >
+            <mat-icon>{{
+              data.media.isPrimary ? "star" : "star_border"
+            }}</mat-icon>
+            {{ "cooperative.media.setPrimary" | transloco }}
+          </button>
+
+          <button
+            mat-stroked-button
+            color="warn"
+            [disabled]="editMode"
+            (click)="confirmDeleteMedia()"
+          >
+            <mat-icon>delete</mat-icon>
+            {{ "cooperative.media.delete" | transloco }}
+          </button>
+        </div>
+
+        <div class="download-button">
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="!mediaUrl"
+            (click)="downloadMedia()"
+          >
+            <mat-icon>download</mat-icon>
+            {{ "cooperative.media.download" | transloco }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Edit form (shown when in edit mode) -->
+      <div *ngIf="editMode" class="edit-form">
+        <form [formGroup]="mediaForm">
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{
+                "cooperative.fields.title" | transloco
+              }}</mat-label>
+              <input matInput formControlName="title" />
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{
+                "cooperative.fields.description" | transloco
+              }}</mat-label>
+              <textarea
+                matInput
+                formControlName="description"
+                rows="3"
+              ></textarea>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row inline-row">
+            <mat-form-field appearance="outline">
+              <mat-label>{{
+                "cooperative.fields.altText" | transloco
+              }}</mat-label>
+              <input matInput formControlName="altText" />
+              <mat-hint>{{ "cooperative.hints.altText" | transloco }}</mat-hint>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>{{
+                "cooperative.fields.visibility" | transloco
+              }}</mat-label>
+              <mat-select formControlName="visibilityStatus">
+                <mat-option
+                  *ngFor="let option of visibilityOptions"
+                  [value]="option"
+                >
+                  {{
+                    "cooperative.visibilityStatus." + option.toLowerCase()
+                      | transloco
+                  }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ "cooperative.fields.tags" | transloco }}</mat-label>
+              <input
+                matInput
+                formControlName="tags"
+                placeholder="tag1, tag2, tag3"
+              />
+              <mat-hint>{{ "cooperative.hints.tags" | transloco }}</mat-hint>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row inline-row">
+            <mat-form-field appearance="outline">
+              <mat-label>{{
+                "cooperative.fields.license" | transloco
+              }}</mat-label>
+              <input matInput formControlName="license" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>{{
+                "cooperative.fields.attribution" | transloco
+              }}</mat-label>
+              <input matInput formControlName="attribution" />
+            </mat-form-field>
+          </div>
+
+          <div class="form-row checkbox-row">
+            <mat-checkbox formControlName="isPrimary">
+              {{ "cooperative.fields.isPrimary" | transloco }}
+            </mat-checkbox>
+
+            <mat-checkbox formControlName="isFeatured">
+              {{ "cooperative.fields.isFeatured" | transloco }}
+            </mat-checkbox>
+          </div>
+
+          <div class="form-actions">
+            <button mat-button (click)="toggleEditMode()">
+              {{ "common.actions.cancel" | transloco }}
+            </button>
+
+            <button mat-raised-button color="primary" (click)="saveChanges()">
+              {{ "common.actions.save" | transloco }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Media metadata display (shown when not in edit mode) -->
+      <div *ngIf="!editMode" class="media-metadata">
+        <div class="metadata-grid">
+          <!-- Type -->
+          <div class="metadata-label">
+            {{ "cooperative.fields.type" | transloco }}
+          </div>
+          <div class="metadata-value">
+            {{
+              "cooperative.mediaTypes." + data.media.type.toLowerCase()
+                | transloco
+            }}
+          </div>
+
+          <!-- Description -->
+          <div class="metadata-label">
+            {{ "cooperative.fields.description" | transloco }}
+          </div>
+          <div class="metadata-value" [class.empty]="!data.media.description">
+            {{
+              data.media.description ||
+                ("cooperative.media.noDescription" | transloco)
+            }}
+          </div>
+
+          <!-- Tags -->
+          <div class="metadata-label">
+            {{ "cooperative.fields.tags" | transloco }}
+          </div>
+          <div class="metadata-value" *ngIf="tags.length > 0; else noTags">
+            <div class="tags-list">
+              <span *ngFor="let tag of tags" class="tag">{{ tag }}</span>
+            </div>
+          </div>
+          <ng-template #noTags>
+            <div class="metadata-value empty">
+              {{ "cooperative.media.noTags" | transloco }}
+            </div>
+          </ng-template>
+
+          <!-- Alt Text -->
+          <div class="metadata-label">
+            {{ "cooperative.fields.altText" | transloco }}
+          </div>
+          <div class="metadata-value" [class.empty]="!data.media.altText">
+            {{
+              data.media.altText || ("cooperative.media.noAltText" | transloco)
+            }}
+          </div>
+
+          <!-- Status Badges -->
+          <div class="metadata-label">
+            {{ "cooperative.fields.status" | transloco }}
+          </div>
+          <div class="metadata-value">
+            <span
+              class="badge"
+              [class.primary]="data.media.isPrimary"
+              [class.featured]="data.media.isFeatured"
+              [class.private]="data.media.visibilityStatus === 'PRIVATE'"
+            >
+              <mat-icon *ngIf="data.media.isPrimary">star</mat-icon>
+              <mat-icon *ngIf="data.media.isFeatured"
+                >featured_play_list</mat-icon
+              >
+              <mat-icon *ngIf="data.media.visibilityStatus === 'PRIVATE'"
+                >visibility_off</mat-icon
+              >
+              {{
+                "cooperative.visibilityStatus." +
+                  data.media.visibilityStatus.toLowerCase() | transloco
+              }}
+            </span>
+
+            <span class="badge primary" *ngIf="data.media.isPrimary">
+              {{ "cooperative.media.primary" | transloco }}
+            </span>
+
+            <span class="badge featured" *ngIf="data.media.isFeatured">
+              {{ "cooperative.media.featured" | transloco }}
+            </span>
+          </div>
+
+          <!-- File Information -->
+          <div class="metadata-label">
+            {{ "cooperative.fields.fileName" | transloco }}
+          </div>
+          <div class="metadata-value">{{ data.media.title }}</div>
+
+          <div class="metadata-label">
+            {{ "cooperative.fields.fileSize" | transloco }}
+          </div>
+          <div class="metadata-value">{{ getFileSize() }}</div>
+
+          <div class="metadata-label">
+            {{ "cooperative.fields.mimeType" | transloco }}
+          </div>
+          <div class="metadata-value">
+            {{ data.media.mimeType || "Unknown" }}
+          </div>
+
+          <!-- Credit Information -->
+          <div class="metadata-label">
+            {{ "cooperative.fields.license" | transloco }}
+          </div>
+          <div class="metadata-value" [class.empty]="!data.media.license">
+            {{
+              data.media.license || ("cooperative.media.noLicense" | transloco)
+            }}
+          </div>
+
+          <div class="metadata-label">
+            {{ "cooperative.fields.attribution" | transloco }}
+          </div>
+          <div class="metadata-value" [class.empty]="!data.media.attribution">
+            {{
+              data.media.attribution ||
+                ("cooperative.media.noAttribution" | transloco)
+            }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">
+    {{ "common.actions.close" | transloco }}
+  </button>
+</mat-dialog-actions>

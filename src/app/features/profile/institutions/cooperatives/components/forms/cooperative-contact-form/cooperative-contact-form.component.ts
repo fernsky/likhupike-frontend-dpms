@@ -1,6 +1,20 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,22 +43,24 @@ import { CooperativeActions } from '../../../store/actions';
     MatButtonModule,
     MatDividerModule,
     MatTooltipModule,
-    TranslocoModule
+    TranslocoModule,
   ],
   providers: [
     provideTranslocoScope({
       scope: 'cooperatives',
-      alias: 'cooperative'
-    })
-  ]
+      alias: 'cooperative',
+    }),
+  ],
 })
-export class CooperativeContactFormComponent implements OnInit, OnChanges, OnDestroy {
+export class CooperativeContactFormComponent
+  implements OnInit, OnChanges, OnDestroy
+{
   @Input() cooperative!: CooperativeResponse;
   @Output() formChanged = new EventEmitter<boolean>();
-  
+
   contactForm!: FormGroup;
   private destroy$ = new Subject<void>();
-  
+
   constructor(
     private fb: FormBuilder,
     private store: Store
@@ -54,18 +70,18 @@ export class CooperativeContactFormComponent implements OnInit, OnChanges, OnDes
     this.initForm();
     this.trackFormChanges();
   }
-  
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['cooperative'] && this.cooperative && this.contactForm) {
       this.updateFormValues();
     }
   }
-  
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  
+
   private initForm(): void {
     this.contactForm = this.fb.group({
       contactEmail: ['', [Validators.email]],
@@ -75,66 +91,53 @@ export class CooperativeContactFormComponent implements OnInit, OnChanges, OnDes
         facebook: ['', [Validators.pattern('https?://.+')]],
         twitter: ['', [Validators.pattern('https?://.+')]],
         instagram: ['', [Validators.pattern('https?://.+')]],
-        linkedin: ['', [Validators.pattern('https?://.+')]]
-      })
+        linkedin: ['', [Validators.pattern('https?://.+')]],
+      }),
     });
-    
+
     if (this.cooperative) {
       this.updateFormValues();
     }
   }
-  
-  private updateFormValues(): void {
-    const metadata = this.cooperative.metadata ? JSON.parse(this.cooperative.metadata) : {};
-    const socialLinks = metadata.socialLinks || {};
 
-    this.contactForm.patchValue({
-      contactEmail: this.cooperative.contactEmail || '',
-      contactPhone: this.cooperative.contactPhone || '',
-      websiteUrl: this.cooperative.websiteUrl || '',
-      socialLinks: {
-        facebook: socialLinks.facebook || '',
-        twitter: socialLinks.twitter || '',
-        instagram: socialLinks.instagram || '',
-        linkedin: socialLinks.linkedin || ''
-      }
-    }, { emitEvent: false });
+  private updateFormValues(): void {
+    this.contactForm.patchValue(
+      {
+        contactEmail: this.cooperative.contactEmail || '',
+        contactPhone: this.cooperative.contactPhone || '',
+        websiteUrl: this.cooperative.websiteUrl || '',
+      },
+      { emitEvent: false }
+    );
   }
-  
+
   private trackFormChanges(): void {
     this.contactForm.valueChanges
-      .pipe(
-        distinctUntilChanged(),
-        takeUntil(this.destroy$)
-      )
+      .pipe(distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(() => {
         this.formChanged.emit(true);
-        this.store.dispatch(CooperativeActions.setUnsavedChanges({ hasUnsavedChanges: true }));
+        this.store.dispatch(
+          CooperativeActions.setUnsavedChanges({ hasUnsavedChanges: true })
+        );
       });
   }
-  
+
   onSubmit(): void {
     if (this.contactForm.invalid) {
       return;
     }
-    
+
     const contactData = this.contactForm.value;
-    
-    // Get existing metadata to preserve other fields
-    let metadata = this.cooperative.metadata ? JSON.parse(this.cooperative.metadata) : {};
-    metadata = {
-      ...metadata,
-      socialLinks: contactData.socialLinks
-    };
-    
-    this.store.dispatch(CooperativeActions.updateCooperative({
-      id: this.cooperative.id,
-      cooperative: {
-        contactEmail: contactData.contactEmail,
-        contactPhone: contactData.contactPhone,
-        websiteUrl: contactData.websiteUrl,
-        metadata: JSON.stringify(metadata)
-      }
-    }));
+
+    this.store.dispatch(
+      CooperativeActions.updateCooperative({
+        id: this.cooperative.id,
+        cooperative: {
+          contactEmail: contactData.contactEmail,
+          contactPhone: contactData.contactPhone,
+          websiteUrl: contactData.websiteUrl,
+        },
+      })
+    );
   }
 }

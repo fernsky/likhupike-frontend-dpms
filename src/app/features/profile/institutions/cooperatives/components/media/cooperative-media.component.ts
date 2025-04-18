@@ -1,4 +1,11 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,18 +18,22 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { TranslocoModule, TranslocoService, provideTranslocoScope } from '@jsverse/transloco';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import {
+  TranslocoModule,
+  TranslocoService,
+  provideTranslocoScope,
+} from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { CooperativeMediaActions } from '../../store/actions';
 import * as fromCooperatives from '../../store/selectors';
-import { 
-  CooperativeMediaResponse, 
+import {
+  CooperativeMediaResponse,
   CooperativeMediaType,
-  MediaVisibilityStatus
+  MediaVisibilityStatus,
 } from '../../types';
 import { MediaUploadDialogComponent } from '../dialogs/media-upload-dialog/media-upload-dialog.component';
 import { MediaViewDialogComponent } from '../dialogs/media-view-dialog/media-view-dialog.component';
@@ -46,14 +57,15 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
     MatTooltipModule,
     MatButtonToggleModule,
     MatProgressSpinnerModule,
-    TranslocoModule
+    MatSnackBarModule,
+    TranslocoModule,
   ],
   providers: [
     provideTranslocoScope({
       scope: 'cooperatives',
-      alias: 'cooperative'
-    })
-  ]
+      alias: 'cooperative',
+    }),
+  ],
 })
 export class CooperativeMediaComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cooperativeId!: string;
@@ -63,15 +75,15 @@ export class CooperativeMediaComponent implements OnInit, OnChanges, OnDestroy {
   totalItems$: Observable<number>;
   currentPage$: Observable<number>;
   pageSize$: Observable<number>;
-  
+
   mediaTypes = Object.values(CooperativeMediaType);
   selectedMediaType: CooperativeMediaType | null = null;
-  
+
   visibilityOptions = Object.values(MediaVisibilityStatus);
-  
+
   displayModes: string[] = ['grid', 'list'];
   currentDisplayMode = 'grid';
-  
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -82,8 +94,12 @@ export class CooperativeMediaComponent implements OnInit, OnChanges, OnDestroy {
   ) {
     this.mediaItems$ = this.store.select(fromCooperatives.selectAllMedia);
     this.loading$ = this.store.select(fromCooperatives.selectMediaLoading);
-    this.totalItems$ = this.store.select(fromCooperatives.selectMediaTotalItems);
-    this.currentPage$ = this.store.select(fromCooperatives.selectMediaCurrentPage);
+    this.totalItems$ = this.store.select(
+      fromCooperatives.selectMediaTotalItems
+    );
+    this.currentPage$ = this.store.select(
+      fromCooperatives.selectMediaCurrentPage
+    );
     this.pageSize$ = this.store.select(fromCooperatives.selectMediaPageSize);
   }
 
@@ -106,18 +122,22 @@ export class CooperativeMediaComponent implements OnInit, OnChanges, OnDestroy {
 
   loadMedia(page = 0, size = 10): void {
     if (this.selectedMediaType) {
-      this.store.dispatch(CooperativeMediaActions.loadMediaByType({
-        cooperativeId: this.cooperativeId,
-        mediaType: this.selectedMediaType,
-        page,
-        size
-      }));
+      this.store.dispatch(
+        CooperativeMediaActions.loadMediaByType({
+          cooperativeId: this.cooperativeId,
+          mediaType: this.selectedMediaType,
+          page,
+          size,
+        })
+      );
     } else {
-      this.store.dispatch(CooperativeMediaActions.loadMedia({
-        cooperativeId: this.cooperativeId,
-        page,
-        size
-      }));
+      this.store.dispatch(
+        CooperativeMediaActions.loadMedia({
+          cooperativeId: this.cooperativeId,
+          page,
+          size,
+        })
+      );
     }
   }
 
@@ -126,13 +146,14 @@ export class CooperativeMediaComponent implements OnInit, OnChanges, OnDestroy {
       width: '600px',
       data: {
         cooperativeId: this.cooperativeId,
-        mediaTypes: this.mediaTypes
-      }
+        mediaTypes: this.mediaTypes,
+      },
     });
 
-    dialogRef.afterClosed()
+    dialogRef
+      .afterClosed()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(result => {
+      .subscribe((result) => {
         if (result) {
           // Reload media after successful upload
           this.loadMedia();
@@ -145,8 +166,8 @@ export class CooperativeMediaComponent implements OnInit, OnChanges, OnDestroy {
       width: '800px',
       data: {
         media,
-        cooperativeId: this.cooperativeId
-      }
+        cooperativeId: this.cooperativeId,
+      },
     });
   }
 
@@ -154,55 +175,68 @@ export class CooperativeMediaComponent implements OnInit, OnChanges, OnDestroy {
     if (event) {
       event.stopPropagation();
     }
-    
+
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: this.transloco.translate('cooperative.dialogs.deleteMediaTitle'),
-        message: this.transloco.translate('cooperative.dialogs.deleteMediaMessage', {
-          title: media.title
-        }),
+        message: this.transloco.translate(
+          'cooperative.dialogs.deleteMediaMessage',
+          {
+            title: media.title,
+          }
+        ),
         confirmButton: this.transloco.translate('common.actions.delete'),
-        cancelButton: this.transloco.translate('common.actions.cancel')
-      }
+        cancelButton: this.transloco.translate('common.actions.cancel'),
+      },
     });
 
-    dialogRef.afterClosed()
+    dialogRef
+      .afterClosed()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(result => {
+      .subscribe((result) => {
         if (result === true) {
           this.deleteMedia(media);
         }
       });
   }
-  
+
   deleteMedia(media: CooperativeMediaResponse): void {
-    this.store.dispatch(CooperativeMediaActions.deleteMedia({
-      cooperativeId: this.cooperativeId,
-      mediaId: media.id
-    }));
+    this.store.dispatch(
+      CooperativeMediaActions.deleteMedia({
+        cooperativeId: this.cooperativeId,
+        mediaId: media.id,
+      })
+    );
   }
-  
+
   setAsPrimary(media: CooperativeMediaResponse, event?: Event): void {
     if (event) {
       event.stopPropagation();
     }
-    
+
     if (media.isPrimary) {
       return;
     }
-    
-    this.store.dispatch(CooperativeMediaActions.setMediaAsPrimary({
-      cooperativeId: this.cooperativeId,
-      mediaId: media.id
-    }));
+
+    this.store.dispatch(
+      CooperativeMediaActions.setMediaAsPrimary({
+        cooperativeId: this.cooperativeId,
+        mediaId: media.id,
+      })
+    );
   }
-  
-  updateVisibility(media: CooperativeMediaResponse, status: MediaVisibilityStatus): void {
-    this.store.dispatch(CooperativeMediaActions.updateMediaVisibility({
-      cooperativeId: this.cooperativeId,
-      mediaId: media.id,
-      status
-    }));
+
+  updateVisibility(
+    media: CooperativeMediaResponse,
+    status: MediaVisibilityStatus
+  ): void {
+    this.store.dispatch(
+      CooperativeMediaActions.updateMediaVisibility({
+        cooperativeId: this.cooperativeId,
+        mediaId: media.id,
+        status,
+      })
+    );
   }
 
   filterByType(type: CooperativeMediaType | null): void {
@@ -224,17 +258,28 @@ export class CooperativeMediaComponent implements OnInit, OnChanges, OnDestroy {
 
   getMediaTypeIcon(type: CooperativeMediaType): string {
     switch (type) {
-      case CooperativeMediaType.LOGO: return 'star';
-      case CooperativeMediaType.HERO_IMAGE: return 'panorama';
-      case CooperativeMediaType.GALLERY_IMAGE: return 'photo_library';
-      case CooperativeMediaType.PRODUCT_PHOTO: return 'shopping_basket';
-      case CooperativeMediaType.TEAM_PHOTO: return 'people';
-      case CooperativeMediaType.DOCUMENT: return 'description';
-      case CooperativeMediaType.VIDEO: return 'videocam';
-      case CooperativeMediaType.BROCHURE: return 'book';
-      case CooperativeMediaType.ANNUAL_REPORT: return 'assessment';
-      case CooperativeMediaType.CERTIFICATE: return 'verified';
-      default: return 'insert_drive_file';
+      case CooperativeMediaType.LOGO:
+        return 'star';
+      case CooperativeMediaType.HERO_IMAGE:
+        return 'panorama';
+      case CooperativeMediaType.GALLERY_IMAGE:
+        return 'photo_library';
+      case CooperativeMediaType.PRODUCT_PHOTO:
+        return 'shopping_basket';
+      case CooperativeMediaType.TEAM_PHOTO:
+        return 'people';
+      case CooperativeMediaType.DOCUMENT:
+        return 'description';
+      case CooperativeMediaType.VIDEO:
+        return 'videocam';
+      case CooperativeMediaType.BROCHURE:
+        return 'book';
+      case CooperativeMediaType.ANNUAL_REPORT:
+        return 'assessment';
+      case CooperativeMediaType.CERTIFICATE:
+        return 'verified';
+      default:
+        return 'insert_drive_file';
     }
   }
 }
