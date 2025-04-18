@@ -1,12 +1,15 @@
 <div class="search-container">
   <form [formGroup]="searchForm" class="search-form" (ngSubmit)="onSearch()">
     <mat-form-field appearance="outline" class="search-field">
-      <mat-label>{{ 'cooperative.search.searchPlaceholder' | transloco }}</mat-label>
+      <mat-label>{{
+        "cooperative.search.searchPlaceholder" | transloco
+      }}</mat-label>
       <input
         matInput
         formControlName="searchTerm"
         type="text"
-        [placeholder]="'cooperative.search.searchPlaceholder' | transloco">
+        [placeholder]="'cooperative.search.searchPlaceholder' | transloco"
+      />
       <mat-icon matPrefix>search</mat-icon>
       <button
         *ngIf="searchForm.get('searchTerm')?.value"
@@ -14,7 +17,8 @@
         mat-icon-button
         type="button"
         aria-label="Clear"
-        (click)="onResetSearch()">
+        (click)="onResetSearch()"
+      >
         <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>
@@ -23,23 +27,25 @@
       mat-raised-button
       color="primary"
       type="submit"
-      [disabled]="!searchForm.get('searchTerm')?.value">
+      [disabled]="!searchForm.get('searchTerm')?.value"
+    >
       <mat-icon>search</mat-icon>
-      {{ 'cooperative.search.searchButton' | transloco }}
+      {{ "cooperative.search.searchButton" | transloco }}
     </button>
 
     <button
       mat-button
       type="button"
       *ngIf="searchForm.get('searchTerm')?.value"
-      (click)="onResetSearch()">
-      {{ 'cooperative.search.resetButton' | transloco }}
+      (click)="onResetSearch()"
+    >
+      {{ "cooperative.search.resetButton" | transloco }}
     </button>
   </form>
 
   <!-- Search hint - can be conditionally displayed -->
   <div class="search-hint">
     <mat-icon>info</mat-icon>
-    <span>{{ 'cooperative.search.hint' | transloco }}</span>
+    <span>{{ "cooperative.search.hint" | transloco }}</span>
   </div>
 </div>

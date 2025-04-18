@@ -1,0 +1,160 @@
+:host {
+  display: inline-block;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 16px;
+  padding: 0 12px;
+  height: 32px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    filter: brightness(0.95);
+  }
+
+  &.small {
+    height: 24px;
+    padding: 0 8px;
+    border-radius: 12px;
+
+    .status-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+      margin-right: 4px;
+    }
+
+    .status-text {
+      font-size: 0.75rem;
+    }
+  }
+
+  &.medium {
+    // Default styles
+  }
+
+  &.large {
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 20px;
+
+    .status-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+    }
+
+    .status-text {
+      font-size: 1rem;
+      letter-spacing: 0.25px;
+    }
+  }
+
+  &.text-only {
+    .status-text {
+      margin-left: 0;
+    }
+  }
+
+  &.icon-only {
+    padding: 0;
+    width: 32px;
+    justify-content: center;
+
+    &.small {
+      width: 24px;
+    }
+
+    &.large {
+      width: 40px;
+    }
+
+    .status-icon {
+      margin-right: 0;
+    }
+  }
+
+  .status-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+  }
+
+  .status-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  // Status colors
+  &.success {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: #388e3c;
+  }
+
+  &.primary {
+    background-color: rgba(63, 81, 181, 0.1);
+    color: #3f51b5;
+  }
+
+  &.warning {
+    background-color: rgba(255, 152, 0, 0.1);
+    color: #f57c00;
+  }
+
+  &.info {
+    background-color: rgba(3, 169, 244, 0.1);
+    color: #0288d1;
+  }
+
+  &.warn {
+    background-color: rgba(255, 87, 34, 0.1);
+    color: #e64a19;
+  }
+
+  &.danger {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: #d32f2f;
+  }
+
+  &.default {
+    background-color: rgba(97, 97, 97, 0.1);
+    color: #616161;
+  }
+}
+
+// Responsive adjustments for mobile
+@media (max-width: 480px) {
+  .status-badge {
+    height: 28px;
+
+    .status-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+      margin-right: 4px;
+    }
+
+    .status-text {
+      font-size: 0.75rem;
+    }
+
+    &.large {
+      height: 36px;
+
+      .status-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+
+      .status-text {
+        font-size: 0.875rem;
+      }
+    }
+  }
+}

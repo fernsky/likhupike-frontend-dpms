@@ -1,6 +1,18 @@
-<div class="status-badge" [ngClass]="statusColor">
+<div
+  class="status-badge"
+  [class.small]="size === 'small'"
+  [class.large]="size === 'large'"
+  [class.text-only]="!statusIcon"
+  [class.icon-only]="!showText"
+  [ngClass]="statusColor"
+  [matTooltip]="statusDescription | transloco"
+>
   <mat-icon class="status-icon">{{ statusIcon }}</mat-icon>
-  <span class="status-text">
-    {{ status ? ('cooperative.statuses.' + status.toLowerCase() | transloco) : 'Unknown' }}
+  <span class="status-text" *ngIf="showText">
+    {{
+      status
+        ? ("cooperative.statuses." + status.toLowerCase() | transloco)
+        : "Unknown"
+    }}
   </span>
 </div>

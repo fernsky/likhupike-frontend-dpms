@@ -1,4 +1,16 @@
-<div class="type-badge">
+<div
+  class="type-badge"
+  [class.small]="size === 'small'"
+  [class.large]="size === 'large'"
+  [class.text-only]="!typeIcon"
+  [class.icon-only]="!showText"
+  [style.backgroundColor]="typeColor ? typeColor + '15' : ''"
+  [style.color]="typeColor"
+  [matTooltip]="getTypeDescription() | transloco"
+  matTooltipPosition="above"
+>
   <mat-icon class="type-icon">{{ typeIcon }}</mat-icon>
-  <span class="type-text">{{ getTypeTranslation() | transloco }}</span>
+  <span class="type-text" *ngIf="showText">{{
+    getTypeTranslation() | transloco
+  }}</span>
 </div>

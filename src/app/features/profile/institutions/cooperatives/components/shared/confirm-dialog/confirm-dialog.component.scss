@@ -1,0 +1,95 @@
+:host {
+  display: block;
+}
+
+.dialog-content {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+
+  .dialog-icon {
+    margin-right: 1rem;
+
+    &.warning-icon {
+      color: #f44336;
+    }
+
+    &.info-icon {
+      color: #2196f3;
+    }
+
+    &.question-icon {
+      color: #673ab7;
+    }
+
+    mat-icon {
+      font-size: 24px;
+      height: 24px;
+      width: 24px;
+    }
+  }
+
+  .message-container {
+    p {
+      margin: 0;
+      white-space: pre-line;
+      line-height: 1.5;
+      color: #546e7a;
+    }
+  }
+}
+
+// Dialog title styling
+::ng-deep .mat-mdc-dialog-container {
+  .mdc-dialog__title {
+    color: #123772;
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .mdc-dialog__content {
+    padding-top: 1rem !important;
+  }
+
+  .mat-mdc-dialog-actions {
+    padding-top: 1rem;
+    margin-bottom: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 480px) {
+  .dialog-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    .dialog-icon {
+      margin-right: 0;
+      margin-bottom: 1rem;
+
+      mat-icon {
+        font-size: 32px;
+        height: 32px;
+        width: 32px;
+      }
+    }
+  }
+
+  ::ng-deep .mat-mdc-dialog-container {
+    .mat-mdc-dialog-actions {
+      flex-direction: column-reverse;
+
+      button {
+        width: 100%;
+        margin-left: 0 !important;
+      }
+    }
+  }
+}
