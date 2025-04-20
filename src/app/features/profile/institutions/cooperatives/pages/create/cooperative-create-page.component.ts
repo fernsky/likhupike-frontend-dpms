@@ -196,23 +196,48 @@ export class CooperativeCreatePageComponent implements OnInit, OnDestroy {
   }
 
   nextStep(): void {
+    console.log('Next Step Clicked', this.activeStep);
     switch (this.activeStep) {
       case 0: // Basic info
         if (this.validateBasicInfo()) {
           this.steps[0].completed = true;
           this.activeStep = 1;
+        } else {
+          console.log('This activated');
+          // Mark all fields as touched to show validation errors
+          const basicControls = [
+            'code',
+            'defaultLocale',
+            'ward',
+            'type',
+            'status',
+          ];
+          basicControls.forEach((controlName) => {
+            this.createForm.get(controlName)?.markAsTouched();
+          });
         }
         break;
       case 1: // Translation
         if (this.validateTranslation()) {
           this.steps[1].completed = true;
           this.activeStep = 2;
+        } else {
+          // Mark required translation fields as touched
+          const translationControls = [
+            'translation.locale',
+            'translation.name',
+          ];
+          translationControls.forEach((controlName) => {
+            this.createForm.get(controlName)?.markAsTouched();
+          });
         }
         break;
       case 2: // Location
         if (this.validateLocation()) {
           this.steps[2].completed = true;
           this.activeStep = 3;
+        } else {
+          this.createForm.get('ward')?.markAsTouched();
         }
         break;
       default:
@@ -239,47 +264,25 @@ export class CooperativeCreatePageComponent implements OnInit, OnDestroy {
 
   private validateBasicInfo(): boolean {
     const basicControls = ['code', 'defaultLocale', 'ward', 'type', 'status'];
-
-    let valid = true;
-
-    basicControls.forEach((controlName) => {
-      const control = this.createForm.get(controlName);
-      if (control) {
-        control.markAsTouched();
-        if (control.invalid) {
-          valid = false;
-        }
-      }
-    });
-
-    return valid;
+    return this.checkControlsValid(basicControls);
   }
 
   private validateTranslation(): boolean {
     const translationControls = ['translation.locale', 'translation.name'];
-
-    let valid = true;
-
-    translationControls.forEach((controlName) => {
-      const control = this.createForm.get(controlName);
-      if (control) {
-        control.markAsTouched();
-        if (control.invalid) {
-          valid = false;
-        }
-      }
-    });
-
-    return valid;
+    return this.checkControlsValid(translationControls);
   }
 
   private validateLocation(): boolean {
-    const control = this.createForm.get('ward');
-    if (control) {
-      control.markAsTouched();
-      return control.valid;
-    }
-    return false;
+    return this.createForm.get('ward')?.valid ?? false;
+  }
+
+  // Helper method to check if controls are valid
+  private checkControlsValid(controlNames: string[]): boolean {
+    return controlNames.every((controlName) => {
+      const control = this.createForm.get(controlName);
+      console.log(controlName, control?.valid);
+      return control?.valid ?? false;
+    });
   }
 
   onSubmit(): void {
