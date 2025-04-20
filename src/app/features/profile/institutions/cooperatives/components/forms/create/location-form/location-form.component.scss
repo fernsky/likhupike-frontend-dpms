@@ -13,31 +13,108 @@
     flex-direction: column;
     gap: 1rem;
 
-    .location-button {
-      margin-top: 1rem;
+    .location-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+
+      .location-button {
+        margin-top: 0.5rem;
+      }
+
+      .location-modification-buttons {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .location-error {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #d32f2f;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+
+        mat-icon {
+          font-size: 18px;
+          height: 18px;
+          width: 18px;
+        }
+      }
     }
   }
 
   .map-container {
     height: 350px;
-    background-color: #f5f5f5;
     border-radius: 8px;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     border: 1px solid rgba(0, 0, 0, 0.1);
+    position: relative;
+    background-color: #f5f5f5;
 
-    .map-placeholder {
+    .map-component {
       width: 100%;
       height: 100%;
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    .map-status-overlay {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      z-index: 10;
+      pointer-events: none;
+
+      .map-status-message {
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 4px;
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        margin: 0 auto;
+        max-width: fit-content;
+
+        mat-icon {
+          color: #3f51b5;
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+
+        span {
+          font-size: 14px;
+          color: #333;
+        }
+      }
+    }
+
+    .map-instructions {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.7);
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 10;
+      pointer-events: none;
 
-      .map-instructions {
+      div {
         text-align: center;
         color: #546e7a;
+        padding: 1rem 2rem;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
         mat-icon {
           font-size: 3rem;
@@ -56,11 +133,80 @@
   }
 }
 
+// Read-only input styling
+::ng-deep {
+  .mat-form-field-appearance-outline.readonly .mat-input-element:read-only {
+    background-color: #f5f5f5;
+  }
+}
+
 .step-actions {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
   margin-top: 1.5rem;
+}
+
+// Default styling for OpenLayers controls
+::ng-deep {
+  .ol-control {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 4px;
+
+    button {
+      background-color: white;
+      color: #3f51b5;
+      width: 32px;
+      height: 32px;
+      font-size: 16px;
+      font-weight: bold;
+      margin: 1px;
+      border-radius: 4px;
+      border: none;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+      &:hover {
+        background-color: #f0f0f0;
+        color: #303f9f;
+      }
+    }
+  }
+
+  .ol-zoom {
+    top: 10px;
+    left: 10px;
+
+    .ol-zoom-in {
+      border-radius: 4px 4px 0 0;
+    }
+
+    .ol-zoom-out {
+      border-radius: 0 0 4px 4px;
+    }
+  }
+
+  .ol-scale-line {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    padding: 2px 5px;
+    color: #333;
+    bottom: 10px;
+    left: 10px;
+  }
+
+  // Make sure the map container doesn't show a scrollbar when map content is larger
+  .ol-viewport {
+    overflow: hidden !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  // Fix for any potential canvas sizing issues
+  canvas.ol-unselectable {
+    width: 100% !important;
+    height: 100% !important;
+  }
 }
 
 @media (max-width: 992px) {
@@ -72,6 +218,14 @@
 @media (max-width: 480px) {
   .step-actions {
     flex-direction: column-reverse;
+
+    app-base-button {
+      width: 100%;
+    }
+  }
+
+  .location-actions .location-modification-buttons {
+    flex-direction: column;
 
     app-base-button {
       width: 100%;

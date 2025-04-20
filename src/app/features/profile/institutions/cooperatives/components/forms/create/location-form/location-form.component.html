@@ -12,6 +12,7 @@
           type="number"
           [formControl]="latitudeControl"
           step="0.000001"
+          [readonly]="editMode"
         />
         <mat-error
           *ngIf="
@@ -29,6 +30,7 @@
           type="number"
           [formControl]="longitudeControl"
           step="0.000001"
+          [readonly]="editMode"
         />
         <mat-error
           *ngIf="
@@ -39,27 +41,113 @@
         </mat-error>
       </mat-form-field>
 
-      <app-base-button
-        buttonType="raised"
-        color="primary"
-        icon="my_location"
-        (clicked)="onUseCurrentLocation()"
-        translationKey="cooperative.location.useCurrentLocation"
-        class="location-button"
-      >
-      </app-base-button>
+      <div class="location-actions">
+        <!-- Use current location button -->
+        <app-base-button
+          buttonType="raised"
+          color="primary"
+          icon="my_location"
+          [loading]="locationLoading"
+          (clicked)="onUseCurrentLocation()"
+          translationKey="cooperative.location.useCurrentLocation"
+          class="location-button"
+          *ngIf="!editMode"
+        >
+        </app-base-button>
+
+        <!-- Location modification buttons -->
+        <div class="location-modification-buttons" *ngIf="hasLocation">
+          <app-base-button
+            buttonType="stroked"
+            color="primary"
+            icon="{{ editMode ? 'save' : 'edit_location' }}"
+            (clicked)="toggleEditMode()"
+          >
+            {{
+              (editMode ? "common.actions.done" : "common.actions.edit")
+                | transloco
+            }}
+          </app-base-button>
+
+          <app-base-button
+            buttonType="stroked"
+            color="warn"
+            icon="delete"
+            (clicked)="clearLocation()"
+            *ngIf="!editMode"
+          >
+            {{ "common.actions.clear" | transloco }}
+          </app-base-button>
+        </div>
+
+        <!-- Error message display -->
+        <div class="location-error" *ngIf="locationError">
+          <mat-icon>error</mat-icon>
+          <span>{{ locationError }}</span>
+        </div>
+      </div>
     </div>
 
     <div class="map-container">
-      <!-- Map placeholder - would be replaced with actual map component -->
-      <div class="map-placeholder">
-        <div class="map-instructions">
-          <mat-icon>map</mat-icon>
-          <p>
-            {{ "cooperative.location.mapInstructions" | transloco }}
-          </p>
+      <!-- OpenLayers Map -->
+      <aol-map class="map-component" (onClick)="onMapClick($event)" #map>
+        <aol-view [zoom]="mapZoom">
+          <aol-coordinate
+            [x]="mapCenter[0]"
+            [y]="mapCenter[1]"
+          ></aol-coordinate>
+        </aol-view>
+
+        <!-- Base Map Layer -->
+        <aol-layer-tile>
+          <aol-source-osm></aol-source-osm>
+        </aol-layer-tile>
+
+        <!-- Vector Layer for Marker -->
+        <aol-layer-vector>
+          <!-- Remove the [instance] binding as it's not available -->
+          <aol-source-vector #vectorSource></aol-source-vector>
+          <aol-style>
+            <aol-style-circle [radius]="8">
+              <aol-style-stroke
+                [color]="'white'"
+                [width]="2"
+              ></aol-style-stroke>
+              <aol-style-fill [color]="'#3f51b5'"></aol-style-fill>
+            </aol-style-circle>
+          </aol-style>
+        </aol-layer-vector>
+
+        <!-- Only add the draw interaction when in edit mode -->
+        <!-- Use the reference to the vector source component -->
+        <aol-interaction-draw
+          type="Point"
+          [source]="vectorSourceInstance!"
+          (drawEnd)="onDrawEnd($event)"
+        ></aol-interaction-draw>
+
+        <!-- Map Controls -->
+        <aol-control-defaults></aol-control-defaults>
+        <aol-control-zoom></aol-control-zoom>
+        <aol-control-scaleline></aol-control-scaleline>
+      </aol-map>
+
+      <!-- Map interaction helper overlays
+      <div class="map-status-overlay" *ngIf="editMode">
+        <div class="map-status-message">
+          <mat-icon>touch_app</mat-icon>
+          <span>{{
+            "cooperative.location.clickToSetLocation" | transloco
+          }}</span>
         </div>
       </div>
+
+      <div class="map-instructions" *ngIf="!hasLocation && !editMode">
+        <div>
+          <mat-icon>touch_app</mat-icon>
+          <p>{{ "cooperative.location.mapClickInstructions" | transloco }}</p>
+        </div>
+      </div> -->
     </div>
   </div>
 </app-form-section>

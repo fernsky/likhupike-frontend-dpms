@@ -174,7 +174,8 @@
     "noAddressProvided": "No address provided for this language",
     "addressNote": "To add or edit address information, please use the translations tab",
     "noCoordinates": "No location coordinates have been set for this cooperative",
-    "wardNumber": "Ward {{ward}}"
+    "wardNumber": "Ward {{ward}}",
+    "mapClickInstructions": "Click on the map to set a location or use the 'Use My Location' button"
   },
   "translations": {
     "title": "Translations",
