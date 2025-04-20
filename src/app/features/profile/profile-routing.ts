@@ -4,12 +4,30 @@ import { authGuard } from '@app/core/guards/auth.guard';
 export const PROFILE_ROUTES: Routes = [
   {
     path: 'location',
+    data: {
+      breadcrumb: {
+        translationKey: 'location',
+        icon: 'location_on',
+        path: '/dashboard/profile/location',
+      },
+    },
     loadChildren: () =>
       import('./location/location-routing').then((m) => m.LOCATION_ROUTES),
     canActivate: [authGuard],
+  },
+  {
+    path: 'cooperatives',
     data: {
-      breadcrumb: 'common.location',
+      breadcrumb: {
+        translationKey: 'cooperatives',
+        icon: 'business',
+        path: '/dashboard/profile/cooperatives',
+      },
     },
+    loadChildren: () =>
+      import('./institutions/cooperatives/cooperatives-routing').then(
+        (m) => m.COOPERATIVES_ROUTES
+      ),
   },
   // Add more profile sections as needed (e.g., demographics, resources, etc.)
   {
