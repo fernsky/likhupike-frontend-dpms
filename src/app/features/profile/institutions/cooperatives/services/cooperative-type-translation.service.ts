@@ -17,7 +17,7 @@ import {
   providedIn: 'root',
 })
 export class CooperativeTypeTranslationService {
-  private readonly apiUrl = `${environment.apiUrl}/api/v1/cooperative-types`;
+  private readonly apiUrl = `${environment.apiUrl}/cooperative-types`;
 
   constructor(private http: HttpClient) {}
 

@@ -17,7 +17,7 @@ import {
   providedIn: 'root',
 })
 export class CooperativeSearchService {
-  private readonly apiUrl = `${environment.apiUrl}/api/v1/cooperatives/search`;
+  private readonly apiUrl = `${environment.apiUrl}/cooperatives/search`;
 
   constructor(private http: HttpClient) {}
 

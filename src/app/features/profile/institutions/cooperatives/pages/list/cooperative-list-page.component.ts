@@ -77,6 +77,7 @@ export class CooperativeListPageComponent implements OnInit, OnDestroy {
     this.cooperatives$ = this.store.select(
       fromCooperatives.selectAllCooperatives
     );
+    console.log(this.store.select(fromCooperatives.selectAllCooperatives));
     this.loading$ = this.store.select(
       fromCooperatives.selectCooperativesLoading
     );

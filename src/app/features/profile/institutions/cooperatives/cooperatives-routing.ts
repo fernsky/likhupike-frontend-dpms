@@ -30,7 +30,7 @@ export const COOPERATIVES_ROUTES: Routes = [
     ],
     canActivate: [authGuard, PermissionGuard],
     data: {
-      permissions: ['VIEW_COOPERATIVES'],
+      permissions: ['VIEW_COOPERATIVE'],
       breadcrumb: 'cooperative.breadcrumb.list',
     },
   },
