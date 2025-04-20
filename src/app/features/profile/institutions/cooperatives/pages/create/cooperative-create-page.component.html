@@ -190,19 +190,21 @@
 
         <div class="step-actions">
           <app-base-button
-            buttonType="text"
-            (clicked)="cancelCreation()"
-            translationKey="common.actions.cancel"
+            variant="secondary"
+            size="large"
+            icon="arrow_back"
+            (click)="previousStep()"
           >
+            {{ "common.actions.previous" | transloco }}
           </app-base-button>
 
           <app-base-button
-            buttonType="raised"
-            color="primary"
+            variant="primary"
+            size="large"
             icon="arrow_forward"
-            (clicked)="nextStep()"
-            translationKey="common.actions.next"
+            (click)="nextStep()"
           >
+            {{ "common.actions.next" | transloco }}
           </app-base-button>
         </div>
       </div>
@@ -466,20 +468,21 @@
 
         <div class="step-actions">
           <app-base-button
-            buttonType="text"
+            variant="secondary"
+            size="large"
             icon="arrow_back"
-            (clicked)="previousStep()"
-            translationKey="common.actions.previous"
+            (click)="previousStep()"
           >
+            {{ "common.actions.previous" | transloco }}
           </app-base-button>
 
           <app-base-button
-            buttonType="raised"
-            color="primary"
+            variant="primary"
+            size="large"
             icon="arrow_forward"
-            (clicked)="nextStep()"
-            translationKey="common.actions.next"
+            (click)="nextStep()"
           >
+            {{ "common.actions.next" | transloco }}
           </app-base-button>
         </div>
       </div>
