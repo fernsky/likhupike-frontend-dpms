@@ -64,6 +64,7 @@
     "@ngrx/store-devtools": "^19.0.1",
     "@tailwindcss/postcss": "^4.0.9",
     "express": "^4.21.2",
+    "ng-openlayers": "^19.0.1",
     "postcss": "^8.5.3",
     "rxjs": "~7.8.2",
     "tailwindcss": "^4.0.9",

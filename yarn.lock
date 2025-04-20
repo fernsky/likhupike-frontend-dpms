@@ -9301,6 +9301,13 @@ neotraverse@^0.6.18:
   resolved "https://registry.yarnpkg.com/neotraverse/-/neotraverse-0.6.18.tgz#abcb33dda2e8e713cf6321b29405e822230cdb30"
   integrity sha512-Z4SmBUweYa09+o6pG+eASabEpP6QkQ70yHj351pQoEXIs8uHbaU2DWVmzBANKgflPa47A50PtB2+NgRpQvr7vA==
 
+ng-openlayers@^19.0.1:
+  version "19.0.1"
+  resolved "https://registry.yarnpkg.com/ng-openlayers/-/ng-openlayers-19.0.1.tgz#a507eee68f504c12c36927eb98e7ffbe81bfa175"
+  integrity sha512-bey7GoHxdgpEdAESiNoRb1+WqItMiHrJ4PV88QiTsJdRSSQO5enUNlKhpZ3Sfmk8huVIAiir4ZVjyOdV9EsTPg==
+  dependencies:
+    tslib "^2.3.0"
+
 no-case@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/no-case/-/no-case-3.0.4.tgz#d361fd5c9800f558551a8369fc0dcd4662b6124d"
