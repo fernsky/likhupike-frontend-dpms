@@ -1,0 +1,139 @@
+<app-form-section
+  icon="info"
+  [title]="'cooperative.sections.basicInfo' | transloco"
+  [subtitle]="'cooperative.sections.basicInfoSubtitle' | transloco"
+>
+  <div class="form-grid">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ "cooperative.fields.code" | transloco }}</mat-label>
+      <input
+        matInput
+        [formControl]="codeControl"
+        placeholder="e.g. dairy-coop-123"
+      />
+      <mat-hint>{{ "cooperative.hints.code" | transloco }}</mat-hint>
+      <mat-error *ngIf="codeControl.hasError('required')">
+        {{ "cooperative.errors.codeRequired" | transloco }}
+      </mat-error>
+      <mat-error *ngIf="codeControl.hasError('pattern')">
+        {{ "cooperative.errors.codePattern" | transloco }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{
+        "cooperative.fields.defaultLocale" | transloco
+      }}</mat-label>
+      <mat-select [formControl]="defaultLocaleControl">
+        <mat-option *ngFor="let locale of availableLocales" [value]="locale">
+          {{ locale === "en" ? "English" : "Nepali" }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="defaultLocaleControl.hasError('required')">
+        {{ "cooperative.errors.localeRequired" | transloco }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ "cooperative.fields.type" | transloco }}</mat-label>
+      <mat-select [formControl]="typeControl">
+        <mat-option *ngFor="let type of cooperativeTypes" [value]="type">
+          {{ "cooperative.types." + type.toLowerCase() | transloco }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="typeControl.hasError('required')">
+        {{ "cooperative.errors.typeRequired" | transloco }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ "cooperative.fields.ward" | transloco }}</mat-label>
+      <input
+        matInput
+        type="number"
+        [formControl]="wardControl"
+        min="1"
+        max="50"
+      />
+      <mat-error *ngIf="wardControl.hasError('required')">
+        {{ "cooperative.errors.wardRequired" | transloco }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ "cooperative.fields.status" | transloco }}</mat-label>
+      <mat-select [formControl]="statusControl">
+        <mat-option *ngFor="let status of cooperativeStatuses" [value]="status">
+          {{ "cooperative.statuses." + status.toLowerCase() | transloco }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{
+        "cooperative.fields.establishedDate" | transloco
+      }}</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        [formControl]="establishedDateControl"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+</app-form-section>
+
+<app-form-section
+  icon="contact_phone"
+  [title]="'cooperative.sections.contact' | transloco"
+>
+  <div class="form-grid">
+    <mat-form-field appearance="outline">
+      <mat-label>{{
+        "cooperative.fields.registrationNumber" | transloco
+      }}</mat-label>
+      <input matInput [formControl]="registrationNumberControl" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ "cooperative.fields.contactEmail" | transloco }}</mat-label>
+      <input matInput [formControl]="contactEmailControl" type="email" />
+      <mat-error *ngIf="contactEmailControl.hasError('email')">
+        {{ "cooperative.errors.emailInvalid" | transloco }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ "cooperative.fields.contactPhone" | transloco }}</mat-label>
+      <input matInput [formControl]="contactPhoneControl" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ "cooperative.fields.websiteUrl" | transloco }}</mat-label>
+      <input
+        matInput
+        [formControl]="websiteUrlControl"
+        placeholder="https://example.com"
+      />
+      <mat-error *ngIf="websiteUrlControl.hasError('pattern')">
+        {{ "cooperative.errors.urlInvalid" | transloco }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+</app-form-section>
+
+<div class="step-actions">
+  <app-base-button variant="secondary" size="large" (click)="onCancel()">
+    {{ "common.actions.cancel" | transloco }}
+  </app-base-button>
+
+  <app-base-button
+    variant="primary"
+    size="large"
+    icon="arrow_forward"
+    (click)="onNext()"
+  >
+    {{ "common.actions.next" | transloco }}
+  </app-base-button>
+</div>

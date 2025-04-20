@@ -1,0 +1,145 @@
+<app-form-section
+  icon="assessment"
+  [title]="'cooperative.sections.review' | transloco"
+>
+  <div class="review-container">
+    <div class="review-section">
+      <h3>{{ "cooperative.sections.basicInfo" | transloco }}</h3>
+      <div class="review-grid">
+        <div class="review-item">
+          <span class="review-label">{{
+            "cooperative.fields.code" | transloco
+          }}</span>
+          <span class="review-value">{{ parentForm.get("code")?.value }}</span>
+        </div>
+        <div class="review-item">
+          <span class="review-label">{{
+            "cooperative.fields.type" | transloco
+          }}</span>
+          <span class="review-value">{{
+            "cooperative.types." + parentForm.get("type")?.value?.toLowerCase()
+              | transloco
+          }}</span>
+        </div>
+        <div class="review-item">
+          <span class="review-label">{{
+            "cooperative.fields.ward" | transloco
+          }}</span>
+          <span class="review-value">{{ parentForm.get("ward")?.value }}</span>
+        </div>
+        <div class="review-item">
+          <span class="review-label">{{
+            "cooperative.fields.establishedDate" | transloco
+          }}</span>
+          <span class="review-value">{{
+            parentForm.get("establishedDate")?.value | date
+          }}</span>
+        </div>
+        <div class="review-item">
+          <span class="review-label">{{
+            "cooperative.fields.status" | transloco
+          }}</span>
+          <span class="review-value">{{
+            "cooperative.statuses." +
+              parentForm.get("status")?.value?.toLowerCase() | transloco
+          }}</span>
+        </div>
+        <div class="review-item">
+          <span class="review-label">{{
+            "cooperative.fields.defaultLocale" | transloco
+          }}</span>
+          <span class="review-value">{{
+            parentForm.get("defaultLocale")?.value === "en"
+              ? "English"
+              : "Nepali"
+          }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-section">
+      <h3>{{ "cooperative.sections.translation" | transloco }}</h3>
+      <div class="review-grid">
+        <div class="review-item full-width">
+          <span class="review-label">{{
+            "cooperative.fields.name" | transloco
+          }}</span>
+          <span class="review-value">{{
+            parentForm.get("translation.name")?.value
+          }}</span>
+        </div>
+        <div
+          class="review-item full-width"
+          *ngIf="parentForm.get('translation.description')?.value"
+        >
+          <span class="review-label">{{
+            "cooperative.fields.description" | transloco
+          }}</span>
+          <span class="review-value">{{
+            parentForm.get("translation.description")?.value
+          }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-section">
+      <h3>{{ "cooperative.sections.location" | transloco }}</h3>
+      <div class="review-grid">
+        <div class="review-item">
+          <span class="review-label">{{
+            "cooperative.fields.coordinates" | transloco
+          }}</span>
+          <span
+            class="review-value"
+            *ngIf="
+              parentForm.get('point.latitude')?.value &&
+              parentForm.get('point.longitude')?.value
+            "
+          >
+            {{ parentForm.get("point.latitude")?.value | number: "1.6-6" }},
+            {{ parentForm.get("point.longitude")?.value | number: "1.6-6" }}
+          </span>
+          <span
+            class="review-value no-value"
+            *ngIf="
+              !parentForm.get('point.latitude')?.value ||
+              !parentForm.get('point.longitude')?.value
+            "
+          >
+            {{ "cooperative.messages.noCoordinates" | transloco }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-errors" *ngIf="parentForm.invalid">
+    <mat-icon color="warn">warning</mat-icon>
+    <p>{{ "cooperative.messages.formHasErrors" | transloco }}</p>
+  </div>
+</app-form-section>
+
+<div class="step-actions final-actions">
+  <app-base-button
+    variant="secondary"
+    size="large"
+    icon="arrow_back"
+    (click)="onPrevious()"
+  >
+    {{ "common.actions.previous" | transloco }}
+  </app-base-button>
+
+  <app-base-button variant="secondary" size="large" (click)="onCancel()">
+    {{ "common.actions.cancel" | transloco }}
+  </app-base-button>
+
+  <app-base-button
+    variant="primary"
+    size="large"
+    icon="save"
+    [disabled]="parentForm.invalid"
+    (click)="onSubmit()"
+  >
+    {{ "cooperative.actions.createCooperative" | transloco }}
+  </app-base-button>
+</div>

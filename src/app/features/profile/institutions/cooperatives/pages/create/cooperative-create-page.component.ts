@@ -12,14 +12,6 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MatCardModule } from '@angular/material/card';
 import { MatStepperModule } from '@angular/material/stepper';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import {
@@ -31,7 +23,12 @@ import {
 // Custom shared components
 import { PageTitleComponent } from '@app/shared/components/page-title/page-title.component';
 import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
-import { FormSectionComponent } from '@app/shared/components/form-section/form-section.component';
+
+// Form section components
+import { BasicInfoFormComponent } from '../../components/forms/create/basic-info-form/basic-info-form.component';
+import { TranslationFormComponent } from '../../components/forms/create/translation-form/translation-form.component';
+import { LocationFormComponent } from '../../components/forms/create/location-form/location-form.component';
+import { ReviewFormComponent } from '../../components/forms/create/review-form/review-form.component';
 
 import {
   ContentStatus,
@@ -52,21 +49,17 @@ import * as fromCooperatives from '../../store/selectors';
     ReactiveFormsModule,
     MatCardModule,
     MatStepperModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatIconModule,
-    MatButtonModule,
-    MatExpansionModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
     TranslocoModule,
     // Custom shared components
     PageTitleComponent,
     BaseButtonComponent,
-    FormSectionComponent,
+    // Form section components
+    BasicInfoFormComponent,
+    TranslationFormComponent,
+    LocationFormComponent,
+    ReviewFormComponent,
   ],
   providers: [
     provideTranslocoScope({
@@ -205,14 +198,12 @@ export class CooperativeCreatePageComponent implements OnInit, OnDestroy {
   }
 
   nextStep(): void {
-    console.log('Next Step Clicked', this.activeStep);
     switch (this.activeStep) {
       case 0: // Basic info
         if (this.validateBasicInfo()) {
           this.steps[0].completed = true;
           this.activeStep = 1;
         } else {
-          console.log('This activated');
           // Mark all fields as touched to show validation errors
           const basicControls = [
             'code',
@@ -289,7 +280,6 @@ export class CooperativeCreatePageComponent implements OnInit, OnDestroy {
   private checkControlsValid(controlNames: string[]): boolean {
     return controlNames.every((controlName) => {
       const control = this.createForm.get(controlName);
-      console.log(controlName, control?.valid);
       return control?.valid ?? false;
     });
   }

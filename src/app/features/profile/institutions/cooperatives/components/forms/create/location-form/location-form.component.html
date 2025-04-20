@@ -1,0 +1,85 @@
+<app-form-section
+  icon="location_on"
+  [title]="'cooperative.sections.location' | transloco"
+  [subtitle]="'cooperative.location.mapInstructions' | transloco"
+>
+  <div class="location-section">
+    <div class="coordinate-inputs">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "cooperative.fields.latitude" | transloco }}</mat-label>
+        <input
+          matInput
+          type="number"
+          [formControl]="latitudeControl"
+          step="0.000001"
+        />
+        <mat-error
+          *ngIf="
+            latitudeControl.hasError('min') || latitudeControl.hasError('max')
+          "
+        >
+          {{ "cooperative.errors.invalidLatitude" | transloco }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "cooperative.fields.longitude" | transloco }}</mat-label>
+        <input
+          matInput
+          type="number"
+          [formControl]="longitudeControl"
+          step="0.000001"
+        />
+        <mat-error
+          *ngIf="
+            longitudeControl.hasError('min') || longitudeControl.hasError('max')
+          "
+        >
+          {{ "cooperative.errors.invalidLongitude" | transloco }}
+        </mat-error>
+      </mat-form-field>
+
+      <app-base-button
+        buttonType="raised"
+        color="primary"
+        icon="my_location"
+        (clicked)="onUseCurrentLocation()"
+        translationKey="cooperative.location.useCurrentLocation"
+        class="location-button"
+      >
+      </app-base-button>
+    </div>
+
+    <div class="map-container">
+      <!-- Map placeholder - would be replaced with actual map component -->
+      <div class="map-placeholder">
+        <div class="map-instructions">
+          <mat-icon>map</mat-icon>
+          <p>
+            {{ "cooperative.location.mapInstructions" | transloco }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-form-section>
+
+<div class="step-actions">
+  <app-base-button
+    variant="secondary"
+    size="large"
+    icon="arrow_back"
+    (click)="onPrevious()"
+  >
+    {{ "common.actions.previous" | transloco }}
+  </app-base-button>
+
+  <app-base-button
+    variant="primary"
+    size="large"
+    icon="arrow_forward"
+    (click)="onNext()"
+  >
+    {{ "common.actions.next" | transloco }}
+  </app-base-button>
+</div>

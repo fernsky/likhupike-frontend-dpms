@@ -1,0 +1,138 @@
+<app-form-section
+  icon="translate"
+  [title]="'cooperative.sections.translation' | transloco"
+>
+  <div class="form-grid">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ "cooperative.fields.locale" | transloco }}</mat-label>
+      <input matInput [formControl]="localeControl" readonly />
+      <mat-hint>{{
+        "cooperative.hints.defaultLocaleTranslation" | transloco
+      }}</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ "cooperative.fields.name" | transloco }}</mat-label>
+      <input matInput [formControl]="nameControl" />
+      <mat-error *ngIf="nameControl.hasError('required')">
+        {{ "cooperative.errors.nameRequired" | transloco }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="form-grid">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ "cooperative.fields.description" | transloco }}</mat-label>
+      <textarea matInput [formControl]="descriptionControl" rows="4"></textarea>
+    </mat-form-field>
+  </div>
+
+  <div class="form-grid">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ "cooperative.fields.location" | transloco }}</mat-label>
+      <textarea matInput [formControl]="locationControl" rows="2"></textarea>
+    </mat-form-field>
+  </div>
+</app-form-section>
+
+<app-form-section
+  icon="add_circle"
+  [title]="'cooperative.sections.additionalInfo' | transloco"
+>
+  <div class="form-grid">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ "cooperative.fields.services" | transloco }}</mat-label>
+      <textarea matInput [formControl]="servicesControl" rows="3"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ "cooperative.fields.achievements" | transloco }}</mat-label>
+      <textarea
+        matInput
+        [formControl]="achievementsControl"
+        rows="3"
+      ></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{
+        "cooperative.fields.operatingHours" | transloco
+      }}</mat-label>
+      <textarea
+        matInput
+        [formControl]="operatingHoursControl"
+        rows="2"
+      ></textarea>
+    </mat-form-field>
+  </div>
+</app-form-section>
+
+<app-form-section
+  icon="search"
+  [title]="'cooperative.sections.seo' | transloco"
+>
+  <div class="form-grid">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ "cooperative.fields.seoTitle" | transloco }}</mat-label>
+      <input matInput [formControl]="seoTitleControl" />
+      <mat-hint align="end"
+        >{{ seoTitleControl.value?.length || 0 }}/60</mat-hint
+      >
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ "cooperative.fields.status" | transloco }}</mat-label>
+      <mat-select [formControl]="statusControl">
+        <mat-option *ngFor="let status of contentStatuses" [value]="status">
+          {{ "cooperative.contentStatus." + status.toLowerCase() | transloco }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{
+        "cooperative.fields.seoDescription" | transloco
+      }}</mat-label>
+      <textarea
+        matInput
+        [formControl]="seoDescriptionControl"
+        rows="2"
+      ></textarea>
+      <mat-hint align="end"
+        >{{ seoDescriptionControl.value?.length || 0 }}/160</mat-hint
+      >
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ "cooperative.fields.seoKeywords" | transloco }}</mat-label>
+      <input matInput [formControl]="seoKeywordsControl" />
+      <mat-hint>{{ "cooperative.hints.seoKeywords" | transloco }}</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ "cooperative.fields.slugUrl" | transloco }}</mat-label>
+      <input matInput [formControl]="slugUrlControl" />
+      <mat-hint>{{ "cooperative.hints.slugUrl" | transloco }}</mat-hint>
+    </mat-form-field>
+  </div>
+</app-form-section>
+
+<div class="step-actions">
+  <app-base-button
+    variant="secondary"
+    size="large"
+    icon="arrow_back"
+    (click)="onPrevious()"
+  >
+    {{ "common.actions.previous" | transloco }}
+  </app-base-button>
+
+  <app-base-button
+    variant="primary"
+    size="large"
+    icon="arrow_forward"
+    (click)="onNext()"
+  >
+    {{ "common.actions.next" | transloco }}
+  </app-base-button>
+</div>

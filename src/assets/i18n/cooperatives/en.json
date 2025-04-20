@@ -27,6 +27,7 @@
   },
   "sections": {
     "basicInfo": "Basic Information",
+    "basicInfoSubtitle": "Enter the basic details for this cooperative",
     "contact": "Contact Information",
     "location": "Location",
     "about": "About the Cooperative",
@@ -35,7 +36,9 @@
     "contactInfo": "Contact Information",
     "socialLinks": "Social Media Links",
     "gallery": "Gallery",
-    "seo": "SEO Information"
+    "seo": "SEO Information",
+    "translation": "Translation Information",
+    "additionalInfo": "Additional Information"
   },
   "fields": {
     "code": "Code",
@@ -266,6 +269,7 @@
     "tags": "Comma separated tags to categorize this media item"
   },
   "createSteps": {
+    "description": "Create a new cooperative by filling out the required information. You can add more details later.",
     "basicInfo": "Basic Info",
     "translations": "Translations",
     "location": "Location",

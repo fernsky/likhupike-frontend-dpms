@@ -19,7 +19,6 @@ import {
   TranslocoService,
   provideTranslocoScope,
 } from '@jsverse/transloco';
-
 import {
   CooperativeResponse,
   CooperativeMediaResponse,
