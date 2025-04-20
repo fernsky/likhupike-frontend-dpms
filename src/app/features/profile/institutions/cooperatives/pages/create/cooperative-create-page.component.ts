@@ -28,6 +28,11 @@ import {
   provideTranslocoScope,
 } from '@jsverse/transloco';
 
+// Custom shared components
+import { PageTitleComponent } from '@app/shared/components/page-title/page-title.component';
+import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
+import { FormSectionComponent } from '@app/shared/components/form-section/form-section.component';
+
 import {
   ContentStatus,
   CooperativeStatus,
@@ -58,6 +63,10 @@ import * as fromCooperatives from '../../store/selectors';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     TranslocoModule,
+    // Custom shared components
+    PageTitleComponent,
+    BaseButtonComponent,
+    FormSectionComponent,
   ],
   providers: [
     provideTranslocoScope({

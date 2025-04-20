@@ -17,7 +17,8 @@
       "view": "View",
       "next": "Next",
       "refresh": "Refresh",
-      "reset": "Reset"
+      "reset": "Reset",
+      "previous": "Previous"
     },
     "messages": {
       "loading": "Loading...",
