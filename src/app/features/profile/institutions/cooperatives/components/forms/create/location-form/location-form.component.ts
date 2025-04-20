@@ -124,10 +124,7 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
     // Wait for vector source component to be available
     setTimeout(() => {
       if (this.vectorSourceComponent) {
-        console.log(
-          'Vector source component found:',
-          this.vectorSourceComponent
-        );
+        console.log('Vector source component found');
         this.vectorSourceInstance = this.vectorSourceComponent.instance;
 
         // Now that we have access to the vector source, check if we need to add a marker
@@ -140,7 +137,22 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
       } else {
         console.error('Vector source component not found');
       }
+
+      // Create a blank marker image if it doesn't exist
+      this.createFallbackMarkerImage();
     }, 500);
+  }
+
+  /**
+   * Creates a fallback marker image if one doesn't exist
+   */
+  private createFallbackMarkerImage() {
+    const img = new Image();
+    img.src = 'assets/images/map-marker.png';
+    img.onerror = () => {
+      console.warn('Map marker image not found, using fallback style');
+      // Switch to circle style in the template
+    };
   }
 
   /**
@@ -157,8 +169,9 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
     console.log('Setting map coordinates:', lng, lat);
 
     try {
-      // Update map center
-      this.mapCenter = fromLonLat([lng, lat]) as [number, number];
+      // Convert coordinates to the map's projection and update center
+      const projectedCoords = fromLonLat([lng, lat]);
+      this.mapCenter = projectedCoords as [number, number];
       this.mapZoom = 15;
 
       // Update marker if source is available
@@ -168,12 +181,20 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
 
         // Create a new marker at the specified coordinates
         const marker = new Feature({
-          geometry: new Point(fromLonLat([lng, lat])),
+          geometry: new Point(projectedCoords),
+          name: 'Location marker',
         });
 
         // Add the marker
         this.vectorSourceInstance.addFeature(marker);
         console.log('Marker added to vector source');
+
+        // Make sure the map renders correctly
+        setTimeout(() => {
+          if (this.mapComponent?.instance) {
+            this.mapComponent.instance.updateSize();
+          }
+        }, 100);
       } else {
         console.warn('Vector source not yet available for marker creation');
       }
@@ -197,11 +218,13 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
       this.longitudeControl.setValue(roundedLng);
       this.latitudeControl.setValue(roundedLat);
 
-      console.log('Form coordinates updated:', roundedLng, roundedLat);
+      console.log('Form coordinates updated:', roundedLat, roundedLng);
     } finally {
       // Reset flag after a short delay
       setTimeout(() => {
         this.isUpdatingCoords = false;
+        // Update map after form values are set
+        this.updateMap();
       }, 100);
     }
   }
