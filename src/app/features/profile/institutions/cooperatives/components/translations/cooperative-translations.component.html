@@ -1,20 +1,19 @@
-<div class="translations-container">
-  <div class="section-header">
-    <h2>{{ "cooperative.translations.title" | transloco }}</h2>
-
-    <button
-      mat-raised-button
-      color="primary"
-      [disabled]="getAvailableLocales().length === 0"
-      (click)="openCreateTranslationDialog()"
-    >
-      <mat-icon>add</mat-icon>
-      {{ "cooperative.translations.addTranslation" | transloco }}
-    </button>
-  </div>
-
-  <div class="translations-info">
-    <p>{{ "cooperative.translations.info" | transloco }}</p>
+<app-form-section
+  icon="translate"
+  [title]="'cooperative.translations.title' | transloco"
+  [subtitle]="'cooperative.translations.info' | transloco"
+>
+  <div class="translations-actions">
+    <div class="button-container">
+      <app-base-button
+        variant="primary"
+        icon="add"
+        [disabled]="getAvailableLocales().length === 0"
+        (clicked)="openCreateTranslationDialog()"
+      >
+        {{ "cooperative.translations.addTranslation" | transloco }}
+      </app-base-button>
+    </div>
   </div>
 
   <!-- Loading spinner -->
@@ -120,26 +119,27 @@
 
           <!-- Translation actions -->
           <div class="translation-actions">
-            <button
-              mat-button
-              color="primary"
-              (click)="openEditTranslationDialog(translation)"
+            <app-base-button
+              variant="secondary"
+              icon="edit"
+              (clicked)="openEditTranslationDialog(translation)"
+              [tooltipText]="'cooperative.translations.edit' | transloco"
             >
-              <mat-icon>edit</mat-icon>
               {{ "cooperative.translations.edit" | transloco }}
-            </button>
+            </app-base-button>
 
-            <button
-              mat-button
+            <app-base-button
+              variant="secondary"
               color="warn"
+              icon="delete"
               [disabled]="translation.locale === cooperative.defaultLocale"
-              (click)="confirmDeleteTranslation(translation)"
+              (clicked)="confirmDeleteTranslation(translation)"
+              [tooltipText]="'cooperative.translations.delete' | transloco"
             >
-              <mat-icon>delete</mat-icon>
               {{ "cooperative.translations.delete" | transloco }}
-            </button>
+            </app-base-button>
 
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>{{
                 "cooperative.translations.status" | transloco
               }}</mat-label>
@@ -177,7 +177,16 @@
       <div class="no-translations">
         <mat-icon>translate</mat-icon>
         <p>{{ "cooperative.translations.noTranslations" | transloco }}</p>
+        <app-base-button
+          variant="primary"
+          icon="add"
+          [disabled]="getAvailableLocales().length === 0"
+          (clicked)="openCreateTranslationDialog()"
+          class="add-translation-button"
+        >
+          {{ "cooperative.translations.addTranslation" | transloco }}
+        </app-base-button>
       </div>
     </ng-template>
   </div>
-</div>
+</app-form-section>

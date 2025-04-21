@@ -22,6 +22,9 @@ import {
   TranslocoService,
 } from '@jsverse/transloco';
 
+import { FormSectionComponent } from '@app/shared/components/form-section/form-section.component';
+import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
+
 import {
   CooperativeResponse,
   CooperativeTranslationResponse,
@@ -49,6 +52,8 @@ import { ConfirmDialogComponent } from '../../components/shared/confirm-dialog/c
     MatSelectModule,
     MatProgressSpinnerModule,
     TranslocoModule,
+    FormSectionComponent,
+    BaseButtonComponent,
   ],
   providers: [
     provideTranslocoScope({

@@ -25,6 +25,9 @@ import { Store } from '@ngrx/store';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
+import { FormSectionComponent } from '@app/shared/components/form-section/form-section.component';
+import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
+
 import {
   CooperativeResponse,
   CooperativeStatus,
@@ -49,6 +52,8 @@ import { CooperativeActions } from '../../../store/actions';
     MatIconModule,
     MatNativeDateModule,
     TranslocoModule,
+    FormSectionComponent,
+    BaseButtonComponent,
   ],
   providers: [
     provideTranslocoScope({
@@ -124,23 +129,25 @@ export class CooperativeBasicFormComponent
   }
 
   protected updateFormValues(): void {
-    this.cooperativeForm.patchValue(
-      {
-        code: this.cooperative.code,
-        defaultLocale: this.cooperative.defaultLocale,
-        establishedDate: this.cooperative.establishedDate
-          ? new Date(this.cooperative.establishedDate)
-          : null,
-        ward: this.cooperative.ward,
-        type: this.cooperative.type,
-        status: this.cooperative.status,
-        registrationNumber: this.cooperative.registrationNumber,
-        contactEmail: this.cooperative.contactEmail,
-        contactPhone: this.cooperative.contactPhone,
-        websiteUrl: this.cooperative.websiteUrl,
-      },
-      { emitEvent: false }
-    );
+    if (this.cooperative) {
+      this.cooperativeForm.patchValue(
+        {
+          code: this.cooperative.code,
+          defaultLocale: this.cooperative.defaultLocale,
+          establishedDate: this.cooperative.establishedDate
+            ? new Date(this.cooperative.establishedDate)
+            : null,
+          ward: this.cooperative.ward,
+          type: this.cooperative.type,
+          status: this.cooperative.status,
+          registrationNumber: this.cooperative.registrationNumber,
+          contactEmail: this.cooperative.contactEmail,
+          contactPhone: this.cooperative.contactPhone,
+          websiteUrl: this.cooperative.websiteUrl,
+        },
+        { emitEvent: false }
+      );
+    }
   }
 
   onSubmit(): void {
