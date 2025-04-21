@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { FormSectionComponent } from '@app/shared/components/form-section/form-section.component';
 import { BaseButtonComponent } from '@app/shared/components/base-button/base-button.component';
@@ -23,6 +24,8 @@ import { Feature } from 'ol';
 import { Point } from 'ol/geom';
 import { Vector as VectorSource } from 'ol/source';
 import { MapComponent, SourceVectorComponent } from 'ng-openlayers';
+import { MatButtonModule } from '@angular/material/button';
+import { IconButtonComponent } from '@app/shared/components/icon-button/icon-button.component';
 
 @Component({
   selector: 'app-location-form',
@@ -38,7 +41,10 @@ import { MapComponent, SourceVectorComponent } from 'ng-openlayers';
     TranslocoModule,
     FormSectionComponent,
     BaseButtonComponent,
+    IconButtonComponent, // Add the new component
     AngularOpenlayersModule,
+    MatTooltipModule,
+    MatButtonModule,
   ],
 })
 export class LocationFormComponent implements OnInit, AfterViewInit {
@@ -50,13 +56,18 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
   @Output() previousStepClicked = new EventEmitter<void>();
   @Output() getCurrentLocation = new EventEmitter<void>();
 
-  // Map properties
-  // longitude, latitude
-  mapCenter: [number, number] = [86.770929, 27.200635]; // Default center (Nepal)
+  // Map properties - using direct longitude, latitude coordinates
+  mapCenter: [number, number] = [84.124, 28.3949]; // Default center (Nepal)
   mapZoom = 7;
 
   // We'll get this from the ViewChild reference
   vectorSourceInstance: VectorSource | null = null;
+
+  // Temporary coordinates for edit mode
+  tempCoordinates: { longitude: number | null; latitude: number | null } = {
+    longitude: null,
+    latitude: null,
+  };
 
   // State flags
   editMode = false;
@@ -85,40 +96,22 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
     const lng = this.longitudeControl.value;
 
     if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
+      // We have coordinates, so start in view mode
       this.hasLocation = true;
-      console.log('Initial coordinates:', lat, lng);
+      this.editMode = false;
+      console.log('Initial coordinates found:', lat, lng);
+
+      // Set map center to initial coordinates
+      this.mapCenter = [lng, lat];
+    } else {
+      // No coordinates, so start in edit mode
+      this.hasLocation = false;
+      this.editMode = true;
+      console.log('No initial coordinates, starting in edit mode');
     }
 
-    // Add value change listeners with flag to prevent circular updates
-    this.latitudeControl.valueChanges.subscribe((value) => {
-      if (this.isUpdatingCoords) return;
-
-      if (
-        value !== null &&
-        !isNaN(value) &&
-        this.longitudeControl.value !== null &&
-        !isNaN(this.longitudeControl.value)
-      ) {
-        console.log('Manual latitude update:', value);
-        this.updateMap();
-        this.hasLocation = true;
-      }
-    });
-
-    this.longitudeControl.valueChanges.subscribe((value) => {
-      if (this.isUpdatingCoords) return;
-
-      if (
-        value !== null &&
-        !isNaN(value) &&
-        this.latitudeControl.value !== null &&
-        !isNaN(this.latitudeControl.value)
-      ) {
-        console.log('Manual longitude update:', value);
-        this.updateMap();
-        this.hasLocation = true;
-      }
-    });
+    // Store current coordinates as temp values when entering edit mode
+    this.saveCurrentCoordinates();
   }
 
   ngAfterViewInit() {
@@ -138,22 +131,7 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
       } else {
         console.error('Vector source component not found');
       }
-
-      // Create a blank marker image if it doesn't exist
-      this.createFallbackMarkerImage();
     }, 500);
-  }
-
-  /**
-   * Creates a fallback marker image if one doesn't exist
-   */
-  private createFallbackMarkerImage() {
-    const img = new Image();
-    img.src = 'assets/images/map-marker.png';
-    img.onerror = () => {
-      console.warn('Map marker image not found, using fallback style');
-      // Switch to circle style in the template
-    };
   }
 
   /**
@@ -170,16 +148,16 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
     console.log('Setting map coordinates:', lng, lat);
 
     try {
-      // Convert coordinates to the map's projection and update center
-      this.mapCenter = [lng, lat] as [number, number];
-      this.mapZoom = 9;
+      // Update map center with direct coordinates
+      this.mapCenter = [lng, lat];
+      this.mapZoom = 15;
 
       // Update marker if source is available
       if (this.vectorSourceInstance) {
         // Clear existing features
         this.vectorSourceInstance.clear();
 
-        // Create a new marker at the specified coordinates
+        // Create a new marker at the specified coordinates - using fromLonLat for marker position
         const marker = new Feature({
           geometry: new Point(fromLonLat([lng, lat])),
           name: 'Location marker',
@@ -204,28 +182,68 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Updates the form controls with new coordinates
-   * Uses flag to prevent circular updates
+   * Save current coordinates to temporary storage
    */
-  updateFormCoordinates(longitude: number, latitude: number) {
-    try {
-      this.isUpdatingCoords = true;
+  private saveCurrentCoordinates() {
+    this.tempCoordinates = {
+      longitude: this.longitudeControl.value,
+      latitude: this.latitudeControl.value,
+    };
+    console.log('Saved coordinates:', this.tempCoordinates);
+  }
 
+  /**
+   * Restore coordinates from temporary storage
+   */
+  private restoreCoordinates() {
+    if (
+      this.tempCoordinates.longitude !== null &&
+      this.tempCoordinates.latitude !== null
+    ) {
+      this.isUpdatingCoords = true;
+      this.longitudeControl.setValue(this.tempCoordinates.longitude);
+      this.latitudeControl.setValue(this.tempCoordinates.latitude);
+
+      setTimeout(() => {
+        this.isUpdatingCoords = false;
+        this.updateMap();
+      }, 100);
+
+      console.log('Restored coordinates:', this.tempCoordinates);
+    }
+  }
+
+  /**
+   * Handle location selection from map click or draw
+   */
+  private handleLocationSelection(coordinates: number[]) {
+    if (!this.editMode) {
+      console.log('Not in edit mode, ignoring location selection');
+      return;
+    }
+
+    try {
+      const lonLatCoord = toLonLat(coordinates);
+      console.log('Selected coordinates (lon/lat):', lonLatCoord);
+
+      // Update the temporary form values while in edit mode
+      this.isUpdatingCoords = true;
       // Round to 6 decimal places for stability
-      const roundedLng = parseFloat(longitude.toFixed(6));
-      const roundedLat = parseFloat(latitude.toFixed(6));
+      const roundedLng = parseFloat(lonLatCoord[0].toFixed(6));
+      const roundedLat = parseFloat(lonLatCoord[1].toFixed(6));
 
       this.longitudeControl.setValue(roundedLng);
       this.latitudeControl.setValue(roundedLat);
 
-      console.log('Form coordinates updated:', roundedLat, roundedLng);
-    } finally {
-      // Reset flag after a short delay
+      // Update the map to show the new position
       setTimeout(() => {
         this.isUpdatingCoords = false;
-        // Update map after form values are set
         this.updateMap();
       }, 100);
+
+      this.hasLocation = true;
+    } catch (error) {
+      console.error('Error processing location selection:', error);
     }
   }
 
@@ -234,27 +252,14 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onMapClick(event: any) {
-    // Only handle map clicks when not in edit mode
-    if (this.editMode) return;
-
-    console.log('Map clicked (not in edit mode):', event);
+    console.log('Map clicked, edit mode:', this.editMode);
 
     if (!event || !event.coordinate) {
       console.error('Invalid map click event');
       return;
     }
 
-    try {
-      const clickedCoord = event.coordinate;
-      const lonLatCoord = toLonLat(clickedCoord);
-      console.log('Clicked coordinates (lon/lat):', lonLatCoord);
-
-      // Update form coordinates
-      this.updateFormCoordinates(lonLatCoord[0], lonLatCoord[1]);
-      this.hasLocation = true;
-    } catch (error) {
-      console.error('Error processing map click:', error);
-    }
+    this.handleLocationSelection(event.coordinate);
   }
 
   /**
@@ -262,7 +267,7 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onDrawEnd(event: any) {
-    console.log('Draw ended:', event);
+    console.log('Draw ended, edit mode:', this.editMode);
 
     if (!event || !event.feature) {
       console.error('Invalid draw event');
@@ -272,16 +277,7 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
     try {
       const geometry = event.feature.getGeometry();
       if (geometry) {
-        const coordinates = geometry.getCoordinates();
-        const lonLatCoord = toLonLat(coordinates);
-        console.log('Drawn point coordinates (lon/lat):', lonLatCoord);
-
-        // Update form controls without triggering the update map function
-        this.updateFormCoordinates(lonLatCoord[0], lonLatCoord[1]);
-
-        // Exit edit mode after drawing
-        this.hasLocation = true;
-        this.editMode = false;
+        this.handleLocationSelection(geometry.getCoordinates());
       }
     } catch (error) {
       console.error('Error processing draw event:', error);
@@ -292,14 +288,41 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
    * Toggle edit mode to allow changing the location
    */
   toggleEditMode() {
-    this.editMode = !this.editMode;
-    console.log('Edit mode:', this.editMode ? 'enabled' : 'disabled');
+    if (this.editMode) {
+      // Exiting edit mode (saving changes)
+      this.editMode = false;
+      console.log('Exiting edit mode, saving changes');
+
+      // The current form values are already updated and will be kept
+      // Update the temporary stored coordinates with the new values
+      this.saveCurrentCoordinates();
+    } else {
+      // Entering edit mode
+      this.editMode = true;
+      console.log('Entering edit mode');
+
+      // Save current coordinates before editing
+      this.saveCurrentCoordinates();
+    }
+  }
+
+  /**
+   * Cancel edit mode without saving changes
+   */
+  cancelEdit() {
+    this.editMode = false;
+    console.log('Canceling edit mode, restoring previous coordinates');
+
+    // Restore the previous coordinates
+    this.restoreCoordinates();
   }
 
   /**
    * Clear current location
    */
   clearLocation() {
+    console.log('Clearing location');
+
     // Clear the vector source if available
     if (this.vectorSourceInstance) {
       this.vectorSourceInstance.clear();
@@ -307,15 +330,21 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
 
     // Reset state
     this.hasLocation = false;
-    this.editMode = false;
+    this.editMode = true; // Enter edit mode after clearing
 
     // Clear form values
     this.isUpdatingCoords = true;
-    this.latitudeControl.setValue(null);
     this.longitudeControl.setValue(null);
+    this.latitudeControl.setValue(null);
+
+    // Clear temporary coordinates
+    this.tempCoordinates = {
+      longitude: null,
+      latitude: null,
+    };
 
     // Reset to default view
-    this.mapCenter = [86.770929, 27.200635];
+    this.mapCenter = [84.124, 28.3949];
     this.mapZoom = 7;
 
     // Reset the update flag
@@ -329,6 +358,13 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
    */
   onUseCurrentLocation(): void {
     console.log('Getting current location');
+
+    // Only proceed if in edit mode
+    if (!this.editMode) {
+      console.log('Not in edit mode, ignoring current location request');
+      return;
+    }
+
     this.locationLoading = true;
     this.locationError = null;
 
@@ -339,12 +375,17 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
           const latitude = position.coords.latitude;
           console.log('Current position:', longitude, latitude);
 
-          // Update form coordinates which will trigger map update
-          this.updateFormCoordinates(longitude, latitude);
+          // Update form controls
+          this.isUpdatingCoords = true;
+          this.longitudeControl.setValue(parseFloat(longitude.toFixed(6)));
+          this.latitudeControl.setValue(parseFloat(latitude.toFixed(6)));
 
-          // Update state
+          setTimeout(() => {
+            this.isUpdatingCoords = false;
+            this.updateMap();
+          }, 100);
+
           this.hasLocation = true;
-          this.editMode = false;
           this.locationLoading = false;
 
           // Emit the event for parent component

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 export type ButtonVariant = 'primary' | 'secondary';
 export type ButtonSize = 'small' | 'medium' | 'large';
@@ -17,6 +18,7 @@ export type ButtonSize = 'small' | 'medium' | 'large';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
   ],
 })
 export class BaseButtonComponent {
@@ -27,4 +29,5 @@ export class BaseButtonComponent {
   @Input() loading = false;
   @Input() icon?: string;
   @Input() iconPosition: 'left' | 'right' = 'left';
+  @Input() tooltipText?: string;
 }

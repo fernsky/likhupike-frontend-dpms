@@ -4,88 +4,73 @@
   [subtitle]="'cooperative.location.mapInstructions' | transloco"
 >
   <div class="location-section">
-    <div class="coordinate-inputs">
-      <mat-form-field appearance="outline">
-        <mat-label>{{ "cooperative.fields.latitude" | transloco }}</mat-label>
-        <input
-          matInput
-          type="number"
-          [formControl]="latitudeControl"
-          step="0.000001"
-          [readonly]="editMode"
-        />
-        <mat-error
-          *ngIf="
-            latitudeControl.hasError('min') || latitudeControl.hasError('max')
-          "
-        >
-          {{ "cooperative.errors.invalidLatitude" | transloco }}
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>{{ "cooperative.fields.longitude" | transloco }}</mat-label>
-        <input
-          matInput
-          type="number"
-          [formControl]="longitudeControl"
-          step="0.000001"
-          [readonly]="editMode"
-        />
-        <mat-error
-          *ngIf="
-            longitudeControl.hasError('min') || longitudeControl.hasError('max')
-          "
-        >
-          {{ "cooperative.errors.invalidLongitude" | transloco }}
-        </mat-error>
-      </mat-form-field>
-
-      <div class="location-actions">
-        <!-- Use current location button -->
-        <app-base-button
-          buttonType="raised"
+    <div class="location-action-buttons map-controls">
+      <!-- Action buttons for view mode -->
+      <ng-container *ngIf="!editMode">
+        <!-- Edit location button -->
+        <app-icon-button
+          icon="edit"
           color="primary"
+          buttonType="stroked"
+          size="medium"
+          [tooltipText]="'common.actions.edit' | transloco"
+          (clicked)="toggleEditMode()"
+          *ngIf="hasLocation"
+        ></app-icon-button>
+
+        <!-- Clear location button -->
+        <app-icon-button
+          icon="delete_outline"
+          color="warn"
+          buttonType="stroked"
+          size="medium"
+          [tooltipText]="'common.actions.clear' | transloco"
+          (clicked)="clearLocation()"
+          *ngIf="hasLocation"
+        ></app-icon-button>
+      </ng-container>
+
+      <!-- Action buttons for edit mode -->
+      <ng-container *ngIf="editMode">
+        <!-- Use current location button -->
+        <app-icon-button
           icon="my_location"
+          color="primary"
+          buttonType="stroked"
+          size="medium"
           [loading]="locationLoading"
+          [tooltipText]="'cooperative.location.useCurrentLocation' | transloco"
           (clicked)="onUseCurrentLocation()"
-          translationKey="cooperative.location.useCurrentLocation"
-          class="location-button"
-          *ngIf="!editMode"
-        >
-        </app-base-button>
+        ></app-icon-button>
 
-        <!-- Location modification buttons -->
-        <div class="location-modification-buttons" *ngIf="hasLocation">
-          <app-base-button
-            buttonType="stroked"
-            color="primary"
-            icon="{{ editMode ? 'save' : 'edit_location' }}"
-            (clicked)="toggleEditMode()"
-          >
-            {{
-              (editMode ? "common.actions.done" : "common.actions.edit")
-                | transloco
-            }}
-          </app-base-button>
+        <!-- Save changes button -->
+        <app-icon-button
+          icon="save"
+          color="primary"
+          buttonType="stroked"
+          size="medium"
+          [tooltipText]="'common.actions.save' | transloco"
+          (clicked)="toggleEditMode()"
+          *ngIf="hasLocation"
+        ></app-icon-button>
 
-          <app-base-button
-            buttonType="stroked"
-            color="warn"
-            icon="delete"
-            (clicked)="clearLocation()"
-            *ngIf="!editMode"
-          >
-            {{ "common.actions.clear" | transloco }}
-          </app-base-button>
-        </div>
+        <!-- Cancel edit button -->
+        <app-icon-button
+          icon="cancel"
+          color="warn"
+          buttonType="stroked"
+          size="medium"
+          [tooltipText]="'common.actions.cancel' | transloco"
+          (clicked)="cancelEdit()"
+          *ngIf="hasLocation && tempCoordinates.longitude !== null"
+        ></app-icon-button>
+      </ng-container>
+    </div>
 
-        <!-- Error message display -->
-        <div class="location-error" *ngIf="locationError">
-          <mat-icon>error</mat-icon>
-          <span>{{ locationError }}</span>
-        </div>
-      </div>
+    <!-- Error message display -->
+    <div class="location-error" *ngIf="locationError">
+      <mat-icon>error</mat-icon>
+      <span>{{ locationError }}</span>
     </div>
 
     <div class="map-container">
@@ -108,13 +93,13 @@
         <aol-layer-vector>
           <aol-source-vector #vectorSource></aol-source-vector>
           <aol-style>
-            <aol-style-icon
-              src="assets/images/map-marker.png"
-              [anchor]="[0.5, 1]"
-              [anchorXUnits]="'fraction'"
-              [anchorYUnits]="'fraction'"
-              [scale]="1"
-            ></aol-style-icon>
+            <aol-style-circle [radius]="6">
+              <aol-style-stroke
+                [color]="'white'"
+                [width]="2"
+              ></aol-style-stroke>
+              <aol-style-fill [color]="'#3f51b5'"></aol-style-fill>
+            </aol-style-circle>
           </aol-style>
         </aol-layer-vector>
 
@@ -133,23 +118,57 @@
         <aol-control-zoom></aol-control-zoom>
       </aol-map>
 
-      <!-- Map interaction helper overlays
-      <div class="map-status-overlay" *ngIf="editMode">
-        <div class="map-status-message">
-          <mat-icon>touch_app</mat-icon>
-          <span>{{
-            "cooperative.location.clickToSetLocation" | transloco
-          }}</span>
-        </div>
+      <!-- Edit mode indicator -->
+      <div class="map-edit-indicator" *ngIf="editMode">
+        <mat-icon>touch_app</mat-icon>
+        <span>{{
+          "cooperative.location.mapClickInstructions" | transloco
+        }}</span>
       </div>
 
-      <div class="map-instructions" *ngIf="!hasLocation && !editMode">
-        <div>
-          <mat-icon>touch_app</mat-icon>
-          <p>{{ "cooperative.location.mapClickInstructions" | transloco }}</p>
-        </div>
+      <!-- View mode indicator (when no location is set) -->
+      <div class="map-empty-indicator" *ngIf="!hasLocation && !editMode">
+        <mat-icon>place</mat-icon>
+        <span>{{ "cooperative.location.noLocationSet" | transloco }}</span>
       </div>
-      -->
+    </div>
+
+    <div class="coordinate-inputs">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "cooperative.fields.latitude" | transloco }}</mat-label>
+        <input
+          matInput
+          type="number"
+          [formControl]="latitudeControl"
+          step="0.000001"
+          [readonly]="true"
+        />
+        <mat-error
+          *ngIf="
+            latitudeControl.hasError('min') || latitudeControl.hasError('max')
+          "
+        >
+          {{ "cooperative.errors.invalidLatitude" | transloco }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "cooperative.fields.longitude" | transloco }}</mat-label>
+        <input
+          matInput
+          type="number"
+          [formControl]="longitudeControl"
+          step="0.000001"
+          [readonly]="true"
+        />
+        <mat-error
+          *ngIf="
+            longitudeControl.hasError('min') || longitudeControl.hasError('max')
+          "
+        >
+          {{ "cooperative.errors.invalidLongitude" | transloco }}
+        </mat-error>
+      </mat-form-field>
     </div>
   </div>
 </app-form-section>

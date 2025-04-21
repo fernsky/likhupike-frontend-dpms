@@ -3,6 +3,8 @@
   [disabled]="disabled || loading"
   [ngClass]="[variant, size]"
   [attr.aria-busy]="loading"
+  [matTooltip]="tooltipText || ''"
+  [matTooltipDisabled]="!tooltipText"
   mat-button
 >
   <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
