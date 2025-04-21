@@ -5,6 +5,9 @@
     "edit": "Edit Cooperative",
     "view": "View Cooperative"
   },
+  "actions": {
+    "createCooperative": "Create Cooperative"
+  },
   "title": {
     "list": "Cooperatives",
     "create": "Create Cooperative",
@@ -38,7 +41,8 @@
     "gallery": "Gallery",
     "seo": "SEO Information",
     "translation": "Translation Information",
-    "additionalInfo": "Additional Information"
+    "additionalInfo": "Additional Information",
+    "review": "Review Information"
   },
   "fields": {
     "code": "Code",

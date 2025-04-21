@@ -18,7 +18,10 @@
       "next": "Next",
       "refresh": "Refresh",
       "reset": "Reset",
-      "previous": "Previous"
+      "previous": "Previous",
+      "ok": "OK",
+      "okay": "Okay",
+      "actions": "Actions"
     },
     "messages": {
       "loading": "Loading...",

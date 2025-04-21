@@ -5,6 +5,9 @@
     "edit": "सहकारी सम्पादन गर्नुहोस्",
     "view": "सहकारी विवरण"
   },
+  "actions": {
+    "createCooperative": "Create Cooperative"
+  },
   "title": {
     "list": "सहकारीहरू",
     "create": "सहकारी सिर्जना गर्नुहोस्",
@@ -38,7 +41,8 @@
     "gallery": "ग्यालरी",
     "seo": "एसईओ जानकारी",
     "translation": "अनुवाद जानकारी",
-    "additionalInfo": "थप जानकारी"
+    "additionalInfo": "थप जानकारी",
+    "review": "समीक्षा"
   },
   "fields": {
     "code": "कोड",
