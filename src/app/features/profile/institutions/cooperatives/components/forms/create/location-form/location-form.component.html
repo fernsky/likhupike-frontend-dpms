@@ -90,11 +90,12 @@
 
     <div class="map-container">
       <!-- OpenLayers Map -->
-      <aol-map class="map-component" (onClick)="onMapClick($event)" #map>
+      <aol-map class="map-component" (olClick)="onMapClick($event)" #map>
         <aol-view [zoom]="mapZoom">
           <aol-coordinate
             [x]="mapCenter[0]"
             [y]="mapCenter[1]"
+            [srid]="'EPSG:4326'"
           ></aol-coordinate>
         </aol-view>
 
@@ -126,9 +127,10 @@
         ></aol-interaction-draw>
 
         <!-- Map Controls -->
-        <aol-control-defaults></aol-control-defaults>
-        <aol-control-zoom></aol-control-zoom>
+        <aol-interaction-default></aol-interaction-default>
         <aol-control-scaleline></aol-control-scaleline>
+        <aol-control-zoomslider></aol-control-zoomslider>
+        <aol-control-zoom></aol-control-zoom>
       </aol-map>
 
       <!-- Map interaction helper overlays

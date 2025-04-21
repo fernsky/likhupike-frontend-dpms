@@ -15,6 +15,7 @@ import { CooperativeListPageComponent } from './pages/list/cooperative-list-page
 import { CooperativeCreatePageComponent } from './pages/create/cooperative-create-page.component';
 import { CooperativeEditPageComponent } from './pages/edit/cooperative-edit-page.component';
 import { CooperativeViewPageComponent } from './pages/view/cooperative-view-page.component';
+import { LocationFormTestComponent } from './test/location-form-test.component';
 
 export const COOPERATIVES_ROUTES: Routes = [
   {
@@ -61,6 +62,15 @@ export const COOPERATIVES_ROUTES: Routes = [
     data: {
       permissions: ['VIEW_COOPERATIVES'],
       breadcrumb: 'cooperative.breadcrumb.view',
+    },
+  },
+  // Test route for location form
+  {
+    path: 'test/location-form',
+    component: LocationFormTestComponent,
+    canActivate: [authGuard],
+    data: {
+      breadcrumb: 'Test Location Form',
     },
   },
 ];

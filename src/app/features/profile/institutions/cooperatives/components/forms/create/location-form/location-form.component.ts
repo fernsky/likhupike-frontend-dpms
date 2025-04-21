@@ -51,7 +51,8 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
   @Output() getCurrentLocation = new EventEmitter<void>();
 
   // Map properties
-  mapCenter: [number, number] = [84.124, 28.3949]; // Default center (Nepal)
+  // longitude, latitude
+  mapCenter: [number, number] = [86.770929, 27.200635]; // Default center (Nepal)
   mapZoom = 7;
 
   // We'll get this from the ViewChild reference
@@ -170,9 +171,8 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
 
     try {
       // Convert coordinates to the map's projection and update center
-      const projectedCoords = fromLonLat([lng, lat]);
-      this.mapCenter = projectedCoords as [number, number];
-      this.mapZoom = 15;
+      this.mapCenter = [lng, lat] as [number, number];
+      this.mapZoom = 9;
 
       // Update marker if source is available
       if (this.vectorSourceInstance) {
@@ -181,7 +181,7 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
 
         // Create a new marker at the specified coordinates
         const marker = new Feature({
-          geometry: new Point(projectedCoords),
+          geometry: new Point(fromLonLat([lng, lat])),
           name: 'Location marker',
         });
 
@@ -315,7 +315,7 @@ export class LocationFormComponent implements OnInit, AfterViewInit {
     this.longitudeControl.setValue(null);
 
     // Reset to default view
-    this.mapCenter = [84.124, 28.3949];
+    this.mapCenter = [86.770929, 27.200635];
     this.mapZoom = 7;
 
     // Reset the update flag
